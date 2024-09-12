@@ -5,7 +5,7 @@ import { Switch } from "react-router-dom";
 import MyRoute from "./MyRoute";
 // import Home from "../pages/Home";
 import Login from "../pages/Login";
-// import Register from "../pages/Register";
+import Register from "../pages/Register";
 
 // O switch faz com que somente uma rota seja chamada por vez
 // <Route path="/" component={Login} /> faz com que o componente Login seja renderizado na raiz da aplicação (a primeira página a ser vista)
@@ -13,7 +13,8 @@ import Login from "../pages/Login";
 export default function Routes() {
   return (
     <Switch>
-      <MyRoute exact path="/login/" component={Login} isClosed={false} />
+      <MyRoute exact path="/" component={Login} isClosed={false} />
+      <MyRoute exact path="/register" component={Register} isClosed={false} />
     </Switch>
   );
 }

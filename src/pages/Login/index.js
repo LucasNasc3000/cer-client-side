@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { isEmail } from "validator";
 import { useDispatch } from "react-redux";
 import { get } from "lodash";
+import { Link } from "react-router-dom";
 
 import { Form, Title, FormContainer, Btn } from "./styled";
 import * as actions from "../../store/modules/auth/actions";
@@ -63,6 +64,9 @@ export default function Login(props) {
           <button type="submit">Entrar</button>
         </Btn>
       </Form>
+      <Link to="/register" class="register-link">
+        Não tenho conta
+      </Link>
     </FormContainer>
   );
 }
