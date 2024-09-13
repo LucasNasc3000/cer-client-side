@@ -3,7 +3,7 @@ import React from "react";
 import { Switch } from "react-router-dom";
 
 import MyRoute from "./MyRoute";
-// import Home from "../pages/Home";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 
@@ -15,6 +15,7 @@ export default function Routes() {
     <Switch>
       <MyRoute exact path="/" component={Login} isClosed={false} />
       <MyRoute exact path="/register" component={Register} isClosed={false} />
+      <MyRoute exact path="/home" component={Home} isClosed={false} />
     </Switch>
   );
 }
