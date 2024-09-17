@@ -14,7 +14,7 @@ export const SearchSpace = styled.div`
     background-color: burlywood;
     height: 120px;
     width: 1050px;
-    bottom: 678px;
+    bottom: 683px;
     left: 230px;
 
     .input-search {
@@ -79,4 +79,54 @@ export const SearchSpace = styled.div`
     .search-icon:hover {
         filter: brightness(80%);
     }
+`;
+
+export const AddInput = styled.div`
+    display: flex;
+    position: relative;
+    bottom: 650px;
+    left: 1010px;
+    height: 70px;
+    width: 190px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+    .btn {
+        height: 70px;
+        width: 190px;
+    }
+
+    .btn-text {
+        position: relative;
+        top: -27px;
+        left: 35px;
+        width: 130px;
+        font-size: 18px;
+    }
+
+    .icon {
+        position: relative;
+        right: 50px;
+        top: 10px;
+    }
+`;
+
+export const InputsSpace = styled.div`
+    display: flex;
+    position: relative;
+    bottom: 720px;
+    height: 520px;
+    width: 620px;
+    left: 300px;
+    background-color: green;
+`;
+
+export const NewInput = styled.div`
+    display: flex;
+    background-color: yellow;
+    position: relative;
+    bottom: 690px;
+    left: 300px;
+    height: 90px;
+    width: 120px;
 `;

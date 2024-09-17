@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch , FaPlus } from "react-icons/fa";
+
 import { MdLogout } from "react-icons/md";
 import Header from "../../components/Header";
-import { InputsContainer, SearchSpace } from "./styled";
+import { InputsContainer, SearchSpace, AddInput, InputsSpace, NewInput } from "./styled";
 
 export default function Inputs() {
     return(
@@ -36,6 +37,14 @@ export default function Inputs() {
                     <h3 className="checkbox-label">Fornecedor</h3>
                 </div>
             </SearchSpace>
+            <AddInput>
+                <button type="button" className="btn">
+                    <FaPlus size={32} className="icon" />
+                    <h4 className="btn-text">Adicionar insumo</h4>
+                </button>
+            </AddInput>
+            <InputsSpace />
+            <NewInput />
         </InputsContainer>
     );
 }
