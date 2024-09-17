@@ -18,38 +18,62 @@ export const SearchSpace = styled.div`
     left: 230px;
 
     .input-search {
+        display: flex;
         height: 35px;
-        width: 450px;
-        margin-left: 20px;
-        margin-top: 20px;
+        width: 930px;
+        position: relative;
+        left: 310px;
+        top: 20px;
         border-radius: 8px;
         border-style: none;
         font-size: 14px;
     }
 
     .search-icon {
-        height: 40px;
-        width: 40px;
+        display: flex;
+        height: 30px;
+        width: 90px;
+        position: relative;
         color: #fff;
-        margin-left: 240px;
-        margin-top: 20px;
+        left: 300px;
+        top: 25px;
     }
 
-    .radio {
-        height: 20px;
-        width: 25px;
-        margin-left: 90px;
-        margin-top: 3px;
+    .checkbox {
+        height: 30px;
+        width: 30px;
+        margin-left: 35px;
     }
 
-    .radios {
+    .checkboxes {
         display: flex;
         flex-direction: row;
-        background-color: aquamarine;
-        margin-left: -540px;
-        margin-top: 80px;
+        position: relative;
+        right: 270px;
+        top: 80px;
         height: 30px;
-        width: 600px;
+        width: 670px;
+    }
+
+    .checkbox-label {
+        color: black;
+        font-size: 12px;
+        margin-left: 5px;
+        margin-top: 8px;
+    }
+
+    .logout {
+        display: flex;
+        position: relative;
+        height: 95px;
+        width: 95px;
+        color: #fff;
+        left: 625px;
+        top: -5px
+    }
+
+    .logout:hover {
+        filter: brightness(70%);
     }
 
     .search-icon:hover {
