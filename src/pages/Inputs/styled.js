@@ -3,15 +3,12 @@
 import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
-export const InputsContainer = styled.div`
-    background-color: aqua;
-`;
+export const InputsContainer = styled.div``;
 
 export const SearchSpace = styled.div`
     display: flex;
     flex-direction: row;
     position: relative;
-    background-color: burlywood;
     height: 120px;
     width: 1050px;
     bottom: 683px;
@@ -123,10 +120,28 @@ export const InputsSpace = styled.div`
 
 export const NewInput = styled.div`
     display: flex;
-    background-color: yellow;
+    flex-direction: column;
     position: relative;
-    bottom: 690px;
-    left: 300px;
-    height: 90px;
-    width: 120px;
+    align-items: center;
+    justify-content: center;
+    bottom: 1150px;
+    left: 1020px;
+    height: fit-content;
+    width: fit-content;
+
+    input {
+        height: 30px;
+        width: 170px;
+        margin-top: 5px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 0.5px solid black;
+    }
+
+    .btn {
+        height: 40px;
+        width: 120px;
+        margin-top: 15px;
+    }
 `;

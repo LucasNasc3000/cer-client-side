@@ -44,7 +44,18 @@ export default function Inputs() {
                 </button>
             </AddInput>
             <InputsSpace />
-            <NewInput />
+            <NewInput>
+                <input type="text" placeholder="Nome..." />
+                <input type="text" placeholder="Tipo..." />
+                <input type="text" placeholder="Peso unitário..."/>
+                <input type="text" placeholder="Peso total..." />
+                <input type="text" placeholder="Unidades..." />
+                <input type="text" placeholder="Data de compra..." />
+                <input type="text" placeholder="Data de validade..." />
+                <input type="text" placeholder="Fornecedor..." />
+                <button type="button" className="btn">Cancelar</button>
+                <button type="button" className="btn">Adicionar</button>
+            </NewInput>
         </InputsContainer>
     );
 }
