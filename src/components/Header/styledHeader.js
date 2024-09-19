@@ -18,7 +18,7 @@ export const MainHeader = styled.nav`
     justify-content: center;
     left: 0px;
     top: 30px;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .inputs {
@@ -32,7 +32,7 @@ export const MainHeader = styled.nav`
     justify-content: center;
     left: 20px;
     top: 35px;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .sales {
@@ -46,7 +46,7 @@ export const MainHeader = styled.nav`
     justify-content: center;
     left: 16px;
     top: 39px;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .profile {
@@ -60,7 +60,7 @@ export const MainHeader = styled.nav`
     justify-content: center;
     left: 5px;
     top: 44px;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .home:hover {

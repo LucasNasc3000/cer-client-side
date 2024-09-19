@@ -18,6 +18,7 @@ function* loginRequest({ payload }) {
     toast.success("Logado!");
 
     axios.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+    history.push("/home");
   } catch (e) {
     toast.error("Usuário ou senha inválidos");
 
@@ -58,7 +59,7 @@ function* registerRequest({ payload }) {
       });
       toast.success("Conta criada com sucesso");
       yield put(actions.registerCreatedSuccess({ nome, email, password }));
-      history.push("/login");
+      history.push("/");
     }
   } catch (e) {
     const errors = get(e, "response.data.errors", []);
@@ -68,7 +69,7 @@ function* registerRequest({ payload }) {
     if (status === 401) {
       toast.error("Você precisa fazer login novamente");
       yield put(actions.loginFailure());
-      return history.push("/login");
+      return history.push("/");
     }
 
     if (errors.legth > 0) {
