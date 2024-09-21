@@ -78,44 +78,34 @@ export const SearchSpace = styled.div`
     }
 `;
 
-export const AddInput = styled.div`
-    display: flex;
-    position: relative;
-    bottom: 650px;
-    left: 1010px;
-    height: 70px;
-    width: 190px;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-
-    .btn {
-        height: 70px;
-        width: 190px;
-    }
-
-    .btn-text {
-        position: relative;
-        top: -27px;
-        left: 35px;
-        width: 130px;
-        font-size: 18px;
-    }
-
-    .icon {
-        position: relative;
-        right: 50px;
-        top: 10px;
-    }
-`;
-
 export const InputsSpace = styled.div`
     display: flex;
     position: relative;
-    bottom: 720px;
+    bottom: 650px;
     height: 520px;
     width: 620px;
     left: 300px;
     background-color: green;
+
+    .main-data-div {
+      background-color: aqua;
+      display: flex;
+      flex-direction: column;
+      height: 200px;
+      width: 300px;
+      margin-top: 10px;
+      margin-left: 150px;
+      border-radius: 8px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .data-div {
+      background-color: white;
+      color: black;
+      width: fit-content;
+      margin-top: 4px;
+    }
 `;
 
 export const NewInput = styled.div`
@@ -124,7 +114,7 @@ export const NewInput = styled.div`
     position: relative;
     align-items: center;
     justify-content: center;
-    bottom: 1150px;
+    bottom: 1170px;
     left: 1020px;
     height: fit-content;
     width: fit-content;
