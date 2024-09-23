@@ -80,31 +80,52 @@ export const SearchSpace = styled.div`
 
 export const InputsSpace = styled.div`
     display: flex;
+    flex-direction: column;
     position: relative;
+    overflow-y: auto;
     bottom: 650px;
     height: 520px;
     width: 620px;
     left: 300px;
-    background-color: green;
 
     .main-data-div {
-      background-color: aqua;
+      background-color: #688da2;
       display: flex;
       flex-direction: column;
       height: 200px;
-      width: 300px;
+      width: 450px;
       margin-top: 10px;
-      margin-left: 150px;
+      margin-left: 90px;
       border-radius: 8px;
       justify-content: center;
       align-items: center;
     }
 
     .data-div {
-      background-color: white;
+      position: relative;
       color: black;
-      width: fit-content;
-      margin-top: 4px;
+      width: 170px;
+      bottom: 84px;
+      left: 110px;
+      margin-top: 10px;
+      color: white;
+      font-size: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+      border-bottom: 0.5px solid white;
+    }
+
+    .label {
+      display: flex;
+      position: relative;
+      right: 130px;
+      top: 75px;
+      margin-top: 10px;
+      width: 130px;
+      color: white;
+      font-size: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+      border-bottom: 0.5px solid white;
     }
 `;
 

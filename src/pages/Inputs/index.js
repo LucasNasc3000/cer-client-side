@@ -22,18 +22,6 @@ export default function Inputs() {
   const [fornecedor, setFornecedor] = useState("");
   const [inputsData, setInputsData] = useState([]);
 
-  const inputAddElements = [
-    document.getElementById(".name"),
-    document.getElementById(".u-weight"),
-    document.getElementById(".t-weight"),
-    document.getElementById(".unities"),
-    document.getElementById(".b-date"),
-    document.getElementById(".e-date"),
-    document.getElementById(".supplier"),
-    document.getElementById(".btn-cancel"),
-    document.getElementById(".btn"),
-  ];
-
   useEffect(() => {
     async function GetData() {
       try {
@@ -43,8 +31,6 @@ export default function Inputs() {
         toast.error(e);
       }
     }
-
-    console.log(inputsData);
 
     GetData();
   });
@@ -57,10 +43,13 @@ export default function Inputs() {
   };
 
   const clear = () => {
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < inputAddElements.length; i++) {
-      inputAddElements[i].value = "";
-    }
+    setNome("");
+    setPesoUnitario("");
+    setPesoTotal("");
+    setUnidades("");
+    setDataValidade("");
+    setDataCompra("");
+    setFornecedor("");
   };
 
   async function handleClick(e) {
@@ -70,14 +59,14 @@ export default function Inputs() {
       await axios.post("/inputs", {
         nome,
         peso_unitario: pesoUnitario,
-        peso_total: pesoTotal,
         unidades,
-        data_compra: dataCompra,
-        data_validade: dataValidade,
+        peso_total: pesoTotal,
         fornecedor,
+        data_validade: dataValidade,
+        data_compra: dataCompra,
       });
 
-      clear();
+      // clear();
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
@@ -127,12 +116,15 @@ export default function Inputs() {
         {inputsData.map((input) => {
           return (
             <div key={input.id} className="main-data-div">
+              <div className="label">Nome: </div>
+              <div className="label">Peso unitário: </div>
+              <div className="label">Peso total: </div>
+              <div className="label">Unidades: </div>
+              <div className="label">Fornecedor: </div>
               <div className="data-div">{input.nome}</div>
               <div className="data-div">{input.peso_unitario}</div>
               <div className="data-div">{input.peso_total}</div>
               <div className="data-div">{input.unidades}</div>
-              <div className="data-div">{input.data_compra}</div>
-              <div className="data-div">{input.data_validade}</div>
               <div className="data-div">{input.fornecedor}</div>
             </div>
           );
