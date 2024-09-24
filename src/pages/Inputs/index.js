@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { MdLogout } from "react-icons/md";
 import { get } from "lodash";
@@ -20,6 +20,7 @@ export default function Inputs() {
   const [dataCompra, setDataCompra] = useState("");
   const [dataValidade, setDataValidade] = useState("");
   const [fornecedor, setFornecedor] = useState("");
+  const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function Inputs() {
   };
 
   const clear = () => {
+    setId(0);
     setNome("");
     setPesoUnitario("");
     setPesoTotal("");
@@ -52,7 +54,44 @@ export default function Inputs() {
     setFornecedor("");
   };
 
-  async function handleClick(e) {
+  const SetInputs = (e, idParam, data) => {
+    e.preventDefault();
+
+    setId(idParam);
+    setNome(data.nome);
+    setPesoUnitario(data.peso_unitario);
+    setPesoTotal(data.peso_total);
+    setUnidades(data.unidades);
+    setDataValidade(data.data_validade);
+    setDataCompra(data.data_compra);
+    setFornecedor(data.fornecedor);
+  };
+
+  async function InputUpdate() {
+    try {
+      await axios.put(`/inputs/${id}`, {
+        nome,
+        peso_unitario: pesoUnitario,
+        unidades,
+        peso_total: pesoTotal,
+        fornecedor,
+        data_validade: dataValidade,
+        data_compra: dataCompra,
+      });
+
+      clear();
+    } catch (err) {
+      const errors = get(err, "response.data.errors", []);
+
+      if (errors.length > 0) {
+        errors.map((error) => toast.error(error));
+      } else {
+        toast.error("Erro desconhecido");
+      }
+    }
+  }
+
+  async function InputRegister(e) {
     e.preventDefault();
 
     try {
@@ -66,17 +105,29 @@ export default function Inputs() {
         data_compra: dataCompra,
       });
 
-      // clear();
+      clear();
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
       } else {
-        toast.error("Erro desconhecido");
+        toast.error(err);
+        console.log(err);
       }
     }
   }
+
+  const IdVerify = (e) => {
+    console.log(pesoUnitario);
+    if (id !== 0) {
+      InputUpdate();
+    } else {
+      InputRegister(e);
+    }
+
+    console.log(id);
+  };
 
   return (
     <InputsContainer>
@@ -116,15 +167,26 @@ export default function Inputs() {
         {inputsData.map((input) => {
           return (
             <div key={input.id} className="main-data-div">
+              <div className="edit">
+                <FaEdit
+                  className="edit-icon"
+                  onClick={(e) => SetInputs(e, input.id, input)}
+                />
+                <FaTrash className="delete-icon" />
+              </div>
               <div className="label">Nome: </div>
               <div className="label">Peso unitário: </div>
               <div className="label">Peso total: </div>
               <div className="label">Unidades: </div>
+              <div className="label">Data compra: </div>
+              <div className="label">Data Validade: </div>
               <div className="label">Fornecedor: </div>
               <div className="data-div">{input.nome}</div>
               <div className="data-div">{input.peso_unitario}</div>
               <div className="data-div">{input.peso_total}</div>
               <div className="data-div">{input.unidades}</div>
+              <div className="data-div">{input.data_compra}</div>
+              <div className="data-div">{input.data_validade}</div>
               <div className="data-div">{input.fornecedor}</div>
             </div>
           );
@@ -183,7 +245,7 @@ export default function Inputs() {
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => handleClick(e)}>
+        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
           Adicionar
         </button>
       </NewInput>

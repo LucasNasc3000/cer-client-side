@@ -84,7 +84,7 @@ export const InputsSpace = styled.div`
     position: relative;
     overflow-y: auto;
     bottom: 650px;
-    height: 520px;
+    height: 500px;
     width: 620px;
     left: 300px;
 
@@ -92,20 +92,21 @@ export const InputsSpace = styled.div`
       background-color: #688da2;
       display: flex;
       flex-direction: column;
-      height: 200px;
+      height: 290px;
       width: 450px;
       margin-top: 10px;
       margin-left: 90px;
       border-radius: 8px;
       justify-content: center;
       align-items: center;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     }
 
     .data-div {
       position: relative;
       color: black;
       width: 170px;
-      bottom: 84px;
+      bottom: 124px;
       left: 110px;
       margin-top: 10px;
       color: white;
@@ -119,13 +120,49 @@ export const InputsSpace = styled.div`
       display: flex;
       position: relative;
       right: 130px;
-      top: 75px;
+      top: 100px;
       margin-top: 10px;
       width: 130px;
       color: white;
       font-size: 18px;
       font-family: Arial, Helvetica, sans-serif;
       border-bottom: 0.5px solid white;
+    }
+
+    .edit {
+      display: flex;
+      position: relative;
+      top: 105px;
+      left: -12px;
+      width: 120px;
+    }
+
+    .edit-icon {
+      position: relative;
+      color: white;
+      display: flex;
+      height: 35px;
+      width: 40px;
+      padding: 4px;
+      left: 15px;
+    }
+
+    .delete-icon {
+      display: flex;
+      position: relative;
+      color: white;
+      height: 35px;
+      width: 40px;
+      padding: 4px;
+      left: 30px;
+    }
+
+    .edit-icon:hover {
+      filter: brightness(80%);
+    }
+
+    .delete-icon:hover {
+      filter: brightness(80%);
     }
 `;
 
@@ -135,7 +172,7 @@ export const NewInput = styled.div`
     position: relative;
     align-items: center;
     justify-content: center;
-    bottom: 1170px;
+    bottom: 1155px;
     left: 1020px;
     height: fit-content;
     width: fit-content;
