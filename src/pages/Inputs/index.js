@@ -29,7 +29,7 @@ export default function Inputs() {
         const data = await axios.get("/inputs");
         setInputsData(data.data);
       } catch (e) {
-        toast.error(e);
+        toast.error("Erro ao exibir insumos");
       }
     }
 
@@ -86,8 +86,7 @@ export default function Inputs() {
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
       } else {
-        toast.error(err);
-        console.log(err);
+        toast.error("Erro ao atualizar insumo. Verifique os dados inseridos");
       }
     }
   }
@@ -113,10 +112,28 @@ export default function Inputs() {
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
       } else {
-        toast.error("Erro desconhecido");
+        toast.error(
+          "Erro ao cadastrar novo insumo. Verifique os dados inseridos"
+        );
       }
     }
   }
+
+  const Delete = async (e, idParam) => {
+    e.preventDefault();
+
+    try {
+      await axios.delete(`/inputs/${idParam}`);
+    } catch (err) {
+      const errors = get(err, "response.data.errors", []);
+
+      if (errors.length > 0) {
+        errors.map((error) => toast.error(error));
+      } else {
+        toast.error("Erro desconhecido");
+      }
+    }
+  };
 
   const IdVerify = (e) => {
     e.preventDefault();
@@ -171,7 +188,10 @@ export default function Inputs() {
                   className="edit-icon"
                   onClick={(e) => SetInputs(e, input.id, input)}
                 />
-                <FaTrash className="delete-icon" />
+                <FaTrash
+                  className="delete-icon"
+                  onClick={(e) => Delete(e, input.id)}
+                />
               </div>
               <div className="label">Nome: </div>
               <div className="label">Peso unitário: </div>

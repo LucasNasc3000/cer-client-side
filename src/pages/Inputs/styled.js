@@ -162,7 +162,7 @@ export const InputsSpace = styled.div`
     }
 
     .delete-icon:hover {
-      filter: brightness(80%);
+      color: red;
     }
 `;
 
