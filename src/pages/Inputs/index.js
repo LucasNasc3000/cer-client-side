@@ -13,13 +13,13 @@ import { InputsContainer, SearchSpace, InputsSpace, NewInput } from "./styled";
 export default function Inputs() {
   const dispatch = useDispatch();
 
-  const [nome, setNome] = useState("");
+  const [nomeValue, setNome] = useState("");
   const [pesoUnitario, setPesoUnitario] = useState("");
   const [pesoTotal, setPesoTotal] = useState("");
-  const [unidades, setUnidades] = useState("");
+  const [unidadesValue, setUnidades] = useState("");
   const [dataCompra, setDataCompra] = useState("");
   const [dataValidade, setDataValidade] = useState("");
-  const [fornecedor, setFornecedor] = useState("");
+  const [fornecedorValue, setFornecedor] = useState("");
   const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
 
@@ -70,37 +70,11 @@ export default function Inputs() {
   async function InputUpdate() {
     try {
       await axios.put(`/inputs/${id}`, {
-        nome,
+        nome: nomeValue,
         peso_unitario: pesoUnitario,
-        unidades,
+        unidades: unidadesValue,
         peso_total: pesoTotal,
-        fornecedor,
-        data_validade: dataValidade,
-        data_compra: dataCompra,
-      });
-
-      clear();
-    } catch (err) {
-      const errors = get(err, "response.data.errors", []);
-
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido");
-      }
-    }
-  }
-
-  async function InputRegister(e) {
-    e.preventDefault();
-
-    try {
-      await axios.post("/inputs", {
-        nome,
-        peso_unitario: pesoUnitario,
-        unidades,
-        peso_total: pesoTotal,
-        fornecedor,
+        fornecedor: fornecedorValue,
         data_validade: dataValidade,
         data_compra: dataCompra,
       });
@@ -118,15 +92,40 @@ export default function Inputs() {
     }
   }
 
+  async function InputRegister(e) {
+    e.preventDefault();
+
+    try {
+      await axios.post("/inputs", {
+        nome: nomeValue,
+        peso_unitario: pesoUnitario,
+        unidades: unidadesValue,
+        peso_total: pesoTotal,
+        fornecedor: fornecedorValue,
+        data_validade: dataValidade,
+        data_compra: dataCompra,
+      });
+
+      clear();
+    } catch (err) {
+      const errors = get(err, "response.data.errors", []);
+
+      if (errors.length > 0) {
+        errors.map((error) => toast.error(error));
+      } else {
+        toast.error("Erro desconhecido");
+      }
+    }
+  }
+
   const IdVerify = (e) => {
-    console.log(pesoUnitario);
+    e.preventDefault();
+
     if (id !== 0) {
       InputUpdate();
     } else {
       InputRegister(e);
     }
-
-    console.log(id);
   };
 
   return (
@@ -197,7 +196,7 @@ export default function Inputs() {
           type="text"
           id="name"
           placeholder="Nome..."
-          value={nome}
+          value={nomeValue}
           onChange={(e) => setNome(e.target.value)}
         />
         <input
@@ -218,7 +217,7 @@ export default function Inputs() {
           type="text"
           id="unities"
           placeholder="Unidades..."
-          value={unidades}
+          value={unidadesValue}
           onChange={(e) => setUnidades(e.target.value)}
         />
         <input
@@ -239,7 +238,7 @@ export default function Inputs() {
           type="text"
           id="supplier"
           placeholder="Fornecedor..."
-          value={fornecedor}
+          value={fornecedorValue}
           onChange={(e) => setFornecedor(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
