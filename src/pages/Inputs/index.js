@@ -20,8 +20,11 @@ export default function Inputs() {
   const [dataCompra, setDataCompra] = useState("");
   const [dataValidade, setDataValidade] = useState("");
   const [fornecedorValue, setFornecedor] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [searchParam, setSearchParam] = useState("");
   const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
+  const searchInput = document.querySelector(".input-search");
 
   useEffect(() => {
     async function GetData() {
@@ -66,6 +69,16 @@ export default function Inputs() {
     setDataCompra(data.data_compra);
     setFornecedor(data.fornecedor);
   };
+
+  async function DoSearch(e) {
+    e.preventDefault();
+    try {
+      await axios.get(`/inputs/search/${searchParam}/${searchInput.value}`);
+      clear();
+    } catch (err) {
+      toast.error(err);
+    }
+  }
 
   async function InputUpdate() {
     try {
@@ -149,7 +162,11 @@ export default function Inputs() {
     <InputsContainer>
       <Header />
       <SearchSpace>
-        <FaSearch size={30} className="search-icon" />
+        <FaSearch
+          size={30}
+          className="search-icon"
+          onClick={(e) => DoSearch(e)}
+        />
         <input
           type="text"
           placeholder="Pesquisar insumo..."
@@ -157,25 +174,35 @@ export default function Inputs() {
         />
         <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
         <div className="checkboxes">
-          <input type="checkbox" className="checkbox" />
+          <input type="checkbox" className="checkbox" name="name" />
           <h3 className="checkbox-label">Nome</h3>
 
-          <input type="checkbox" className="checkbox" />
+          <input type="checkbox" className="checkbox" name="unitweight" />
           <h3 className="checkbox-label">Peso unitário</h3>
 
-          <input type="checkbox" className="checkbox" />
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="totalweight"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
           <h3 className="checkbox-label">Peso total</h3>
 
-          <input type="checkbox" className="checkbox" />
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="unities"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
           <h3 className="checkbox-label">Unidades</h3>
 
-          <input type="checkbox" className="checkbox" />
+          <input type="checkbox" className="checkbox" name="boughtdate" />
           <h3 className="checkbox-label">Data da compra</h3>
 
-          <input type="checkbox" className="checkbox" />
+          <input type="checkbox" className="checkbox" name="expirationdate" />
           <h3 className="checkbox-label">Data de validade</h3>
 
-          <input type="checkbox" className="checkbox" />
+          <input type="checkbox" className="checkbox" name="supplier" />
           <h3 className="checkbox-label">Fornecedor</h3>
         </div>
       </SearchSpace>
