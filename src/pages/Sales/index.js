@@ -55,6 +55,8 @@ export default function Sales() {
     setTelefoneCliente("");
     setEnderecoCliente("");
     setDataVenda("");
+    setSearchParam("");
+    searchInput.value = "";
   };
 
   const SetSales = (e, idParam, data) => {
@@ -73,7 +75,10 @@ export default function Sales() {
   async function DoSearch(e) {
     e.preventDefault();
     try {
-      await axios.get(`/sales/search/${searchParam}/${searchInput.value}`);
+      const result = await axios.get(
+        `/sales/search/${searchParam}/${searchInput.value}`
+      );
+      console.log(result);
       clear();
     } catch (err) {
       toast.error(err);

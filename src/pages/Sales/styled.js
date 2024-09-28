@@ -106,9 +106,9 @@ export const SalesSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 124px;
+      bottom: 154px;
       left: 110px;
-      margin-top: 10px;
+      margin-top: 20px;
       color: white;
       font-size: 18px;
       font-family: Arial, Helvetica, sans-serif;
@@ -120,7 +120,7 @@ export const SalesSpace = styled.div`
       display: flex;
       position: relative;
       right: 130px;
-      top: 100px;
+      top: 140px;
       margin-top: 10px;
       width: 130px;
       color: white;
@@ -132,8 +132,8 @@ export const SalesSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 105px;
-      left: -12px;
+      top: 145px;
+      left: -16px;
       width: 120px;
     }
 
