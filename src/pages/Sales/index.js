@@ -8,31 +8,31 @@ import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import Header from "../../components/Header";
-import { InputsContainer, SearchSpace, InputsSpace, NewInput } from "./styled";
+import { SalesContainer, SearchSpace, SalesSpace, NewSale } from "./styled";
 
-export default function Inputs() {
+export default function Sales() {
   const dispatch = useDispatch();
 
-  const [nomeValue, setNome] = useState("");
-  const [pesoUnitario, setPesoUnitario] = useState("");
+  const [produto, setProduto] = useState("");
   const [pesoTotal, setPesoTotal] = useState("");
   const [unidadesValue, setUnidades] = useState("");
-  const [dataCompra, setDataCompra] = useState("");
-  const [dataValidade, setDataValidade] = useState("");
-  const [fornecedorValue, setFornecedor] = useState("");
+  const [nomeCliente, setNomeCliente] = useState("");
+  const [telefoneCliente, setTelefoneCliente] = useState("");
+  const [enderecoCliente, setEnderecoCliente] = useState("");
+  const [dataVenda, setDataVenda] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
   const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
-  const searchInput = document.querySelector(".input-search");
+  const searchInput = document.querySelector(".sale-search");
 
   useEffect(() => {
     async function GetData() {
       try {
-        const data = await axios.get("/inputs");
+        const data = await axios.get("/sales");
         setInputsData(data.data);
       } catch (e) {
-        toast.error("Erro ao exibir insumos");
+        toast.error("Erro ao exibir vendas");
       }
     }
 
@@ -48,48 +48,48 @@ export default function Inputs() {
 
   const clear = () => {
     setId(0);
-    setNome("");
-    setPesoUnitario("");
+    setProduto("");
     setPesoTotal("");
     setUnidades("");
-    setDataValidade("");
-    setDataCompra("");
-    setFornecedor("");
+    setNomeCliente("");
+    setTelefoneCliente("");
+    setEnderecoCliente("");
+    setDataVenda("");
   };
 
-  const SetInputs = (e, idParam, data) => {
+  const SetSales = (e, idParam, data) => {
     e.preventDefault();
 
     setId(idParam);
-    setNome(data.nome);
-    setPesoUnitario(data.peso_unitario);
+    setProduto(data.produto);
     setPesoTotal(data.peso_total);
     setUnidades(data.unidades);
-    setDataValidade(data.data_validade);
-    setDataCompra(data.data_compra);
-    setFornecedor(data.fornecedor);
+    setNomeCliente(data.nome_cliente);
+    setTelefoneCliente(data.telefone_cliente);
+    setEnderecoCliente(data.endereco_cliente);
+    setDataVenda(data.data_venda);
   };
 
   async function DoSearch(e) {
     e.preventDefault();
     try {
-      await axios.get(`/inputs/search/${searchParam}/${searchInput.value}`);
+      await axios.get(`/sales/search/${searchParam}/${searchInput.value}`);
       clear();
     } catch (err) {
       toast.error(err);
     }
   }
 
-  async function InputUpdate() {
+  async function SaleUpdate() {
     try {
-      await axios.put(`/inputs/${id}`, {
-        nome: nomeValue,
-        peso_unitario: pesoUnitario,
-        unidades: unidadesValue,
+      await axios.put(`/sales/${id}`, {
+        produto,
         peso_total: pesoTotal,
-        fornecedor: fornecedorValue,
-        data_validade: dataValidade,
-        data_compra: dataCompra,
+        unidades: unidadesValue,
+        nome_cliente: nomeCliente,
+        telefone_cliente: telefoneCliente,
+        endereco_cliente: enderecoCliente,
+        data_venda: dataVenda,
       });
 
       clear();
@@ -99,23 +99,23 @@ export default function Inputs() {
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
       } else {
-        toast.error("Erro ao atualizar insumo. Verifique os dados inseridos");
+        toast.error("Erro ao atualizar venda. Verifique os dados inseridos");
       }
     }
   }
 
-  async function InputRegister(e) {
+  async function SaleRegister(e) {
     e.preventDefault();
 
     try {
-      await axios.post("/inputs", {
-        nome: nomeValue,
-        peso_unitario: pesoUnitario,
-        unidades: unidadesValue,
+      await axios.post("/sales", {
+        produto,
         peso_total: pesoTotal,
-        fornecedor: fornecedorValue,
-        data_validade: dataValidade,
-        data_compra: dataCompra,
+        unidades: unidadesValue,
+        nome_cliente: nomeCliente,
+        telefone_cliente: telefoneCliente,
+        endereco_cliente: enderecoCliente,
+        data_venda: dataVenda,
       });
 
       clear();
@@ -126,7 +126,7 @@ export default function Inputs() {
         errors.map((error) => toast.error(error));
       } else {
         toast.error(
-          "Erro ao cadastrar novo insumo. Verifique os dados inseridos"
+          "Erro ao cadastrar nova venda. Verifique os dados inseridos"
         );
       }
     }
@@ -136,7 +136,7 @@ export default function Inputs() {
     e.preventDefault();
 
     try {
-      await axios.delete(`/inputs/${idParam}`);
+      await axios.delete(`/sales/${idParam}`);
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
@@ -152,14 +152,14 @@ export default function Inputs() {
     e.preventDefault();
 
     if (id !== 0) {
-      InputUpdate();
+      SaleUpdate();
     } else {
-      InputRegister(e);
+      SaleRegister(e);
     }
   };
 
   return (
-    <InputsContainer>
+    <SalesContainer>
       <Header />
       <SearchSpace>
         <FaSearch
@@ -169,26 +169,50 @@ export default function Inputs() {
         />
         <input
           type="text"
-          placeholder="Pesquisar insumo..."
-          className="input-search"
+          placeholder="Pesquisar venda..."
+          className="sale-search"
         />
         <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
         <div className="checkboxes">
           <input
             type="checkbox"
             className="checkbox"
-            name="name"
+            name="clientName"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Nome</h3>
+          <h3 className="checkbox-label">Nome cliente</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="unitweight"
+            name="clientAddress"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Peso unitário</h3>
+          <h3 className="checkbox-label">Endereco cliente</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="clientPhone"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Telefone cliente</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="product"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Produto</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="saledate"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Data venda</h3>
 
           <input
             type="checkbox"
@@ -205,78 +229,47 @@ export default function Inputs() {
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Unidades</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="boughtdate"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data da compra</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="expirationdate"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data de validade</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="supplier"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Fornecedor</h3>
         </div>
       </SearchSpace>
-      <InputsSpace>
-        {inputsData.map((input) => {
+      <SalesSpace>
+        {inputsData.map((sale) => {
           return (
-            <div key={input.id} className="main-data-div">
+            <div key={sale.id} className="main-data-div">
               <div className="edit">
                 <FaEdit
                   className="edit-icon"
-                  onClick={(e) => SetInputs(e, input.id, input)}
+                  onClick={(e) => SetSales(e, sale.id, sale)}
                 />
                 <FaTrash
                   className="delete-icon"
-                  onClick={(e) => Delete(e, input.id)}
+                  onClick={(e) => Delete(e, sale.id)}
                 />
               </div>
-              <div className="label">Nome: </div>
-              <div className="label">Peso unitário: </div>
+              <div className="label">Produto: </div>
               <div className="label">Peso total: </div>
               <div className="label">Unidades: </div>
-              <div className="label">Data compra: </div>
-              <div className="label">Data Validade: </div>
-              <div className="label">Fornecedor: </div>
-              <div className="data-div">{input.nome}</div>
-              <div className="data-div">{input.peso_unitario}</div>
-              <div className="data-div">{input.peso_total}</div>
-              <div className="data-div">{input.unidades}</div>
-              <div className="data-div">{input.data_compra}</div>
-              <div className="data-div">{input.data_validade}</div>
-              <div className="data-div">{input.fornecedor}</div>
+              <div className="label">Nome do cliente: </div>
+              <div className="label">Telefone do cliente: </div>
+              <div className="label">Endereco do cliente: </div>
+              <div className="label">Data da venda: </div>
+              <div className="data-div">{sale.produto}</div>
+              <div className="data-div">{sale.peso_total}</div>
+              <div className="data-div">{sale.unidades}</div>
+              <div className="data-div">{sale.nome_cliente}</div>
+              <div className="data-div">{sale.telefone_cliente}</div>
+              <div className="data-div">{sale.endereco_cliente}</div>
+              <div className="data-div">{sale.data_venda}</div>
             </div>
           );
         })}
-      </InputsSpace>
-      <NewInput>
+      </SalesSpace>
+      <NewSale>
         <input
           type="text"
-          id="name"
-          placeholder="Nome..."
-          value={nomeValue}
-          onChange={(e) => setNome(e.target.value)}
-        />
-        <input
-          type="text"
-          id="u-weight"
-          placeholder="Peso unitário..."
-          value={pesoUnitario}
-          onChange={(e) => setPesoUnitario(e.target.value)}
+          id="product"
+          placeholder="Produto..."
+          value={produto}
+          onChange={(e) => setProduto(e.target.value)}
         />
         <input
           type="text"
@@ -294,24 +287,31 @@ export default function Inputs() {
         />
         <input
           type="text"
-          id="b-date"
-          placeholder="Data de compra..."
-          value={dataCompra}
-          onChange={(e) => setDataCompra(e.target.value)}
+          id="c-name"
+          placeholder="Nome do cliente..."
+          value={nomeCliente}
+          onChange={(e) => setNomeCliente(e.target.value)}
         />
         <input
           type="text"
-          id="e-date"
-          placeholder="Data de validade..."
-          value={dataValidade}
-          onChange={(e) => setDataValidade(e.target.value)}
+          id="c-phone"
+          placeholder="Telefone do cliente..."
+          value={telefoneCliente}
+          onChange={(e) => setTelefoneCliente(e.target.value)}
         />
         <input
           type="text"
-          id="supplier"
-          placeholder="Fornecedor..."
-          value={fornecedorValue}
-          onChange={(e) => setFornecedor(e.target.value)}
+          id="c-address"
+          placeholder="Endereço do cliente..."
+          value={enderecoCliente}
+          onChange={(e) => setEnderecoCliente(e.target.value)}
+        />
+        <input
+          type="text"
+          id="sale-date"
+          placeholder="Data da venda..."
+          value={dataVenda}
+          onChange={(e) => setDataVenda(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
@@ -319,7 +319,7 @@ export default function Inputs() {
         <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
           Adicionar
         </button>
-      </NewInput>
-    </InputsContainer>
+      </NewSale>
+    </SalesContainer>
   );
 }

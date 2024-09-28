@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Inputs from "../pages/Inputs";
+import Sales from "../pages/Sales";
 
 // O switch faz com que somente uma rota seja chamada por vez
 // <Route path="/" component={Login} /> faz com que o componente Login seja renderizado na raiz da aplicação (a primeira página a ser vista)
@@ -16,8 +17,9 @@ export default function Routes() {
     <Switch>
       <MyRoute exact path="/" component={Login} isClosed={false} />
       <MyRoute exact path="/register" component={Register} isClosed={false} />
-      <MyRoute exact path="/home" component={Home} isClosed={false} />
-      <MyRoute exact path="/inputs" component={Inputs} isClosed={false} />
+      <MyRoute exact path="/home" component={Home} isClosed />
+      <MyRoute exact path="/inputs" component={Inputs} isClosed />
+      <MyRoute exact path="/sales" component={Sales} isClosed />
     </Switch>
   );
 }
