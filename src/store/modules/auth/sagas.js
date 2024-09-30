@@ -48,6 +48,7 @@ function* registerRequest({ payload }) {
       });
       toast.success("Dados atualizados com sucesso");
       yield put(actions.registerUpdatedSuccess({ nome, email, password }));
+      history.push("/");
     } else {
       // Caso respose seja necessário deve ser usado como uma variável dentro deste try
       // history.push("/login"); redireciona o usuário, depois de fazer o cadastro para a página de login

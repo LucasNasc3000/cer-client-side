@@ -14,7 +14,7 @@ export default function MyRoute({ component: Component, isClosed, ...rest }) {
   if (isClosed && !isLoggedIn) {
     return (
       <Redirect
-        to={{ pathname: "/login", state: { prevPath: rest.location.pathname } }}
+        to={{ pathname: "/", state: { prevPath: rest.location.pathname } }}
       />
     );
   }
