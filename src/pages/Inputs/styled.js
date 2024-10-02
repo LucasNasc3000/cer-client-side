@@ -69,12 +69,26 @@ export const SearchSpace = styled.div`
         top: -5px
     }
 
+    .arrow {
+      display: flex;
+      position: relative;
+      height: 95px;
+      width: 95px;
+      right: 310px;
+      top: -5px;
+      color: #fff;
+    }
+
+    .arrow:hover {
+      filter: brightness(70%);
+    }
+
     .logout:hover {
-        filter: brightness(70%);
+      filter: brightness(70%);
     }
 
     .search-icon:hover {
-        filter: brightness(80%);
+      filter: brightness(80%);
     }
 `;
 

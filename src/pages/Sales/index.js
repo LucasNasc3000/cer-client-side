@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { FaSearch, FaEdit, FaTrash } from "react-icons/fa";
+import { FaSearch, FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { MdLogout } from "react-icons/md";
 import { get } from "lodash";
@@ -24,6 +24,7 @@ export default function Sales() {
   const [searchParam, setSearchParam] = useState("");
   const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const searchInput = document.querySelector(".sale-search");
 
   useEffect(() => {
@@ -46,7 +47,9 @@ export default function Sales() {
     history.push("/");
   };
 
-  const clear = () => {
+  const clear = (e) => {
+    e.preventDefault();
+
     setId(0);
     setProduto("");
     setPesoTotal("");
@@ -57,6 +60,7 @@ export default function Sales() {
     setDataVenda("");
     setSearchParam("");
     searchInput.value = "";
+    setSearchResults([]);
   };
 
   const SetSales = (e, idParam, data) => {
@@ -78,7 +82,7 @@ export default function Sales() {
       const result = await axios.get(
         `/sales/search/${searchParam}/${searchInput.value}`
       );
-      console.log(result);
+      setSearchResults(result.data);
       clear();
     } catch (err) {
       toast.error(err);
@@ -178,6 +182,7 @@ export default function Sales() {
           className="sale-search"
         />
         <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
+        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
         <div className="checkboxes">
           <input
             type="checkbox"
@@ -214,7 +219,7 @@ export default function Sales() {
           <input
             type="checkbox"
             className="checkbox"
-            name="saledate"
+            name="saleDate"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Data venda</h3>
@@ -222,7 +227,7 @@ export default function Sales() {
           <input
             type="checkbox"
             className="checkbox"
-            name="totalweight"
+            name="totalWeight"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Peso total</h3>
@@ -237,36 +242,67 @@ export default function Sales() {
         </div>
       </SearchSpace>
       <SalesSpace>
-        {inputsData.map((sale) => {
-          return (
-            <div key={sale.id} className="main-data-div">
-              <div className="edit">
-                <FaEdit
-                  className="edit-icon"
-                  onClick={(e) => SetSales(e, sale.id, sale)}
-                />
-                <FaTrash
-                  className="delete-icon"
-                  onClick={(e) => Delete(e, sale.id)}
-                />
-              </div>
-              <div className="label">Produto: </div>
-              <div className="label">Peso total: </div>
-              <div className="label">Unidades: </div>
-              <div className="label">Nome do cliente: </div>
-              <div className="label">Telefone do cliente: </div>
-              <div className="label">Endereco do cliente: </div>
-              <div className="label">Data da venda: </div>
-              <div className="data-div">{sale.produto}</div>
-              <div className="data-div">{sale.peso_total}</div>
-              <div className="data-div">{sale.unidades}</div>
-              <div className="data-div">{sale.nome_cliente}</div>
-              <div className="data-div">{sale.telefone_cliente}</div>
-              <div className="data-div">{sale.endereco_cliente}</div>
-              <div className="data-div">{sale.data_venda}</div>
-            </div>
-          );
-        })}
+        {searchResults.length < 1
+          ? inputsData.map((sale) => {
+              return (
+                <div key={sale.id} className="main-data-div">
+                  <div className="edit">
+                    <FaEdit
+                      className="edit-icon"
+                      onClick={(e) => SetSales(e, sale.id, sale)}
+                    />
+                    <FaTrash
+                      className="delete-icon"
+                      onClick={(e) => Delete(e, sale.id)}
+                    />
+                  </div>
+                  <div className="label">Produto: </div>
+                  <div className="label">Peso total: </div>
+                  <div className="label">Unidades: </div>
+                  <div className="label">Nome do cliente: </div>
+                  <div className="label">Telefone do cliente: </div>
+                  <div className="label">Endereco do cliente: </div>
+                  <div className="label">Data da venda: </div>
+                  <div className="data-div">{sale.produto}</div>
+                  <div className="data-div">{sale.peso_total}</div>
+                  <div className="data-div">{sale.unidades}</div>
+                  <div className="data-div">{sale.nome_cliente}</div>
+                  <div className="data-div">{sale.telefone_cliente}</div>
+                  <div className="data-div">{sale.endereco_cliente}</div>
+                  <div className="data-div">{sale.data_venda}</div>
+                </div>
+              );
+            })
+          : searchResults.map((sale) => {
+              return (
+                <div key={sale.id} className="main-data-div">
+                  <div className="edit">
+                    <FaEdit
+                      className="edit-icon"
+                      onClick={(e) => SetSales(e, sale.id, sale)}
+                    />
+                    <FaTrash
+                      className="delete-icon"
+                      onClick={(e) => Delete(e, sale.id)}
+                    />
+                  </div>
+                  <div className="label">Produto: </div>
+                  <div className="label">Peso total: </div>
+                  <div className="label">Unidades: </div>
+                  <div className="label">Nome do cliente: </div>
+                  <div className="label">Telefone do cliente: </div>
+                  <div className="label">Endereco do cliente: </div>
+                  <div className="label">Data da venda: </div>
+                  <div className="data-div">{sale.produto}</div>
+                  <div className="data-div">{sale.peso_total}</div>
+                  <div className="data-div">{sale.unidades}</div>
+                  <div className="data-div">{sale.nome_cliente}</div>
+                  <div className="data-div">{sale.telefone_cliente}</div>
+                  <div className="data-div">{sale.endereco_cliente}</div>
+                  <div className="data-div">{sale.data_venda}</div>
+                </div>
+              );
+            })}
       </SalesSpace>
       <NewSale>
         <input

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { FaSearch, FaEdit, FaTrash } from "react-icons/fa";
+import { FaSearch, FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { MdLogout } from "react-icons/md";
 import { get } from "lodash";
@@ -46,7 +46,8 @@ export default function Inputs() {
     history.push("/");
   };
 
-  const clear = () => {
+  const clear = (e) => {
+    e.preventDefault();
     setId(0);
     setNome("");
     setPesoUnitario("");
@@ -56,7 +57,7 @@ export default function Inputs() {
     setDataCompra("");
     setFornecedor("");
     searchInput.value = "";
-    console.log(searchResults);
+    setSearchResults([]);
   };
 
   const SetInputs = (e, idParam, data) => {
@@ -178,6 +179,7 @@ export default function Inputs() {
           className="input-search"
         />
         <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
+        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
         <div className="checkboxes">
           <input
             type="checkbox"
