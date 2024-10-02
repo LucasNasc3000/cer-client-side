@@ -12,7 +12,6 @@ import { InputsContainer, SearchSpace, InputsSpace, NewInput } from "./styled";
 
 export default function Inputs() {
   const dispatch = useDispatch();
-
   const [nomeValue, setNome] = useState("");
   const [pesoUnitario, setPesoUnitario] = useState("");
   const [pesoTotal, setPesoTotal] = useState("");
@@ -24,6 +23,7 @@ export default function Inputs() {
   const [searchParam, setSearchParam] = useState("");
   const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const searchInput = document.querySelector(".input-search");
 
   useEffect(() => {
@@ -55,6 +55,8 @@ export default function Inputs() {
     setDataValidade("");
     setDataCompra("");
     setFornecedor("");
+    searchInput.value = "";
+    console.log(searchResults);
   };
 
   const SetInputs = (e, idParam, data) => {
@@ -73,7 +75,10 @@ export default function Inputs() {
   async function DoSearch(e) {
     e.preventDefault();
     try {
-      await axios.get(`/inputs/search/${searchParam}/${searchInput.value}`);
+      const results = await axios.get(
+        `/inputs/search/${searchParam}/${searchInput.value}`
+      );
+      setSearchResults(results.data);
       clear();
     } catch (err) {
       toast.error(err);
@@ -232,36 +237,67 @@ export default function Inputs() {
         </div>
       </SearchSpace>
       <InputsSpace>
-        {inputsData.map((input) => {
-          return (
-            <div key={input.id} className="main-data-div">
-              <div className="edit">
-                <FaEdit
-                  className="edit-icon"
-                  onClick={(e) => SetInputs(e, input.id, input)}
-                />
-                <FaTrash
-                  className="delete-icon"
-                  onClick={(e) => Delete(e, input.id)}
-                />
-              </div>
-              <div className="label">Nome: </div>
-              <div className="label">Peso unitário: </div>
-              <div className="label">Peso total: </div>
-              <div className="label">Unidades: </div>
-              <div className="label">Data compra: </div>
-              <div className="label">Data Validade: </div>
-              <div className="label">Fornecedor: </div>
-              <div className="data-div">{input.nome}</div>
-              <div className="data-div">{input.peso_unitario}</div>
-              <div className="data-div">{input.peso_total}</div>
-              <div className="data-div">{input.unidades}</div>
-              <div className="data-div">{input.data_compra}</div>
-              <div className="data-div">{input.data_validade}</div>
-              <div className="data-div">{input.fornecedor}</div>
-            </div>
-          );
-        })}
+        {searchResults.length < 1
+          ? inputsData.map((input) => {
+              return (
+                <div key={input.id} className="main-data-div">
+                  <div className="edit">
+                    <FaEdit
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id, input)}
+                    />
+                    <FaTrash
+                      className="delete-icon"
+                      onClick={(e) => Delete(e, input.id)}
+                    />
+                  </div>
+                  <div className="label">Nome: </div>
+                  <div className="label">Peso unitário: </div>
+                  <div className="label">Peso total: </div>
+                  <div className="label">Unidades: </div>
+                  <div className="label">Data compra: </div>
+                  <div className="label">Data Validade: </div>
+                  <div className="label">Fornecedor: </div>
+                  <div className="data-div">{input.nome}</div>
+                  <div className="data-div">{input.peso_unitario}</div>
+                  <div className="data-div">{input.peso_total}</div>
+                  <div className="data-div">{input.unidades}</div>
+                  <div className="data-div">{input.data_compra}</div>
+                  <div className="data-div">{input.data_validade}</div>
+                  <div className="data-div">{input.fornecedor}</div>
+                </div>
+              );
+            })
+          : searchResults.map((input) => {
+              return (
+                <div key={input.id} className="main-data-div">
+                  <div className="edit">
+                    <FaEdit
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id, input)}
+                    />
+                    <FaTrash
+                      className="delete-icon"
+                      onClick={(e) => Delete(e, input.id)}
+                    />
+                  </div>
+                  <div className="label">Nome: </div>
+                  <div className="label">Peso unitário: </div>
+                  <div className="label">Peso total: </div>
+                  <div className="label">Unidades: </div>
+                  <div className="label">Data compra: </div>
+                  <div className="label">Data Validade: </div>
+                  <div className="label">Fornecedor: </div>
+                  <div className="data-div">{input.nome}</div>
+                  <div className="data-div">{input.peso_unitario}</div>
+                  <div className="data-div">{input.peso_total}</div>
+                  <div className="data-div">{input.unidades}</div>
+                  <div className="data-div">{input.data_compra}</div>
+                  <div className="data-div">{input.data_validade}</div>
+                  <div className="data-div">{input.fornecedor}</div>
+                </div>
+              );
+            })}
       </InputsSpace>
       <NewInput>
         <input
