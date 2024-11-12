@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { FaSearch, FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
-import { toast } from "react-toastify";
-import { MdLogout } from "react-icons/md";
 import { get } from "lodash";
+import React, { useEffect, useState } from "react";
+import { FaArrowLeft, FaEdit, FaSearch, FaTrash } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
-import Header from "../../components/Header";
-import { InputsContainer, SearchSpace, InputsSpace, NewInput } from "./styled";
+import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
   const dispatch = useDispatch();

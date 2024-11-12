@@ -30,9 +30,9 @@ export const FormContainerRegister = styled.div`
   display: flex;
   flex-direction: column;
   width: 600px;
-  height: 460px;
-  margin-top: 90px;
-  margin-left: 330px;
+  height: 670px;
+  margin-top: 30px;
+  margin-left: 460px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;

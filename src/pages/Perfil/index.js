@@ -1,22 +1,22 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import { isEmail } from "validator";
+import React, { useEffect, useState } from "react";
 import { MdLogout } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { isEmail } from "validator";
 import Header from "../../components/Header";
-import { UserContainer, Form } from "./styled";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
+import { Form, UserContainer } from "./styled";
 
 export default function Profile() {
   const userId = useSelector((state) => state.auth.user.id);
-  const nomeStored = useSelector((state) => state.auth.user.nome);
+  const nameStored = useSelector((state) => state.auth.user.name);
   const emailStored = useSelector((state) => state.auth.user.email);
   const dispatch = useDispatch();
 
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,8 +25,10 @@ export default function Profile() {
 
     async function GetUserName() {
       try {
-        const userName = await axios.get(`/users/search/name/${nomeStored}`);
-        setNome(userName.data[0].nome);
+        const userName = await axios.get(
+          `/employees/search/name/${nameStored}`
+        );
+        setName(userName.data[0].nome);
       } catch (e) {
         toast.error("Erro ao tentar obter o nome do usuário");
       } finally {
@@ -34,13 +36,13 @@ export default function Profile() {
       }
     }
     GetUserName();
-  }, [nomeStored, emailStored, userId]);
+  }, [nameStored, emailStored, userId]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     let FormErrors = false;
 
-    if (nome.length < 3 || nome.length > 255) {
+    if (name.length < 3 || name.length > 255) {
       FormErrors = true;
       toast.error("O nome deve ter entre 3 e 255 caracteres");
     }
@@ -58,7 +60,7 @@ export default function Profile() {
 
     if (FormErrors) return;
 
-    dispatch(actions.registerRequest({ userId, nome, email, password }));
+    dispatch(actions.registerRequest({ userId, name, email, password }));
     if (emailStored !== email) dispatch(actions.loginFailure());
   }
 
@@ -76,8 +78,8 @@ export default function Profile() {
       <Form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Digite seu nome aqui"
         />
 
@@ -103,7 +105,7 @@ export default function Profile() {
         </p>
 
         <p className="minitext">
-          Mude a senha ou digite a atual para confirmar as alterações de seus
+          Mude as senhas ou digite a atual para confirmar as alterações de seus
           dados.
         </p>
 

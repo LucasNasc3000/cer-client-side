@@ -10,6 +10,7 @@ export const Title = styled.p`
   margin-top: 25px;
   border-bottom: 0.5px solid black;
   width: 250px;
+  padding: 5px;
 `;
 
 export const Btn = styled.button`
@@ -30,9 +31,9 @@ export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 490px;
-  height: 385px;
+  height: 525px;
   margin-top: 130px;
-  margin-left: 400px;
+  margin-left: 520px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;

@@ -1,35 +1,35 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { isEmail } from "validator";
 import { Link } from "react-router-dom";
-import { Form, Title, FormContainerRegister, BtnRegister } from "./styled";
+import { toast } from "react-toastify";
+import { isEmail } from "validator";
 import * as actions from "../../store/modules/auth/actions";
+import { BtnRegister, Form, FormContainerRegister, Title } from "./styled";
 
 // O input não precisa de id por estar dentro de label, que já tem o nome do campo no htmlFor
 export default function Register() {
   const dispatch = useDispatch();
 
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [permission, setPermission] = useState("");
+  const [address_allowed, setAddressAllowed] = useState("");
 
-  /* Validação do front-end. Neste método é feita a verificação da quantidade de linhas nos inputs responsáveis
-     pelo nome e senha. Já o email será validado usando a dependência isEmail. A senha aqui só têm a sua validação
-     pela quantidade de caracteres, assim como no back-end. Há uma quantidade mínima de caracteres para a criação
-     da senha, nada além disso. A validação da senha só é feita no login. */
   async function handleSubmit(e) {
     e.preventDefault();
     const whiteSpaceRegex = /\s/;
     let FormErrors = false;
 
-    if (nome.length < 3 || nome.length > 255) {
+    if (name.length < 3 || name.length > 255) {
       FormErrors = true;
       toast.error("O nome deve ter entre 3 e 255 caracteres");
     }
 
-    if (whiteSpaceRegex.test(nome)) {
+    if (whiteSpaceRegex.test(name)) {
       FormErrors = true;
       toast.error("O nome não pode conter espaços em branco");
     }
@@ -47,23 +47,27 @@ export default function Register() {
 
     if (FormErrors) return;
 
-    /* Depois da validação do front-end a ação registerRequest é disparada e os dados são enviados
-       ao sagas, onde é verificado se existe um id de usuário no reducer de auth. Se não houver, uma
-       nova conta é criada com os dados enviados por este componente. Depois de criada a conta, o usuário
-       é redirecionado para a página de login.
-    */
-    dispatch(actions.registerRequest({ nome, email, password }));
+    dispatch(
+      actions.registerRequest({
+        name,
+        email,
+        password,
+        adminPassword,
+        permission,
+        address_allowed,
+      })
+    );
   }
 
   return (
     <FormContainerRegister>
-      <Title>Cadastre-se</Title>
+      <Title>Cadastrar novo funcionário</Title>
 
       <Form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Digite seu primeiro nome"
         />
         <input
@@ -77,6 +81,24 @@ export default function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Crie uma senha"
+        />
+        <input
+          type="password"
+          value={adminPassword}
+          onChange={(e) => setAdminPassword(e.target.value)}
+          placeholder="Crie uma senha de administrador"
+        />
+        <input
+          type="text"
+          value={permission}
+          onChange={(e) => setPermission(e.target.value)}
+          placeholder="Escolha uma permissão"
+        />
+        <input
+          type="text"
+          value={address_allowed}
+          onChange={(e) => setAddressAllowed(e.target.value)}
+          placeholder="Autorização para receber emails. Escreva y ou n"
         />
         <BtnRegister>
           <button type="submit">Criar conta</button>

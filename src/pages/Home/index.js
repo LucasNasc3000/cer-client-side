@@ -1,20 +1,23 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from "react";
-import { MdLogout } from "react-icons/md";
-import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
+import Chart from "chart.js/auto";
+import React, { useEffect, useState } from "react";
+import { MdLogout } from "react-icons/md";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { HomeContainer } from "./styled";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import history from "../../services/history";
+import * as actions from "../../store/modules/auth/actions";
+import { HomeContainer } from "./styled";
 
 Chart.register(CategoryScale);
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [salesData, setSalesData] = useState([]);
 
   useEffect(() => {
@@ -30,41 +33,53 @@ export default function Home() {
     GetSalesData();
   }, []);
 
+  console.log(axios.defaults.headers);
   // eslint-disable-next-line no-unused-vars
   const chartData = {
-    labels: salesData.map((data) => {return data.data_venda}),
+    labels: salesData.map((data) => {
+      return data.data_venda;
+    }),
     datasets: [
       {
         label: "Unidades vendidas",
-        data: salesData.map((data) => {return data.unidades}),
+        data: salesData.map((data) => {
+          return data.unidades;
+        }),
         skipNull: true,
         maxBarThicness: 10,
-        backgroundColor: [
-          "gray"
-        ],
+        backgroundColor: ["gray"],
       },
     ],
   };
 
   const chartDataProducts = {
-    labels: salesData.map((data) => {return data.produto}),
+    labels: salesData.map((data) => {
+      return data.produto;
+    }),
     datasets: [
       {
         label: "Unidades vendidas",
-        data: salesData.map((data) => {return data.unidades}),
+        data: salesData.map((data) => {
+          return data.unidades;
+        }),
         skipNull: true,
         maxBarThicness: 10,
-        backgroundColor: [
-          "gray"
-        ],
+        backgroundColor: ["gray"],
       },
     ],
   };
 
-  return(
+  const handleLogout = (e) => {
+    e.preventDefault();
+
+    dispatch(actions.loginFailure());
+    history.push("/");
+  };
+
+  return (
     <HomeContainer>
       <Header />
-      <MdLogout size={32} class="logout" />
+      <MdLogout size={32} class="logout" onClick={(e) => handleLogout(e)} />
       <BarChart chartData={chartData} />
       <BarChartProducts chartData={chartDataProducts} />
     </HomeContainer>

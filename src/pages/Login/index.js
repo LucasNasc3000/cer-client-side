@@ -1,13 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { get } from "lodash";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isEmail } from "validator";
-import { useDispatch } from "react-redux";
-import { get } from "lodash";
-import { Link } from "react-router-dom";
 
-import { Form, Title, FormContainer, Btn } from "./styled";
 import * as actions from "../../store/modules/auth/actions";
+import { Btn, Form, FormContainer, Title } from "./styled";
 
 export default function Login(props) {
   const dispatch = useDispatch();
@@ -16,6 +16,8 @@ export default function Login(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [adminpassword, setAdminPassword] = useState("");
+  const [permission, setPermission] = useState("");
 
   /* Validação do front-end. Neste método é feita a verificação da quantidade de linhas nos inputs responsáveis
      pelo nome e senha. Já o email será validado usando a dependência isEmail. A senha aqui têm a sua validação
@@ -40,12 +42,20 @@ export default function Login(props) {
 
     // Ação disparada que delega a responsabilidade para a função loginRequest (mesmo nome da action) no sagas, que além de
     // enviar o email e a senha, envia o caminho que o usuário estava antes de ser deslogado da aplicação.
-    dispatch(actions.loginRequest({ email, password, prevPath }));
+    dispatch(
+      actions.loginRequest({
+        email,
+        password,
+        adminpassword,
+        permission,
+        prevPath,
+      })
+    );
   };
 
   return (
     <FormContainer>
-      <Title>Entre com email e senha</Title>
+      <Title>Login</Title>
 
       <Form onSubmit={handleSubmit}>
         <input
@@ -59,6 +69,18 @@ export default function Login(props) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Digite sua senha"
+        />
+        <input
+          type="password"
+          value={adminpassword}
+          onChange={(e) => setAdminPassword(e.target.value)}
+          placeholder="Digite sua senha de administrador"
+        />
+        <input
+          type="text"
+          value={permission}
+          onChange={(e) => setPermission(e.target.value)}
+          placeholder="Digite sua permissão"
         />
         <Btn>
           <button type="submit">Entrar</button>

@@ -1,15 +1,28 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
-import { call, put, all, takeLatest } from "redux-saga/effects";
-import { toast } from "react-toastify";
 import { get } from "lodash";
-import * as actions from "./actions";
-import * as types from "../types";
+import { toast } from "react-toastify";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 import axios from "../../../services/axios";
 import history from "../../../services/history";
+import * as types from "../types";
+import * as actions from "./actions";
 
 // O call chama uma função (pode ser normal ou geradora) que retorna uma promise (aqui são os dados do usuário e o token)
 // O put dispara uma ação
 // eslint-disable-next-line require-yield
+
+// Esta função recupera o token que desapareceria do cabeçalho depois que o login fosse feito e o site atualizado
+// O terceiro parâmetro de get será um valor padrão
+function persistRehydrate({ payload }) {
+  const token = get(payload, "auth.token", "");
+  if (!token) return;
+  axios.defaults.headers.Authorization = `Bearer ${token}`;
+  axios.defaults.headers.permission = payload.auth.permission;
+  axios.defaults.headers.adminpassword = payload.auth.adminpassword;
+  axios.defaults.headers.email = payload.auth.emailHeaders;
+}
+
 function* loginRequest({ payload }) {
   try {
     const response = yield call(axios.post, "/tokens", payload);
@@ -17,7 +30,12 @@ function* loginRequest({ payload }) {
 
     toast.success("Logado!");
 
+    // criptografar as informações antes de enviar
     axios.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+    axios.defaults.headers.email = payload.email;
+    axios.defaults.headers.adminpassword = payload.adminpassword;
+    axios.defaults.headers.permission = payload.permission;
+
     history.push("/home");
   } catch (e) {
     toast.error("Usuário ou senha inválidos");
@@ -26,40 +44,55 @@ function* loginRequest({ payload }) {
   }
 }
 
-// Esta função recupera o token que desapareceria do cabeçalho depois que o login fosse feito e o site atualizado
-// O terceiro parâmetro de get será um valor padrão
-function persistRehydrate({ payload }) {
-  const token = get(payload, "auth.token", "");
-  if (!token) return;
-  axios.defaults.headers.Authorization = `Bearer ${token}`;
-}
-
 // Esta função atualiza dos dados do usuário
 // eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
-  const { userId, nome, email, password } = payload;
+  const {
+    userId,
+    name,
+    email,
+    password,
+    adminpassword,
+    permission,
+    address_allowed,
+  } = payload;
 
   try {
     if (userId) {
-      yield call(axios.put, `/users/${userId}`, {
-        nome,
+      yield call(axios.put, `/employees/${userId}`, {
+        name,
         email,
         password,
+        adminpassword,
+        permission,
+        address_allowed,
       });
       toast.success("Dados atualizados com sucesso");
-      yield put(actions.registerUpdatedSuccess({ nome, email, password }));
+      yield put(actions.registerUpdatedSuccess({ name, email, password }));
       history.push("/");
     } else {
       // Caso respose seja necessário deve ser usado como uma variável dentro deste try
       // history.push("/login"); redireciona o usuário, depois de fazer o cadastro para a página de login
       // setisLoading(true);
-      yield call(axios.post, "/users", {
-        nome,
+      yield call(axios.post, "/employees", {
+        name,
         email,
         password,
+        adminpassword,
+        permission,
+        address_allowed,
       });
       toast.success("Conta criada com sucesso");
-      yield put(actions.registerCreatedSuccess({ nome, email, password }));
+      yield put(
+        actions.registerCreatedSuccess({
+          name,
+          email,
+          password,
+          adminpassword,
+          permission,
+          address_allowed,
+        })
+      );
       history.push("/");
     }
   } catch (e) {

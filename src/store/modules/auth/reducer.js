@@ -1,9 +1,12 @@
-import * as types from "../types";
 import axios from "../../../services/axios";
+import * as types from "../types";
 
 const initialState = {
   isLoggedIn: false,
   token: "",
+  adminpassword: "",
+  emailHeaders: "",
+  permission: "",
   user: {},
   isLoading: false,
 };
@@ -27,12 +30,18 @@ export default function (state = initialState, action) {
       // O estado nunca é alterado e sim copiado e a cópia com as alterações é que retorna
       // garante que o token do usuário deslogado não permaneça ativo
       delete axios.defaults.headers.Authorization;
+      delete axios.defaults.headers.adminpassword;
+      delete axios.defaults.headers.email;
+      delete axios.defaults.headers.permission;
       const newState = { ...initialState };
       return newState;
     }
 
     case types.LOGIN_REQUEST: {
       const newState = { ...state };
+      newState.adminpassword = action.payload.adminpassword;
+      newState.emailHeaders = action.payload.email;
+      newState.permission = action.payload.permission;
       newState.isLoading = true;
       return newState;
     }
