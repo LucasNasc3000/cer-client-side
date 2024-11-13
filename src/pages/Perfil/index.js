@@ -11,32 +11,32 @@ import * as actions from "../../store/modules/auth/actions";
 import { Form, UserContainer } from "./styled";
 
 export default function Profile() {
-  const userId = useSelector((state) => state.auth.user.id);
-  const nameStored = useSelector((state) => state.auth.user.name);
-  const emailStored = useSelector((state) => state.auth.user.email);
+  const emailStored = useSelector((state) => state.auth.emailHeaders);
+  const nameStored = useSelector((state) => state.auth.name);
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [adminpassword, setAdminPassword] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [employeeId, setEmployeeId] = useState("");
 
   useEffect(() => {
-    if (!userId) return;
-
-    async function GetUserName() {
+    async function employeeSearch() {
       try {
-        const userName = await axios.get(
-          `/employees/search/name/${nameStored}`
+        const employee = await axios.get(
+          `/employees/search/email/${emailStored}`
         );
-        setName(userName.data[0].nome);
+
+        setEmployeeId(employee.data[0].id);
       } catch (e) {
-        toast.error("Erro ao tentar obter o nome do usuário");
-      } finally {
-        setEmail(emailStored);
+        toast.error(e.response.data.error[0]);
       }
     }
-    GetUserName();
-  }, [nameStored, emailStored, userId]);
+
+    employeeSearch();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -60,7 +60,7 @@ export default function Profile() {
 
     if (FormErrors) return;
 
-    dispatch(actions.registerRequest({ userId, name, email, password }));
+    dispatch(actions.registerRequest({ employeeId, name, email, password }));
     if (emailStored !== email) dispatch(actions.loginFailure());
   }
 
@@ -80,7 +80,7 @@ export default function Profile() {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Digite seu nome aqui"
+          placeholder={nameStored}
         />
 
         <input
@@ -96,6 +96,14 @@ export default function Profile() {
           className="pass"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Crie uma senha"
+        />
+
+        <input
+          type="password"
+          className="pass"
+          value={adminpassword}
+          onChange={(e) => setAdminPassword(e.target.value)}
           placeholder="Crie uma senha"
         />
 

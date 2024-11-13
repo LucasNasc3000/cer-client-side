@@ -15,6 +15,7 @@ export default function Login(props) {
   const prevPath = get(props, "location.state.prevPath", "/");
 
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [adminpassword, setAdminPassword] = useState("");
   const [permission, setPermission] = useState("");
@@ -44,6 +45,7 @@ export default function Login(props) {
     // enviar o email e a senha, envia o caminho que o usuário estava antes de ser deslogado da aplicação.
     dispatch(
       actions.loginRequest({
+        name,
         email,
         password,
         adminpassword,
@@ -58,6 +60,12 @@ export default function Login(props) {
       <Title>Login</Title>
 
       <Form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Digite seu nome"
+        />
         <input
           type="text"
           value={email}

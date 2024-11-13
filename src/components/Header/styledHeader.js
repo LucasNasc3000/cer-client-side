@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 export const MainHeader = styled.nav`
   background-color: #688da2;
-  height: 683px;
+  height: 750px;
   width: 230px;
 
   .home {

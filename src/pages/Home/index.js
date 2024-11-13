@@ -33,7 +33,6 @@ export default function Home() {
     GetSalesData();
   }, []);
 
-  console.log(axios.defaults.headers);
   // eslint-disable-next-line no-unused-vars
   const chartData = {
     labels: salesData.map((data) => {

@@ -38,7 +38,7 @@ function* loginRequest({ payload }) {
 
     history.push("/home");
   } catch (e) {
-    toast.error("Usuário ou senha inválidos");
+    toast.error(e.response.data.error[0]);
 
     yield put(actions.loginFailure());
   }

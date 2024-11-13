@@ -7,7 +7,7 @@ const initialState = {
   adminpassword: "",
   emailHeaders: "",
   permission: "",
-  user: {},
+  name: "",
   isLoading: false,
 };
 
@@ -21,7 +21,6 @@ export default function (state = initialState, action) {
       const newState = { ...state };
       newState.isLoggedIn = true;
       newState.token = action.payload.token;
-      newState.user = action.payload.user;
       newState.isLoading = false;
       return newState;
     }
@@ -42,6 +41,7 @@ export default function (state = initialState, action) {
       newState.adminpassword = action.payload.adminpassword;
       newState.emailHeaders = action.payload.email;
       newState.permission = action.payload.permission;
+      newState.name = action.payload.name;
       newState.isLoading = true;
       return newState;
     }
