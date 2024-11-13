@@ -15,7 +15,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
+  const [adminpassword, setAdminPassword] = useState("");
   const [permission, setPermission] = useState("");
   const [address_allowed, setAddressAllowed] = useState("");
 
@@ -52,7 +52,7 @@ export default function Register() {
         name,
         email,
         password,
-        adminPassword,
+        adminpassword,
         permission,
         address_allowed,
       })
@@ -84,7 +84,7 @@ export default function Register() {
         />
         <input
           type="password"
-          value={adminPassword}
+          value={adminpassword}
           onChange={(e) => setAdminPassword(e.target.value)}
           placeholder="Crie uma senha de administrador"
         />

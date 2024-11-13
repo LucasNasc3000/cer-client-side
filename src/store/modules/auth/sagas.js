@@ -68,7 +68,9 @@ function* registerRequest({ payload }) {
         address_allowed,
       });
       toast.success("Dados atualizados com sucesso");
-      yield put(actions.registerUpdatedSuccess({ name, email, password }));
+      yield put(
+        actions.registerUpdatedSuccess({ name, email, password, adminpassword })
+      );
       history.push("/");
     } else {
       // Caso respose seja necessário deve ser usado como uma variável dentro deste try
