@@ -38,8 +38,8 @@ function* loginRequest({ payload }) {
 
     history.push("/home");
   } catch (e) {
+    console.log(e);
     toast.error(e.response.data.error[0]);
-
     yield put(actions.loginFailure());
   }
 }
@@ -47,59 +47,33 @@ function* loginRequest({ payload }) {
 // Esta função atualiza dos dados do usuário
 // eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
-  const {
-    userId,
-    name,
-    email,
-    password,
-    adminpassword,
-    permission,
-    address_allowed,
-  } = payload;
+  const { name, email, password, adminpassword, permission, address_allowed } =
+    payload;
 
   try {
-    if (userId) {
-      yield call(axios.put, `/employees/${userId}`, {
+    yield call(axios.post, "/employees", {
+      name,
+      email,
+      password,
+      adminpassword,
+      permission,
+      address_allowed,
+    });
+    toast.success("Conta criada com sucesso");
+
+    yield put(
+      actions.registerCreatedSuccess({
         name,
         email,
         password,
         adminpassword,
         permission,
         address_allowed,
-      });
-      toast.success("Dados atualizados com sucesso");
-      yield put(
-        actions.registerUpdatedSuccess({ name, email, password, adminpassword })
-      );
-      history.push("/");
-    } else {
-      // Caso respose seja necessário deve ser usado como uma variável dentro deste try
-      // history.push("/login"); redireciona o usuário, depois de fazer o cadastro para a página de login
-      // setisLoading(true);
-      yield call(axios.post, "/employees", {
-        name,
-        email,
-        password,
-        adminpassword,
-        permission,
-        address_allowed,
-      });
-      toast.success("Conta criada com sucesso");
-      yield put(
-        actions.registerCreatedSuccess({
-          name,
-          email,
-          password,
-          adminpassword,
-          permission,
-          address_allowed,
-        })
-      );
-      history.push("/");
-    }
+      })
+    );
+    history.push("/");
   } catch (e) {
     const errors = get(e, "response.data.errors", []);
-    // eslint-disable-next-line no-unused-vars
     const status = get(e, "response.status", 0);
 
     if (status === 401) {
@@ -118,6 +92,85 @@ function* registerRequest({ payload }) {
   }
 }
 
+function* updateRequest({ payload }) {
+  try {
+    const { id, name, email, password, adminpassword } = payload;
+
+    if (!id) {
+      toast.error("Erro ao tentar atualizar os dados");
+      return;
+    }
+
+    switch (true) {
+      case name.length > 0 &&
+        email.length < 1 &&
+        password.legth < 1 &&
+        adminpassword < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          name,
+        });
+        return;
+
+      case email.length > 0 &&
+        name.length < 1 &&
+        password.legth < 1 &&
+        adminpassword < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          email,
+        });
+        return;
+
+      case password.length > 0 &&
+        email.length < 1 &&
+        name.legth < 1 &&
+        adminpassword < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          password,
+        });
+        return;
+
+      case adminpassword.length > 0 &&
+        email.length < 1 &&
+        password.legth < 1 &&
+        name < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          adminpassword,
+        });
+        return;
+
+      default:
+        yield call(axios.put, `/employees/${id}`, {
+          name,
+          email,
+          password,
+          adminpassword,
+        });
+    }
+
+    axios.defaults.headers.permission = payload.auth.permission;
+    axios.defaults.headers.adminpassword = payload.auth.adminpassword;
+    axios.defaults.headers.email = payload.auth.emailHeaders;
+
+    toast.success("Dados atualizados com sucesso");
+
+    yield put(actions.updatedSuccess({ name, email, password, adminpassword }));
+  } catch (e) {
+    console.log(e);
+    const errors = get(e, "response.data.errors", []);
+    const status = get(e, "response.status", 0);
+
+    if (status === 401) {
+      toast.error("Você precisa fazer login novamente");
+    }
+
+    if (errors.legth > 0) {
+      errors.map((error) => toast.error(error));
+    } else {
+      toast.error("Erro desconhecido ao atualizar dados");
+    }
+  }
+}
+
 // O takeLatest recebe no primeiro parâmetro a ação que vai ser ouvida e no segundo a função que vai ser executada
 // Quando se usa o takeLatest qualquer action anterior é cancelada para que a função do segundo parâmetro seja executada no lugar
 // O all faz com que o middleware execute vários efeitos em paralelo e espera todos para finalizar o processo
@@ -125,4 +178,5 @@ export default all([
   takeLatest(types.LOGIN_REQUEST, loginRequest),
   takeLatest(types.PERSIST_REHYDRATE, persistRehydrate),
   takeLatest(types.REGISTER_REQUEST, registerRequest),
+  takeLatest(types.UPDATE_REQUEST, updateRequest),
 ]);

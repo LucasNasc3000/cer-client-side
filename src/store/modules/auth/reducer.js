@@ -58,11 +58,17 @@ export default function (state = initialState, action) {
       return newState;
     }
 
-    case types.REGISTER_UPDATED_SUCCESS: {
+    case types.UPDATED_SUCCESS: {
       const newState = { ...state };
-      // Nome e email estão sendo salvos no estado
-      newState.user.nome = action.payload.nome;
-      newState.user.email = action.payload.email;
+      newState.name = action.payload.name;
+      newState.emailHeaders = action.payload.email;
+      newState.adminpassword = action.payload.adminpassword;
+      newState.isLoading = false;
+      return newState;
+    }
+
+    case types.UPDATE_REQUEST: {
+      const newState = { ...state };
       newState.isLoading = false;
       return newState;
     }

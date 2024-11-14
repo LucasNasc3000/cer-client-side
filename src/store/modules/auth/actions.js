@@ -43,9 +43,16 @@ export function registerCreatedSuccess(payload) {
   };
 }
 
-export function registerUpdatedSuccess(payload) {
+export function updatedSuccess(payload) {
   return {
-    type: types.REGISTER_UPDATED_SUCCESS,
+    type: types.UPDATED_SUCCESS,
+    payload,
+  };
+}
+
+export function updateRequest(payload) {
+  return {
+    type: types.UPDATE_REQUEST,
     payload,
   };
 }

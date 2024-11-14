@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { isEmail } from "validator";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
@@ -20,7 +19,7 @@ export default function Profile() {
   const [password, setPassword] = useState("");
   const [adminpassword, setAdminPassword] = useState("");
   // eslint-disable-next-line no-unused-vars
-  const [employeeId, setEmployeeId] = useState("");
+  const [id, setId] = useState("");
 
   useEffect(() => {
     async function employeeSearch() {
@@ -29,7 +28,7 @@ export default function Profile() {
           `/employees/search/email/${emailStored}`
         );
 
-        setEmployeeId(employee.data[0].id);
+        setId(employee.data[0].id);
       } catch (e) {
         toast.error(e.response.data.error[0]);
       }
@@ -40,27 +39,35 @@ export default function Profile() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let FormErrors = false;
+    // let FormErrors = false;
 
-    if (name.length < 3 || name.length > 255) {
-      FormErrors = true;
-      toast.error("O nome deve ter entre 3 e 255 caracteres");
-    }
+    // if (name.length < 3 || name.length > 255) {
+    //   FormErrors = true;
+    //   toast.error("O nome deve ter entre 3 e 255 caracteres");
+    // }
 
-    if (!isEmail(email)) {
-      FormErrors = true;
-      toast.error("E-mail inválido");
-    }
+    // if (!isEmail(email)) {
+    //   FormErrors = true;
+    //   toast.error("E-mail inválido");
+    // }
 
-    if (password.length < 8 || password.length > 60) {
-      // eslint-disable-next-line no-unused-vars
-      FormErrors = true;
-      toast.error("A senha deve ter entre 6 e 50 caracteres");
-    }
+    // if (password.length < 8 || password.length > 60) {
+    //   // eslint-disable-next-line no-unused-vars
+    //   FormErrors = true;
+    //   toast.error("A senha deve ter entre 6 e 50 caracteres");
+    // }
 
-    if (FormErrors) return;
+    // if (FormErrors) return;
 
-    dispatch(actions.registerRequest({ employeeId, name, email, password }));
+    dispatch(
+      actions.updateRequest({
+        id,
+        name,
+        email,
+        password,
+        adminpassword,
+      })
+    );
     if (emailStored !== email) dispatch(actions.loginFailure());
   }
 
@@ -78,7 +85,6 @@ export default function Profile() {
       <Form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
-          value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={nameStored}
         />
@@ -86,25 +92,22 @@ export default function Profile() {
         <input
           type="email"
           id="emailInput"
-          value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Escolha um email"
+          placeholder={emailStored}
         />
 
         <input
           type="password"
           className="pass"
-          value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Crie uma senha"
+          placeholder="Digite sua senha ou escolha uma nova"
         />
 
         <input
           type="password"
           className="pass"
-          value={adminpassword}
           onChange={(e) => setAdminPassword(e.target.value)}
-          placeholder="Crie uma senha"
+          placeholder="Digite sua senha de admin ou escolha uma nova"
         />
 
         <p className="minitext">
