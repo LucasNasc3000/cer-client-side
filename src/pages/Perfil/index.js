@@ -38,8 +38,6 @@ export default function Profile() {
     employeeSearch();
   }, []);
 
-  console.log(axios.defaults.headers);
-
   async function handleSubmit(e) {
     e.preventDefault();
     // let FormErrors = false;
@@ -85,7 +83,7 @@ export default function Profile() {
   return (
     <UserContainer>
       <Header />
-      <MdLogout size={30} class="logout" onClick={(e) => handleLogout(e)} />
+      <MdLogout size={40} class="logout" onClick={(e) => handleLogout(e)} />
       <Form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"

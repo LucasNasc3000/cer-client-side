@@ -9,8 +9,8 @@ export const UserContainer = styled.div`
   .logout {
     display: flex;
     position: relative;
-    bottom: 650px;
-    left: 1170px;
+    bottom: 710px;
+    left: 1400px;
     color: #fff;
   }
 
@@ -23,8 +23,8 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 600px;
-  left: 490px;
+  bottom: 690px;
+  left: 590px;
   height: 500px;
   width: 450px;
 
@@ -51,7 +51,7 @@ export const Form = styled.form`
   .minitext {
     display: flex;
     position: relative;
-    color: white;
+    color: black;
     top: 120px;
     margin-top: 10px;
   }

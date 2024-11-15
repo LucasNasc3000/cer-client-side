@@ -123,7 +123,7 @@ function* updateRequest({ payload }) {
       case password.length > 0 &&
         email.length < 1 &&
         name.length < 1 &&
-        adminpassword < 1:
+        adminpassword.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           password,
         });
@@ -132,11 +132,55 @@ function* updateRequest({ payload }) {
       case adminpassword.length > 0 &&
         email.length < 1 &&
         password.length < 1 &&
-        name < 1:
+        name.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           adminpassword,
         });
         axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length > 0 &&
+        email.length < 1 &&
+        password.length > 0 &&
+        name.length < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          adminpassword,
+          password,
+        });
+        axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length > 0 &&
+        email.length < 1 &&
+        password.length > 0 &&
+        name.length > 0:
+        yield call(axios.put, `/employees/${id}`, {
+          adminpassword,
+          password,
+          name,
+        });
+        axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length > 0 &&
+        email.length < 1 &&
+        password.length < 1 &&
+        name.length > 0:
+        yield call(axios.put, `/employees/${id}`, {
+          adminpassword,
+          name,
+        });
+        axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length < 1 &&
+        email.length < 1 &&
+        password.length > 0 &&
+        name.length > 0:
+        yield call(axios.put, `/employees/${id}`, {
+          password,
+          name,
+        });
         break;
 
       default:
