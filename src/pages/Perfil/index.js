@@ -29,6 +29,7 @@ export default function Profile() {
         );
 
         setId(employee.data[0].id);
+        setEmail(emailStored);
       } catch (e) {
         toast.error(e.response.data.error[0]);
       }
@@ -68,7 +69,8 @@ export default function Profile() {
         adminpassword,
       })
     );
-    if (emailStored !== email) dispatch(actions.loginFailure());
+
+    if (email !== "" && email !== emailStored) dispatch(actions.loginFailure());
   }
 
   const handleLogout = (e) => {
