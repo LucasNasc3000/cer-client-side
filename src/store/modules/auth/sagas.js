@@ -104,39 +104,40 @@ function* updateRequest({ payload }) {
     switch (true) {
       case name.length > 0 &&
         email.length < 1 &&
-        password.legth < 1 &&
+        password.length < 1 &&
         adminpassword < 1:
         yield call(axios.put, `/employees/${id}`, {
           name,
         });
-        return;
+        break;
 
       case email.length > 0 &&
         name.length < 1 &&
-        password.legth < 1 &&
+        password.length < 1 &&
         adminpassword < 1:
         yield call(axios.put, `/employees/${id}`, {
           email,
         });
-        return;
+        break;
 
       case password.length > 0 &&
         email.length < 1 &&
-        name.legth < 1 &&
+        name.length < 1 &&
         adminpassword < 1:
         yield call(axios.put, `/employees/${id}`, {
           password,
         });
-        return;
+        break;
 
       case adminpassword.length > 0 &&
         email.length < 1 &&
-        password.legth < 1 &&
+        password.length < 1 &&
         name < 1:
         yield call(axios.put, `/employees/${id}`, {
           adminpassword,
         });
-        return;
+        axios.defaults.headers.adminpassword = adminpassword;
+        break;
 
       default:
         yield call(axios.put, `/employees/${id}`, {
@@ -145,15 +146,17 @@ function* updateRequest({ payload }) {
           password,
           adminpassword,
         });
+        break;
     }
 
-    axios.defaults.headers.permission = payload.auth.permission;
-    axios.defaults.headers.adminpassword = payload.auth.adminpassword;
-    axios.defaults.headers.email = payload.auth.emailHeaders;
+    if (email.length > 0) {
+      toast.success("Dados atualizados com sucesso. Faça login novamente");
+      return;
+    }
 
     toast.success("Dados atualizados com sucesso");
 
-    yield put(actions.updatedSuccess({ name, email, password, adminpassword }));
+    yield put(actions.updatedSuccess({ name, password, adminpassword }));
   } catch (e) {
     console.log(e);
     const errors = get(e, "response.data.errors", []);

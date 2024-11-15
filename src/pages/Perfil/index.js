@@ -38,6 +38,8 @@ export default function Profile() {
     employeeSearch();
   }, []);
 
+  console.log(axios.defaults.headers);
+
   async function handleSubmit(e) {
     e.preventDefault();
     // let FormErrors = false;
