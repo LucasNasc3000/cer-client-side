@@ -38,7 +38,6 @@ function* loginRequest({ payload }) {
 
     history.push("/home");
   } catch (e) {
-    console.log(e);
     toast.error(e.response.data.error[0]);
     yield put(actions.loginFailure());
   }
@@ -73,7 +72,8 @@ function* registerRequest({ payload }) {
     );
     history.push("/");
   } catch (e) {
-    const errors = get(e, "response.data.errors", []);
+    console.log(e);
+    const errors = get(e, "response.data.error", []);
     const status = get(e, "response.status", 0);
 
     if (status === 401) {
@@ -82,7 +82,7 @@ function* registerRequest({ payload }) {
       return history.push("/");
     }
 
-    if (errors.legth > 0) {
+    if (errors.length > 0) {
       errors.map((error) => toast.error(error));
     } else {
       toast.error("Erro desconhecido");
@@ -202,15 +202,14 @@ function* updateRequest({ payload }) {
 
     yield put(actions.updatedSuccess({ name, password, adminpassword }));
   } catch (e) {
-    console.log(e);
-    const errors = get(e, "response.data.errors", []);
+    const errors = get(e, "response.data.error", []);
     const status = get(e, "response.status", 0);
 
     if (status === 401) {
       toast.error("Você precisa fazer login novamente");
     }
 
-    if (errors.legth > 0) {
+    if (errors.length > 0) {
       errors.map((error) => toast.error(error));
     } else {
       toast.error("Erro desconhecido ao atualizar dados");

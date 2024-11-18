@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import { isEmail } from "validator";
 import * as actions from "../../store/modules/auth/actions";
 import { BtnRegister, Form, FormContainerRegister, Title } from "./styled";
 
@@ -21,31 +19,31 @@ export default function Register() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const whiteSpaceRegex = /\s/;
-    let FormErrors = false;
+    // const whiteSpaceRegex = /\s/;
+    // let FormErrors = false;
 
-    if (name.length < 3 || name.length > 255) {
-      FormErrors = true;
-      toast.error("O nome deve ter entre 3 e 255 caracteres");
-    }
+    // if (name.length < 3 || name.length > 255) {
+    //   FormErrors = true;
+    //   toast.error("O nome deve ter entre 3 e 255 caracteres");
+    // }
 
-    if (whiteSpaceRegex.test(name)) {
-      FormErrors = true;
-      toast.error("O nome não pode conter espaços em branco");
-    }
+    // if (whiteSpaceRegex.test(name)) {
+    //   FormErrors = true;
+    //   toast.error("O nome não pode conter espaços em branco");
+    // }
 
-    if (!isEmail(email)) {
-      FormErrors = true;
-      toast.error("E-mail inválido");
-    }
+    // if (!isEmail(email)) {
+    //   FormErrors = true;
+    //   toast.error("E-mail inválido");
+    // }
 
-    if (password.length < 8 || password.length > 60) {
-      // eslint-disable-next-line no-unused-vars
-      FormErrors = true;
-      toast.error("A senha deve ter entre 6 e 50 caracteres");
-    }
+    // if (password.length < 8 || password.length > 60) {
+    //   // eslint-disable-next-line no-unused-vars
+    //   FormErrors = true;
+    //   toast.error("A senha deve ter entre 6 e 50 caracteres");
+    // }
 
-    if (FormErrors) return;
+    // if (FormErrors) return;
 
     dispatch(
       actions.registerRequest({
