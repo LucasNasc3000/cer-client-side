@@ -40,25 +40,6 @@ export default function Profile() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // let FormErrors = false;
-
-    // if (name.length < 3 || name.length > 255) {
-    //   FormErrors = true;
-    //   toast.error("O nome deve ter entre 3 e 255 caracteres");
-    // }
-
-    // if (!isEmail(email)) {
-    //   FormErrors = true;
-    //   toast.error("E-mail inválido");
-    // }
-
-    // if (password.length < 8 || password.length > 60) {
-    //   // eslint-disable-next-line no-unused-vars
-    //   FormErrors = true;
-    //   toast.error("A senha deve ter entre 6 e 50 caracteres");
-    // }
-
-    // if (FormErrors) return;
 
     dispatch(
       actions.updateRequest({

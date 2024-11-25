@@ -202,6 +202,7 @@ function* updateRequest({ payload }) {
 
     yield put(actions.updatedSuccess({ name, password, adminpassword }));
   } catch (e) {
+    console.log(e);
     const errors = get(e, "response.data.error", []);
     const status = get(e, "response.status", 0);
 
