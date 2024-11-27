@@ -5,6 +5,7 @@ import { AiFillDashboard } from "react-icons/ai";
 import { BiCabinet } from "react-icons/bi";
 import { IoBagHandle } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa6";
 import { MainHeader } from "./styledHeader";
 
 export default function Header() {
@@ -25,6 +26,10 @@ export default function Header() {
             <Link to="/profile" class="profile">
                 <FaUser size={25} class="profile-icon" />
                 Perfil
+            </Link>
+            <Link to="/employees" class="employees">
+                <FaUsers size={25} class="employees-icon" />
+                Funcionários
             </Link>
         </MainHeader>
     );

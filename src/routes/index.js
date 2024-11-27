@@ -2,6 +2,7 @@
 import React from "react";
 import { Switch } from "react-router-dom";
 
+import { Employees } from "../pages/Employees";
 import Home from "../pages/Home";
 import Inputs from "../pages/Inputs";
 import Login from "../pages/Login";
@@ -20,6 +21,7 @@ export default function Routes() {
       <MyRoute exact path="/inputs" component={Inputs} isClosed />
       <MyRoute exact path="/sales" component={Sales} isClosed />
       <MyRoute exact path="/profile" component={Profile} isClosed />
+      <MyRoute exact path="/employees" component={Employees} isClosed />
     </Switch>
   );
 }
