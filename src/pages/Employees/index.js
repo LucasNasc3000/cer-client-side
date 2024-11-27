@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
 import { EmployeeCards, EmployeesListContainer } from "./styled";
@@ -18,7 +17,7 @@ export function Employees() {
         );
         setBoss(bossSearch.data);
       } catch (e) {
-        toast.error("Erro ao tentar obter dados do administrador");
+        console.log(e);
       }
     }
 
@@ -33,7 +32,7 @@ export function Employees() {
         );
         setEmployees(employeesSearch.data);
       } catch (e) {
-        toast.error("Erro ao tentar obter dados dos funcionários");
+        console.log(e);
       }
     }
 
@@ -46,10 +45,18 @@ export function Employees() {
       <EmployeeCards>
         {employees.map((empData) => {
           return (
-            <div key={empData.id}>
-              <div>{empData.name}</div>
-              <div>{empData.email}</div>
-              <div>{empData.permission}</div>
+            <div className="main-data-div">
+              <div key={empData.id}>
+                <div className="name">{empData.name}</div>
+                <div className="email-label">E-mail:</div>
+                <div className="email">{empData.email}</div>
+                <div className="permission-label">Permissão:</div>
+                <div className="permission">{empData.permission}</div>
+                <div className="al-label">
+                  Autorização para receber e-mails:
+                </div>
+                <div className="a-l">{empData.address_allowed}</div>
+              </div>
             </div>
           );
         })}
