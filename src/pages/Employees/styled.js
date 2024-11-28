@@ -32,24 +32,25 @@ export const EmployeeCards = styled.div`
   .name {
     font-size: 24px;
     left: 110px;
+    font-weight: bold;
   }
 
   .email {
     left: 140px;
-    top: 4px;
+    top: -48px;
     bottom: 25px;
     width: 100px;
   }
 
   .email-label {
-    top: 30px;
+    top: -20px;
     border-bottom: 1px solid white;
     padding: 3px;
     width: 255px;
   }
 
   .permission-label {
-    top: 30px;
+    top: -30px;
     border-bottom: 1px solid white;
     padding: 3px;
     width: 255px;
@@ -57,7 +58,7 @@ export const EmployeeCards = styled.div`
 
   .permission {
     left: 140px;
-    top: 4px;
+    top: -57px;
     bottom: 25px;
     width: 100px;
     border-bottom: none;
@@ -65,16 +66,38 @@ export const EmployeeCards = styled.div`
 
   .al-label {
     border-bottom: none;
-    top: 30px;
+    top: -40px;
     border-bottom: 1px solid white;
     padding: 3px;
     width: 305px;
   }
 
   .a-l {
-    top: 4px;
+    top: -67px;
     left: 290px;
     bottom: 25px;
     width: 100px;
+  }
+
+  .edit-icon {
+    display: flex;
+    position: relative;
+    bottom: 23px;
+  }
+
+  .del-icon {
+    display: flex;
+    position: relative;
+    bottom: 51px;
+    left: 45px;
+    color: red;
+  }
+
+  .edit-icon:hover {
+    filter: brightness(70%);
+  }
+
+  .del-icon:hover {
+    filter: brightness(70%);
   }
 `;

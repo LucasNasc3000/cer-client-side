@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
@@ -48,6 +50,8 @@ export function Employees() {
             <div className="main-data-div">
               <div key={empData.id}>
                 <div className="name">{empData.name}</div>
+                <FaRegEdit size={25} className="edit-icon" />
+                <MdDelete size={30} className="del-icon" />
                 <div className="email-label">E-mail:</div>
                 <div className="email">{empData.email}</div>
                 <div className="permission-label">Permissão:</div>
