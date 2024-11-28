@@ -2,6 +2,26 @@ import styled from "styled-components";
 
 export const EmployeesListContainer = styled.div``;
 
+export const EmployeeInputs = styled.div`
+  display: flex;
+  background-color: lime;
+  flex-direction: column;
+  position: relative;
+  bottom: 1400px;
+  left: 1130px;
+  width: 350px;
+  height: 600px;
+
+  input {
+    width: 220px;
+    height: 36px;
+    margin-top: 7px;
+    margin-left: 70px;
+    border-style: none;
+    border-radius: 4px;
+  }
+`;
+
 export const EmployeeCards = styled.div`
   display: flex;
   flex-direction: column;

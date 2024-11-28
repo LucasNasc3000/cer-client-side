@@ -72,7 +72,6 @@ function* registerRequest({ payload }) {
     );
     history.push("/");
   } catch (e) {
-    console.log(e);
     const errors = get(e, "response.data.error", []);
     const status = get(e, "response.status", 0);
 
@@ -148,6 +147,109 @@ function* updateRequest({ payload }) {
           password,
         });
         axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length > 0 &&
+        email.length < 1 &&
+        password.length > 0 &&
+        name.length > 0:
+        yield call(axios.put, `/employees/${id}`, {
+          adminpassword,
+          password,
+          name,
+        });
+        axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length > 0 &&
+        email.length < 1 &&
+        password.length < 1 &&
+        name.length > 0:
+        yield call(axios.put, `/employees/${id}`, {
+          adminpassword,
+          name,
+        });
+        axios.defaults.headers.adminpassword = adminpassword;
+        break;
+
+      case adminpassword.length < 1 &&
+        email.length < 1 &&
+        password.length > 0 &&
+        name.length > 0:
+        yield call(axios.put, `/employees/${id}`, {
+          password,
+          name,
+        });
+        break;
+
+      default:
+        yield call(axios.put, `/employees/${id}`, {
+          name,
+          email,
+          password,
+          adminpassword,
+        });
+        break;
+    }
+
+    if (email.length > 0) {
+      toast.success("Dados atualizados com sucesso. Faça login novamente");
+      return;
+    }
+
+    toast.success("Dados atualizados com sucesso");
+
+    yield put(actions.updatedSuccess({ name, password, adminpassword }));
+  } catch (e) {
+    console.log(e);
+    const errors = get(e, "response.data.error", []);
+    const status = get(e, "response.status", 0);
+
+    if (status === 401) {
+      toast.error("Você precisa fazer login novamente");
+    }
+
+    if (errors.length > 0) {
+      errors.map((error) => toast.error(error));
+    } else {
+      toast.error("Erro desconhecido ao atualizar dados");
+    }
+  }
+}
+
+function* employeeUpdateRequest({ payload }) {
+  try {
+    const { id, permission, boss, address_allowed } = payload;
+
+    if (!id) {
+      toast.error("Erro ao tentar atualizar os dados");
+      return;
+    }
+
+    switch (true) {
+      case permission.length > 0 &&
+        boss.length < 1 &&
+        address_allowed.length < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          permission,
+        });
+        axios.defaults.headers.permission = permission;
+        break;
+
+      case boss.length > 0 &&
+        permission.length < 1 &&
+        address_allowed.length < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          boss,
+        });
+        break;
+
+      case address_allowed.length > 0 &&
+        boss.length < 1 &&
+        permission.length < 1:
+        yield call(axios.put, `/employees/${id}`, {
+          address_allowed,
+        });
         break;
 
       case adminpassword.length > 0 &&
