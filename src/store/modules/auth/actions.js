@@ -57,5 +57,19 @@ export function updateRequest(payload) {
   };
 }
 
+export function adminUpdatedSuccess(payload) {
+  return {
+    type: types.ADMIN_UPDATED_SUCCESS,
+    payload,
+  };
+}
+
+export function adminUpdateRequest(payload) {
+  return {
+    type: types.ADMIN_UPDATE_REQUEST,
+    payload,
+  };
+}
+
 /* Organizar os tipos desta maneira, em um arquivo separado é uma boa prática de programação
  e evita que dois ou mais devs usem o mesmo nome de tipo e que evita outros transtornos */

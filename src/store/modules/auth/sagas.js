@@ -96,7 +96,7 @@ function* updateRequest({ payload }) {
     const { id, name, email, password, adminpassword } = payload;
 
     if (!id) {
-      toast.error("Erro ao tentar atualizar os dados");
+      toast.error("Erro ao tentar atualizar os dados, id necessário");
       return;
     }
 
@@ -217,18 +217,29 @@ function* updateRequest({ payload }) {
   }
 }
 
-function* employeeUpdateRequest({ payload }) {
+async function getBossData(bossName) {
+  const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
+  console.log(bossId);
+  return bossId.data.id;
+}
+
+function* adminUpdateRequest({ payload }) {
   try {
-    const { id, permission, boss, address_allowed } = payload;
+    const { id, permissionEdit, bossEdit, alEdit } = payload;
+    const boss = bossEdit;
+    const permission = permissionEdit;
+    const address_allowed = alEdit;
 
     if (!id) {
-      toast.error("Erro ao tentar atualizar os dados");
+      toast.error("Erro ao tentar atualizar os dados, id necessário");
       return;
     }
+    console.log(payload);
+    const bossId = getBossData(boss);
 
     switch (true) {
       case permission.length > 0 &&
-        boss.length < 1 &&
+        bossId.length < 1 &&
         address_allowed.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           permission,
@@ -236,73 +247,65 @@ function* employeeUpdateRequest({ payload }) {
         axios.defaults.headers.permission = permission;
         break;
 
-      case boss.length > 0 &&
+      case bossId.length > 0 &&
         permission.length < 1 &&
         address_allowed.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          boss,
+          bossId,
         });
         break;
 
       case address_allowed.length > 0 &&
-        boss.length < 1 &&
+        bossId.length < 1 &&
         permission.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           address_allowed,
         });
         break;
 
-      case adminpassword.length > 0 &&
-        email.length < 1 &&
-        password.length > 0 &&
-        name.length > 0:
+      case bossId.length > 0 &&
+        address_allowed.length > 0 &&
+        permission.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          adminpassword,
-          password,
-          name,
+          bossId,
+          address_allowed,
         });
-        axios.defaults.headers.adminpassword = adminpassword;
         break;
 
-      case adminpassword.length > 0 &&
-        email.length < 1 &&
-        password.length < 1 &&
-        name.length > 0:
+      case bossId.length > 0 &&
+        permission.length > 0 &&
+        address_allowed.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          adminpassword,
-          name,
+          bossId,
+          permission,
         });
-        axios.defaults.headers.adminpassword = adminpassword;
+        axios.defaults.headers.permission = permission;
         break;
 
-      case adminpassword.length < 1 &&
-        email.length < 1 &&
-        password.length > 0 &&
-        name.length > 0:
+      case permission.length > 0 &&
+        address_allowed.length > 0 &&
+        bossId.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          password,
-          name,
+          permission,
+          address_allowed,
         });
+        axios.defaults.headers.permission = permission;
         break;
 
       default:
         yield call(axios.put, `/employees/${id}`, {
-          name,
-          email,
-          password,
-          adminpassword,
+          bossId,
+          permission,
+          address_allowed,
         });
         break;
     }
 
-    if (email.length > 0) {
-      toast.success("Dados atualizados com sucesso. Faça login novamente");
-      return;
-    }
+    toast.success("Dados do funcionário atualizados com sucesso");
 
-    toast.success("Dados atualizados com sucesso");
-
-    yield put(actions.updatedSuccess({ name, password, adminpassword }));
+    yield put(
+      actions.adminUpdatedSuccess({ bossId, permission, address_allowed })
+    );
   } catch (e) {
     console.log(e);
     const errors = get(e, "response.data.error", []);
@@ -315,7 +318,7 @@ function* employeeUpdateRequest({ payload }) {
     if (errors.length > 0) {
       errors.map((error) => toast.error(error));
     } else {
-      toast.error("Erro desconhecido ao atualizar dados");
+      toast.error("Erro desconhecido ao atualizar dados do funcionário");
     }
   }
 }
@@ -328,4 +331,5 @@ export default all([
   takeLatest(types.PERSIST_REHYDRATE, persistRehydrate),
   takeLatest(types.REGISTER_REQUEST, registerRequest),
   takeLatest(types.UPDATE_REQUEST, updateRequest),
+  takeLatest(types.ADMIN_UPDATE_REQUEST, adminUpdateRequest),
 ]);

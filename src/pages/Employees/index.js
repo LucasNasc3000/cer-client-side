@@ -1,9 +1,12 @@
+import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
+import * as actions from "../../store/modules/auth/actions";
 import {
   EmployeeCards,
   EmployeeInputs,
@@ -11,6 +14,8 @@ import {
 } from "./styled";
 
 export function Employees() {
+  const dispatch = useDispatch();
+
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const [employees, setEmployees] = useState([]);
   const [boss, setBoss] = useState([]);
@@ -27,7 +32,13 @@ export function Employees() {
         );
         setBoss(bossSearch.data);
       } catch (e) {
-        console.log(e);
+        const errors = get(e, "response.data.errors", []);
+
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        } else {
+          toast.error("Erro ao tentar obter os dados do chefe");
+        }
       }
     }
 
@@ -42,25 +53,18 @@ export function Employees() {
         );
         setEmployees(employeesSearch.data);
       } catch (e) {
-        console.log(e);
+        const errors = get(e, "response.data.errors", []);
+
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        } else {
+          toast.error("Erro ao tentar obter os dados dos funcionários");
+        }
       }
     }
 
     getEmployees();
   });
-
-  useEffect(() => {
-    async function EmployeeUpdate() {}
-  });
-
-  const SetInputs = (e, idParam, data) => {
-    e.preventDefault();
-
-    setId(idParam);
-    setBossEdit(data.boss);
-    setPermissionEdit(data.permission);
-    setAlEdit(data.address_allowed);
-  };
 
   const clear = (e) => {
     e.preventDefault();
@@ -68,6 +72,32 @@ export function Employees() {
     setBossEdit("");
     setAlEdit("");
     setPermissionEdit("");
+  };
+
+  const employeeUpdate = (e) => {
+    e.preventDefault();
+
+    dispatch(
+      actions.adminUpdateRequest({
+        id,
+        bossEdit,
+        permissionEdit,
+        alEdit,
+      })
+    );
+
+    clear(e);
+  };
+
+  const SetInputs = async (e, idParam, data) => {
+    e.preventDefault();
+
+    const getBossName = await axios.get(`/employees/search/id/${data.boss}`);
+
+    setId(idParam);
+    setBossEdit(getBossName.data.name);
+    setPermissionEdit(data.permission);
+    setAlEdit(data.address_allowed);
   };
 
   return (
@@ -123,7 +153,11 @@ export function Employees() {
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => employeeUpdate(e)}
+        >
           Salvar
         </button>
       </EmployeeInputs>

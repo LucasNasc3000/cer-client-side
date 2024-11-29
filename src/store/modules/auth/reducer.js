@@ -72,6 +72,19 @@ export default function (state = initialState, action) {
       return newState;
     }
 
+    case types.ADMIN_UPDATED_SUCCESS: {
+      const newState = { ...state };
+      newState.permission = action.payload.permssion;
+      newState.isLoading = false;
+      return newState;
+    }
+
+    case types.ADMIN_UPDATE_REQUEST: {
+      const newState = { ...state };
+      newState.isLoading = false;
+      return newState;
+    }
+
     case types.REGISTER_CREATED_SUCCESS: {
       const newState = { ...state };
       newState.isLoading = false;
