@@ -1,10 +1,10 @@
 import styled from "styled-components";
+import * as colors from "../../config/colors";
 
 export const EmployeesListContainer = styled.div``;
 
 export const EmployeeInputs = styled.div`
   display: flex;
-  background-color: lime;
   flex-direction: column;
   position: relative;
   bottom: 1400px;
@@ -20,6 +20,36 @@ export const EmployeeInputs = styled.div`
     border-style: none;
     border-radius: 4px;
   }
+
+  button {
+    margin-top: 10px;
+    margin-left: 80px;
+    width: 200px;
+  }
+
+  .btn-cancel {
+    margin-top: 45px;
+  }
+
+  .link {
+    display: flex;
+    width: 230px;
+    height: 35px;
+    margin-top: 10px;
+    margin-left: 65px;
+    background-color: ${colors.primaryColor};
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    justify-content: space-between;
+  }
+
+  .link:hover {
+    filter: brightness(70%);
+    transition: all 160ms;
+  }
 `;
 
 export const EmployeeCards = styled.div`
@@ -27,8 +57,8 @@ export const EmployeeCards = styled.div`
   flex-direction: column;
   position: relative;
   bottom: 740px;
-  left: 250px;
-  width: 850px;
+  left: 500px;
+  width: 550px;
   height: 710px;
 
   div {

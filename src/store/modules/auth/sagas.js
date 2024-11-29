@@ -234,7 +234,7 @@ function* adminUpdateRequest({ payload }) {
       toast.error("Erro ao tentar atualizar os dados, id necessário");
       return;
     }
-    console.log(payload);
+
     const bossId = getBossData(boss);
 
     switch (true) {
@@ -298,6 +298,7 @@ function* adminUpdateRequest({ payload }) {
           permission,
           address_allowed,
         });
+        axios.defaults.headers.permission = permission;
         break;
     }
 

@@ -1,8 +1,9 @@
 import { get } from "lodash";
 import React, { useEffect, useState } from "react";
-import { FaRegEdit } from "react-icons/fa";
+import { FaPlus, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
@@ -150,7 +151,7 @@ export function Employees() {
           value={bossEdit}
           onChange={(e) => setBossEdit(e.target.value)}
         />
-        <button type="button" className="btn" onClick={clear}>
+        <button type="button" className="btn-cancel" onClick={clear}>
           Cancelar
         </button>
         <button
@@ -160,6 +161,10 @@ export function Employees() {
         >
           Salvar
         </button>
+        <Link to="/employee/new" className="link">
+          <FaPlus size={18} className="plus-icon" />
+          Adicionar Funcionário
+        </Link>
       </EmployeeInputs>
     </EmployeesListContainer>
   );
