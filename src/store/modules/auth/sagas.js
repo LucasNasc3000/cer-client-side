@@ -43,11 +43,26 @@ function* loginRequest({ payload }) {
   }
 }
 
+async function getBossData(bossName) {
+  const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
+  const { id } = bossId.data;
+  return id;
+}
+
 // Esta função atualiza dos dados do usuário
 // eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
-  const { name, email, password, adminpassword, permission, address_allowed } =
-    payload;
+  const {
+    name,
+    email,
+    password,
+    adminpassword,
+    permission,
+    address_allowed,
+    boss,
+  } = payload;
+
+  const bossId = getBossData(boss);
 
   try {
     yield call(axios.post, "/employees", {
@@ -57,8 +72,9 @@ function* registerRequest({ payload }) {
       adminpassword,
       permission,
       address_allowed,
+      bossId,
     });
-    toast.success("Conta criada com sucesso");
+    toast.success("Funcionário registrado com sucesso");
 
     yield put(
       actions.registerCreatedSuccess({
@@ -68,6 +84,7 @@ function* registerRequest({ payload }) {
         adminpassword,
         permission,
         address_allowed,
+        bossId,
       })
     );
     history.push("/");
@@ -201,7 +218,6 @@ function* updateRequest({ payload }) {
 
     yield put(actions.updatedSuccess({ name, password, adminpassword }));
   } catch (e) {
-    console.log(e);
     const errors = get(e, "response.data.error", []);
     const status = get(e, "response.status", 0);
 
@@ -215,12 +231,6 @@ function* updateRequest({ payload }) {
       toast.error("Erro desconhecido ao atualizar dados");
     }
   }
-}
-
-async function getBossData(bossName) {
-  const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
-  console.log(bossId);
-  return bossId.data.id;
 }
 
 function* adminUpdateRequest({ payload }) {

@@ -31,6 +31,7 @@ export function Employees() {
         const bossSearch = await axios.get(
           `/employees/search/email/${emailStored}`
         );
+        console.log(bossSearch);
         setBoss(bossSearch.data);
       } catch (e) {
         const errors = get(e, "response.data.errors", []);
@@ -44,7 +45,7 @@ export function Employees() {
     }
 
     getBoss();
-  });
+  }, []);
 
   useEffect(() => {
     async function getEmployees() {
