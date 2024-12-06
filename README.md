@@ -18,3 +18,24 @@ O cadastro dos administradores no aplicativo é realizado por mim e o login apó
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
 <p font=12>Página com parte do CRUD dos funcionários</p>
 <br><br>
+
+# Storage Manager System
+This is the client side of the Storage Manager System, which will use the API specifically designed for this application. Storage Manager System is a web application for small/medium-sized entrepreneurs in the food industry. The application allows entrepreneurs to control their product inventory and sales quickly and conveniently, with the possibility of part of the work being done by employees with the appropriate permissions according to the activity performed.
+
+Administrators are registered in the application by me, and login after registration requires an email and password. The administrator, that is, the entrepreneur who will use the application, will have full access to it and only this administrator will be able to register his or her employees.
+
+## Main technologies and dependencies
+- React js
+- Styled components
+- Redux
+- Sagas
+- Axios
+
+## Status
+In development 🛠️
+
+## Preview
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
+<p font=12>Employees page with part of employees CRUD</p>
+<br><br>
