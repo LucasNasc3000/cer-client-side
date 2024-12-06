@@ -13,7 +13,7 @@ O cadastro dos administradores no aplicativo é realizado por mim e o login apó
 ## Status
 ### Em desenvolvimento 🛠️
 
-### Previa
+## Previa
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
 <p font=12>Página com parte do CRUD dos funcionários</p>
