@@ -19,7 +19,7 @@ export function Employees() {
 
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const [employees, setEmployees] = useState([]);
-  const [boss, setBoss] = useState([]);
+  const [boss, setBoss] = useState("");
   const [bossEdit, setBossEdit] = useState("");
   const [permissionEdit, setPermissionEdit] = useState("");
   const [alEdit, setAlEdit] = useState("");
@@ -31,15 +31,16 @@ export function Employees() {
         const bossSearch = await axios.get(
           `/employees/search/email/${emailStored}`
         );
-        console.log(bossSearch);
-        setBoss(bossSearch.data);
+        setBoss(bossSearch.data.id);
       } catch (e) {
         const errors = get(e, "response.data.errors", []);
 
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        } else {
-          toast.error("Erro ao tentar obter os dados do chefe");
+        if (e) {
+          if (errors.length > 0) {
+            errors.map((error) => toast.error(error));
+          } else {
+            toast.error("Erro ao tentar obter os dados do chefe");
+          }
         }
       }
     }
@@ -51,16 +52,20 @@ export function Employees() {
     async function getEmployees() {
       try {
         const employeesSearch = await axios.get(
-          `/employees/search/boss/${boss[0].id}`
+          `/employees/search/boss/${boss}`
         );
         setEmployees(employeesSearch.data);
       } catch (e) {
-        const errors = get(e, "response.data.errors", []);
+        const errors = get(e, "response.data.error", []);
 
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        } else {
-          toast.error("Erro ao tentar obter os dados dos funcionários");
+        if (e) {
+          if (errors.length > 0) {
+            errors.map((error) => toast.error(error));
+          }
+
+          if (e && errors.length > 0) {
+            toast.error("Erro ao tentar obter os dados do chefe");
+          }
         }
       }
     }

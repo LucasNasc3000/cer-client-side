@@ -28,9 +28,10 @@ export default function Profile() {
           `/employees/search/email/${emailStored}`
         );
 
-        setId(employee.data[0].id);
+        setId(employee.data.id);
         setEmail(emailStored);
       } catch (e) {
+        console.log(e);
         toast.error(e.response.data.error[0]);
       }
     }

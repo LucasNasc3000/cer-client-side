@@ -1,7 +1,10 @@
 /* eslint-disable camelcase */
+import { get } from "lodash";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import Header from "../../components/Header";
+import axios from "../../services/axios";
 import * as actions from "../../store/modules/auth/actions";
 import { EmployeeRegisterContainer, Form } from "./styled";
 
@@ -14,9 +17,29 @@ export function EmployeeRegister() {
   const [adminpassword, setAdminPassword] = useState("");
   const [permission, setPermission] = useState("");
   const [address_allowed, setAddressAllowed] = useState("");
-  const [boss, setBoss] = useState("");
+  const [bossName, setBossName] = useState("");
+  let boss = "";
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const bossData = await axios.get(
+        `/employees/search/uniquename/${bossName}`
+      );
+      boss = bossData.data.id;
+    } catch (err) {
+      const errors = get(e, "response.data.error", []);
+
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        } else {
+          toast.error("Erro desconhecido ao obter dados do chefe");
+        }
+      }
+    }
+
     dispatch(
       actions.registerRequest({
         name,
@@ -28,6 +51,15 @@ export function EmployeeRegister() {
         boss,
       })
     );
+
+    setEmail("");
+    setName("");
+    setPassword("");
+    setAdminPassword("");
+    setAddressAllowed("");
+    setPermission("");
+    setBossName("");
+    boss = "";
   };
 
   return (
@@ -72,11 +104,11 @@ export function EmployeeRegister() {
         />
         <input
           type="text"
-          value={boss}
-          onChange={(e) => setBoss(e.target.value)}
+          value={bossName}
+          onChange={(e) => setBossName(e.target.value)}
           placeholder="Digite o nome do chefe"
         />
-        <button type="button" className="btn" onClick={handleSubmit}>
+        <button type="button" className="btn" onClick={(e) => handleSubmit(e)}>
           Adicionar Funcionário
         </button>
       </Form>
