@@ -107,6 +107,15 @@ export function Employees() {
     setAlEdit(data.address_allowed);
   };
 
+  const DeleteAsk = (e, email) => {
+    e.preventDefault();
+
+    // eslint-disable-next-line no-restricted-globals, no-alert
+    const ask = confirm(`Deseja mesmo deletar o funcionário ${email}`);
+
+    if (ask === true) console.log("deletado");
+  };
+
   return (
     <EmployeesListContainer>
       <Header />
@@ -121,7 +130,11 @@ export function Employees() {
                   className="edit-icon"
                   onClick={(e) => SetInputs(e, empData.id, empData)}
                 />
-                <MdDelete size={30} className="del-icon" />
+                <MdDelete
+                  size={30}
+                  className="del-icon"
+                  onClick={(e) => DeleteAsk(e, empData.email)}
+                />
                 <div className="email-label">E-mail:</div>
                 <div className="email">{empData.email}</div>
                 <div className="permission-label">Permissão:</div>
