@@ -107,13 +107,31 @@ export function Employees() {
     setAlEdit(data.address_allowed);
   };
 
-  const DeleteAsk = (e, email) => {
+  const DeleteAsk = (e, email, idParamExclude) => {
     e.preventDefault();
 
     // eslint-disable-next-line no-restricted-globals, no-alert
-    const ask = confirm(`Deseja mesmo deletar o funcionário ${email}`);
+    const ask = confirm(`Deseja mesmo excluir o funcionário ${email}`);
 
-    if (ask === true) console.log("deletado");
+    if (ask === true) {
+      try {
+        axios.put(`/employees/${idParamExclude}`, {
+          is_active: 0,
+        });
+      } catch (err) {
+        const errors = get(e, "response.data.error", []);
+
+        if (e) {
+          if (errors.length > 0) {
+            errors.map((error) => toast.error(error));
+          }
+
+          if (e && errors.length > 0) {
+            toast.error("Erro ao tentar obter os dados do chefe");
+          }
+        }
+      }
+    }
   };
 
   return (
@@ -133,7 +151,7 @@ export function Employees() {
                 <MdDelete
                   size={30}
                   className="del-icon"
-                  onClick={(e) => DeleteAsk(e, empData.email)}
+                  onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
                 />
                 <div className="email-label">E-mail:</div>
                 <div className="email">{empData.email}</div>

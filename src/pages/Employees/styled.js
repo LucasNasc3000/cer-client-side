@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import * as colors from "../../config/colors";
 
-export const EmployeesListContainer = styled.div``;
+export const EmployeesListContainer = styled.div`
+  height: 740px;
+`;
 
 export const EmployeeInputs = styled.div`
   display: flex;
@@ -60,6 +62,7 @@ export const EmployeeCards = styled.div`
   left: 500px;
   width: 550px;
   height: 710px;
+  overflow-y: auto;
 
   div {
     display: flex;
