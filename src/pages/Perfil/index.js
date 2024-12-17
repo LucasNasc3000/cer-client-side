@@ -20,6 +20,7 @@ export default function Profile() {
   const [adminpassword, setAdminPassword] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [id, setId] = useState("");
+  console.log(axios.defaults.headers);
 
   useEffect(() => {
     async function employeeSearch() {

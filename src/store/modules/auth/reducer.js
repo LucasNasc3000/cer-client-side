@@ -8,7 +8,7 @@ const initialState = {
   emailHeaders: "",
   permission: "",
   name: "",
-  isLoading: false,
+  headerid: "",
 };
 
 // O reducer escuta todas as actions, não só as definidas nesta aplicação. Por isso é possível usar a action persist/REHYDRATE para
@@ -21,7 +21,7 @@ export default function (state = initialState, action) {
       const newState = { ...state };
       newState.isLoggedIn = true;
       newState.token = action.payload.token;
-      newState.isLoading = false;
+      newState.headerid = action.payload.employee.id;
       return newState;
     }
 
@@ -42,19 +42,16 @@ export default function (state = initialState, action) {
       newState.emailHeaders = action.payload.email;
       newState.permission = action.payload.permission;
       newState.name = action.payload.name;
-      newState.isLoading = true;
       return newState;
     }
 
     case types.REGISTER_REQUEST: {
       const newState = { ...state };
-      newState.isLoading = true;
       return newState;
     }
 
     case types.REGISTER_FAILURE: {
       const newState = { ...state };
-      newState.isLoading = false;
       return newState;
     }
 
@@ -62,32 +59,27 @@ export default function (state = initialState, action) {
       const newState = { ...state };
       newState.name = action.payload.name;
       newState.adminpassword = action.payload.adminpassword;
-      newState.isLoading = false;
       return newState;
     }
 
     case types.UPDATE_REQUEST: {
       const newState = { ...state };
-      newState.isLoading = false;
       return newState;
     }
 
     case types.ADMIN_UPDATED_SUCCESS: {
       const newState = { ...state };
       newState.permission = action.payload.permssion;
-      newState.isLoading = false;
       return newState;
     }
 
     case types.ADMIN_UPDATE_REQUEST: {
       const newState = { ...state };
-      newState.isLoading = false;
       return newState;
     }
 
     case types.REGISTER_CREATED_SUCCESS: {
       const newState = { ...state };
-      newState.isLoading = false;
       return newState;
     }
 

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
 import { get } from "lodash";
@@ -14,6 +15,7 @@ import * as actions from "./actions";
 
 // Esta função recupera o token que desapareceria do cabeçalho depois que o login fosse feito e o site atualizado
 // O terceiro parâmetro de get será um valor padrão
+
 function persistRehydrate({ payload }) {
   const token = get(payload, "auth.token", "");
   if (!token) return;
@@ -21,6 +23,7 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.permission = payload.auth.permission;
   axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
+  axios.defaults.headers.headerid = payload.auth.headerid;
 }
 
 function* loginRequest({ payload }) {
@@ -35,6 +38,7 @@ function* loginRequest({ payload }) {
     axios.defaults.headers.email = payload.email;
     axios.defaults.headers.adminpassword = payload.adminpassword;
     axios.defaults.headers.permission = payload.permission;
+    axios.defaults.headers.headerid = response.data.employee.id;
 
     history.push("/home");
   } catch (e) {
@@ -44,9 +48,13 @@ function* loginRequest({ payload }) {
 }
 
 async function getBossData(bossName) {
-  const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
-  const { id } = bossId.data;
-  return id;
+  try {
+    const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
+    const { id } = bossId.data;
+    return id;
+  } catch (e) {
+    toast.error("Erro ao obter os dados do chefe para atualização de admin");
+  }
 }
 
 // Esta função atualiza dos dados do usuário

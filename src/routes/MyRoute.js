@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Redirect, Route } from "react-router-dom";
 
 export default function MyRoute({ component: Component, isClosed, ...rest }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
