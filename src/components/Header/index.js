@@ -1,14 +1,17 @@
 /* eslint-disable prettier/prettier */
 import React from "react";
-import { Link } from "react-router-dom";
 import { AiFillDashboard } from "react-icons/ai";
 import { BiCabinet } from "react-icons/bi";
-import { IoBagHandle } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
+import { IoBagHandle } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { MainHeader } from "./styledHeader";
 
 export default function Header() {
+  const permissison = useSelector((state) => state.auth.permission);
+
     return(
         <MainHeader>
             <Link to="/home" class="home">
@@ -27,10 +30,14 @@ export default function Header() {
                 <FaUser size={25} class="profile-icon" />
                 Perfil
             </Link>
-            <Link to="/employees" class="employees">
+            {permissison === process.env.REACT_APP_ADMIN_ROLE ? (
+              <Link to="/employees" class="employees">
                 <FaUsers size={25} class="employees-icon" />
                 Funcionários
-            </Link>
+              </Link>
+            ) : (
+              ""
+            )}
         </MainHeader>
     );
 }

@@ -24,7 +24,7 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
 
-  if (payload.auth.headerid) {
+  if (payload.auth.permission !== process.env.REACT_APP_ADMIN_ROLE) {
     axios.defaults.headers.headerid = payload.auth.headerid;
   }
 }
@@ -42,7 +42,7 @@ function* loginRequest({ payload }) {
     axios.defaults.headers.adminpassword = payload.adminpassword;
     axios.defaults.headers.permission = payload.permission;
 
-    if (payload.permission === process.env.REACT_APP_ADMIN_ROLE) {
+    if (payload.permission !== process.env.REACT_APP_ADMIN_ROLE) {
       axios.defaults.headers.headerid = response.data.employee.id;
     }
 

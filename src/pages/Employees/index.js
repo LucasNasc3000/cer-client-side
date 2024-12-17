@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
+import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import {
   EmployeeCards,
@@ -18,12 +19,21 @@ export function Employees() {
   const dispatch = useDispatch();
 
   const emailStored = useSelector((state) => state.auth.emailHeaders);
+  const permission = useSelector((state) => state.auth.permission);
   const [employees, setEmployees] = useState([]);
   const [boss, setBoss] = useState("");
   const [bossEdit, setBossEdit] = useState("");
   const [permissionEdit, setPermissionEdit] = useState("");
   const [alEdit, setAlEdit] = useState("");
   const [id, setId] = useState(0);
+
+  useEffect(() => {
+    const PermissionCheck = () => {
+      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
+    };
+
+    PermissionCheck();
+  }, []);
 
   useEffect(() => {
     async function getBoss() {
