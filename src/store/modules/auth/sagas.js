@@ -23,7 +23,10 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.permission = payload.auth.permission;
   axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
-  axios.defaults.headers.headerid = payload.auth.headerid;
+
+  if (payload.auth.headerid) {
+    axios.defaults.headers.headerid = payload.auth.headerid;
+  }
 }
 
 function* loginRequest({ payload }) {
@@ -38,7 +41,10 @@ function* loginRequest({ payload }) {
     axios.defaults.headers.email = payload.email;
     axios.defaults.headers.adminpassword = payload.adminpassword;
     axios.defaults.headers.permission = payload.permission;
-    axios.defaults.headers.headerid = response.data.employee.id;
+
+    if (payload.permission === process.env.REACT_APP_ADMIN_ROLE) {
+      axios.defaults.headers.headerid = response.data.employee.id;
+    }
 
     history.push("/home");
   } catch (e) {
