@@ -16,6 +16,7 @@ import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 export default function Inputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
+  const permissionlStored = useSelector((state) => state.auth.permission);
   const dispatch = useDispatch();
 
   const [type, setType] = useState("");
@@ -37,7 +38,6 @@ export default function Inputs() {
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
-  const inputsRaw = [];
 
   useEffect(() => {
     async function GetData() {
@@ -62,7 +62,7 @@ export default function Inputs() {
       }
     }
     GetData();
-  }, [bossId]);
+  }, [bossId, emailStored, headerid]);
 
   useEffect(() => {
     async function headerIdCheck() {
@@ -81,13 +81,16 @@ export default function Inputs() {
     }
 
     headerIdCheck();
-  }, [headerid]);
+  }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
-    // tentar economizar requests vendo se dá para colocar GetData em outro useEffect e executar uma vez só
     async function GetInputs() {
-      try {
-        if (bossId.length > 0) {
+      const inputsRaw = [];
+      const allInputs = [];
+      const joinData = [];
+
+      if (bossId.length > 0) {
+        try {
           const getEmployeesByBoss = await axios.get(
             `/employees/search/boss/${bossId}`
           );
@@ -104,17 +107,39 @@ export default function Inputs() {
 
             if (inputs.data) inputsRaw.push(inputs.data);
           }
-          setInputsData(inputsRaw[0]);
+
+          for (let i = 0; i < inputsRaw.length; i++) {
+            const join = allInputs.concat(inputsRaw[i]);
+            joinData.push(...join);
+          }
+
+          if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
+            const bossInputs = await axios.get(
+              `/inputs/search/employeeid/${employee_id}`
+            );
+
+            joinData.push(...bossInputs.data);
+          } else {
+            const bossInputs = await axios.get(
+              `/inputs/search/employeeid/${bossId}`
+            );
+
+            joinData.push(...bossInputs.data);
+          }
+
+          setInputsData(joinData);
 
           if (!inputsData) toast.error("Erro ao exibir insumos");
+        } catch (e) {
+          toast.error("Erro desconhecido");
         }
-      } catch (e) {
-        toast.error("Erro desconhecido");
       }
     }
 
     GetInputs();
-  }, [bossId]);
+  }, [bossId, employee_id, permissionlStored]);
+
+  console.log(inputsData);
 
   const handleLogout = (e) => {
     e.preventDefault();

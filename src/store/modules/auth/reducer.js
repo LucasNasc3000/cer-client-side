@@ -36,6 +36,7 @@ export default function (state = initialState, action) {
       delete axios.defaults.headers.adminpassword;
       delete axios.defaults.headers.email;
       delete axios.defaults.headers.permission;
+      delete axios.defaults.headers.headerid;
       const newState = { ...initialState };
       return newState;
     }
