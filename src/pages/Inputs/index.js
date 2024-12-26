@@ -7,6 +7,7 @@ import { FaArrowLeft, FaEdit, FaSearch, FaTrash } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { toInt } from "validator";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
@@ -21,16 +22,16 @@ export default function Inputs() {
 
   const [type, setType] = useState("");
   const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState(0);
-  const [totalweight, setTotalWeight] = useState(0);
-  const [weightperunit, setWeightPerUnit] = useState(0);
+  const [interQuantity, setInterQuantity] = useState(0);
+  const [interTotalWeight, setInterTotalWeight] = useState(0);
+  const [interWeightPerUnit, setInterWeightPerUnit] = useState(0);
   const [supplier, setSupplier] = useState("");
   const [expirationdate, setExpirationDate] = useState("");
-  const [minimun_quantity, setMinimunQuantity] = useState(0);
-  const [rateisnear, setRateIsNear] = useState("");
+  const [interMinimunQuantity, setInterMinimunQuantity] = useState(0);
+  const [interRateIsNear, setInterRateIsNear] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
-  //  const [id, setId] = useState(0);
+  const [inputId, setInputId] = useState(0);
   // eslint-disable-next-line no-unused-vars
   // eslint-disable-next-line no-unused-vars
   const [inputsData, setInputsData] = useState([]);
@@ -139,8 +140,6 @@ export default function Inputs() {
     GetInputs();
   }, [bossId, employee_id, permissionlStored]);
 
-  console.log(inputsData);
-
   const handleLogout = (e) => {
     e.preventDefault();
 
@@ -148,35 +147,39 @@ export default function Inputs() {
     history.push("/");
   };
 
-  const clear = (e) => {
-    e.preventDefault();
-    // setId(0);
+  const clearDirectExecution = () => {
+    setInputId(0);
     setType("");
     setName("");
-    setQuantity(0);
-    setTotalWeight(0);
-    setWeightPerUnit(0);
+    setInterQuantity(0);
+    setInterTotalWeight(0);
+    setInterWeightPerUnit(0);
     setSupplier("");
     setExpirationDate("");
-    setMinimunQuantity(0);
-    setRateIsNear(0);
+    setInterMinimunQuantity(0);
+    setInterRateIsNear(0);
     searchInput.value = "";
     setSearchResults([]);
+  };
+
+  const clear = (e) => {
+    e.preventDefault();
+    clearDirectExecution();
   };
 
   const SetInputs = (e, idParam, data) => {
     e.preventDefault();
 
-    // setId(idParam);
+    setInputId(idParam);
     setType(data.type);
     setName(data.name);
-    setQuantity(data.quantity);
-    setTotalWeight(data.totalweight);
-    setWeightPerUnit(data.weightperunit);
+    setInterQuantity(data.quantity);
+    setInterTotalWeight(data.totalweight);
+    setInterWeightPerUnit(data.weightperunit);
     setSupplier(data.supplier);
     setExpirationDate(data.expirationdate);
-    setMinimunQuantity(data.minimun_quantity);
-    setRateIsNear(data.rateisnear);
+    setInterMinimunQuantity(data.minimun_quantity);
+    setInterRateIsNear(data.rateisnear);
   };
 
   async function DoSearch(e) {
@@ -192,32 +195,51 @@ export default function Inputs() {
     }
   }
 
-  // async function InputUpdate() {
-  //   try {
-  //     await axios.put(`/inputs/${id}`, {
-  //       nome: nomeValue,
-  //       peso_unitario: pesoUnitario,
-  //       unidades: unidadesValue,
-  //       peso_total: pesoTotal,
-  //       fornecedor: fornecedorValue,
-  //       data_validade: dataValidade,
-  //       data_compra: dataCompra,
-  //     });
+  async function InputUpdate() {
+    try {
+      await axios.put(`/inputs/${inputId}`, {
+        type,
+        name,
+        quantity,
+        totalweight,
+        weightperunit,
+        supplier,
+        expirationdate,
+        minimun_quantity,
+        rateisnear,
+      });
 
-  //     clear();
-  //   } catch (err) {
-  //     const errors = get(err, "response.data.errors", []);
+      clear();
+    } catch (err) {
+      const errors = get(err, "response.data.errors", []);
 
-  //     if (errors.length > 0) {
-  //       errors.map((error) => toast.error(error));
-  //     } else {
-  //       toast.error("Erro ao atualizar insumo. Verifique os dados inseridos");
-  //     }
-  //   }
-  // }
+      if (errors.length > 0) {
+        errors.map((error) => toast.error(error));
+      } else {
+        toast.error("Erro ao atualizar insumo. Verifique os dados inseridos");
+      }
+    }
+  }
+
+  const numberfy = (variables) => {
+    const numbers = [];
+
+    for (let i = 0; i < variables.length; i++) {
+      numbers.push(toInt(variables[i]));
+    }
+
+    console.log(numbers);
+    return numbers;
+  };
 
   async function InputRegister(e) {
     e.preventDefault();
+
+    const quantity = toInt(interTotalWeight);
+    const totalweight = toInt(interTotalWeight);
+    const weightperunit = toInt(interWeightPerUnit);
+    const minimun_quantity = toInt(interMinimunQuantity);
+    const rateisnear = toInt(interRateIsNear);
 
     try {
       await axios.post("/inputs", {
@@ -233,7 +255,9 @@ export default function Inputs() {
         rateisnear,
       });
 
-      // clear();
+      toast.success("Insumo adicionado com sucesso");
+      clearDirectExecution();
+      return;
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
@@ -263,15 +287,15 @@ export default function Inputs() {
     }
   };
 
-  // const IdVerify = (e) => {
-  //   e.preventDefault();
+  const IdVerify = (e) => {
+    e.preventDefault();
 
-  //   if (id !== 0) {
-  //     InputUpdate();
-  //   } else {
-  //     InputRegister(e);
-  //   }
-  // };
+    if (inputId !== 0) {
+      InputUpdate();
+    } else {
+      InputRegister(e);
+    }
+  };
 
   return (
     <InputsContainer>
@@ -436,20 +460,20 @@ export default function Inputs() {
         <input
           type="text"
           placeholder="Quantidade..."
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          value={interQuantity}
+          onChange={(e) => setInterQuantity(e.target.value)}
         />
         <input
           type="text"
           placeholder="Peso total..."
-          value={totalweight}
-          onChange={(e) => setTotalWeight(e.target.value)}
+          value={interTotalWeight}
+          onChange={(e) => setInterTotalWeight(e.target.value)}
         />
         <input
           type="text"
           placeholder="Peso unitário..."
-          value={weightperunit}
-          onChange={(e) => setWeightPerUnit(e.target.value)}
+          value={interWeightPerUnit}
+          onChange={(e) => setInterWeightPerUnit(e.target.value)}
         />
         <input
           type="text"
@@ -466,14 +490,14 @@ export default function Inputs() {
         <input
           type="text"
           placeholder="quantidade mínima... (opcional)"
-          value={minimun_quantity}
-          onChange={(e) => setMinimunQuantity(e.target.value)}
+          value={interMinimunQuantity}
+          onChange={(e) => setInterMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
           placeholder="Próximo ao limite..."
-          value={rateisnear}
-          onChange={(e) => setExpirationDate(e.target.value)}
+          value={interRateIsNear}
+          onChange={(e) => setInterRateIsNear(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
