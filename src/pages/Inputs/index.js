@@ -22,13 +22,13 @@ export default function Inputs() {
 
   const [type, setType] = useState("");
   const [name, setName] = useState("");
-  const [interQuantity, setInterQuantity] = useState(0);
-  const [interTotalWeight, setInterTotalWeight] = useState(0);
-  const [interWeightPerUnit, setInterWeightPerUnit] = useState(0);
+  const [interquantity, setInterQuantity] = useState("");
+  const [intertotalweight, setInterTotalWeight] = useState("");
+  const [interweightperunit, setInterWeightPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
   const [expirationdate, setExpirationDate] = useState("");
-  const [interMinimunQuantity, setInterMinimunQuantity] = useState(0);
-  const [interRateIsNear, setInterRateIsNear] = useState("");
+  const [interminimun_quantity, setInterMinimunQuantity] = useState("");
+  const [interrateisnear, setInterRateIsNear] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
   const [inputId, setInputId] = useState(0);
@@ -173,13 +173,13 @@ export default function Inputs() {
     setInputId(idParam);
     setType(data.type);
     setName(data.name);
-    setInterQuantity(data.quantity);
-    setInterTotalWeight(data.totalweight);
-    setInterWeightPerUnit(data.weightperunit);
+    setInterQuantity(String(data.quantity));
+    setInterTotalWeight(String(data.totalweight));
+    setInterWeightPerUnit(String(data.weightperunit));
     setSupplier(data.supplier);
     setExpirationDate(data.expirationdate);
-    setInterMinimunQuantity(data.minimun_quantity);
-    setInterRateIsNear(data.rateisnear);
+    setInterMinimunQuantity(String(data.minimun_quantity));
+    setInterRateIsNear(String(data.rateisnear));
   };
 
   async function DoSearch(e) {
@@ -196,6 +196,12 @@ export default function Inputs() {
   }
 
   async function InputUpdate() {
+    const quantity = toInt(interquantity);
+    const totalweight = toInt(intertotalweight);
+    const weightperunit = toInt(interweightperunit);
+    const minimun_quantity = toInt(interminimun_quantity);
+    const rateisnear = toInt(interrateisnear);
+
     try {
       await axios.put(`/inputs/${inputId}`, {
         type,
@@ -205,41 +211,35 @@ export default function Inputs() {
         weightperunit,
         supplier,
         expirationdate,
+        employee_id,
         minimun_quantity,
         rateisnear,
       });
 
       clear();
     } catch (err) {
-      const errors = get(err, "response.data.errors", []);
+      const errors = get(err, "response.data.error", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro ao atualizar insumo. Verifique os dados inseridos");
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar atualizar insumo");
+        }
       }
     }
   }
 
-  const numberfy = (variables) => {
-    const numbers = [];
-
-    for (let i = 0; i < variables.length; i++) {
-      numbers.push(toInt(variables[i]));
-    }
-
-    console.log(numbers);
-    return numbers;
-  };
-
   async function InputRegister(e) {
     e.preventDefault();
 
-    const quantity = toInt(interTotalWeight);
-    const totalweight = toInt(interTotalWeight);
-    const weightperunit = toInt(interWeightPerUnit);
-    const minimun_quantity = toInt(interMinimunQuantity);
-    const rateisnear = toInt(interRateIsNear);
+    const quantity = toInt(interquantity);
+    const totalweight = toInt(intertotalweight);
+    const weightperunit = toInt(interweightperunit);
+    const minimun_quantity = toInt(interminimun_quantity);
+    const rateisnear = toInt(interrateisnear);
 
     try {
       await axios.post("/inputs", {
@@ -259,23 +259,32 @@ export default function Inputs() {
       clearDirectExecution();
       return;
     } catch (err) {
-      const errors = get(err, "response.data.errors", []);
+      const errors = get(err, "response.data.error", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error(
-          "Erro ao cadastrar novo insumo. Verifique os dados inseridos"
-        );
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar cadastrar insumo");
+        }
       }
     }
   }
 
-  const Delete = async (e, idParam) => {
+  const Delete = async (e, idParam, inputName) => {
     e.preventDefault();
 
+    // eslint-disable-next-line no-restricted-globals, no-alert
+    const ask = confirm(`Deseja realmente deletar o insumo ${inputName}`);
+
     try {
-      await axios.delete(`/inputs/${idParam}`);
+      if (ask === true) {
+        await axios.delete(`/inputs/${idParam}`);
+      }
+
+      toast.success("Insumo deletado com sucesso");
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
@@ -383,7 +392,7 @@ export default function Inputs() {
                     />
                     <FaTrash
                       className="delete-icon"
-                      onClick={(e) => Delete(e, input.id)}
+                      onClick={(e) => Delete(e, input.id, input.name)}
                     />
                   </div>
                   <div className="label">Tipo: </div>
@@ -418,7 +427,7 @@ export default function Inputs() {
                     />
                     <FaTrash
                       className="delete-icon"
-                      onClick={(e) => Delete(e, input.id)}
+                      onClick={(e) => Delete(e, input.id, input.name)}
                     />
                   </div>
                   <div className="label">Tipo: </div>
@@ -460,19 +469,19 @@ export default function Inputs() {
         <input
           type="text"
           placeholder="Quantidade..."
-          value={interQuantity}
+          value={interquantity}
           onChange={(e) => setInterQuantity(e.target.value)}
         />
         <input
           type="text"
           placeholder="Peso total..."
-          value={interTotalWeight}
+          value={intertotalweight}
           onChange={(e) => setInterTotalWeight(e.target.value)}
         />
         <input
           type="text"
           placeholder="Peso unitário..."
-          value={interWeightPerUnit}
+          value={interweightperunit}
           onChange={(e) => setInterWeightPerUnit(e.target.value)}
         />
         <input
@@ -490,19 +499,19 @@ export default function Inputs() {
         <input
           type="text"
           placeholder="quantidade mínima... (opcional)"
-          value={interMinimunQuantity}
+          value={interminimun_quantity}
           onChange={(e) => setInterMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
           placeholder="Próximo ao limite..."
-          value={interRateIsNear}
+          value={interrateisnear}
           onChange={(e) => setInterRateIsNear(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => InputRegister(e)}>
+        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
           Adicionar
         </button>
       </NewInput>
