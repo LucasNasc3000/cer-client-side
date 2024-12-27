@@ -3,15 +3,17 @@
 import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
-export const InputsContainer = styled.div``;
+export const InputsContainer = styled.div`
+  overflow: hidden;
+`;
 
 export const SearchSpace = styled.div`
     display: flex;
     flex-direction: row;
     position: relative;
     height: 120px;
-    width: 1050px;
-    bottom: 683px;
+    width: 1290px;
+    bottom: 750px;
     left: 230px;
 
     .input-search {
@@ -37,8 +39,8 @@ export const SearchSpace = styled.div`
     }
 
     .checkbox {
-        height: 30px;
-        width: 30px;
+        height: 32px;
+        width: 32px;
         margin-left: 35px;
     }
 
@@ -46,15 +48,15 @@ export const SearchSpace = styled.div`
         display: flex;
         flex-direction: row;
         position: relative;
-        right: 270px;
-        top: 80px;
+        right: 520px;
+        top: 90px;
         height: 30px;
         width: 670px;
     }
 
     .checkbox-label {
         color: black;
-        font-size: 12px;
+        font-size: 12.5px;
         margin-left: 5px;
         margin-top: 8px;
     }
@@ -62,20 +64,20 @@ export const SearchSpace = styled.div`
     .logout {
         display: flex;
         position: relative;
-        height: 95px;
-        width: 95px;
+        height: 75px;
+        width: 75px;
         color: #fff;
         left: 625px;
-        top: -5px
+        top: 3px
     }
 
     .arrow {
       display: flex;
       position: relative;
-      height: 95px;
-      width: 95px;
-      right: 310px;
-      top: -5px;
+      height: 65px;
+      width: 65px;
+      right: 530px;
+      top: 8px;
       color: #fff;
     }
 
@@ -106,7 +108,7 @@ export const InputsSpace = styled.div`
       background-color: #688da2;
       display: flex;
       flex-direction: column;
-      height: 290px;
+      height: 380px;
       width: 450px;
       margin-top: 10px;
       margin-left: 90px;
@@ -120,11 +122,11 @@ export const InputsSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 124px;
+      bottom: 166.5px;
       left: 110px;
       margin-top: 10px;
       color: white;
-      font-size: 18px;
+      font-size: 17px;
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;
       border-bottom: 0.5px solid white;
@@ -133,20 +135,21 @@ export const InputsSpace = styled.div`
     .label {
       display: flex;
       position: relative;
-      right: 130px;
-      top: 100px;
+      right: 120px;
+      top: 142px;
       margin-top: 10px;
-      width: 130px;
+      width: 170px;
       color: white;
-      font-size: 18px;
+      font-size: 17px;
       font-family: Arial, Helvetica, sans-serif;
+      word-break: keep-all;
       border-bottom: 0.5px solid white;
     }
 
     .edit {
       display: flex;
       position: relative;
-      top: 105px;
+      top: 150px;
       left: -12px;
       width: 120px;
     }
@@ -155,8 +158,8 @@ export const InputsSpace = styled.div`
       position: relative;
       color: white;
       display: flex;
-      height: 35px;
-      width: 40px;
+      height: 30px;
+      width: 35px;
       padding: 4px;
       left: 15px;
     }
@@ -165,8 +168,8 @@ export const InputsSpace = styled.div`
       display: flex;
       position: relative;
       color: white;
-      height: 35px;
-      width: 40px;
+      height: 30px;
+      width: 35px;
       padding: 4px;
       left: 30px;
     }

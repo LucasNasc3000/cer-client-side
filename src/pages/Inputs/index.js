@@ -281,15 +281,23 @@ export default function Inputs() {
     const ask = confirm(`Deseja realmente deletar o insumo ${inputName}`);
 
     try {
-      if (ask === true) await axios.delete(`/inputs/${idParam}`);
-      toast.success("Insumo deletado com sucesso");
-    } catch (err) {
-      const errors = get(err, "response.data.errors", []);
-
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
+      if (ask === true) {
+        await axios.delete(`/inputs/${idParam}`);
       } else {
-        toast.error("Erro desconhecido");
+        return;
+      }
+      toast.success(`${inputName} deletado`);
+    } catch (err) {
+      const errors = get(err, "response.data.error", []);
+
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar deletar insumo");
+        }
       }
     }
   };
@@ -324,6 +332,14 @@ export default function Inputs() {
           <input
             type="checkbox"
             className="checkbox"
+            name="type"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Tipo</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
             name="name"
             onChange={(e) => setSearchParam(e.target.name)}
           />
@@ -335,7 +351,7 @@ export default function Inputs() {
             name="unitweight"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Peso unitário</h3>
+          <h3 className="checkbox-label">Quantidade</h3>
 
           <input
             type="checkbox"
@@ -351,7 +367,7 @@ export default function Inputs() {
             name="unities"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Unidades</h3>
+          <h3 className="checkbox-label">Peso unitário</h3>
 
           <input
             type="checkbox"
@@ -359,7 +375,7 @@ export default function Inputs() {
             name="boughtdate"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Data da compra</h3>
+          <h3 className="checkbox-label">Fornecedor</h3>
 
           <input
             type="checkbox"
@@ -375,7 +391,23 @@ export default function Inputs() {
             name="supplier"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Fornecedor</h3>
+          <h3 className="checkbox-label">Quantidade mínima</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="supplier"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Registrado por</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="supplier"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Próximo ao limite</h3>
         </div>
       </SearchSpace>
       <InputsSpace>
@@ -399,10 +431,10 @@ export default function Inputs() {
                   <div className="label">Peso total: </div>
                   <div className="label">Peso unitário: </div>
                   <div className="label">Fornecedor: </div>
-                  <div className="label">Unidades: </div>
                   <div className="label">Data validade: </div>
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
+                  <div className="label">Funcionário: </div>
                   <div className="data-div">{input.type}</div>
                   <div className="data-div">{input.name}</div>
                   <div className="data-div">{input.quantity}</div>
@@ -412,6 +444,7 @@ export default function Inputs() {
                   <div className="data-div">{input.expirationdate}</div>
                   <div className="data-div">{input.minimun_quantity}</div>
                   <div className="data-div">{input.rateisnear}</div>
+                  <div className="data-div">{input.employee_id}</div>
                 </div>
               );
             })
@@ -434,7 +467,6 @@ export default function Inputs() {
                   <div className="label">Peso total: </div>
                   <div className="label">Peso unitário: </div>
                   <div className="label">Fornecedor: </div>
-                  <div className="label">Unidades: </div>
                   <div className="label">Data validade: </div>
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
