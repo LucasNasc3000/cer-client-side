@@ -216,7 +216,8 @@ export default function Inputs() {
         rateisnear,
       });
 
-      clear();
+      clearDirectExecution();
+      toast.success(`${name} atualizado com sucesso`);
     } catch (err) {
       const errors = get(err, "response.data.error", []);
 
@@ -280,10 +281,7 @@ export default function Inputs() {
     const ask = confirm(`Deseja realmente deletar o insumo ${inputName}`);
 
     try {
-      if (ask === true) {
-        await axios.delete(`/inputs/${idParam}`);
-      }
-
+      if (ask === true) await axios.delete(`/inputs/${idParam}`);
       toast.success("Insumo deletado com sucesso");
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
