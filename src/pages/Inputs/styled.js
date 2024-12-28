@@ -3,9 +3,7 @@
 import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
-export const InputsContainer = styled.div`
-  overflow: hidden;
-`;
+export const InputsContainer = styled.div``;
 
 export const SearchSpace = styled.div`
     display: flex;
@@ -150,36 +148,22 @@ export const InputsSpace = styled.div`
       display: flex;
       position: relative;
       top: 150px;
-      left: -12px;
-      width: 120px;
+      left: 30px;
+      width: 135px;
     }
 
     .edit-icon {
       position: relative;
       color: white;
       display: flex;
-      height: 30px;
-      width: 35px;
+      height: 45px;
+      width: 45px;
       padding: 4px;
       left: 15px;
     }
 
-    .delete-icon {
-      display: flex;
-      position: relative;
-      color: white;
-      height: 30px;
-      width: 35px;
-      padding: 4px;
-      left: 30px;
-    }
-
     .edit-icon:hover {
       filter: brightness(80%);
-    }
-
-    .delete-icon:hover {
-      color: red;
     }
 `;
 

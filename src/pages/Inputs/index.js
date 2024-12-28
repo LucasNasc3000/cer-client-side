@@ -1,16 +1,16 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
-/* eslint-disable camelcase */
-import { get } from "lodash";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaEdit, FaSearch, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { toInt } from "validator";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
+import Register from "../../services/register";
+import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
@@ -39,6 +39,7 @@ export default function Inputs() {
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
+  const [rerender, setReRender] = useState(false);
 
   useEffect(() => {
     async function GetData() {
@@ -84,61 +85,66 @@ export default function Inputs() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
-  useEffect(() => {
-    async function GetInputs() {
-      const inputsRaw = [];
-      const allInputs = [];
-      const joinData = [];
+  async function GetInputs() {
+    const inputsRaw = [];
+    const allInputs = [];
+    const joinData = [];
 
-      if (bossId.length > 0) {
-        try {
-          const getEmployeesByBoss = await axios.get(
-            `/employees/search/boss/${bossId}`
+    if (bossId.length > 0) {
+      try {
+        const getEmployeesByBoss = await axios.get(
+          `/employees/search/boss/${bossId}`
+        );
+
+        const employeesIds = getEmployeesByBoss.data.map((employees) => {
+          return employees.id;
+        });
+
+        for (let i = 0; i < employeesIds.length; i++) {
+          // eslint-disable-next-line no-await-in-loop
+          const inputs = await axios.get(
+            `/inputs/search/employeeid/${employeesIds[i]}`
           );
 
-          const employeesIds = getEmployeesByBoss.data.map((employees) => {
-            return employees.id;
-          });
-
-          for (let i = 0; i < employeesIds.length; i++) {
-            // eslint-disable-next-line no-await-in-loop
-            const inputs = await axios.get(
-              `/inputs/search/employeeid/${employeesIds[i]}`
-            );
-
-            if (inputs.data) inputsRaw.push(inputs.data);
-          }
-
-          for (let i = 0; i < inputsRaw.length; i++) {
-            const join = allInputs.concat(inputsRaw[i]);
-            joinData.push(...join);
-          }
-
-          if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
-            const bossInputs = await axios.get(
-              `/inputs/search/employeeid/${employee_id}`
-            );
-
-            joinData.push(...bossInputs.data);
-          } else {
-            const bossInputs = await axios.get(
-              `/inputs/search/employeeid/${bossId}`
-            );
-
-            joinData.push(...bossInputs.data);
-          }
-
-          setInputsData(joinData);
-
-          if (!inputsData) toast.error("Erro ao exibir insumos");
-        } catch (e) {
-          toast.error("Erro desconhecido");
+          if (inputs.data) inputsRaw.push(inputs.data);
         }
+
+        for (let i = 0; i < inputsRaw.length; i++) {
+          const join = allInputs.concat(inputsRaw[i]);
+          joinData.push(...join);
+        }
+
+        if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
+          const bossInputs = await axios.get(
+            `/inputs/search/employeeid/${employee_id}`
+          );
+
+          joinData.push(...bossInputs.data);
+        } else {
+          const bossInputs = await axios.get(
+            `/inputs/search/employeeid/${bossId}`
+          );
+
+          joinData.push(...bossInputs.data);
+        }
+
+        setInputsData(joinData);
+
+        if (!inputsData) toast.error("Erro ao exibir insumos");
+      } catch (e) {
+        toast.error("Erro desconhecido");
       }
     }
+  }
 
+  useEffect(() => {
     GetInputs();
-  }, [bossId, employee_id, permissionlStored]);
+  }, [bossId]);
+
+  useEffect(() => {
+    if (rerender === true) GetInputs();
+    setReRender(false);
+  });
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -195,111 +201,46 @@ export default function Inputs() {
     }
   }
 
-  async function InputUpdate() {
-    const quantity = toInt(interquantity);
-    const totalweight = toInt(intertotalweight);
-    const weightperunit = toInt(interweightperunit);
-    const minimun_quantity = toInt(interminimun_quantity);
-    const rateisnear = toInt(interrateisnear);
+  const InputUpdate = async () => {
+    const data = {
+      type,
+      name,
+      interquantity,
+      intertotalweight,
+      interweightperunit,
+      supplier,
+      expirationdate,
+      employee_id,
+      interminimun_quantity,
+      interrateisnear,
+    };
 
-    try {
-      await axios.put(`/inputs/${inputId}`, {
-        type,
-        name,
-        quantity,
-        totalweight,
-        weightperunit,
-        supplier,
-        expirationdate,
-        employee_id,
-        minimun_quantity,
-        rateisnear,
-      });
+    const register = await Update(inputId, data, "inputs");
+    setReRender(register);
 
-      clearDirectExecution();
-      toast.success(`${name} atualizado com sucesso`);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
+    clearDirectExecution();
+  };
 
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
-
-        if (err && errors.length < 1) {
-          toast.error("Erro desconhecido ao tentar atualizar insumo");
-        }
-      }
-    }
-  }
-
-  async function InputRegister(e) {
+  const InputRegister = async (e) => {
     e.preventDefault();
 
-    const quantity = toInt(interquantity);
-    const totalweight = toInt(intertotalweight);
-    const weightperunit = toInt(interweightperunit);
-    const minimun_quantity = toInt(interminimun_quantity);
-    const rateisnear = toInt(interrateisnear);
+    const data = {
+      type,
+      name,
+      interquantity,
+      intertotalweight,
+      interweightperunit,
+      supplier,
+      expirationdate,
+      employee_id,
+      interminimun_quantity,
+      interrateisnear,
+    };
 
-    try {
-      await axios.post("/inputs", {
-        type,
-        name,
-        quantity,
-        totalweight,
-        weightperunit,
-        supplier,
-        expirationdate,
-        employee_id,
-        minimun_quantity,
-        rateisnear,
-      });
+    const register = await Register(data, "inputs");
+    setReRender(register);
 
-      toast.success("Insumo adicionado com sucesso");
-      clearDirectExecution();
-      return;
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
-
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
-
-        if (err && errors.length < 1) {
-          toast.error("Erro desconhecido ao tentar cadastrar insumo");
-        }
-      }
-    }
-  }
-
-  const Delete = async (e, idParam, inputName) => {
-    e.preventDefault();
-
-    // eslint-disable-next-line no-restricted-globals, no-alert
-    const ask = confirm(`Deseja realmente deletar o insumo ${inputName}`);
-
-    try {
-      if (ask === true) {
-        await axios.delete(`/inputs/${idParam}`);
-      } else {
-        return;
-      }
-      toast.success(`${inputName} deletado`);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
-
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
-
-        if (err && errors.length < 1) {
-          toast.error("Erro desconhecido ao tentar deletar insumo");
-        }
-      }
-    }
+    clearDirectExecution();
   };
 
   const IdVerify = (e) => {
@@ -348,7 +289,7 @@ export default function Inputs() {
           <input
             type="checkbox"
             className="checkbox"
-            name="unitweight"
+            name="quantity"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Quantidade</h3>
@@ -364,7 +305,7 @@ export default function Inputs() {
           <input
             type="checkbox"
             className="checkbox"
-            name="unities"
+            name="weightperunit"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Peso unitário</h3>
@@ -372,7 +313,7 @@ export default function Inputs() {
           <input
             type="checkbox"
             className="checkbox"
-            name="boughtdate"
+            name="supplier"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Fornecedor</h3>
@@ -388,7 +329,7 @@ export default function Inputs() {
           <input
             type="checkbox"
             className="checkbox"
-            name="supplier"
+            name="minimunquantity"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Quantidade mínima</h3>
@@ -396,18 +337,10 @@ export default function Inputs() {
           <input
             type="checkbox"
             className="checkbox"
-            name="supplier"
+            name="employeeid"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Registrado por</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="supplier"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Próximo ao limite</h3>
         </div>
       </SearchSpace>
       <InputsSpace>
@@ -419,10 +352,6 @@ export default function Inputs() {
                     <FaEdit
                       className="edit-icon"
                       onClick={(e) => SetInputs(e, input.id, input)}
-                    />
-                    <FaTrash
-                      className="delete-icon"
-                      onClick={(e) => Delete(e, input.id, input.name)}
                     />
                   </div>
                   <div className="label">Tipo: </div>
@@ -455,10 +384,6 @@ export default function Inputs() {
                     <FaEdit
                       className="edit-icon"
                       onClick={(e) => SetInputs(e, input.id, input)}
-                    />
-                    <FaTrash
-                      className="delete-icon"
-                      onClick={(e) => Delete(e, input.id, input.name)}
                     />
                   </div>
                   <div className="label">Tipo: </div>
