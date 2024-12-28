@@ -3,7 +3,9 @@
 import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
-export const InputsContainer = styled.div``;
+export const InputsContainer = styled.div`
+  overflow: hidden
+`;
 
 export const SearchSpace = styled.div`
     display: flex;
@@ -97,7 +99,7 @@ export const InputsSpace = styled.div`
     flex-direction: column;
     position: relative;
     overflow-y: auto;
-    bottom: 650px;
+    bottom: 700px;
     height: 500px;
     width: 620px;
     left: 300px;
@@ -173,7 +175,7 @@ export const NewInput = styled.div`
     position: relative;
     align-items: center;
     justify-content: center;
-    bottom: 1155px;
+    bottom: 1165px;
     left: 1020px;
     height: fit-content;
     width: fit-content;
