@@ -1,44 +1,84 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable camelcase */
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { FaSearch, FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
-import { get } from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
+import Register from "../../services/register";
+import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
-import Header from "../../components/Header";
-import { SalesContainer, SearchSpace, SalesSpace, NewSale } from "./styled";
+import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
+  const headerid = useSelector((state) => state.auth.headerid);
+  const emailStored = useSelector((state) => state.auth.emailHeaders);
+  const permissionlStored = useSelector((state) => state.auth.permission);
   const dispatch = useDispatch();
 
-  const [produto, setProduto] = useState("");
-  const [pesoTotal, setPesoTotal] = useState("");
-  const [unidadesValue, setUnidades] = useState("");
-  const [nomeCliente, setNomeCliente] = useState("");
-  const [telefoneCliente, setTelefoneCliente] = useState("");
-  const [enderecoCliente, setEnderecoCliente] = useState("");
-  const [dataVenda, setDataVenda] = useState("");
+  const [date, setDate] = useState("");
+  const [hour, setHour] = useState("");
+  const [client_name, setClientName] = useState("");
+  const [phone_number, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [products, setProducts] = useState("");
+  const [employee_id, setEmployeeId] = useState("");
+  const [client_birthday, setClientBirthday] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
-  const [id, setId] = useState(0);
-  const [inputsData, setInputsData] = useState([]);
+  const [bossId, setBossId] = useState("");
+  const [saleId, setSaleId] = useState("");
+  const [salesData, setSalesData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const searchInput = document.querySelector(".sale-search");
+  const [rerender, setReRender] = useState(false);
+  const searchSale = document.querySelector(".sale-search");
 
   useEffect(() => {
     async function GetData() {
       try {
-        const data = await axios.get("/sales");
-        setInputsData(data.data);
+        if (!headerid || headerid === "") {
+          const bossData = await axios.get(
+            `/employees/search/email/${emailStored}`
+          );
+
+          const { id } = bossData.data;
+          setBossId(id);
+          return;
+        }
+        const employeeData = await axios.get(
+          `/employees/search/email/${emailStored}`
+        );
+
+        const { boss } = employeeData.data;
+        setBossId(boss);
       } catch (e) {
-        toast.error("Erro ao exibir vendas");
+        toast.error("Erro ao obter dados identificadores");
+      }
+    }
+    GetData();
+  }, [bossId, emailStored, headerid]);
+
+  useEffect(() => {
+    async function headerIdCheck() {
+      try {
+        if (!headerid || headerid === "") {
+          const bossData = await axios.get(
+            `/employees/search/email/${emailStored}`
+          );
+          setEmployeeId(bossData.data.id);
+          return;
+        }
+        setEmployeeId(headerid);
+      } catch (e) {
+        toast.error("Erro ao verificar id no cabeçalho");
       }
     }
 
-    GetData();
-  });
+    headerIdCheck();
+  }, [headerid, emailStored, employee_id]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -47,40 +87,103 @@ export default function Sales() {
     history.push("/");
   };
 
+  const clearDirectExecution = () => {
+    setSaleId("");
+    setDate("");
+    setHour("");
+    setClientName("");
+    setPhoneNumber("");
+    setAddress("");
+    setProducts("");
+    setClientBirthday("");
+    searchSale.value = "";
+    setSearchResults([]);
+  };
+
   const clear = (e) => {
     e.preventDefault();
-
-    setId(0);
-    setProduto("");
-    setPesoTotal("");
-    setUnidades("");
-    setNomeCliente("");
-    setTelefoneCliente("");
-    setEnderecoCliente("");
-    setDataVenda("");
-    setSearchParam("");
-    searchInput.value = "";
-    setSearchResults([]);
+    clearDirectExecution();
   };
 
   const SetSales = (e, idParam, data) => {
     e.preventDefault();
 
-    setId(idParam);
-    setProduto(data.produto);
-    setPesoTotal(data.peso_total);
-    setUnidades(data.unidades);
-    setNomeCliente(data.nome_cliente);
-    setTelefoneCliente(data.telefone_cliente);
-    setEnderecoCliente(data.endereco_cliente);
-    setDataVenda(data.data_venda);
+    setSaleId(idParam);
+    setDate(data.date);
+    setHour(data.hour);
+    setClientName(data.client_name);
+    setPhoneNumber(data.phone_number);
+    setAddress(data.address);
+    setProducts(data.products);
+    setClientBirthday(data.client_birthday);
   };
+
+  async function GetSales() {
+    const salesRaw = [];
+    const allSales = [];
+    const joinData = [];
+
+    if (bossId.length > 0) {
+      try {
+        const getEmployeesByBoss = await axios.get(
+          `/employees/search/boss/${bossId}`
+        );
+
+        const employeesIds = getEmployeesByBoss.data.map((employees) => {
+          return employees.id;
+        });
+
+        for (let i = 0; i < employeesIds.length; i++) {
+          // eslint-disable-next-line no-await-in-loop
+          const sales = await axios.get(
+            `/sales/search/employeeid/${employeesIds[i]}`
+          );
+
+          if (sales.data) salesRaw.push(sales.data);
+        }
+
+        for (let i = 0; i < salesRaw.length; i++) {
+          const join = allSales.concat(salesRaw[i]);
+          joinData.push(...join);
+        }
+
+        if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
+          const bossSales = await axios.get(
+            `/sales/search/employeeid/${employee_id}`
+          );
+
+          joinData.push(...bossSales.data);
+        } else {
+          const bossSales = await axios.get(
+            `/sales/search/employeeid/${bossId}`
+          );
+
+          joinData.push(...bossSales.data);
+        }
+
+        setSalesData(joinData);
+
+        if (!salesData) toast.error("Erro ao exibir vendas");
+      } catch (e) {
+        toast.error("Erro desconhecido");
+      }
+    }
+  }
+
+  useEffect(() => {
+    GetSales();
+  }, [bossId]);
+
+  useEffect(() => {
+    if (rerender === true) GetSales();
+    setReRender(false);
+  });
 
   async function DoSearch(e) {
     e.preventDefault();
     try {
       const result = await axios.get(
-        `/sales/search/${searchParam}/${searchInput.value}`
+        `/sales/search/${searchParam}/${searchSale.value}`
       );
       setSearchResults(result.data);
       clear();
@@ -90,77 +193,47 @@ export default function Sales() {
   }
 
   async function SaleUpdate() {
-    try {
-      await axios.put(`/sales/${id}`, {
-        produto,
-        peso_total: pesoTotal,
-        unidades: unidadesValue,
-        nome_cliente: nomeCliente,
-        telefone_cliente: telefoneCliente,
-        endereco_cliente: enderecoCliente,
-        data_venda: dataVenda,
-      });
+    const data = {
+      date,
+      hour,
+      client_name,
+      phone_number,
+      address,
+      products,
+      employee_id,
+      client_birthday,
+    };
 
-      clear();
-    } catch (err) {
-      const errors = get(err, "response.data.errors", []);
+    const register = await Update(saleId, data, "sales");
+    setReRender(register);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro ao atualizar venda. Verifique os dados inseridos");
-      }
-    }
+    clearDirectExecution();
   }
 
   async function SaleRegister(e) {
     e.preventDefault();
 
-    try {
-      await axios.post("/sales", {
-        produto,
-        peso_total: pesoTotal,
-        unidades: unidadesValue,
-        nome_cliente: nomeCliente,
-        telefone_cliente: telefoneCliente,
-        endereco_cliente: enderecoCliente,
-        data_venda: dataVenda,
-      });
+    const data = {
+      date,
+      hour,
+      client_name,
+      phone_number,
+      address,
+      products,
+      employee_id,
+      client_birthday,
+    };
 
-      clear();
-    } catch (err) {
-      const errors = get(err, "response.data.errors", []);
+    const register = await Register(data, "sales");
+    setReRender(register);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error(
-          "Erro ao cadastrar nova venda. Verifique os dados inseridos"
-        );
-      }
-    }
+    clearDirectExecution();
   }
-
-  const Delete = async (e, idParam) => {
-    e.preventDefault();
-
-    try {
-      await axios.delete(`/sales/${idParam}`);
-    } catch (err) {
-      const errors = get(err, "response.data.errors", []);
-
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido");
-      }
-    }
-  };
 
   const IdVerify = (e) => {
     e.preventDefault();
 
-    if (id !== 0) {
+    if (saleId !== 0) {
       SaleUpdate();
     } else {
       SaleRegister(e);
@@ -187,7 +260,23 @@ export default function Sales() {
           <input
             type="checkbox"
             className="checkbox"
-            name="clientName"
+            name="date"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Data</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="hour"
+            onChange={(e) => setSearchParam(e.target.name)}
+          />
+          <h3 className="checkbox-label">Hora</h3>
+
+          <input
+            type="checkbox"
+            className="checkbox"
+            name="clientname"
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Nome cliente</h3>
@@ -195,55 +284,47 @@ export default function Sales() {
           <input
             type="checkbox"
             className="checkbox"
-            name="clientAddress"
+            name="phonenumber"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Endereco cliente</h3>
+          <h3 className="checkbox-label">Telefone</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="clientPhone"
+            name="address"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Telefone cliente</h3>
+          <h3 className="checkbox-label">Endereço</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="product"
+            name="products"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Produto</h3>
+          <h3 className="checkbox-label">Produtos</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="saleDate"
+            name="employeeid"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Data venda</h3>
+          <h3 className="checkbox-label">Registrado por</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="totalWeight"
+            name="clientbirthday"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Peso total</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="unities"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Unidades</h3>
+          <h3 className="checkbox-label">Anv. cliente</h3>
         </div>
       </SearchSpace>
       <SalesSpace>
         {searchResults.length < 1
-          ? inputsData.map((sale) => {
+          ? salesData.map((sale) => {
               return (
                 <div key={sale.id} className="main-data-div">
                   <div className="edit">
@@ -251,25 +332,23 @@ export default function Sales() {
                       className="edit-icon"
                       onClick={(e) => SetSales(e, sale.id, sale)}
                     />
-                    <FaTrash
-                      className="delete-icon"
-                      onClick={(e) => Delete(e, sale.id)}
-                    />
                   </div>
-                  <div className="label">Produto: </div>
-                  <div className="label">Peso total: </div>
-                  <div className="label">Unidades: </div>
-                  <div className="label">Nome do cliente: </div>
-                  <div className="label">Telefone do cliente: </div>
-                  <div className="label">Endereco do cliente: </div>
-                  <div className="label">Data da venda: </div>
-                  <div className="data-div">{sale.produto}</div>
-                  <div className="data-div">{sale.peso_total}</div>
-                  <div className="data-div">{sale.unidades}</div>
-                  <div className="data-div">{sale.nome_cliente}</div>
-                  <div className="data-div">{sale.telefone_cliente}</div>
-                  <div className="data-div">{sale.endereco_cliente}</div>
-                  <div className="data-div">{sale.data_venda}</div>
+                  <div className="label">Data: </div>
+                  <div className="label">Hora: </div>
+                  <div className="label">Nome cliente: </div>
+                  <div className="label">Telefone: </div>
+                  <div className="label">Endereço: </div>
+                  <div className="label">Produtos: </div>
+                  <div className="label">Anv. Cliente: </div>
+                  <div className="label">Funcionário: </div>
+                  <div className="data-div">{sale.date}</div>
+                  <div className="data-div">{sale.hour}</div>
+                  <div className="data-div">{sale.client_name}</div>
+                  <div className="data-div">{sale.phone_number}</div>
+                  <div className="data-div">{sale.address}</div>
+                  <div className="data-div">{sale.products}</div>
+                  <div className="data-div">{sale.client_birthday}</div>
+                  <div className="data-div">{sale.employee_id}</div>
                 </div>
               );
             })
@@ -281,25 +360,23 @@ export default function Sales() {
                       className="edit-icon"
                       onClick={(e) => SetSales(e, sale.id, sale)}
                     />
-                    <FaTrash
-                      className="delete-icon"
-                      onClick={(e) => Delete(e, sale.id)}
-                    />
                   </div>
-                  <div className="label">Produto: </div>
-                  <div className="label">Peso total: </div>
-                  <div className="label">Unidades: </div>
-                  <div className="label">Nome do cliente: </div>
-                  <div className="label">Telefone do cliente: </div>
-                  <div className="label">Endereco do cliente: </div>
-                  <div className="label">Data da venda: </div>
-                  <div className="data-div">{sale.produto}</div>
-                  <div className="data-div">{sale.peso_total}</div>
-                  <div className="data-div">{sale.unidades}</div>
-                  <div className="data-div">{sale.nome_cliente}</div>
-                  <div className="data-div">{sale.telefone_cliente}</div>
-                  <div className="data-div">{sale.endereco_cliente}</div>
-                  <div className="data-div">{sale.data_venda}</div>
+                  <div className="label">Data: </div>
+                  <div className="label">Hora: </div>
+                  <div className="label">Nome cliente: </div>
+                  <div className="label">Telefone: </div>
+                  <div className="label">Endereço: </div>
+                  <div className="label">Produtos: </div>
+                  <div className="label">Anv. Cliente: </div>
+                  <div className="label">Funcionário: </div>
+                  <div className="data-div">{sale.date}</div>
+                  <div className="data-div">{sale.hour}</div>
+                  <div className="data-div">{sale.client_name}</div>
+                  <div className="data-div">{sale.phone_number}</div>
+                  <div className="data-div">{sale.address}</div>
+                  <div className="data-div">{sale.products}</div>
+                  <div className="data-div">{sale.client_birthday}</div>
+                  <div className="data-div">{sale.employee_id}</div>
                 </div>
               );
             })}
@@ -307,52 +384,45 @@ export default function Sales() {
       <NewSale>
         <input
           type="text"
-          id="product"
-          placeholder="Produto..."
-          value={produto}
-          onChange={(e) => setProduto(e.target.value)}
+          placeholder="Data..."
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
         />
         <input
           type="text"
-          id="t-weight"
-          placeholder="Peso total..."
-          value={pesoTotal}
-          onChange={(e) => setPesoTotal(e.target.value)}
+          placeholder="Hora..."
+          value={hour}
+          onChange={(e) => setHour(e.target.value)}
         />
         <input
           type="text"
-          id="unities"
-          placeholder="Unidades..."
-          value={unidadesValue}
-          onChange={(e) => setUnidades(e.target.value)}
+          placeholder="Nome cliente..."
+          value={client_name}
+          onChange={(e) => setClientName(e.target.value)}
         />
         <input
           type="text"
-          id="c-name"
-          placeholder="Nome do cliente..."
-          value={nomeCliente}
-          onChange={(e) => setNomeCliente(e.target.value)}
+          placeholder="Telefone..."
+          value={phone_number}
+          onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input
           type="text"
-          id="c-phone"
-          placeholder="Telefone do cliente..."
-          value={telefoneCliente}
-          onChange={(e) => setTelefoneCliente(e.target.value)}
+          placeholder="Endereço..."
+          value={address}
+          onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input
           type="text"
-          id="c-address"
-          placeholder="Endereço do cliente..."
-          value={enderecoCliente}
-          onChange={(e) => setEnderecoCliente(e.target.value)}
+          placeholder="Produtos..."
+          value={products}
+          onChange={(e) => setAddress(e.target.value)}
         />
         <input
           type="text"
-          id="sale-date"
-          placeholder="Data da venda..."
-          value={dataVenda}
-          onChange={(e) => setDataVenda(e.target.value)}
+          placeholder="Anv. Cliente..."
+          value={client_birthday}
+          onChange={(e) => setClientBirthday(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
