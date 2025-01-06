@@ -10,8 +10,8 @@ export const SearchSpace = styled.div`
     flex-direction: row;
     position: relative;
     height: 120px;
-    width: 1050px;
-    bottom: 683px;
+    width: 1281px;
+    bottom: 749px;
     left: 230px;
 
     .sale-search {
@@ -37,8 +37,8 @@ export const SearchSpace = styled.div`
     }
 
     .checkbox {
-        height: 30px;
-        width: 30px;
+        height: 32px;
+        width: 32px;
         margin-left: 35px;
     }
 
@@ -46,36 +46,36 @@ export const SearchSpace = styled.div`
         display: flex;
         flex-direction: row;
         position: relative;
-        right: 270px;
-        top: 80px;
+        right: 400px;
+        top: 90px;
         height: 30px;
         width: 670px;
     }
 
     .checkbox-label {
         color: black;
-        font-size: 12px;
+        font-size: 12.5px;
         margin-left: 5px;
         margin-top: 8px;
     }
 
     .logout {
-        display: flex;
+      display: flex;
         position: relative;
-        height: 95px;
-        width: 95px;
+        height: 75px;
+        width: 75px;
         color: #fff;
         left: 625px;
-        top: -5px
+        top: 3px
     }
 
     .arrow {
       display: flex;
       position: relative;
-      height: 95px;
-      width: 95px;
-      right: 310px;
-      top: -5px;
+      height: 65px;
+      width: 65px;
+      right: 510px;
+      top: 8px;
       color: #fff;
     }
 
@@ -97,7 +97,7 @@ export const SalesSpace = styled.div`
     flex-direction: column;
     position: relative;
     overflow-y: auto;
-    bottom: 650px;
+    bottom: 700px;
     height: 500px;
     width: 620px;
     left: 300px;
@@ -106,7 +106,7 @@ export const SalesSpace = styled.div`
       background-color: #688da2;
       display: flex;
       flex-direction: column;
-      height: 350px;
+      height: 380px;
       width: 450px;
       margin-top: 10px;
       margin-left: 90px;
@@ -120,11 +120,11 @@ export const SalesSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 154px;
+      bottom: 166.5px;
       left: 110px;
-      margin-top: 20px;
+      margin-top: 10px;
       color: white;
-      font-size: 18px;
+      font-size: 17px;
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;
       border-bottom: 0.5px solid white;
@@ -133,50 +133,37 @@ export const SalesSpace = styled.div`
     .label {
       display: flex;
       position: relative;
-      right: 130px;
-      top: 140px;
+      right: 120px;
+      top: 142px;
       margin-top: 10px;
-      width: 130px;
+      width: 170px;
       color: white;
-      font-size: 18px;
+      font-size: 17px;
       font-family: Arial, Helvetica, sans-serif;
-      border-bottom: 0.5px solid white;
+      word-break: keep-all;
+      border-bottom: 0.5px solid white;;
     }
 
     .edit {
       display: flex;
       position: relative;
-      top: 145px;
-      left: -16px;
-      width: 120px;
+      top: 150px;
+      left: 30px;
+      width: 135px;
     }
 
     .edit-icon {
       position: relative;
       color: white;
       display: flex;
-      height: 35px;
-      width: 40px;
+      height: 45px;
+      width: 45px;
       padding: 4px;
       left: 15px;
     }
 
-    .delete-icon {
-      display: flex;
-      position: relative;
-      color: white;
-      height: 35px;
-      width: 40px;
-      padding: 4px;
-      left: 30px;
-    }
-
     .edit-icon:hover {
       filter: brightness(80%);
-    }
-
-    .delete-icon:hover {
-      color: red;
     }
 `;
 

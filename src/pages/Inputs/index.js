@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
+import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
@@ -90,56 +91,67 @@ export default function Inputs() {
     const allInputs = [];
     const joinData = [];
 
-    if (bossId.length > 0) {
-      try {
-        const getEmployeesByBoss = await axios.get(
-          `/employees/search/boss/${bossId}`
+    try {
+      const getEmployeesByBoss = await axios.get(
+        `/employees/search/boss/${bossId}`
+      );
+
+      const employeesIds = getEmployeesByBoss.data.map((employees) => {
+        return employees.id;
+      });
+
+      for (let i = 0; i < employeesIds.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const inputs = await axios.get(
+          `/inputs/search/employeeid/${employeesIds[i]}`
         );
 
-        const employeesIds = getEmployeesByBoss.data.map((employees) => {
-          return employees.id;
-        });
+        if (inputs.data) inputsRaw.push(inputs.data);
+      }
 
-        for (let i = 0; i < employeesIds.length; i++) {
-          // eslint-disable-next-line no-await-in-loop
-          const inputs = await axios.get(
-            `/inputs/search/employeeid/${employeesIds[i]}`
-          );
+      for (let i = 0; i < inputsRaw.length; i++) {
+        const join = allInputs.concat(inputsRaw[i]);
+        joinData.push(...join);
+      }
 
-          if (inputs.data) inputsRaw.push(inputs.data);
+      // Adiciona à variável inputsData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
+      if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
+        const bossInputs = await axios.get(
+          `/inputs/search/employeeid/${employee_id}`
+        );
+
+        joinData.push(...bossInputs.data);
+      } else {
+        const bossInputs = await axios.get(
+          `/inputs/search/employeeid/${bossId}`
+        );
+
+        joinData.push(...bossInputs.data);
+      }
+
+      setInputsData(joinData);
+
+      if (!inputsData) toast.error("Erro ao exibir insumos");
+    } catch (e) {
+      if (typeof e.response.data === "string") return;
+
+      const errors = get(e, "response.data.error", []);
+
+      if (e) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
         }
 
-        for (let i = 0; i < inputsRaw.length; i++) {
-          const join = allInputs.concat(inputsRaw[i]);
-          joinData.push(...join);
+        if (e && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar exibir insumos");
         }
-
-        if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
-          const bossInputs = await axios.get(
-            `/inputs/search/employeeid/${employee_id}`
-          );
-
-          joinData.push(...bossInputs.data);
-        } else {
-          const bossInputs = await axios.get(
-            `/inputs/search/employeeid/${bossId}`
-          );
-
-          joinData.push(...bossInputs.data);
-        }
-
-        setInputsData(joinData);
-
-        if (!inputsData) toast.error("Erro ao exibir insumos");
-      } catch (e) {
-        toast.error("Erro desconhecido");
       }
     }
   }
 
   useEffect(() => {
     GetInputs();
-  }, [bossId]);
+  }, [bossId, employee_id]);
 
   useEffect(() => {
     if (rerender === true) GetInputs();

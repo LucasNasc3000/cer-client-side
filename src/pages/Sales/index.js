@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
+import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
@@ -20,7 +21,6 @@ export default function Sales() {
   const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
-  const [hour, setHour] = useState("");
   const [client_name, setClientName] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
@@ -90,7 +90,6 @@ export default function Sales() {
   const clearDirectExecution = () => {
     setSaleId("");
     setDate("");
-    setHour("");
     setClientName("");
     setPhoneNumber("");
     setAddress("");
@@ -110,7 +109,6 @@ export default function Sales() {
 
     setSaleId(idParam);
     setDate(data.date);
-    setHour(data.hour);
     setClientName(data.client_name);
     setPhoneNumber(data.phone_number);
     setAddress(data.address);
@@ -123,56 +121,60 @@ export default function Sales() {
     const allSales = [];
     const joinData = [];
 
-    if (bossId.length > 0) {
-      try {
-        const getEmployeesByBoss = await axios.get(
-          `/employees/search/boss/${bossId}`
+    try {
+      const getEmployeesByBoss = await axios.get(
+        `/employees/search/boss/${bossId}`
+      );
+
+      const employeesIds = getEmployeesByBoss.data.map((employees) => {
+        return employees.id;
+      });
+
+      for (let i = 0; i < employeesIds.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const sales = await axios.get(
+          `/sales/search/employeeid/${employeesIds[i]}`
         );
 
-        const employeesIds = getEmployeesByBoss.data.map((employees) => {
-          return employees.id;
-        });
+        if (sales.data) salesRaw.push(sales.data);
+      }
 
-        for (let i = 0; i < employeesIds.length; i++) {
-          // eslint-disable-next-line no-await-in-loop
-          const sales = await axios.get(
-            `/sales/search/employeeid/${employeesIds[i]}`
-          );
+      for (let i = 0; i < salesRaw.length; i++) {
+        const join = allSales.concat(salesRaw[i]);
+        joinData.push(...join);
+      }
 
-          if (sales.data) salesRaw.push(sales.data);
+      if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
+        const bossSales = await axios.get(
+          `/sales/search/employeeid/${employee_id}`
+        );
+
+        joinData.push(...bossSales.data);
+      } else {
+        const bossSales = await axios.get(`/sales/search/employeeid/${bossId}`);
+
+        joinData.push(...bossSales.data);
+      }
+
+      setSalesData(joinData);
+    } catch (e) {
+      const errors = get(e, "response.data.error", []);
+
+      if (e) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
         }
 
-        for (let i = 0; i < salesRaw.length; i++) {
-          const join = allSales.concat(salesRaw[i]);
-          joinData.push(...join);
+        if (e && errors.length < 1 && typeof errors !== "object") {
+          toast.error("Erro desconhecido ao tentar exibir vendas");
         }
-
-        if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
-          const bossSales = await axios.get(
-            `/sales/search/employeeid/${employee_id}`
-          );
-
-          joinData.push(...bossSales.data);
-        } else {
-          const bossSales = await axios.get(
-            `/sales/search/employeeid/${bossId}`
-          );
-
-          joinData.push(...bossSales.data);
-        }
-
-        setSalesData(joinData);
-
-        if (!salesData) toast.error("Erro ao exibir vendas");
-      } catch (e) {
-        toast.error("Erro desconhecido");
       }
     }
   }
 
   useEffect(() => {
     GetSales();
-  }, [bossId]);
+  }, [bossId, employee_id]);
 
   useEffect(() => {
     if (rerender === true) GetSales();
@@ -195,7 +197,6 @@ export default function Sales() {
   async function SaleUpdate() {
     const data = {
       date,
-      hour,
       client_name,
       phone_number,
       address,
@@ -212,6 +213,11 @@ export default function Sales() {
 
   async function SaleRegister(e) {
     e.preventDefault();
+
+    const ddate = new Date();
+    const hour = ddate.toLocaleTimeString("pt-br", {
+      hourCycle: "h24",
+    });
 
     const data = {
       date,
@@ -234,9 +240,9 @@ export default function Sales() {
     e.preventDefault();
 
     if (saleId !== 0) {
-      SaleUpdate();
-    } else {
       SaleRegister(e);
+    } else {
+      SaleUpdate();
     }
   };
 
@@ -390,12 +396,6 @@ export default function Sales() {
         />
         <input
           type="text"
-          placeholder="Hora..."
-          value={hour}
-          onChange={(e) => setHour(e.target.value)}
-        />
-        <input
-          type="text"
           placeholder="Nome cliente..."
           value={client_name}
           onChange={(e) => setClientName(e.target.value)}
@@ -410,13 +410,13 @@ export default function Sales() {
           type="text"
           placeholder="Endereço..."
           value={address}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => setAddress(e.target.value)}
         />
         <input
           type="text"
           placeholder="Produtos..."
           value={products}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={(e) => setProducts(e.target.value)}
         />
         <input
           type="text"

@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
 import { get } from "lodash";
 import { toast } from "react-toastify";
@@ -22,13 +23,30 @@ export default async function Register(data, registerType) {
         ...data,
       };
 
-      await axios.post(`/${registerType}`, {
+      await axios.post("/inputs", {
         ...finalData,
       });
     }
 
-    const inputName = data.name;
-    toast.success(`Registro de ${inputName} adicionado com sucesso`);
+    if (registerType === "sales") {
+      await axios.post("/sales", {
+        ...data,
+      });
+    }
+
+    // eslint-disable-next-line default-case
+    switch (registerType) {
+      case "inputs":
+        const inputName = data.name;
+        return toast.success(`${inputName} adicionado`);
+
+      case "sales":
+        return toast.success("Venda adicionada");
+
+      case "outputs":
+        const outputName = data.name;
+        return toast.success(`${outputName} adicionado`);
+    }
     return true;
   } catch (err) {
     const errors = get(err, "response.data.error", []);

@@ -64,7 +64,7 @@ export default function Login(props) {
           placeholder="Digite sua senha de administrador"
         />
         <input
-          type="text"
+          type="password"
           value={permission}
           onChange={(e) => setPermission(e.target.value)}
           placeholder="Digite sua permissão"
