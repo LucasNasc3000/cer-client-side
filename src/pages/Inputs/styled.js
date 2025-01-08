@@ -149,7 +149,7 @@ export const InputsSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 150px;
+      top: 155px;
       left: 30px;
       width: 135px;
     }
