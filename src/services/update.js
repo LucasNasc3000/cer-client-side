@@ -27,9 +27,6 @@ export default async function Update(id, data, registerType) {
         ...finalData,
       });
     }
-    console.log(registerType);
-    console.log(id);
-    console.log(data);
 
     if (registerType === "sales") {
       await axios.patch(`/sales/${id}`, {

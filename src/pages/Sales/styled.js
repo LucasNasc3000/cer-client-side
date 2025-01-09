@@ -97,6 +97,7 @@ export const SalesSpace = styled.div`
     flex-direction: column;
     position: relative;
     overflow-y: auto;
+    overflow-x: hidden;
     bottom: 700px;
     height: 500px;
     width: 620px;
@@ -106,7 +107,7 @@ export const SalesSpace = styled.div`
       background-color: #688da2;
       display: flex;
       flex-direction: column;
-      height: 340px;
+      height: 380px;
       width: 450px;
       margin-top: 10px;
       margin-left: 90px;
@@ -120,13 +121,14 @@ export const SalesSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 153px;
+      bottom: 172px;
       left: 110px;
       margin-top: 13px;
       color: white;
-      font-size: 17px;
+      font-size: 16px;
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;
+      line-break: auto;
       border-bottom: 0.5px solid white;
     }
 
@@ -134,11 +136,11 @@ export const SalesSpace = styled.div`
       display: flex;
       position: relative;
       right: 120px;
-      top: 118px;
+      top: 86px;
       margin-top: 13px;
       width: 170px;
       color: white;
-      font-size: 17px;
+      font-size: 16px;
       font-family: Arial, Helvetica, sans-serif;
       word-break: keep-all;
       border-bottom: 0.5px solid white;;
@@ -147,7 +149,7 @@ export const SalesSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 140px;
+      top: 110px;
       left: 25px;
       width: 135px;
     }

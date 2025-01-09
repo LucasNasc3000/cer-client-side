@@ -195,14 +195,6 @@ export default function Sales() {
   }
 
   async function SaleUpdate() {
-    console.log(saleId);
-    console.log(date);
-    console.log(client_name);
-    console.log(phone_number);
-    console.log(address);
-    console.log(products);
-    console.log(client_birthday);
-
     const data = {
       date,
       client_name,
@@ -214,10 +206,7 @@ export default function Sales() {
     };
 
     const update = await Update(saleId, data, "sales");
-    console.log(rerender);
     setReRender(update);
-    console.log(rerender);
-    console.log(update);
 
     clearDirectExecution();
   }
@@ -355,17 +344,17 @@ export default function Sales() {
                   <div className="label">Nome cliente: </div>
                   <div className="label">Telefone: </div>
                   <div className="label">Endereço: </div>
-                  <div className="label">Produtos: </div>
                   <div className="label">Anv. Cliente: </div>
                   <div className="label">Funcionário: </div>
+                  <div className="label">Produtos: </div>
                   <div className="data-div">{sale.date}</div>
                   <div className="data-div">{sale.hour}</div>
                   <div className="data-div">{sale.client_name}</div>
                   <div className="data-div">{sale.phone_number}</div>
                   <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.products}</div>
                   <div className="data-div">{sale.client_birthday}</div>
                   <div className="data-div">{sale.employee_id}</div>
+                  <div className="data-div">{sale.products}</div>
                 </div>
               );
             })
