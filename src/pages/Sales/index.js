@@ -195,6 +195,14 @@ export default function Sales() {
   }
 
   async function SaleUpdate() {
+    console.log(saleId);
+    console.log(date);
+    console.log(client_name);
+    console.log(phone_number);
+    console.log(address);
+    console.log(products);
+    console.log(client_birthday);
+
     const data = {
       date,
       client_name,
@@ -205,8 +213,11 @@ export default function Sales() {
       client_birthday,
     };
 
-    const register = await Update(saleId, data, "sales");
-    setReRender(register);
+    const update = await Update(saleId, data, "sales");
+    console.log(rerender);
+    setReRender(update);
+    console.log(rerender);
+    console.log(update);
 
     clearDirectExecution();
   }
@@ -239,10 +250,10 @@ export default function Sales() {
   const IdVerify = (e) => {
     e.preventDefault();
 
-    if (saleId !== 0) {
-      SaleRegister(e);
-    } else {
+    if (saleId !== "") {
       SaleUpdate();
+    } else {
+      SaleRegister(e);
     }
   };
 

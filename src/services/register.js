@@ -38,14 +38,17 @@ export default async function Register(data, registerType) {
     switch (registerType) {
       case "inputs":
         const inputName = data.name;
-        return toast.success(`${inputName} adicionado`);
+        toast.success(`${inputName} adicionado`);
+        break;
 
       case "sales":
-        return toast.success("Venda adicionada");
+        toast.success("Venda adicionada");
+        break;
 
       case "outputs":
         const outputName = data.name;
-        return toast.success(`${outputName} adicionado`);
+        toast.success(`${outputName} adicionado`);
+        break;
     }
     return true;
   } catch (err) {

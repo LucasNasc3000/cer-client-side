@@ -1,10 +1,11 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
 import { get } from "lodash";
 import { toast } from "react-toastify";
 import { toInt } from "validator";
 import axios from "./axios";
 
-export default async function Update(inputId, data, registerType) {
+export default async function Update(id, data, registerType) {
   try {
     if (registerType === "inputs") {
       const quantity = toInt(data.interquantity);
@@ -22,13 +23,37 @@ export default async function Update(inputId, data, registerType) {
         ...data,
       };
 
-      await axios.put(`/${registerType}/${inputId}`, {
+      await axios.put(`/inputs/${id}`, {
         ...finalData,
       });
     }
+    console.log(registerType);
+    console.log(id);
+    console.log(data);
 
-    const inputName = data.name;
-    toast.success(`Registro de ${inputName} atualizado com sucesso`);
+    if (registerType === "sales") {
+      await axios.patch(`/sales/${id}`, {
+        ...data,
+      });
+    }
+
+    // eslint-disable-next-line default-case
+    switch (registerType) {
+      case "inputs":
+        const inputName = data.name;
+        toast.success(`${inputName} atualizado`);
+        break;
+
+      case "sales":
+        toast.success("Venda atualizada");
+        break;
+
+      case "outputs":
+        const outputName = data.name;
+        toast.success(`${outputName} atualizado`);
+        break;
+    }
+
     return true;
   } catch (err) {
     const errors = get(err, "response.data.error", []);
