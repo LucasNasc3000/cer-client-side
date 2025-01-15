@@ -59,8 +59,8 @@ export const EmployeeCards = styled.div`
   flex-direction: column;
   position: relative;
   bottom: 740px;
-  left: 500px;
-  width: 550px;
+  left: 470px;
+  width: 600px;
   height: 710px;
   overflow-y: auto;
 
@@ -68,7 +68,7 @@ export const EmployeeCards = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-left: 20px;
+    margin-left: 80px;
     margin-top: 5px;
   }
 
@@ -76,58 +76,78 @@ export const EmployeeCards = styled.div`
     background-color: #688da2;
     top: 10px;
     margin-top: 20px;
-    width: 390px;
-    height: 230px;
+    width: 440px;
+    height: 250px;
     border-radius: 6px;
-    box-shadow: 3px 1.8px #a0a0a0;
+    box-shadow: 3px 1.8px rgb(149, 148, 148);
   }
 
   .name {
     font-size: 24px;
-    left: 110px;
+    left: 0px;
+    top: 5px;
     font-weight: bold;
   }
 
+  .id-label {
+    border-bottom: 1px solid white;
+    padding: 3px;
+    width: 335px;
+    bottom: 30px;
+    right: 60px;
+  }
+
+  .id {
+    width: 310px;
+    bottom: 56px;
+    right: 30px;
+    word-break: break-all;
+  }
+
   .email {
-    left: 140px;
-    top: -48px;
+    left: 0px;
+    top: -68px;
     bottom: 25px;
     width: 100px;
   }
 
   .email-label {
-    top: -20px;
+    top: -40px;
     border-bottom: 1px solid white;
     padding: 3px;
+    right: 60px;
     width: 255px;
   }
 
   .permission-label {
-    top: -30px;
+    top: -50px;
     border-bottom: 1px solid white;
+    right: 60px;
     padding: 3px;
     width: 255px;
   }
 
   .permission {
-    left: 140px;
-    top: -57px;
+    left: 30px;
+    top: -77px;
     bottom: 25px;
-    width: 100px;
+    width: 120px;
+    word-break: break-all;
     border-bottom: none;
   }
 
   .al-label {
     border-bottom: none;
-    top: -40px;
+    top: -60px;
+    right: 60px;
     border-bottom: 1px solid white;
     padding: 3px;
     width: 305px;
   }
 
   .a-l {
-    top: -67px;
-    left: 290px;
+    top: -87px;
+    left: 190px;
     bottom: 25px;
     width: 100px;
   }
@@ -136,13 +156,14 @@ export const EmployeeCards = styled.div`
     display: flex;
     position: relative;
     bottom: 23px;
+    right: 60px;
   }
 
   .del-icon {
     display: flex;
     position: relative;
-    bottom: 51px;
-    left: 45px;
+    bottom: 50px;
+    right: 20px;
     color: red;
   }
 

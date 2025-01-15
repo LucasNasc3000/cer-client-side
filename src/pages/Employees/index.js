@@ -56,32 +56,30 @@ export function Employees() {
     }
 
     getBoss();
-  }, []);
+  }, [emailStored, boss]);
 
-  useEffect(() => {
-    async function getEmployees() {
-      try {
-        const employeesSearch = await axios.get(
-          `/employees/search/boss/${boss}`
-        );
-        setEmployees(employeesSearch.data);
-      } catch (e) {
-        const errors = get(e, "response.data.error", []);
+  async function getEmployees() {
+    try {
+      const employeesSearch = await axios.get(`/employees/search/boss/${boss}`);
+      setEmployees(employeesSearch.data);
+    } catch (e) {
+      const errors = get(e, "response.data.error", []);
 
-        if (e) {
-          if (errors.length > 0) {
-            errors.map((error) => toast.error(error));
-          }
+      if (e) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
 
-          if (e && errors.length > 0) {
-            toast.error("Erro ao tentar obter os dados do chefe");
-          }
+        if (e && errors.length > 0) {
+          toast.error("Erro ao tentar obter os dados do chefe");
         }
       }
     }
+  }
 
+  useEffect(() => {
     getEmployees();
-  });
+  }, [boss]);
 
   const clear = (e) => {
     e.preventDefault();
@@ -163,6 +161,8 @@ export function Employees() {
                   className="del-icon"
                   onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
                 />
+                <div className="id-label">Id:</div>
+                <div className="id">{empData.id}</div>
                 <div className="email-label">E-mail:</div>
                 <div className="email">{empData.email}</div>
                 <div className="permission-label">Permissão:</div>
