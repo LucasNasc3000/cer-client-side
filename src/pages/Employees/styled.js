@@ -5,6 +5,77 @@ export const EmployeesListContainer = styled.div`
   height: 740px;
 `;
 
+export const SearchSpace = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height: 120px;
+  width: 1290px;
+  bottom: 750px;
+  left: 230px;
+
+  .input-search {
+    display: flex;
+    height: 35px;
+    width: 390px;
+    position: relative;
+    left: 285px;
+    top: 23px;
+    border-radius: 8px;
+    border-style: none;
+    font-size: 14px;
+  }
+
+  .search-icon {
+    display: flex;
+    height: 32px;
+    width: 92px;
+    position: relative;
+    color: #fff;
+    left: 290px;
+    top: 25px;
+  }
+
+  .exemp-list {
+    height: 35px;
+    width: 190px;
+    margin-left: 365px;
+    margin-top: 24px;
+  }
+
+  .logout {
+    display: flex;
+    position: relative;
+    height: 75px;
+    width: 75px;
+    color: #fff;
+    left: 625px;
+    top: 3px;
+  }
+
+  .arrow {
+    display: flex;
+    position: relative;
+    height: 42px;
+    width: 42px;
+    right: 1040px;
+    top: 20px;
+    color: #fff;
+  }
+
+  .arrow:hover {
+    filter: brightness(70%);
+  }
+
+  .logout:hover {
+    filter: brightness(70%);
+  }
+
+  .search-icon:hover {
+    filter: brightness(80%);
+  }
+`;
+
 export const EmployeeInputs = styled.div`
   display: flex;
   flex-direction: column;

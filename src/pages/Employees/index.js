@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaRegEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FaArrowLeft, FaPlus, FaRegEdit, FaSearch } from "react-icons/fa";
+import { MdDelete, MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,6 +13,7 @@ import {
   EmployeeCards,
   EmployeeInputs,
   EmployeesListContainer,
+  SearchSpace,
 } from "./styled";
 
 export function Employees() {
@@ -142,9 +143,39 @@ export function Employees() {
     }
   };
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+
+    dispatch(actions.loginFailure());
+    history.push("/");
+  };
+
+  async function DoSearch(e) {
+    e.preventDefault();
+  }
+
   return (
     <EmployeesListContainer>
       <Header />
+      <SearchSpace>
+        <FaSearch
+          size={30}
+          className="search-icon"
+          onClick={(e) => DoSearch(e)}
+        />
+        <input
+          type="text"
+          placeholder="Pesquisar funcionário pelo id"
+          className="input-search"
+        />
+        <button type="button" className="exemp-list">
+          Listar ex-funcionários
+        </button>
+
+        <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
+
+        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
+      </SearchSpace>
       <EmployeeCards>
         {employees.map((empData) => {
           return (
