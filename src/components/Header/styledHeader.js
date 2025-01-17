@@ -49,6 +49,20 @@ export const MainHeader = styled.nav`
     font-size: 18px;
   }
 
+  .outputs {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    color: #fff;
+    height: 50px;
+    width: 170px;
+    align-items: center;
+    justify-content: center;
+    left: 16px;
+    top: 39px;
+    font-size: 18px;
+  }
+
   .profile {
     position: relative;
     display: flex;
@@ -89,6 +103,10 @@ export const MainHeader = styled.nav`
     filter: brightness(70%);
   }
 
+  .outputs:hover {
+    filter: brightness(70%);
+  }
+
   .profile:hover {
     filter: brightness(70%);
   }
@@ -100,6 +118,7 @@ export const MainHeader = styled.nav`
   .home-icon,
   .inputs-icon,
   .sales-icon,
+  .outputs-icon,
   .employees-icon,
   .profile-icon {
     margin-right: 20px;

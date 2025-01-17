@@ -34,6 +34,12 @@ export default async function Update(id, data, registerType) {
       });
     }
 
+    if (registerType === "outputs") {
+      await axios.put(`/outputs/${id}`, {
+        ...data,
+      });
+    }
+
     // eslint-disable-next-line default-case
     switch (registerType) {
       case "inputs":

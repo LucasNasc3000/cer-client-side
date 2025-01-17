@@ -156,7 +156,7 @@ export default function Inputs() {
   useEffect(() => {
     if (rerender === true) GetInputs();
     setReRender(false);
-  });
+  }, [rerender]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -207,7 +207,6 @@ export default function Inputs() {
         `/inputs/search/${searchParam}/${searchInput.value}`
       );
       setSearchResults(results.data);
-      clear();
     } catch (err) {
       toast.error(err);
     }
@@ -227,8 +226,8 @@ export default function Inputs() {
       interrateisnear,
     };
 
-    const register = await Update(inputId, data, "inputs");
-    setReRender(register);
+    const update = await Update(inputId, data, "inputs");
+    setReRender(update);
 
     clearDirectExecution();
   };

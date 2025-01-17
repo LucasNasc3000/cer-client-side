@@ -4,6 +4,7 @@ import { AiFillDashboard } from "react-icons/ai";
 import { BiCabinet } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
+import { GoPackageDependents } from "react-icons/go";
 import { IoBagHandle } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -25,6 +26,10 @@ export default function Header() {
             <Link to="/sales" class="sales">
                 <IoBagHandle size={25} class="sales-icon" />
                 Vendas
+            </Link>
+            <Link to="/outputs" class="outputs">
+                <GoPackageDependents size={25} class="outputs-icon" />
+                Saídas
             </Link>
             <Link to="/profile" class="profile">
                 <FaUser size={25} class="profile-icon" />

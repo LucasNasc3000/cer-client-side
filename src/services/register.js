@@ -34,6 +34,12 @@ export default async function Register(data, registerType) {
       });
     }
 
+    if (registerType === "outputs") {
+      await axios.post("/outputs", {
+        ...data,
+      });
+    }
+
     // eslint-disable-next-line default-case
     switch (registerType) {
       case "inputs":

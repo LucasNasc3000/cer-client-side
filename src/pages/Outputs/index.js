@@ -1,5 +1,6 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
+/* eslint-disable no-useless-return */
+/* eslint-disable no-plusplus */
 import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
@@ -12,29 +13,33 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
-import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
+import {
+  NewOutput,
+  OutputsContainer,
+  OutputsSpace,
+  SearchSpace,
+} from "./styled";
 
-export default function Sales() {
+export default function Outputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
   const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
-  const [client_name, setClientName] = useState("");
-  const [phone_number, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [products, setProducts] = useState("");
-  const [employee_id, setEmployeeId] = useState("");
-  const [client_birthday, setClientBirthday] = useState("");
-  // eslint-disable-next-line no-unused-vars
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [unities, setUnities] = useState("");
   const [searchParam, setSearchParam] = useState("");
-  const [bossId, setBossId] = useState("");
-  const [saleId, setSaleId] = useState("");
-  const [salesData, setSalesData] = useState([]);
+  const [outputId, setOutputId] = useState(0);
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
+  const [outputsData, setOutputsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const searchOutput = document.querySelector(".output-search");
+  const [bossId, setBossId] = useState("");
+  const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
-  const searchSale = document.querySelector(".sale-search");
 
   useEffect(() => {
     async function GetData() {
@@ -80,45 +85,9 @@ export default function Sales() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
-
-  const clearDirectExecution = () => {
-    setSaleId("");
-    setDate("");
-    setClientName("");
-    setPhoneNumber("");
-    setAddress("");
-    setProducts("");
-    setClientBirthday("");
-    searchSale.value = "";
-    setSearchResults([]);
-  };
-
-  const clear = (e) => {
-    e.preventDefault();
-    clearDirectExecution();
-  };
-
-  const SetSales = (e, idParam, data) => {
-    e.preventDefault();
-
-    setSaleId(idParam);
-    setDate(data.date);
-    setClientName(data.client_name);
-    setPhoneNumber(data.phone_number);
-    setAddress(data.address);
-    setProducts(data.products);
-    setClientBirthday(data.client_birthday);
-  };
-
-  async function GetSales() {
-    const salesRaw = [];
-    const allSales = [];
+  async function GetOutputs() {
+    const outputsRaw = [];
+    const allOutputs = [];
     const joinData = [];
 
     try {
@@ -132,32 +101,39 @@ export default function Sales() {
 
       for (let i = 0; i < employeesIds.length; i++) {
         // eslint-disable-next-line no-await-in-loop
-        const sales = await axios.get(
-          `/sales/search/employeeid/${employeesIds[i]}`
+        const outputs = await axios.get(
+          `/outputs/search/employeeid/${employeesIds[i]}`
         );
 
-        if (sales.data) salesRaw.push(sales.data);
+        if (outputs.data) outputsRaw.push(outputs.data);
       }
 
-      for (let i = 0; i < salesRaw.length; i++) {
-        const join = allSales.concat(salesRaw[i]);
+      for (let i = 0; i < outputsRaw.length; i++) {
+        const join = allOutputs.concat(outputsRaw[i]);
         joinData.push(...join);
       }
 
+      // Adiciona à variável inputsData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
       if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
-        const bossSales = await axios.get(
-          `/sales/search/employeeid/${employee_id}`
+        const bossOutputs = await axios.get(
+          `/outputs/search/employeeid/${employee_id}`
         );
 
-        joinData.push(...bossSales.data);
+        joinData.push(...bossOutputs.data);
       } else {
-        const bossSales = await axios.get(`/sales/search/employeeid/${bossId}`);
+        const bossOutputs = await axios.get(
+          `/outputs/search/employeeid/${bossId}`
+        );
 
-        joinData.push(...bossSales.data);
+        joinData.push(...bossOutputs.data);
       }
 
-      setSalesData(joinData);
+      setOutputsData(joinData);
+
+      if (!outputsData) toast.error("Erro ao exibir saídas");
     } catch (e) {
+      if (typeof e.response.data === "string") return;
+
       const errors = get(e, "response.data.error", []);
 
       if (e) {
@@ -165,52 +141,86 @@ export default function Sales() {
           errors.map((error) => toast.error(error));
         }
 
-        if (e && errors.length < 1 && typeof errors !== "object") {
-          toast.error("Erro desconhecido ao tentar exibir vendas");
+        if (e && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar exibir saídas");
         }
       }
     }
   }
 
   useEffect(() => {
-    GetSales();
+    GetOutputs();
   }, [bossId, employee_id]);
 
   useEffect(() => {
-    if (rerender === true) GetSales();
+    if (rerender === true) GetOutputs();
     setReRender(false);
   }, [rerender]);
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+
+    dispatch(actions.loginFailure());
+    history.push("/");
+  };
+
+  const clearDirectExecution = () => {
+    setOutputId(0);
+    setType("");
+    setName("");
+    searchOutput.value = "";
+    setSearchResults([]);
+  };
+
+  const clear = (e) => {
+    e.preventDefault();
+    clearDirectExecution();
+  };
+
+  const SetOutputs = (e, idParam, data) => {
+    e.preventDefault();
+
+    setOutputId(idParam);
+    setDate(data.date);
+    setName(data.name);
+    setType(data.type);
+    setUnities(data.unities);
+  };
 
   async function DoSearch(e) {
     e.preventDefault();
     try {
-      const result = await axios.get(
-        `/sales/search/${searchParam}/${searchSale.value}`
+      const results = await axios.get(
+        `/outputs/search/${searchParam}/${searchOutput.value}`
       );
-      setSearchResults(result.data);
+      setSearchResults(results.data);
     } catch (err) {
       toast.error(err);
     }
   }
 
-  async function SaleUpdate() {
+  const OutputUpdate = async () => {
+    const ddate = new Date();
+    const hour = ddate.toLocaleTimeString("pt-br", {
+      hourCycle: "h24",
+    });
+
     const data = {
       date,
-      client_name,
-      phone_number,
-      address,
-      products,
+      hour,
+      name,
+      type,
+      unities,
       employee_id,
-      client_birthday,
     };
 
-    const update = await Update(saleId, data, "sales");
+    const update = await Update(outputId, data, "outputs");
     setReRender(update);
 
     clearDirectExecution();
-  }
+  };
 
-  async function SaleRegister(e) {
+  const OutputRegister = async (e) => {
     e.preventDefault();
 
     const ddate = new Date();
@@ -221,32 +231,30 @@ export default function Sales() {
     const data = {
       date,
       hour,
-      client_name,
-      phone_number,
-      address,
-      products,
+      name,
+      type,
+      unities,
       employee_id,
-      client_birthday,
     };
 
-    const register = await Register(data, "sales");
+    const register = await Register(data, "outputs");
     setReRender(register);
 
     clearDirectExecution();
-  }
+  };
 
   const IdVerify = (e) => {
     e.preventDefault();
 
-    if (saleId !== "") {
-      SaleUpdate();
+    if (outputId !== 0) {
+      OutputUpdate();
     } else {
-      SaleRegister(e);
+      OutputRegister(e);
     }
   };
 
   return (
-    <SalesContainer>
+    <OutputsContainer>
       <Header />
       <SearchSpace>
         <FaSearch
@@ -256,8 +264,8 @@ export default function Sales() {
         />
         <input
           type="text"
-          placeholder="Pesquisar venda..."
-          className="sale-search"
+          placeholder="Pesquisar saída..."
+          className="output-search"
         />
         <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
@@ -281,34 +289,26 @@ export default function Sales() {
           <input
             type="checkbox"
             className="checkbox"
-            name="clientname"
+            name="name"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Nome cliente</h3>
+          <h3 className="checkbox-label">Nome</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="phonenumber"
+            name="type"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Telefone</h3>
+          <h3 className="checkbox-label">Tipo</h3>
 
           <input
             type="checkbox"
             className="checkbox"
-            name="address"
+            name="unities"
             onChange={(e) => setSearchParam(e.target.name)}
           />
-          <h3 className="checkbox-label">Endereço</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="products"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Produtos</h3>
+          <h3 className="checkbox-label">Unidades</h3>
 
           <input
             type="checkbox"
@@ -317,76 +317,60 @@ export default function Sales() {
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Registrado por</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="clientbirthday"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Anv. cliente</h3>
         </div>
       </SearchSpace>
-      <SalesSpace>
+      <OutputsSpace>
         {searchResults.length < 1
-          ? salesData.map((sale) => {
+          ? outputsData.map((output) => {
               return (
-                <div key={sale.id} className="main-data-div">
+                <div key={output.id} className="main-data-div">
                   <div className="edit">
                     <FaEdit
                       className="edit-icon"
-                      onClick={(e) => SetSales(e, sale.id, sale)}
+                      onClick={(e) => SetOutputs(e, output.id, output)}
                     />
                   </div>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
-                  <div className="label">Nome cliente: </div>
-                  <div className="label">Telefone: </div>
-                  <div className="label">Endereço: </div>
-                  <div className="label">Anv. Cliente: </div>
+                  <div className="label">Nome: </div>
+                  <div className="label">Tipo: </div>
+                  <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="label">Produtos: </div>
-                  <div className="data-div">{sale.date}</div>
-                  <div className="data-div">{sale.hour}</div>
-                  <div className="data-div">{sale.client_name}</div>
-                  <div className="data-div">{sale.phone_number}</div>
-                  <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.client_birthday}</div>
-                  <div className="data-div">{sale.employee_id}</div>
-                  <div className="data-div">{sale.products}</div>
+                  <div className="data-div">{output.date}</div>
+                  <div className="data-div">{output.hour}</div>
+                  <div className="data-div">{output.name}</div>
+                  <div className="data-div">{output.type}</div>
+                  <div className="data-div">{output.unities}</div>
+                  <div className="data-div">{output.employee_id}</div>
                 </div>
               );
             })
-          : searchResults.map((sale) => {
+          : searchResults.map((output) => {
               return (
-                <div key={sale.id} className="main-data-div">
+                <div key={output.id} className="main-data-div">
                   <div className="edit">
                     <FaEdit
                       className="edit-icon"
-                      onClick={(e) => SetSales(e, sale.id, sale)}
+                      onClick={(e) => SetOutputs(e, output.id, output)}
                     />
                   </div>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
-                  <div className="label">Nome cliente: </div>
-                  <div className="label">Telefone: </div>
-                  <div className="label">Endereço: </div>
-                  <div className="label">Produtos: </div>
-                  <div className="label">Anv. Cliente: </div>
+                  <div className="label">Nome: </div>
+                  <div className="label">Tipo: </div>
+                  <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="data-div">{sale.date}</div>
-                  <div className="data-div">{sale.hour}</div>
-                  <div className="data-div">{sale.client_name}</div>
-                  <div className="data-div">{sale.phone_number}</div>
-                  <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.products}</div>
-                  <div className="data-div">{sale.client_birthday}</div>
-                  <div className="data-div">{sale.employee_id}</div>
+                  <div className="data-div">{output.date}</div>
+                  <div className="data-div">{output.hour}</div>
+                  <div className="data-div">{output.name}</div>
+                  <div className="data-div">{output.type}</div>
+                  <div className="data-div">{output.unities}</div>
+                  <div className="data-div">{output.employee_id}</div>
                 </div>
               );
             })}
-      </SalesSpace>
-      <NewSale>
+      </OutputsSpace>
+      <NewOutput>
         <input
           type="text"
           placeholder="Data..."
@@ -395,33 +379,21 @@ export default function Sales() {
         />
         <input
           type="text"
-          placeholder="Nome cliente..."
-          value={client_name}
-          onChange={(e) => setClientName(e.target.value)}
+          placeholder="Nome..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Telefone..."
-          value={phone_number}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="Tipo..."
+          value={type}
+          onChange={(e) => setType(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Endereço..."
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Produtos..."
-          value={products}
-          onChange={(e) => setProducts(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Anv. Cliente..."
-          value={client_birthday}
-          onChange={(e) => setClientBirthday(e.target.value)}
+          placeholder="Unidades..."
+          value={unities}
+          onChange={(e) => setUnities(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
@@ -429,7 +401,7 @@ export default function Sales() {
         <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
           Adicionar
         </button>
-      </NewSale>
-    </SalesContainer>
+      </NewOutput>
+    </OutputsContainer>
   );
 }
