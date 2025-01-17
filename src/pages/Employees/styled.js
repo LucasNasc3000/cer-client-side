@@ -3,6 +3,7 @@ import * as colors from "../../config/colors";
 
 export const EmployeesListContainer = styled.div`
   height: 740px;
+  overflow-x: hidden;
 `;
 
 export const SearchSpace = styled.div`
@@ -46,11 +47,11 @@ export const SearchSpace = styled.div`
   .logout {
     display: flex;
     position: relative;
-    height: 75px;
-    width: 75px;
+    height: 38px;
+    width: 38px;
     color: #fff;
-    left: 625px;
-    top: 3px;
+    left: 145px;
+    top: 22px;
   }
 
   .arrow {

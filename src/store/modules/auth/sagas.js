@@ -269,7 +269,6 @@ function* adminUpdateRequest({ payload }) {
         yield call(axios.put, `/employees/${id}`, {
           permission,
         });
-        axios.defaults.headers.permission = permission;
         break;
 
       case bossId.length > 0 &&
@@ -304,7 +303,6 @@ function* adminUpdateRequest({ payload }) {
           bossId,
           permission,
         });
-        axios.defaults.headers.permission = permission;
         break;
 
       case permission.length > 0 &&
@@ -314,7 +312,6 @@ function* adminUpdateRequest({ payload }) {
           permission,
           address_allowed,
         });
-        axios.defaults.headers.permission = permission;
         break;
 
       default:
@@ -323,7 +320,6 @@ function* adminUpdateRequest({ payload }) {
           permission,
           address_allowed,
         });
-        axios.defaults.headers.permission = permission;
         break;
     }
 

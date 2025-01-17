@@ -74,10 +74,6 @@ export default function (state = initialState, action) {
 
     case types.ADMIN_UPDATED_SUCCESS: {
       const newState = { ...state };
-      if (newState.permission !== process.env.REACT_APP_ADMIN_ROLE) {
-        newState.permission = action.payload.permssion;
-      }
-
       return newState;
     }
 

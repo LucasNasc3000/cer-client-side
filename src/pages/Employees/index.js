@@ -21,12 +21,16 @@ export function Employees() {
 
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permission = useSelector((state) => state.auth.permission);
+  const searchInput = document.querySelector(".input-search");
   const [employees, setEmployees] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [exemployees, setExemployees] = useState([]);
   const [boss, setBoss] = useState("");
   const [bossEdit, setBossEdit] = useState("");
   const [permissionEdit, setPermissionEdit] = useState("");
   const [alEdit, setAlEdit] = useState("");
   const [id, setId] = useState(0);
+  const [rerender, setReRender] = useState(false);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -59,6 +63,16 @@ export function Employees() {
     getBoss();
   }, [emailStored, boss]);
 
+  function clearDirectExecution() {
+    setId(0);
+    setBossEdit("");
+    setAlEdit("");
+    setPermissionEdit("");
+    setSearchResults([]);
+    setExemployees([]);
+    searchInput.value = "";
+  }
+
   async function getEmployees() {
     try {
       const employeesSearch = await axios.get(`/employees/search/boss/${boss}`);
@@ -78,16 +92,43 @@ export function Employees() {
     }
   }
 
+  async function DoSearch(e) {
+    e.preventDefault();
+    try {
+      const results = await axios.get(
+        `/employees/search/id/${searchInput.value}`
+      );
+
+      const inArray = [results.data];
+
+      setSearchResults(inArray);
+    } catch (err) {
+      toast.error(err);
+    }
+  }
+
+  async function ShowExEmployees(e) {
+    e.preventDefault();
+    try {
+      const results = await axios.get("/exemployees");
+      setExemployees(results.data);
+    } catch (err) {
+      toast.error(err);
+    }
+  }
+
   useEffect(() => {
     getEmployees();
   }, [boss]);
 
+  useEffect(() => {
+    if (rerender === true) getEmployees();
+    setReRender(false);
+  }, [rerender]);
+
   const clear = (e) => {
     e.preventDefault();
-    setId(0);
-    setBossEdit("");
-    setAlEdit("");
-    setPermissionEdit("");
+    clearDirectExecution();
   };
 
   const employeeUpdate = (e) => {
@@ -102,7 +143,8 @@ export function Employees() {
       })
     );
 
-    clear(e);
+    clearDirectExecution();
+    setReRender(true);
   };
 
   const SetInputs = async (e, idParam, data) => {
@@ -120,13 +162,15 @@ export function Employees() {
     e.preventDefault();
 
     // eslint-disable-next-line no-restricted-globals, no-alert
-    const ask = confirm(`Deseja mesmo excluir o funcionário ${email}`);
+    const ask = confirm(`Deseja mesmo desligar o funcionário ${email}`);
 
     if (ask === true) {
       try {
         axios.put(`/employees/${idParamExclude}`, {
           is_active: 0,
         });
+
+        setReRender(true);
       } catch (err) {
         const errors = get(e, "response.data.error", []);
 
@@ -150,10 +194,6 @@ export function Employees() {
     history.push("/");
   };
 
-  async function DoSearch(e) {
-    e.preventDefault();
-  }
-
   return (
     <EmployeesListContainer>
       <Header />
@@ -168,7 +208,11 @@ export function Employees() {
           placeholder="Pesquisar funcionário pelo id"
           className="input-search"
         />
-        <button type="button" className="exemp-list">
+        <button
+          type="button"
+          className="exemp-list"
+          onClick={(e) => ShowExEmployees(e)}
+        >
           Listar ex-funcionários
         </button>
 
@@ -177,35 +221,101 @@ export function Employees() {
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
       </SearchSpace>
       <EmployeeCards>
-        {employees.map((empData) => {
-          return (
-            <div className="main-data-div">
-              <div key={empData.id}>
-                <div className="name">{empData.name}</div>
-                <FaRegEdit
-                  size={25}
-                  className="edit-icon"
-                  onClick={(e) => SetInputs(e, empData.id, empData)}
-                />
-                <MdDelete
-                  size={30}
-                  className="del-icon"
-                  onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                />
-                <div className="id-label">Id:</div>
-                <div className="id">{empData.id}</div>
-                <div className="email-label">E-mail:</div>
-                <div className="email">{empData.email}</div>
-                <div className="permission-label">Permissão:</div>
-                <div className="permission">{empData.permission}</div>
-                <div className="al-label">
-                  Autorização para receber e-mails:
+        {searchResults.length < 1 && exemployees.length < 1
+          ? employees.map((empData) => {
+              return (
+                <div className="main-data-div">
+                  <div key={empData.id}>
+                    <div className="name">{empData.name}</div>
+                    <FaRegEdit
+                      size={25}
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, empData.id, empData)}
+                    />
+                    <MdDelete
+                      size={30}
+                      className="del-icon"
+                      onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
+                    />
+                    <div className="id-label">Id:</div>
+                    <div className="id">{empData.id}</div>
+                    <div className="email-label">E-mail:</div>
+                    <div className="email">{empData.email}</div>
+                    <div className="permission-label">Permissão:</div>
+                    <div className="permission">{empData.permission}</div>
+                    <div className="al-label">
+                      Autorização para receber e-mails:
+                    </div>
+                    <div className="a-l">{empData.address_allowed}</div>
+                  </div>
                 </div>
-                <div className="a-l">{empData.address_allowed}</div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })
+          : ""}
+
+        {exemployees.length > 0 && searchResults.length < 1
+          ? exemployees.map((empData) => {
+              return (
+                <div className="main-data-div">
+                  <div key={empData.id}>
+                    <div className="name">{empData.name}</div>
+                    <FaRegEdit
+                      size={25}
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, empData.id, empData)}
+                    />
+                    <MdDelete
+                      size={30}
+                      className="del-icon"
+                      onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
+                    />
+                    <div className="id-label">Id:</div>
+                    <div className="id">{empData.id}</div>
+                    <div className="email-label">E-mail:</div>
+                    <div className="email">{empData.email}</div>
+                    <div className="permission-label">Permissão:</div>
+                    <div className="permission">{empData.permission}</div>
+                    <div className="al-label">
+                      Autorização para receber e-mails:
+                    </div>
+                    <div className="a-l">{empData.address_allowed}</div>
+                  </div>
+                </div>
+              );
+            })
+          : ""}
+
+        {searchResults.length > 0 && exemployees.length < 1
+          ? searchResults.map((empData) => {
+              return (
+                <div className="main-data-div">
+                  <div key={empData.id}>
+                    <div className="name">{empData.name}</div>
+                    <FaRegEdit
+                      size={25}
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, empData.id, empData)}
+                    />
+                    <MdDelete
+                      size={30}
+                      className="del-icon"
+                      onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
+                    />
+                    <div className="id-label">Id:</div>
+                    <div className="id">{empData.id}</div>
+                    <div className="email-label">E-mail:</div>
+                    <div className="email">{empData.email}</div>
+                    <div className="permission-label">Permissão:</div>
+                    <div className="permission">{empData.permission}</div>
+                    <div className="al-label">
+                      Autorização para receber e-mails:
+                    </div>
+                    <div className="a-l">{empData.address_allowed}</div>
+                  </div>
+                </div>
+              );
+            })
+          : ""}
       </EmployeeCards>
       <EmployeeInputs>
         <input
