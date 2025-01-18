@@ -35,8 +35,17 @@ export default async function Register(data, registerType) {
     }
 
     if (registerType === "outputs") {
+      const finalData = {
+        date: data.date,
+        hour: data.hour,
+        name: data.name,
+        type: data.type,
+        unities: toInt(data.unities),
+        employee_id: data.employee_id,
+      };
+
       await axios.post("/outputs", {
-        ...data,
+        ...finalData,
       });
     }
 

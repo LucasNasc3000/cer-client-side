@@ -4,7 +4,7 @@ import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
 export const OutputsContainer = styled.div`
-  overflow: hidden
+  overflow: hidden;
 `;
 
 export const SearchSpace = styled.div`
@@ -18,11 +18,11 @@ export const SearchSpace = styled.div`
 
     .output-search {
       display: flex;
-      height: 35px;
-      width: 930px;
+      height: 33px;
+      width: 500px;
       position: relative;
-      left: 310px;
-      top: 20px;
+      left: 290px;
+      top: 22px;
       border-radius: 8px;
       border-style: none;
       font-size: 14px;
@@ -39,8 +39,8 @@ export const SearchSpace = styled.div`
     }
 
     .checkbox {
-      height: 32px;
-      width: 32px;
+      height: 16px;
+      width: 16px;
       margin-left: 35px;
     }
 
@@ -48,7 +48,7 @@ export const SearchSpace = styled.div`
       display: flex;
       flex-direction: row;
       position: relative;
-      right: 520px;
+      right: 430px;
       top: 90px;
       height: 30px;
       width: 670px;
@@ -58,26 +58,26 @@ export const SearchSpace = styled.div`
       color: black;
       font-size: 12.5px;
       margin-left: 5px;
-      margin-top: 8px;
+      margin-top: 2px;
     }
 
     .logout {
       display: flex;
       position: relative;
-      height: 75px;
-      width: 75px;
+      height: 38px;
+      width: 38px;
       color: #fff;
       left: 625px;
-      top: 3px
+      top: 23px
     }
 
     .arrow {
       display: flex;
       position: relative;
-      height: 65px;
-      width: 65px;
-      right: 530px;
-      top: 8px;
+      height: 38px;
+      width: 38px;
+      right: 570px;
+      top: 20px;
       color: #fff;
     }
 
@@ -108,7 +108,7 @@ export const OutputsSpace = styled.div`
       background-color: #688da2;
       display: flex;
       flex-direction: column;
-      height: 380px;
+      height: 315px;
       width: 450px;
       margin-top: 10px;
       margin-left: 90px;
@@ -122,7 +122,7 @@ export const OutputsSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 166.5px;
+      bottom: 135px;
       left: 110px;
       margin-top: 10px;
       color: white;
@@ -136,7 +136,7 @@ export const OutputsSpace = styled.div`
       display: flex;
       position: relative;
       right: 120px;
-      top: 142px;
+      top: 50px;
       margin-top: 10px;
       width: 170px;
       color: white;
@@ -149,7 +149,7 @@ export const OutputsSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 155px;
+      top: 64px;
       left: 30px;
       width: 135px;
     }
@@ -180,7 +180,7 @@ export const NewOutput = styled.div`
     height: fit-content;
     width: fit-content;
 
-    output {
+    input {
       height: 30px;
       width: 170px;
       margin-top: 5px;

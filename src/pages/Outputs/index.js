@@ -168,6 +168,8 @@ export default function Outputs() {
     setOutputId(0);
     setType("");
     setName("");
+    setUnities("");
+    setDate("");
     searchOutput.value = "";
     setSearchResults([]);
   };
