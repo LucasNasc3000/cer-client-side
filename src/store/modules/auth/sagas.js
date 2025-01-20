@@ -99,21 +99,16 @@ function* registerRequest({ payload }) {
         boss,
       })
     );
-  } catch (e) {
-    const errors = get(e, "response.data.error", []);
-    const status = get(e, "response.status", 0);
+  } catch (err) {
+    const errors = get(err, "response.data.error", []);
 
-    if (status === 401) {
-      toast.error("Você precisa fazer login novamente");
-      yield put(actions.loginFailure());
-      return history.push("/");
-    }
-
-    if (e) {
+    if (err) {
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido");
+      }
+
+      if (err && errors.length < 1) {
+        toast.error("Erro desconhecido ao tentar cadastrar novo funcionário");
       }
     }
 
@@ -230,19 +225,21 @@ function* updateRequest({ payload }) {
     toast.success("Dados atualizados com sucesso");
 
     yield put(actions.updatedSuccess({ name, password, adminpassword }));
-  } catch (e) {
-    const errors = get(e, "response.data.error", []);
-    const status = get(e, "response.status", 0);
+  } catch (err) {
+    const errors = get(err, "response.data.error", []);
+    const status = get(err, "response.status", 0);
 
     if (status === 401) {
       toast.error("Você precisa fazer login novamente");
     }
 
-    if (e) {
+    if (err) {
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido ao atualizar dados");
+      }
+
+      if (err && errors.length < 1) {
+        toast.error("Erro desconhecido ao tentar atualizar dados");
       }
     }
   }
@@ -328,19 +325,18 @@ function* adminUpdateRequest({ payload }) {
     yield put(
       actions.adminUpdatedSuccess({ bossId, permission, address_allowed })
     );
-  } catch (e) {
-    const errors = get(e, "response.data.error", []);
-    const status = get(e, "response.status", 0);
+  } catch (err) {
+    const errors = get(err, "response.data.error", []);
 
-    if (status === 401) {
-      toast.error("Você precisa fazer login novamente");
-    }
-
-    if (e) {
+    if (err) {
       if (errors.length > 0) {
         errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido ao atualizar dados do funcionário");
+      }
+
+      if (err && errors.length < 1) {
+        toast.error(
+          "Erro desconhecido ao tentar atualizar dados do funcionário"
+        );
       }
     }
   }

@@ -73,7 +73,7 @@ export default function Sales() {
         }
         setEmployeeId(headerid);
       } catch (e) {
-        toast.error("Erro ao verificar id no cabeçalho");
+        toast.error("Erro ao verificar id");
       }
     }
 
@@ -157,15 +157,15 @@ export default function Sales() {
       }
 
       setSalesData(joinData);
-    } catch (e) {
-      const errors = get(e, "response.data.error", []);
+    } catch (err) {
+      const errors = get(err, "response.data.error", []);
 
-      if (e) {
+      if (err) {
         if (errors.length > 0) {
           errors.map((error) => toast.error(error));
         }
 
-        if (e && errors.length < 1 && typeof errors !== "object") {
+        if (err && errors.length < 1) {
           toast.error("Erro desconhecido ao tentar exibir vendas");
         }
       }
@@ -189,7 +189,15 @@ export default function Sales() {
       );
       setSearchResults(result.data);
     } catch (err) {
-      toast.error(err);
+      const errors = get(err, "response.data.error", []);
+
+      if (errors.length > 0) {
+        errors.map((error) => toast.error(error));
+      }
+
+      if (err && errors.length < 1) {
+        toast.error("Erro desconhecido ao pesquisar venda");
+      }
     }
   }
 

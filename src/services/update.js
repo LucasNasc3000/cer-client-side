@@ -67,7 +67,7 @@ export default async function Update(id, data, registerType) {
       }
 
       if (err && errors.length < 1) {
-        toast.error(`Erro desconhecido ao tentar cadastrar ${registerType}`);
+        toast.error(`Erro desconhecido ao tentar atualizar ${registerType}`);
       }
       return false;
     }

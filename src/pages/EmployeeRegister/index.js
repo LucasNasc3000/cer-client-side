@@ -27,15 +27,18 @@ export function EmployeeRegister() {
       const bossData = await axios.get(
         `/employees/search/uniquename/${bossName}`
       );
+
       boss = bossData.data.id;
     } catch (err) {
-      const errors = get(e, "response.data.error", []);
+      const errors = get(err, "response.data.error", []);
 
       if (err) {
         if (errors.length > 0) {
           errors.map((error) => toast.error(error));
-        } else {
-          toast.error("Erro desconhecido ao obter dados do chefe");
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar obter dados do chefe");
         }
       }
     }

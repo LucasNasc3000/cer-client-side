@@ -79,7 +79,7 @@ export default function Inputs() {
         }
         setEmployeeId(headerid);
       } catch (e) {
-        toast.error("Erro ao verificar id no cabeçalho");
+        toast.error("Erro ao verificar id");
       }
     }
 
@@ -132,17 +132,17 @@ export default function Inputs() {
       setInputsData(joinData);
 
       if (!inputsData) toast.error("Erro ao exibir insumos");
-    } catch (e) {
-      if (typeof e.response.data === "string") return;
+    } catch (err) {
+      if (typeof err.response.data === "string") return;
 
-      const errors = get(e, "response.data.error", []);
+      const errors = get(err, "response.data.error", []);
 
-      if (e) {
+      if (err) {
         if (errors.length > 0) {
           errors.map((error) => toast.error(error));
         }
 
-        if (e && errors.length < 1) {
+        if (err && errors.length < 1) {
           toast.error("Erro desconhecido ao tentar exibir insumos");
         }
       }
@@ -208,7 +208,17 @@ export default function Inputs() {
       );
       setSearchResults(results.data);
     } catch (err) {
-      toast.error(err);
+      const errors = get(err, "response.data.error", []);
+
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar pesquisar insumo");
+        }
+      }
     }
   }
 

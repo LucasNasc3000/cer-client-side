@@ -47,14 +47,16 @@ export function Employees() {
           `/employees/search/email/${emailStored}`
         );
         setBoss(bossSearch.data.id);
-      } catch (e) {
-        const errors = get(e, "response.data.errors", []);
+      } catch (err) {
+        const errors = get(err, "response.data.errors", []);
 
-        if (e) {
+        if (err) {
           if (errors.length > 0) {
             errors.map((error) => toast.error(error));
-          } else {
-            toast.error("Erro ao tentar obter os dados do chefe");
+          }
+
+          if (err && errors.length < 1) {
+            toast.error("Erro desconhecido ao tentar obter os dados do chefe");
           }
         }
       }
@@ -77,16 +79,18 @@ export function Employees() {
     try {
       const employeesSearch = await axios.get(`/employees/search/boss/${boss}`);
       setEmployees(employeesSearch.data);
-    } catch (e) {
-      const errors = get(e, "response.data.error", []);
+    } catch (err) {
+      const errors = get(err, "response.data.error", []);
 
-      if (e) {
+      if (err) {
         if (errors.length > 0) {
           errors.map((error) => toast.error(error));
         }
 
-        if (e && errors.length > 0) {
-          toast.error("Erro ao tentar obter os dados do chefe");
+        if (err && errors.length < 1) {
+          toast.error(
+            "Erro desconhecido ao tentar obter os dados dos funcionários"
+          );
         }
       }
     }
@@ -103,7 +107,17 @@ export function Employees() {
 
       setSearchResults(inArray);
     } catch (err) {
-      toast.error(err);
+      const errors = get(err, "response.data.error", []);
+
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao pesquisar funcionário");
+        }
+      }
     }
   }
 
@@ -113,7 +127,17 @@ export function Employees() {
       const results = await axios.get("/exemployees");
       setExemployees(results.data);
     } catch (err) {
-      toast.error(err);
+      const errors = get(err, "response.data.error", []);
+
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar listar ex-funcionários");
+        }
+      }
     }
   }
 
@@ -172,15 +196,15 @@ export function Employees() {
 
         setReRender(true);
       } catch (err) {
-        const errors = get(e, "response.data.error", []);
+        const errors = get(err, "response.data.error", []);
 
-        if (e) {
+        if (err) {
           if (errors.length > 0) {
             errors.map((error) => toast.error(error));
           }
 
-          if (e && errors.length > 0) {
-            toast.error("Erro ao tentar obter os dados do chefe");
+          if (err && errors.length < 1) {
+            toast.error("Erro desconhecido ao tentar desligar funcionário");
           }
         }
       }
