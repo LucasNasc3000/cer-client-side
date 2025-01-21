@@ -4,7 +4,7 @@ import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import React, { useEffect, useState } from "react";
 import { MdLogout } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
@@ -17,8 +17,17 @@ import { HomeContainer } from "./styled";
 Chart.register(CategoryScale);
 
 export default function Home() {
+  const permission = useSelector((state) => state.auth.permission);
   const dispatch = useDispatch();
   const [salesData, setSalesData] = useState([]);
+
+  useEffect(() => {
+    const PermissionCheck = () => {
+      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
+    };
+
+    PermissionCheck();
+  }, []);
 
   useEffect(() => {
     async function GetSalesData() {

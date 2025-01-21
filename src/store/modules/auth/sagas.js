@@ -46,7 +46,38 @@ function* loginRequest({ payload }) {
       axios.defaults.headers.headerid = response.data.employee.id;
     }
 
-    history.push("/home");
+    const { permission } = payload;
+
+    // eslint-disable-next-line default-case
+    switch (permission) {
+      case process.env.REACT_APP_ADMIN_ROLE:
+        history.push("/home");
+        break;
+
+      case process.env.REACT_APP_INPUTS:
+        history.push("/inputs");
+        break;
+
+      case process.env.REACT_APP_OUTPUTS:
+        history.push("/outputs");
+        break;
+
+      case process.env.REACT_APP_SALES:
+        history.push("/sales");
+        break;
+
+      case process.env.REACT_APP_IOUT:
+        history.push("/inputs");
+        break;
+
+      case process.env.REACT_APP_SOUT:
+        history.push("/outputs");
+        break;
+
+      case process.env.REACT_APP_SIOUT:
+        history.push("/sales");
+        break;
+    }
   } catch (e) {
     toast.error(e.response.data.error[0]);
     yield put(actions.loginFailure());

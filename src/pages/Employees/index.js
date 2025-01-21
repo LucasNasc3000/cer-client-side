@@ -81,13 +81,14 @@ export function Employees() {
       setEmployees(employeesSearch.data);
     } catch (err) {
       const errors = get(err, "response.data.error", []);
+      const status = get(err, "response.status", 0);
 
       if (err) {
         if (errors.length > 0) {
           errors.map((error) => toast.error(error));
         }
 
-        if (err && errors.length < 1) {
+        if (err && errors.length < 1 && status !== 404) {
           toast.error(
             "Erro desconhecido ao tentar obter os dados dos funcionários"
           );

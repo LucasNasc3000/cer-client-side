@@ -37,6 +37,20 @@ export default function Sales() {
   const searchSale = document.querySelector(".sale-search");
 
   useEffect(() => {
+    const PermissionCheck = () => {
+      if (
+        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== process.env.REACT_APP_SALES &&
+        permissionlStored !== process.env.REACT_APP_SOUT &&
+        permissionlStored !== process.env.REACT_APP_SIOUT
+      )
+        history.goBack();
+    };
+
+    PermissionCheck();
+  }, []);
+
+  useEffect(() => {
     async function GetData() {
       try {
         if (!headerid || headerid === "") {
@@ -159,13 +173,14 @@ export default function Sales() {
       setSalesData(joinData);
     } catch (err) {
       const errors = get(err, "response.data.error", []);
+      const status = get(err, "response.status", 0);
 
       if (err) {
         if (errors.length > 0) {
           errors.map((error) => toast.error(error));
         }
 
-        if (err && errors.length < 1) {
+        if (err && errors.length < 1 && status !== 404) {
           toast.error("Erro desconhecido ao tentar exibir vendas");
         }
       }

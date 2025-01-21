@@ -24,6 +24,7 @@ export const SearchSpace = styled.div`
         border-radius: 8px;
         border-style: none;
         font-size: 14px;
+        box-shadow: 1px 1.5px rgb(173, 173, 173);
     }
 
     .search-icon {

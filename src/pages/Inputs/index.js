@@ -43,6 +43,20 @@ export default function Inputs() {
   const [rerender, setReRender] = useState(false);
 
   useEffect(() => {
+    const PermissionCheck = () => {
+      if (
+        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== process.env.REACT_APP_INPUTS &&
+        permissionlStored !== process.env.REACT_APP_IOUT &&
+        permissionlStored !== process.env.REACT_APP_SIOUT
+      )
+        history.goBack();
+    };
+
+    PermissionCheck();
+  }, []);
+
+  useEffect(() => {
     async function GetData() {
       try {
         if (!headerid || headerid === "") {

@@ -42,6 +42,21 @@ export default function Outputs() {
   const [rerender, setReRender] = useState(false);
 
   useEffect(() => {
+    const PermissionCheck = () => {
+      if (
+        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== process.env.REACT_APP_OUTPUTS &&
+        permissionlStored !== process.env.REACT_APP_IOUT &&
+        permissionlStored !== process.env.REACT_APP_SOUT &&
+        permissionlStored !== process.env.REACT_APP_SIOUT
+      )
+        history.goBack();
+    };
+
+    PermissionCheck();
+  }, []);
+
+  useEffect(() => {
     async function GetData() {
       try {
         if (!headerid || headerid === "") {
