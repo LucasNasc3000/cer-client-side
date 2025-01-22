@@ -11,6 +11,7 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import Register from "../../services/register";
+import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
 import {
@@ -204,26 +205,14 @@ export default function Outputs() {
     setUnities(data.unities);
   };
 
-  async function DoSearch(e) {
+  async function SearchOutputs(e) {
     e.preventDefault();
-    try {
-      const results = await axios.get(
-        `/outputs/search/${searchParam}/${searchOutput.value}`
-      );
-      setSearchResults(results.data);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
 
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
+    const search = await DoSearch("outputs", searchParam, searchOutput.value);
 
-        if (err && errors.length < 1) {
-          toast.error("Erro desconhecido ao tentar pesquisar saídas");
-        }
-      }
-    }
+    if (typeof search === "undefined" || !search) return;
+
+    setSearchResults(search);
   }
 
   const OutputUpdate = async () => {
@@ -287,7 +276,7 @@ export default function Outputs() {
         <FaSearch
           size={30}
           className="search-icon"
-          onClick={(e) => DoSearch(e)}
+          onClick={(e) => SearchOutputs(e)}
         />
         <input
           type="text"

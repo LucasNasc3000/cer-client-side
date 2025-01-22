@@ -10,6 +10,7 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import Register from "../../services/register";
+import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
@@ -196,24 +197,14 @@ export default function Sales() {
     setReRender(false);
   }, [rerender]);
 
-  async function DoSearch(e) {
+  async function SearchSales(e) {
     e.preventDefault();
-    try {
-      const result = await axios.get(
-        `/sales/search/${searchParam}/${searchSale.value}`
-      );
-      setSearchResults(result.data);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      }
+    const search = await DoSearch("sales", searchParam, searchSale.value);
 
-      if (err && errors.length < 1) {
-        toast.error("Erro desconhecido ao pesquisar venda");
-      }
-    }
+    if (typeof search === "undefined" || !search) return;
+
+    setSearchResults(search);
   }
 
   async function SaleUpdate() {
@@ -275,7 +266,7 @@ export default function Sales() {
         <FaSearch
           size={30}
           className="search-icon"
-          onClick={(e) => DoSearch(e)}
+          onClick={(e) => SearchSales(e)}
         />
         <input
           type="text"

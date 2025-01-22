@@ -11,6 +11,7 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import Register from "../../services/register";
+import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
@@ -214,26 +215,14 @@ export default function Inputs() {
     setInterRateIsNear(String(data.rateisnear));
   };
 
-  async function DoSearch(e) {
+  async function SearchInputs(e) {
     e.preventDefault();
-    try {
-      const results = await axios.get(
-        `/inputs/search/${searchParam}/${searchInput.value}`
-      );
-      setSearchResults(results.data);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
 
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
+    const search = await DoSearch("inputs", searchParam, searchInput.value);
 
-        if (err && errors.length < 1) {
-          toast.error("Erro desconhecido ao tentar pesquisar insumo");
-        }
-      }
-    }
+    if (typeof search === "undefined" || !search) return;
+
+    setSearchResults(search);
   }
 
   const InputUpdate = async () => {
@@ -295,7 +284,7 @@ export default function Inputs() {
         <FaSearch
           size={30}
           className="search-icon"
-          onClick={(e) => DoSearch(e)}
+          onClick={(e) => SearchInputs(e)}
         />
         <input
           type="text"
