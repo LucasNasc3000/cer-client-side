@@ -1,6 +1,5 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
-import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
@@ -8,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
@@ -52,7 +52,7 @@ export default function Sales() {
   }, []);
 
   useEffect(() => {
-    async function GetData() {
+    async function GetGeneralData() {
       try {
         if (!headerid || headerid === "") {
           const bossData = await axios.get(
@@ -73,7 +73,7 @@ export default function Sales() {
         toast.error("Erro ao obter dados identificadores");
       }
     }
-    GetData();
+    GetGeneralData();
   }, [bossId, emailStored, headerid]);
 
   useEffect(() => {
@@ -132,69 +132,27 @@ export default function Sales() {
   };
 
   async function GetSales() {
-    const salesRaw = [];
-    const allSales = [];
-    const joinData = [];
+    const sales = await GetData(
+      bossId,
+      "sales",
+      employee_id,
+      permissionlStored
+    );
 
-    try {
-      const getEmployeesByBoss = await axios.get(
-        `/employees/search/boss/${bossId}`
-      );
+    if (typeof sales === "undefined" || !sales) return;
 
-      const employeesIds = getEmployeesByBoss.data.map((employees) => {
-        return employees.id;
-      });
-
-      for (let i = 0; i < employeesIds.length; i++) {
-        // eslint-disable-next-line no-await-in-loop
-        const sales = await axios.get(
-          `/sales/search/employeeid/${employeesIds[i]}`
-        );
-
-        if (sales.data) salesRaw.push(sales.data);
-      }
-
-      for (let i = 0; i < salesRaw.length; i++) {
-        const join = allSales.concat(salesRaw[i]);
-        joinData.push(...join);
-      }
-
-      if (permissionlStored === process.env.REACT_APP_ADMIN_ROLE) {
-        const bossSales = await axios.get(
-          `/sales/search/employeeid/${employee_id}`
-        );
-
-        joinData.push(...bossSales.data);
-      } else {
-        const bossSales = await axios.get(`/sales/search/employeeid/${bossId}`);
-
-        joinData.push(...bossSales.data);
-      }
-
-      setSalesData(joinData);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
-      const status = get(err, "response.status", 0);
-
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
-
-        if (err && errors.length < 1 && status !== 404) {
-          toast.error("Erro desconhecido ao tentar exibir vendas");
-        }
-      }
-    }
+    setSalesData(sales);
   }
 
   useEffect(() => {
     GetSales();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
   useEffect(() => {
     if (rerender === true) GetSales();
     setReRender(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
 
   async function SearchSales(e) {
