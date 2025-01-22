@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
+import GetBossId from "../../services/getBossId";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import {
@@ -18,7 +19,7 @@ import {
 
 export function Employees() {
   const dispatch = useDispatch();
-
+  const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permission = useSelector((state) => state.auth.permission);
   const searchInput = document.querySelector(".input-search");
@@ -41,29 +42,16 @@ export function Employees() {
   }, []);
 
   useEffect(() => {
-    async function getBoss() {
-      try {
-        const bossSearch = await axios.get(
-          `/employees/search/email/${emailStored}`
-        );
-        setBoss(bossSearch.data.id);
-      } catch (err) {
-        const errors = get(err, "response.data.errors", []);
+    async function ExecuteGetBossId() {
+      const bossId = await GetBossId(headerid, emailStored);
 
-        if (err) {
-          if (errors.length > 0) {
-            errors.map((error) => toast.error(error));
-          }
+      if (typeof bossId === "undefined" || !bossId) return;
 
-          if (err && errors.length < 1) {
-            toast.error("Erro desconhecido ao tentar obter os dados do chefe");
-          }
-        }
-      }
+      setBoss(bossId);
     }
 
-    getBoss();
-  }, [emailStored, boss]);
+    ExecuteGetBossId();
+  }, [boss, emailStored, headerid]);
 
   function clearDirectExecution() {
     setId(0);

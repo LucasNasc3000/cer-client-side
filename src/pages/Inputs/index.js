@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
@@ -58,28 +59,15 @@ export default function Inputs() {
   }, []);
 
   useEffect(() => {
-    async function GetEmployeeData() {
-      try {
-        if (!headerid || headerid === "") {
-          const bossData = await axios.get(
-            `/employees/search/email/${emailStored}`
-          );
+    async function ExecuteGetBossId() {
+      const get = await GetBossId(headerid, emailStored);
 
-          const { id } = bossData.data;
-          setBossId(id);
-          return;
-        }
-        const employeeData = await axios.get(
-          `/employees/search/email/${emailStored}`
-        );
+      if (typeof get === "undefined" || !get) return;
 
-        const { boss } = employeeData.data;
-        setBossId(boss);
-      } catch (e) {
-        toast.error("Erro ao obter dados identificadores");
-      }
+      setBossId(get);
     }
-    GetEmployeeData();
+
+    ExecuteGetBossId();
   }, [bossId, emailStored, headerid]);
 
   useEffect(() => {
