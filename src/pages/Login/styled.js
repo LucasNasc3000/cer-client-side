@@ -37,19 +37,7 @@ export const FormContainer = styled.div`
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
-
-  .register-link {
-    margin-left: 180px;
-    margin-top: 15px;
-    color: black;
-    text-align: center;
-    font-size: 15px;
-    width: 130px;
-  }
-
-  .register-link:hover {
-    border-bottom: 0.5px solid black;
-  }
+  overflow: hidden;
 `;
 
 export const Form = styled.form`
