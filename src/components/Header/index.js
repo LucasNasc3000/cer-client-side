@@ -2,7 +2,7 @@
 import React from "react";
 import { AiFillDashboard } from "react-icons/ai";
 import { BiCabinet } from "react-icons/bi";
-import { FaUser } from "react-icons/fa";
+import { FaBell, FaUser } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
 import { GoPackageDependents } from "react-icons/go";
 import { IoBagHandle } from "react-icons/io5";
@@ -41,6 +41,10 @@ export default function Header() {
                 <Link to="/employees" class="employees">
                   <FaUsers size={25} class="employees-icon" />
                   Funcionários
+                </Link>
+                <Link to="/advices" class="advices">
+                  <FaBell size={25} class="advices-icon" />
+                  Lembretes
                 </Link>
               </>
             ) : (
@@ -111,6 +115,10 @@ export default function Header() {
                   <FaUser size={25} class="profile-icon" />
                   Perfil
                 </Link>
+                <Link to="/advices" class="advices">
+                  <FaBell size={25} class="advices-icon" />
+                  Lembretes
+                </Link>
               </>
             ) : (
               ""
@@ -130,6 +138,10 @@ export default function Header() {
                 <Link to="/profile" class="profile">
                   <FaUser size={25} class="profile-icon" />
                   Perfil
+                </Link>
+                <Link to="/advices" class="advices">
+                  <FaBell size={25} class="advices-icon" />
+                  Lembretes
                 </Link>
               </>
             ) : (
@@ -154,6 +166,10 @@ export default function Header() {
                 <Link to="/profile" class="profile">
                   <FaUser size={25} class="profile-icon" />
                   Perfil
+                </Link>
+                <Link to="/advices" class="advices">
+                  <FaBell size={25} class="advices-icon" />
+                  Lembretes
                 </Link>
               </>
             ) : (

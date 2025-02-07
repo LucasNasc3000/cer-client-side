@@ -14,6 +14,7 @@ import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/auth/actions";
+import * as actionsDataTransfer from "../../store/modules/dataTransfer/actions";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
@@ -205,6 +206,13 @@ export default function Sales() {
     }
   };
 
+  const Transfer = (e, saleData) => {
+    e.preventDefault();
+    dispatch(actionsDataTransfer.saleDataTransfer(saleData));
+
+    history.push("/advices");
+  };
+
   return (
     <SalesContainer>
       <Header />
@@ -298,6 +306,9 @@ export default function Sales() {
                       onClick={(e) => SetSales(e, sale.id, sale)}
                     />
                   </div>
+                  <button type="button" onClick={(e) => Transfer(e, sale)}>
+                    Aqui
+                  </button>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
                   <div className="label">Nome cliente: </div>

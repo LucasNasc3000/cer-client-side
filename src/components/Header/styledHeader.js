@@ -91,6 +91,20 @@ export const MainHeader = styled.nav`
     font-size: 18px;
   }
 
+  .advices {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    color: #fff;
+    height: 45px;
+    width: 165px;
+    align-items: center;
+    justify-content: center;
+    left: 28px;
+    top: 54px;
+    font-size: 18px;
+  }
+
   .home:hover {
     filter: brightness(70%);
   }
@@ -115,11 +129,16 @@ export const MainHeader = styled.nav`
     filter: brightness(70%);
   }
 
+  .advices:hover {
+    filter: brightness(70%);
+  }
+
   .home-icon,
   .inputs-icon,
   .sales-icon,
   .outputs-icon,
   .employees-icon,
+  .advices-icon,
   .profile-icon {
     margin-right: 20px;
   }
