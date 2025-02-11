@@ -11,7 +11,7 @@ export default (reducers) => {
     {
       key: "STMEXT",
       storage,
-      whitelist: ["auth", "dataTrasnfer"],
+      whitelist: ["auth"],
     },
     reducers
   );

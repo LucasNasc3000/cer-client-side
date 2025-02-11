@@ -110,8 +110,7 @@ export const SalesSpace = styled.div`
       flex-direction: column;
       height: 380px;
       width: 450px;
-      margin-top: 10px;
-      margin-left: 90px;
+      margin-left: 200px;
       border-radius: 8px;
       justify-content: center;
       align-items: center;
