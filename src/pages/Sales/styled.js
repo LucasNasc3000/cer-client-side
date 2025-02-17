@@ -101,16 +101,17 @@ export const SalesSpace = styled.div`
     overflow-x: hidden;
     bottom: 700px;
     height: 500px;
-    width: 620px;
-    left: 300px;
+    width: 580px;
+    left: 420px;
 
     .main-data-div {
       background-color: #688da2;
+      margin-top: 15px;
       display: flex;
       flex-direction: column;
-      height: 380px;
+      height: 415px;
       width: 450px;
-      margin-left: 200px;
+      margin-left: 70px;
       border-radius: 8px;
       justify-content: center;
       align-items: center;
@@ -121,7 +122,7 @@ export const SalesSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 172px;
+      bottom: 192px;
       left: 110px;
       margin-top: 13px;
       color: white;
@@ -136,7 +137,7 @@ export const SalesSpace = styled.div`
       display: flex;
       position: relative;
       right: 120px;
-      top: 86px;
+      top: 66px;
       margin-top: 13px;
       width: 170px;
       color: white;
@@ -149,7 +150,7 @@ export const SalesSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 110px;
+      top: 115px;
       left: 25px;
       width: 135px;
     }
@@ -164,6 +165,12 @@ export const SalesSpace = styled.div`
       left: 15px;
     }
 
+    .btd-button {
+      display: flex;
+      position: relative;
+      top: 425px;
+    }
+
     .edit-icon:hover {
       filter: brightness(80%);
     }
@@ -176,7 +183,7 @@ export const NewSale = styled.div`
     align-items: center;
     justify-content: center;
     bottom: 1155px;
-    left: 1020px;
+    left: 1080px;
     height: fit-content;
     width: fit-content;
 

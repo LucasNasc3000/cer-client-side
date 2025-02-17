@@ -4,14 +4,15 @@ export const ChartContainer = styled.div`
   display: flex;
   position: relative;
   bottom: 660px;
-  left: 400px;
+  left: 380px;
   height: 300px;
-  width: 300px;
+  width: 950px;
 
   .chart-container {
     display: flex;
     background-color: #fff;
     padding: 5px;
     border-radius: 6px;
+    width: 950px;
   }
 `;

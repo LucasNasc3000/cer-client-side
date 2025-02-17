@@ -12,8 +12,8 @@ export const HomeContainer = styled.div`
         display: flex;
         position: relative;
         color: #fff;
-        left: 1200px;
-        bottom: 648px;
+        left: 1400px;
+        bottom: 710px;
     }
 
     .logout:hover {

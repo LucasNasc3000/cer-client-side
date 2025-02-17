@@ -306,8 +306,12 @@ export default function Sales() {
                       onClick={(e) => SetSales(e, sale.id, sale)}
                     />
                   </div>
-                  <button type="button" onClick={(e) => Transfer(e, sale)}>
-                    Aqui
+                  <button
+                    type="button"
+                    className="btd-button"
+                    onClick={(e) => Transfer(e, sale)}
+                  >
+                    Agendar lembrete de aniversário
                   </button>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>

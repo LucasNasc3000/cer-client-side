@@ -11,6 +11,8 @@ export function BarChart({ chartData }) {
         <Bar
           data={chartData}
           options={{
+            responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               title: {
                 display: true,

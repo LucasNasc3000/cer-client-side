@@ -11,10 +11,12 @@ export function BarChartProducts({ chartData }) {
         <Bar
           data={chartData}
           options={{
+            maintainAspectRatio: false,
+            responsive: true,
             plugins: {
               title: {
                 display: true,
-                text: "Produtos vendidos",
+                text: "Saídas",
               },
               legend: {
                 display: false,
