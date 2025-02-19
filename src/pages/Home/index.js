@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
@@ -13,6 +14,7 @@ import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import GetData from "../../services/getData";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { HomeContainer } from "./styled";
@@ -26,7 +28,6 @@ export default function Home() {
   const dispatch = useDispatch();
   const [employee_id, setEmployeeId] = useState("");
   const [outputsData, setOutputsData] = useState([]);
-  const [salesData, setSalesData] = useState([]);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -47,7 +48,7 @@ export default function Home() {
           return;
         }
         setEmployeeId(headerid);
-      } catch (e) {
+      } catch (err) {
         toast.error("Erro ao verificar id");
       }
     }
@@ -58,32 +59,25 @@ export default function Home() {
   useEffect(() => {
     async function GetOutputsData() {
       try {
-        const data = await axios.get(
-          `/outputs/search/employeeid/${employee_id}`
+        const outputs = await GetData(
+          employee_id,
+          "outputs",
+          employee_id,
+          permission
         );
-        setOutputsData(data.data);
-      } catch (e) {
-        if (typeof e.response.data === "string") return;
+        console.log(outputs);
+
+        if (typeof outputs === "undefined" || !outputs) return;
+
+        setOutputsData(outputs);
+      } catch (err) {
+        if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das saídas");
       }
     }
 
     GetOutputsData();
-  }, [employee_id]);
-
-  useEffect(() => {
-    async function GetSalesData() {
-      try {
-        const data = await axios.get(`/sales/search/employeeid/${employee_id}`);
-        setSalesData(data.data);
-      } catch (e) {
-        if (typeof e.response.data === "string") return;
-        toast.error("Erro ao obter dados das vendas");
-      }
-    }
-
-    GetSalesData();
-  }, [employee_id]);
+  }, [employee_id, permission]);
 
   function DaysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
@@ -101,16 +95,42 @@ export default function Home() {
     const daysInMonth = DaysInMonth(month, year);
 
     for (let i = 0; i < daysInMonth + 1; i++) {
-      dates.push(String(`${i}/${month}`));
+      dates.push(String(`${i}-${month}`));
     }
 
     for (let i = 0; i < 10; i++) {
-      dates[i] = `0${i}/${month}`;
+      dates[i] = `0${i}-${month}`;
     }
 
     dates.shift();
 
     return dates;
+  }
+
+  async function SearchForSalesByDates() {
+    try {
+      const dates = GetDates();
+      const sales = [];
+
+      for (let i = 0; i < dates.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        await axios.post("/sales/search/date", {
+          forDashboard: true,
+        });
+
+        // eslint-disable-next-line no-await-in-loop
+        const getSalesByDates = await axios.get(
+          `/sales/search/date/${dates[i]}`
+        );
+
+        sales.push(getSalesByDates.data);
+      }
+
+      return sales;
+    } catch (err) {
+      if (typeof err.response.data === "string") return;
+      toast.error("Erro ao obter vendas nas datas especificadas");
+    }
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -119,7 +139,7 @@ export default function Home() {
     datasets: [
       {
         label: "Vendas realizadas neste dia",
-        data: ["a", "b", "c"],
+        data: SearchForSalesByDates(),
         skipNull: true,
         maxBarThicness: 10,
         backgroundColor: ["gray"],

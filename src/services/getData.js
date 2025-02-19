@@ -20,9 +20,10 @@ export default async function GetData(bossId, path, employee_id, permission) {
 
     for (let i = 0; i < employeesIds.length; i++) {
       // eslint-disable-next-line no-await-in-loop
-      const registersBy = await axios.get(
-        `/${path}/search/employeeid/${employeesIds[i]}`
-      );
+      const registersBy = await axios.post(`/${path}/search/employeeid`, {
+        employeeidBody: employeesIds[i],
+        forListInputs: true,
+      });
 
       if (registersBy.data) rawData.push(registersBy.data);
     }
@@ -34,15 +35,17 @@ export default async function GetData(bossId, path, employee_id, permission) {
 
     // Adiciona à variável inputsData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
     if (permission === process.env.REACT_APP_ADMIN_ROLE) {
-      const bossRegisters = await axios.get(
-        `/${path}/search/employeeid/${employee_id}`
-      );
+      const bossRegisters = await axios.post(`/${path}/search/employeeid`, {
+        employeeidBody: employee_id,
+        forListInputs: true,
+      });
 
       joinData.push(...bossRegisters.data);
     } else {
-      const bossRegisters = await axios.get(
-        `/${path}/search/employeeid/${bossId}`
-      );
+      const bossRegisters = await axios.post(`/${path}/search/employeeid`, {
+        employeeidBody: bossId,
+        forListInputs: true,
+      });
 
       joinData.push(...bossRegisters.data);
     }
