@@ -1,8 +1,10 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
 import { get } from "lodash";
 import { toast } from "react-toastify";
 import axios from "./axios";
+import PathCheck from "./requestPathCheck";
 
 export default async function GetData(bossId, path, employee_id, permission) {
   const rawData = [];
@@ -19,13 +21,8 @@ export default async function GetData(bossId, path, employee_id, permission) {
     });
 
     for (let i = 0; i < employeesIds.length; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      const registersBy = await axios.post(`/${path}/search/employeeid`, {
-        employeeidBody: employeesIds[i],
-        forListInputs: true,
-      });
-
-      if (registersBy.data) rawData.push(registersBy.data);
+      const registers = await PathCheck(path, employeesIds[i]);
+      if (registers.data) rawData.push(registers.data);
     }
 
     for (let i = 0; i < rawData.length; i++) {
@@ -33,20 +30,12 @@ export default async function GetData(bossId, path, employee_id, permission) {
       joinData.push(...join);
     }
 
-    // Adiciona à variável inputsData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
+    // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
     if (permission === process.env.REACT_APP_ADMIN_ROLE) {
-      const bossRegisters = await axios.post(`/${path}/search/employeeid`, {
-        employeeidBody: employee_id,
-        forListInputs: true,
-      });
-
-      joinData.push(...bossRegisters.data);
+      const bossOwnRegisters = await PathCheck(path, employee_id);
+      joinData.push(...bossOwnRegisters.data);
     } else {
-      const bossRegisters = await axios.post(`/${path}/search/employeeid`, {
-        employeeidBody: bossId,
-        forListInputs: true,
-      });
-
+      const bossRegisters = await PathCheck(path, bossId);
       joinData.push(...bossRegisters.data);
     }
 
