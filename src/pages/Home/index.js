@@ -65,7 +65,6 @@ export default function Home() {
           employee_id,
           permission
         );
-        console.log(outputs);
 
         if (typeof outputs === "undefined" || !outputs) return;
 
@@ -114,14 +113,10 @@ export default function Home() {
 
       for (let i = 0; i < dates.length; i++) {
         // eslint-disable-next-line no-await-in-loop
-        await axios.post("/sales/search/date", {
+        const getSalesByDates = await axios.post(`/sales/search/date`, {
+          employeeidBody: employee_id,
           forDashboard: true,
         });
-
-        // eslint-disable-next-line no-await-in-loop
-        const getSalesByDates = await axios.get(
-          `/sales/search/date/${dates[i]}`
-        );
 
         sales.push(getSalesByDates.data);
       }

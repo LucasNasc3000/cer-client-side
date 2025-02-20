@@ -35,7 +35,10 @@ export default async function PathCheck(path, employeesId) {
     }
 
     if (path === "advices") {
-      const registersBy = await axios.get(`/${path}/search/employeeid/`);
+      const registersBy = await axios.get(
+        `/${path}/search/employeeid/${employeesId}`
+      );
+
       return registersBy;
     }
   } catch (err) {

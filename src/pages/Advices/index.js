@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import GetBossId from "../../services/getBossId";
+import GetData from "../../services/getData";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { AdvicesContainer, AdvicesSpace, NewAdvice } from "./styled";
@@ -32,6 +34,7 @@ export default function Advices() {
   const [hour, setHour] = useState("");
   const [subject, setSubject] = useState("");
   const [email_body, setEmailBody] = useState("");
+  const [bossId, setBossId] = useState("");
   const [rerender, setReRender] = useState(false);
   const emailBodyText = `Aniversário do cliente ${clientName}, de telefone ${phoneNumber} no dia ${clientBirthday}`;
 
@@ -48,6 +51,18 @@ export default function Advices() {
 
     PermissionCheck();
   }, []);
+
+  useEffect(() => {
+    async function ExecuteGetBossId() {
+      const getBossId = await GetBossId(headerid, emailStored);
+
+      if (typeof getBossId === "undefined" || !getBossId) return;
+
+      setBossId(getBossId);
+    }
+
+    ExecuteGetBossId();
+  }, [bossId, emailStored, headerid]);
 
   useEffect(() => {
     async function headerIdCheck() {
@@ -69,26 +84,16 @@ export default function Advices() {
   }, [headerid, emailStored, employee_id]);
 
   async function GetAdvices() {
-    try {
-      const getAdvices = await axios.get(
-        `/advices/search/employeeid/${employee_id}`
-      );
-      setAdvices(getAdvices.data);
-    } catch (err) {
-      if (typeof err.response.data === "string") return;
+    const advicesData = await GetData(
+      employee_id,
+      "advices",
+      employee_id,
+      permissionlStored
+    );
 
-      const errors = get(err, "response.data.error", []);
+    if (typeof advicesData === "undefined" || !advicesData) return;
 
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
-
-        if (err && errors.length < 1) {
-          toast.error(`Erro desconhecido ao tentar obter avisos`);
-        }
-      }
-    }
+    setAdvices(advicesData);
   }
 
   useEffect(() => {
