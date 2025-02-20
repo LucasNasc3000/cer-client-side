@@ -16,7 +16,7 @@ export function BarChart({ chartData }) {
             plugins: {
               title: {
                 display: true,
-                text: "Vendas diárias",
+                text: "Número de vendas por mês",
               },
               legend: {
                 display: false,

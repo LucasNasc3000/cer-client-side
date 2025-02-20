@@ -28,6 +28,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const [employee_id, setEmployeeId] = useState("");
   const [outputsData, setOutputsData] = useState([]);
+  const [datesAndLength, setDatesAndLength] = useState([]);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -94,11 +95,11 @@ export default function Home() {
     const daysInMonth = DaysInMonth(month, year);
 
     for (let i = 0; i < daysInMonth + 1; i++) {
-      dates.push(String(`${i}-${month}`));
+      dates.push(String(`${i}-${month}-${year}`));
     }
 
     for (let i = 0; i < 10; i++) {
-      dates[i] = `0${i}-${month}`;
+      dates[i] = `0${i}-${month}-${year}`;
     }
 
     dates.shift();
@@ -106,35 +107,46 @@ export default function Home() {
     return dates;
   }
 
-  async function SearchForSalesByDates() {
-    try {
-      const dates = GetDates();
-      const sales = [];
+  useEffect(() => {
+    async function SearchForSalesByDates() {
+      try {
+        const dates = GetDates();
+        const preDatesAndLength = [];
 
-      for (let i = 0; i < dates.length; i++) {
-        // eslint-disable-next-line no-await-in-loop
-        const getSalesByDates = await axios.post(`/sales/search/date`, {
-          employeeidBody: employee_id,
-          forDashboard: true,
-        });
+        for (let i = 0; i < dates.length; i++) {
+          // eslint-disable-next-line no-await-in-loop
+          const getSalesByDates = await axios.post(`/sales/search/date`, {
+            saledateBody: dates[i],
+            forDashboard: true,
+          });
 
-        sales.push(getSalesByDates.data);
+          preDatesAndLength.push({
+            date: dates[i],
+            salesNumber: getSalesByDates.data,
+          });
+        }
+
+        setDatesAndLength(preDatesAndLength);
+      } catch (err) {
+        if (typeof err.response.data === "string") return;
+        toast.error("Erro ao obter vendas nas datas especificadas");
       }
-
-      return sales;
-    } catch (err) {
-      if (typeof err.response.data === "string") return;
-      toast.error("Erro ao obter vendas nas datas especificadas");
     }
-  }
+
+    SearchForSalesByDates();
+  }, [employee_id]);
 
   // eslint-disable-next-line no-unused-vars
   const chartData = {
-    labels: GetDates(),
+    labels: datesAndLength.map((date) => {
+      return date.date;
+    }),
     datasets: [
       {
         label: "Vendas realizadas neste dia",
-        data: SearchForSalesByDates(),
+        data: datesAndLength.map((sale) => {
+          return sale.salesNumber;
+        }),
         skipNull: true,
         maxBarThicness: 10,
         backgroundColor: ["gray"],
