@@ -1,8 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
+import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -13,7 +12,6 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import * as actions from "../../store/modules/auth/actions";
 import * as actionsDataTransfer from "../../store/modules/dataTransfer/actions";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
@@ -83,13 +81,6 @@ export default function Sales() {
 
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
 
   const clearDirectExecution = () => {
     setSaleId("");
@@ -217,17 +208,21 @@ export default function Sales() {
     <SalesContainer>
       <Header />
       <SearchSpace>
-        <FaSearch
-          size={30}
-          className="search-icon"
-          onClick={(e) => SearchSales(e)}
-        />
-        <input
-          type="text"
-          placeholder="Pesquisar venda..."
-          className="sale-search"
-        />
-        <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
+        <div className="sale-search">
+          <button
+            type="button"
+            onClick={(e) => SearchSales(e)}
+            className="search-btn"
+          >
+            Pesquisar
+          </button>
+          <input
+            type="text"
+            placeholder="Pesquisar venda..."
+            className="search-bar"
+          />
+        </div>
+
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
         <div className="checkboxes">
           <input
@@ -301,10 +296,13 @@ export default function Sales() {
               return (
                 <div key={sale.id} className="main-data-div">
                   <div className="edit">
-                    <FaEdit
+                    <button
+                      type="button"
                       className="edit-icon"
                       onClick={(e) => SetSales(e, sale.id, sale)}
-                    />
+                    >
+                      Editar
+                    </button>
                   </div>
                   <button
                     type="button"

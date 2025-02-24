@@ -18,6 +18,7 @@ export const SearchSpace = styled.div`
 
     .input-search {
         display: flex;
+        background-color: aqua;
         height: 35px;
         width: 930px;
         position: relative;

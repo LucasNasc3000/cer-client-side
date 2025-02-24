@@ -2,7 +2,7 @@
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
+import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -221,16 +221,22 @@ export default function Inputs() {
     <InputsContainer>
       <Header />
       <SearchSpace>
-        <FaSearch
-          size={30}
-          className="search-icon"
-          onClick={(e) => SearchInputs(e)}
-        />
-        <input
-          type="text"
-          placeholder="Pesquisar insumo..."
-          className="input-search"
-        />
+        <div className="search-space">
+          <button
+            type="button"
+            size={30}
+            className="search-btn"
+            onClick={(e) => SearchInputs(e)}
+          >
+            Pesquisar
+          </button>
+          <input
+            type="text"
+            placeholder="Pesquisar insumo..."
+            className="input-search"
+          />
+        </div>
+
         <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
         <div className="checkboxes">

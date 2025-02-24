@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
-// import * as colors from "../../config/colors";
 
 export const SalesContainer = styled.div``;
 
@@ -10,31 +9,44 @@ export const SearchSpace = styled.div`
     flex-direction: row;
     position: relative;
     height: 120px;
-    width: 1281px;
+    width: 1300px;
     bottom: 749px;
     left: 230px;
 
     .sale-search {
         display: flex;
-        height: 35px;
-        width: 930px;
+        height: fit-content;
+        width: 490px;
         position: relative;
         left: 310px;
         top: 20px;
-        border-radius: 8px;
+        border-radius: 4px;
         border-style: none;
         font-size: 14px;
-        box-shadow: 1px 1.5px rgb(173, 173, 173);
     }
 
-    .search-icon {
+    .search-bar {
+      display: flex;
+      position: relative;
+      width: 300px;
+      height: 39px;
+      right: 70px;
+      border-style: none;
+      border-radius: 4px;
+      box-shadow: 1px 1.5px rgb(173, 173, 173);
+    }
+
+    .search-btn {
         display: flex;
-        height: 30px;
-        width: 90px;
+        background-color: #696969;
+        height: 38px;
+        width: 84px;
         position: relative;
-        color: #fff;
-        left: 300px;
-        top: 25px;
+        align-content: center;
+        justify-content: center;
+        left: 320px;
+        top: 1px;
+        padding: 10px;
     }
 
     .checkbox {
@@ -47,7 +59,7 @@ export const SearchSpace = styled.div`
         display: flex;
         flex-direction: row;
         position: relative;
-        right: 400px;
+        right: 340px;
         top: 90px;
         height: 30px;
         width: 670px;
@@ -55,28 +67,19 @@ export const SearchSpace = styled.div`
 
     .checkbox-label {
         color: black;
+        font-weight: 100;
         font-size: 12.5px;
         margin-left: 5px;
         margin-top: 8px;
     }
 
-    .logout {
-      display: flex;
-        position: relative;
-        height: 75px;
-        width: 75px;
-        color: #fff;
-        left: 625px;
-        top: 3px
-    }
-
     .arrow {
       display: flex;
       position: relative;
-      height: 65px;
-      width: 65px;
-      right: 510px;
-      top: 8px;
+      height: 42px;
+      width: 42px;
+      right: 380px;
+      top: 20px;
       color: #fff;
     }
 
@@ -105,7 +108,7 @@ export const SalesSpace = styled.div`
     left: 420px;
 
     .main-data-div {
-      background-color: #688da2;
+      background-color: #4F4F4F;
       margin-top: 15px;
       display: flex;
       flex-direction: column;
@@ -120,17 +123,17 @@ export const SalesSpace = styled.div`
 
     .data-div {
       position: relative;
-      color: black;
+      color: #fff;
       width: 170px;
       bottom: 192px;
       left: 110px;
       margin-top: 13px;
-      color: white;
+      color: #fff;
       font-size: 16px;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       text-align: center;
       line-break: auto;
-      border-bottom: 0.5px solid white;
+      border-bottom: 0.5px solid #fff;
     }
 
     .label {
@@ -140,35 +143,37 @@ export const SalesSpace = styled.div`
       top: 66px;
       margin-top: 13px;
       width: 170px;
-      color: white;
+      color: #fff;
       font-size: 16px;
       font-family: Arial, Helvetica, sans-serif;
       word-break: keep-all;
-      border-bottom: 0.5px solid white;;
+      border-bottom: 0.5px solid #fff;
     }
 
     .edit {
       display: flex;
       position: relative;
-      top: 115px;
-      left: 25px;
-      width: 135px;
+      top: 480px;
+      right: 130px;
+      width: fit-content;
     }
 
     .edit-icon {
       position: relative;
       color: white;
       display: flex;
-      height: 45px;
-      width: 45px;
-      padding: 4px;
-      left: 15px;
+      height: 35px;
+      width: 65px;
+      justify-content: center;
+      align-items: center;
+      left: -30px;
     }
 
     .btd-button {
       display: flex;
       position: relative;
-      top: 425px;
+      top: 445px;
+      left: 50px;
     }
 
     .edit-icon:hover {
@@ -183,7 +188,7 @@ export const NewSale = styled.div`
     align-items: center;
     justify-content: center;
     bottom: 1155px;
-    left: 1080px;
+    left: 1180px;
     height: fit-content;
     width: fit-content;
 

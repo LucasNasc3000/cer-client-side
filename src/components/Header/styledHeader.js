@@ -3,9 +3,9 @@
 import styled from "styled-components";
 
 export const MainHeader = styled.nav`
-  background-color: #688da2;
+  background-color: #4F4F4F;
   height: 750px;
-  width: 230px;
+  width: 250px;
 
   .home {
     position: relative;
@@ -16,9 +16,10 @@ export const MainHeader = styled.nav`
     width: 230px;
     align-items: center;
     justify-content: center;
-    left: 0px;
+    left: -2px;
     top: 30px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .inputs {
@@ -30,9 +31,10 @@ export const MainHeader = styled.nav`
     width: 170px;
     align-items: center;
     justify-content: center;
-    left: 20px;
+    left: 18px;
     top: 35px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .sales {
@@ -44,9 +46,10 @@ export const MainHeader = styled.nav`
     width: 170px;
     align-items: center;
     justify-content: center;
-    left: 16px;
+    left: 12px;
     top: 39px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .outputs {
@@ -58,9 +61,10 @@ export const MainHeader = styled.nav`
     width: 170px;
     align-items: center;
     justify-content: center;
-    left: 16px;
+    left: 10px;
     top: 39px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .profile {
@@ -75,6 +79,7 @@ export const MainHeader = styled.nav`
     left: 5px;
     top: 44px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .employees {
@@ -89,6 +94,7 @@ export const MainHeader = styled.nav`
     left: 38px;
     top: 48px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .advices {
@@ -103,6 +109,22 @@ export const MainHeader = styled.nav`
     left: 28px;
     top: 54px;
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .logout-btn {
+    background-color: #4F4F4F;
+    display: flex;
+    position: relative;
+    top: 83px;
+    left: 63px;
+    height: 45px;
+    width: 105px;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .home:hover {
@@ -133,12 +155,17 @@ export const MainHeader = styled.nav`
     filter: brightness(70%);
   }
 
+  .logout-btn:hover {
+    color:rgb(243, 64, 64);
+  }
+
   .home-icon,
   .inputs-icon,
   .sales-icon,
   .outputs-icon,
   .employees-icon,
   .advices-icon,
+  .logout-btn,
   .profile-icon {
     margin-right: 20px;
   }
