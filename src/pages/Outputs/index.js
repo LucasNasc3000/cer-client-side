@@ -138,11 +138,20 @@ export default function Outputs() {
   async function SearchOutputs(e) {
     e.preventDefault();
 
+    const inArray = [];
+
     const search = await DoSearch("outputs", searchParam, searchOutput.value);
 
     if (typeof search === "undefined" || !search) return;
 
-    setSearchResults(search);
+    if (Array.isArray(search)) {
+      setSearchResults(search);
+      return;
+    }
+
+    inArray.push(search);
+    setSearchResults(inArray);
+    return;
   }
 
   const OutputUpdate = async () => {

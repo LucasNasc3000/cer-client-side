@@ -148,11 +148,20 @@ export default function Inputs() {
   async function SearchInputs(e) {
     e.preventDefault();
 
+    const inArray = [];
+
     const search = await DoSearch("inputs", searchParam, searchInput.value);
 
     if (typeof search === "undefined" || !search) return;
 
-    setSearchResults(search);
+    if (Array.isArray(search)) {
+      setSearchResults(search);
+      return;
+    }
+
+    inArray.push(search);
+    setSearchResults(inArray);
+    return;
   }
 
   const InputUpdate = async () => {
@@ -360,6 +369,7 @@ export default function Inputs() {
                   <div className="label">Data validade: </div>
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
+                  <div className="label">Funcionário: </div>
                   <div className="data-div">{input.type}</div>
                   <div className="data-div">{input.name}</div>
                   <div className="data-div">{input.quantity}</div>
@@ -369,6 +379,7 @@ export default function Inputs() {
                   <div className="data-div">{input.expirationdate}</div>
                   <div className="data-div">{input.minimun_quantity}</div>
                   <div className="data-div">{input.rateisnear}</div>
+                  <div className="data-div">{input.employee_id}</div>
                 </div>
               );
             })}

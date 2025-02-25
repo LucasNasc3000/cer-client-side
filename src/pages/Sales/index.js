@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from "react";
@@ -138,11 +139,20 @@ export default function Sales() {
   async function SearchSales(e) {
     e.preventDefault();
 
+    const inArray = [];
+
     const search = await DoSearch("sales", searchParam, searchSale.value);
 
     if (typeof search === "undefined" || !search) return;
 
-    setSearchResults(search);
+    if (Array.isArray(search)) {
+      setSearchResults(search);
+      return;
+    }
+
+    inArray.push(search);
+    setSearchResults(inArray);
+    return;
   }
 
   async function SaleUpdate() {

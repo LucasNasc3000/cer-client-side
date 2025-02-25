@@ -53,8 +53,8 @@ export const SearchSpace = styled.div`
     }
 
     .checkbox {
-      height: 16px;
-      width: 16px;
+      height: 13px;
+      width: 13px;
       margin-left: 35px;
     }
 
@@ -73,7 +73,7 @@ export const SearchSpace = styled.div`
       font-weight: 100;
       font-size: 12.5px;
       margin-left: 5px;
-      margin-top: 3px;
+      margin-top: 0px;
     }
 
     .arrow {
