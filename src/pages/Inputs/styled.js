@@ -177,7 +177,7 @@ export const NewInput = styled.div`
     position: relative;
     align-items: center;
     justify-content: center;
-    bottom: 1165px;
+    bottom: 1205px;
     left: 1160px;
     height: fit-content;
     width: fit-content;
@@ -186,7 +186,7 @@ export const NewInput = styled.div`
       background-color: #DCDCDC;
       height: 30px;
       width: 170px;
-      margin-top: 10px;
+      margin-top: 15px;
       border-top: none;
       border-left: none;
       border-right: none;

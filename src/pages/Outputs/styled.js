@@ -186,7 +186,7 @@ export const NewOutput = styled.div`
       background-color: #DCDCDC;
       height: 30px;
       width: 170px;
-      margin-top: 10px;
+      margin-top: 15px;
       border-top: none;
       border-left: none;
       border-right: none;

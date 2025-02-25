@@ -387,55 +387,55 @@ export default function Inputs() {
       <NewInput>
         <input
           type="text"
-          placeholder="Tipo..."
+          placeholder="Tipo ex: cereais"
           value={type}
           onChange={(e) => setType(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Nome..."
+          placeholder="Nome ex: arroz branco"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Quantidade..."
+          placeholder="Quantidade ex: 25"
           value={interquantity}
           onChange={(e) => setInterQuantity(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Peso total..."
+          placeholder="Peso total ex: 10,50 (kg)"
           value={intertotalweight}
           onChange={(e) => setInterTotalWeight(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Peso unitário..."
+          placeholder="Peso unitário ex: 1 (kg)"
           value={interweightperunit}
           onChange={(e) => setInterWeightPerUnit(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Fornecedor..."
+          placeholder="Fornecedor ex: shopee"
           value={supplier}
           onChange={(e) => setSupplier(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Data de validade --> dd-mm-aaa..."
+          placeholder="Validade ex: 25-03-2027"
           value={expirationdate}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
         <input
           type="text"
-          placeholder="quantidade mínima... (opcional)"
+          placeholder="quantidade mínima ex: 5"
           value={interminimun_quantity}
           onChange={(e) => setInterMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Próximo ao limite..."
+          placeholder="Próximo ao limite ex: 10"
           value={interrateisnear}
           onChange={(e) => setInterRateIsNear(e.target.value)}
         />

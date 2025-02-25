@@ -338,25 +338,25 @@ export default function Outputs() {
       <NewOutput>
         <input
           type="text"
-          placeholder="Data..."
+          placeholder="Data ex: 09-10-2025"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Nome..."
+          placeholder="Nome ex: abacaxi"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Tipo..."
+          placeholder="Tipo ex: fruta"
           value={type}
           onChange={(e) => setType(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Unidades..."
+          placeholder="Unidades ex: 15"
           value={unities}
           onChange={(e) => setUnities(e.target.value)}
         />

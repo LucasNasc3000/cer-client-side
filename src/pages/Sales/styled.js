@@ -117,6 +117,20 @@ export const SalesSpace = styled.div`
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     }
 
+    .main-data-div-search {
+      background-color: #4F4F4F;
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      height: 435px;
+      width: 450px;
+      margin-left: 70px;
+      border-radius: 8px;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+
     .data-div {
       position: relative;
       color: #fff;
@@ -132,11 +146,40 @@ export const SalesSpace = styled.div`
       border-bottom: 0.5px solid #fff;
     }
 
+    .data-div-search {
+      position: relative;
+      color: #fff;
+      width: 170px;
+      bottom: 211px;
+      left: 110px;
+      margin-top: 13px;
+      color: #fff;
+      font-size: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      text-align: center;
+      line-break: auto;
+      border-bottom: 0.5px solid #fff;
+    }
+
     .label {
       display: flex;
       position: relative;
       right: 120px;
       top: 52px;
+      margin-top: 13px;
+      width: 170px;
+      color: #fff;
+      font-size: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      word-break: keep-all;
+      border-bottom: 0.5px solid #fff;
+    }
+
+    .label-search {
+      display: flex;
+      position: relative;
+      right: 110px;
+      top: 72px;
       margin-top: 13px;
       width: 170px;
       color: #fff;
@@ -163,6 +206,18 @@ export const SalesSpace = styled.div`
       justify-content: center;
       align-items: center;
       left: -30px;
+    }
+
+    .edit-icon-search {
+      position: relative;
+      color: white;
+      display: flex;
+      height: 35px;
+      width: 95px;
+      justify-content: center;
+      align-items: center;
+      left: 0px;
+      top: 470px;
     }
 
     .btd-button {
@@ -192,7 +247,7 @@ export const NewSale = styled.div`
       background-color: #DCDCDC;
       height: 30px;
       width: 170px;
-      margin-top: 10px;
+      margin-top: 15px;
       border-top: none;
       border-left: none;
       border-right: none;

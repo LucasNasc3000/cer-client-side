@@ -342,32 +342,32 @@ export default function Sales() {
             })
           : searchResults.map((sale) => {
               return (
-                <div key={sale.id} className="main-data-div">
-                  <div className="edit">
+                <div key={sale.id} className="main-data-div-search">
+                  <div className="edit-search">
                     <button
                       type="button"
-                      className="edit-icon"
+                      className="edit-icon-search"
                       onClick={(e) => SetSales(e, sale.id, sale)}
                     >
                       Editar
                     </button>
                   </div>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome cliente: </div>
-                  <div className="label">Telefone: </div>
-                  <div className="label">Endereço: </div>
-                  <div className="label">Produtos: </div>
-                  <div className="label">Anv. Cliente: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="data-div">{sale.date}</div>
-                  <div className="data-div">{sale.hour}</div>
-                  <div className="data-div">{sale.client_name}</div>
-                  <div className="data-div">{sale.phone_number}</div>
-                  <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.products}</div>
-                  <div className="data-div">{sale.client_birthday}</div>
-                  <div className="data-div">{sale.employee_id}</div>
+                  <div className="label-search">Data: </div>
+                  <div className="label-search">Hora: </div>
+                  <div className="label-search">Nome cliente: </div>
+                  <div className="label-search">Telefone: </div>
+                  <div className="label-search">Endereço: </div>
+                  <div className="label-search">Produtos: </div>
+                  <div className="label-search">Anv. Cliente: </div>
+                  <div className="label-search">Funcionário: </div>
+                  <div className="data-div-search">{sale.date}</div>
+                  <div className="data-div-search">{sale.hour}</div>
+                  <div className="data-div-search">{sale.client_name}</div>
+                  <div className="data-div-search">{sale.phone_number}</div>
+                  <div className="data-div-search">{sale.address}</div>
+                  <div className="data-div-search">{sale.products}</div>
+                  <div className="data-div-search">{sale.client_birthday}</div>
+                  <div className="data-div-search">{sale.employee_id}</div>
                 </div>
               );
             })}
@@ -375,37 +375,37 @@ export default function Sales() {
       <NewSale>
         <input
           type="text"
-          placeholder="Data..."
+          placeholder="Data ex: 02-07-2025"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Nome cliente..."
+          placeholder="Nome cliente ex: Joao silva"
           value={client_name}
           onChange={(e) => setClientName(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Telefone..."
+          placeholder="Tel ex: 11 11111-2222"
           value={phone_number}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Endereço..."
+          placeholder="Endereço ex: Rua tal, 123"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Produtos..."
+          placeholder="Produtos ex: coxinha,suco"
           value={products}
           onChange={(e) => setProducts(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Anv. Cliente..."
+          placeholder="Anv. Cliente ex: 15-02"
           value={client_birthday}
           onChange={(e) => setClientBirthday(e.target.value)}
         />
