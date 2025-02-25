@@ -5,18 +5,6 @@ import styled from "styled-components";
 export const UserContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  .logout {
-    display: flex;
-    position: relative;
-    bottom: 710px;
-    left: 1400px;
-    color: #fff;
-  }
-
-  .logout:hover {
-    filter: brightness(70%);
-  }
 `;
 
 export const Form = styled.form`
@@ -29,11 +17,12 @@ export const Form = styled.form`
   width: 450px;
 
   input {
+    background-color: #dcdcdc;
     display: flex;
     position: relative;
     height: 40px;
     top: 50px;
-    margin-top: 8px;
+    margin-top: 10px;
     border-top: none;
     border-left: none;
     border-right: none;

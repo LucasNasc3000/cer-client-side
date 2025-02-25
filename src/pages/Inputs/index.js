@@ -2,9 +2,8 @@
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaEdit } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { FaArrowLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -14,14 +13,12 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import * as actions from "../../store/modules/auth/actions";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
-  const dispatch = useDispatch();
 
   const [type, setType] = useState("");
   const [name, setName] = useState("");
@@ -112,13 +109,6 @@ export default function Inputs() {
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
 
   const clearDirectExecution = () => {
     setInputId(0);
@@ -237,7 +227,6 @@ export default function Inputs() {
           />
         </div>
 
-        <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
         <div className="checkboxes">
           <input
@@ -319,10 +308,13 @@ export default function Inputs() {
               return (
                 <div key={input.id} className="main-data-div">
                   <div className="edit">
-                    <FaEdit
+                    <button
+                      type="button"
                       className="edit-icon"
                       onClick={(e) => SetInputs(e, input.id, input)}
-                    />
+                    >
+                      Editar
+                    </button>
                   </div>
                   <div className="label">Tipo: </div>
                   <div className="label">Nome: </div>
@@ -351,10 +343,13 @@ export default function Inputs() {
               return (
                 <div key={input.id} className="main-data-div">
                   <div className="edit">
-                    <FaEdit
+                    <button
+                      type="button"
                       className="edit-icon"
                       onClick={(e) => SetInputs(e, input.id, input)}
-                    />
+                    >
+                      Editar
+                    </button>
                   </div>
                   <div className="label">Tipo: </div>
                   <div className="label">Nome: </div>

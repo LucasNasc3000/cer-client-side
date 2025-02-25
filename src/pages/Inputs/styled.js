@@ -14,80 +14,79 @@ export const SearchSpace = styled.div`
     height: 120px;
     width: 1290px;
     bottom: 750px;
-    left: 230px;
+    left: 250px;
 
-    .input-search {
-        display: flex;
-        background-color: aqua;
-        height: 35px;
-        width: 930px;
-        position: relative;
-        left: 310px;
-        top: 20px;
-        border-radius: 8px;
-        border-style: none;
-        font-size: 14px;
-        box-shadow: 1px 1.5px rgb(173, 173, 173);
+    .search-space {
+      display: flex;
+      position: relative;
+      width: 490px;
+      height: fit-content;
+      border-radius: 4px;
+      border-style: none;
+      font-size: 14px;
+      left: 310px;
+      top: 20px;
     }
 
-    .search-icon {
-        display: flex;
-        height: 30px;
-        width: 90px;
-        position: relative;
-        color: #fff;
-        left: 300px;
-        top: 25px;
+    .input-search {
+      display: flex;
+      height: 39px;
+      width: 300px;
+      position: relative;
+      right: 70px;
+      border-radius: 4px;
+      border-style: none;
+      box-shadow: 1px 1.5px rgb(173, 173, 173);
+    }
+
+    .search-btn {
+      display: flex;
+      background-color: #696969;
+      height: 38px;
+      width: 84px;
+      position: relative;
+      align-content: center;
+      justify-content: center;
+      left: 320px;
+      top: 1px;
+      padding: 10px;
     }
 
     .checkbox {
-        height: 32px;
-        width: 32px;
-        margin-left: 35px;
+      height: 32px;
+      width: 32px;
+      margin-left: 35px;
     }
 
     .checkboxes {
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        right: 520px;
-        top: 90px;
-        height: 30px;
-        width: 670px;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      right: 370px;
+      top: 90px;
+      height: 30px;
+      width: 670px;
     }
 
     .checkbox-label {
-        color: black;
-        font-size: 12.5px;
-        margin-left: 5px;
-        margin-top: 8px;
-    }
-
-    .logout {
-        display: flex;
-        position: relative;
-        height: 75px;
-        width: 75px;
-        color: #fff;
-        left: 625px;
-        top: 3px
+      color: black;
+      font-weight: 100;
+      font-size: 12.5px;
+      margin-left: 5px;
+      margin-top: 8px;
     }
 
     .arrow {
       display: flex;
       position: relative;
-      height: 65px;
-      width: 65px;
-      right: 530px;
-      top: 8px;
+      height: 42px;
+      width: 42px;
+      right: 400px;
+      top: 20px;
       color: #fff;
     }
 
     .arrow:hover {
-      filter: brightness(70%);
-    }
-
-    .logout:hover {
       filter: brightness(70%);
     }
 
@@ -104,13 +103,13 @@ export const InputsSpace = styled.div`
     bottom: 700px;
     height: 500px;
     width: 620px;
-    left: 300px;
+    left: 360px;
 
     .main-data-div {
-      background-color: #688da2;
+      background-color: #4F4F4F;
       display: flex;
       flex-direction: column;
-      height: 380px;
+      height: 440px;
       width: 450px;
       margin-top: 10px;
       margin-left: 90px;
@@ -124,12 +123,12 @@ export const InputsSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 166.5px;
+      bottom: 222px;
       left: 110px;
       margin-top: 10px;
-      color: white;
-      font-size: 17px;
-      font-family: Arial, Helvetica, sans-serif;
+      color: #fff;
+      font-size: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       text-align: center;
       border-bottom: 0.5px solid white;
     }
@@ -138,12 +137,12 @@ export const InputsSpace = styled.div`
       display: flex;
       position: relative;
       right: 120px;
-      top: 142px;
+      top: 109px;
       margin-top: 10px;
       width: 170px;
-      color: white;
+      color: #fff;
       font-size: 17px;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       word-break: keep-all;
       border-bottom: 0.5px solid white;
     }
@@ -151,19 +150,20 @@ export const InputsSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 155px;
+      top: 522px;
       left: 30px;
-      width: 135px;
+      width: fit-content
     }
 
     .edit-icon {
       position: relative;
       color: white;
       display: flex;
-      height: 45px;
-      width: 45px;
-      padding: 4px;
-      left: 15px;
+      height: 35px;
+      width: 100px;
+      justify-content: center;
+      align-items: center;
+      left: -30px;
     }
 
     .edit-icon:hover {
@@ -178,23 +178,24 @@ export const NewInput = styled.div`
     align-items: center;
     justify-content: center;
     bottom: 1165px;
-    left: 1020px;
+    left: 1160px;
     height: fit-content;
     width: fit-content;
 
     input {
-        height: 30px;
-        width: 170px;
-        margin-top: 5px;
-        border-top: none;
-        border-left: none;
-        border-right: none;
-        border-bottom: 0.5px solid black;
+      background-color: #DCDCDC;
+      height: 30px;
+      width: 170px;
+      margin-top: 10px;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 0.5px solid black;
     }
 
     .btn {
-        height: 40px;
-        width: 120px;
-        margin-top: 15px;
+      height: 40px;
+      width: 120px;
+      margin-top: 15px;
     }
 `;

@@ -1,11 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from "react";
-import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
-import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { Form, UserContainer } from "./styled";
 
@@ -54,17 +52,9 @@ export default function Profile() {
     if (email !== "" && email !== emailStored) dispatch(actions.loginFailure());
   }
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
-
   return (
     <UserContainer>
       <Header />
-      <MdLogout size={40} class="logout" onClick={(e) => handleLogout(e)} />
       <Form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"

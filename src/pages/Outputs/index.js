@@ -2,9 +2,8 @@
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaEdit, FaSearch } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { FaArrowLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -14,7 +13,6 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import * as actions from "../../store/modules/auth/actions";
 import {
   NewOutput,
   OutputsContainer,
@@ -26,7 +24,6 @@ export default function Outputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
-  const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -112,13 +109,6 @@ export default function Outputs() {
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
 
   const clearDirectExecution = () => {
     setOutputId(0);
@@ -213,17 +203,21 @@ export default function Outputs() {
     <OutputsContainer>
       <Header />
       <SearchSpace>
-        <FaSearch
-          size={30}
-          className="search-icon"
-          onClick={(e) => SearchOutputs(e)}
-        />
-        <input
-          type="text"
-          placeholder="Pesquisar saída..."
-          className="output-search"
-        />
-        <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
+        <div className="search-space">
+          <button
+            type="button"
+            className="search-btn"
+            onClick={(e) => SearchOutputs(e)}
+          >
+            Pesquisar
+          </button>
+          <input
+            type="text"
+            placeholder="Pesquisar saída..."
+            className="output-search"
+          />
+        </div>
+
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
         <div className="checkboxes">
           <input
@@ -281,10 +275,13 @@ export default function Outputs() {
               return (
                 <div key={output.id} className="main-data-div">
                   <div className="edit">
-                    <FaEdit
+                    <button
+                      type="button"
                       className="edit-icon"
                       onClick={(e) => SetOutputs(e, output.id, output)}
-                    />
+                    >
+                      Editar
+                    </button>
                   </div>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
@@ -305,10 +302,13 @@ export default function Outputs() {
               return (
                 <div key={output.id} className="main-data-div">
                   <div className="edit">
-                    <FaEdit
+                    <button
+                      type="button"
                       className="edit-icon"
                       onClick={(e) => SetOutputs(e, output.id, output)}
-                    />
+                    >
+                      Editar
+                    </button>
                   </div>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>

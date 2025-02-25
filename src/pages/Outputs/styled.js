@@ -14,29 +14,42 @@ export const SearchSpace = styled.div`
     height: 120px;
     width: 1290px;
     bottom: 750px;
-    left: 230px;
+    left: 250px;
+
+    .search-space {
+      display: flex;
+      position: relative;
+      width: 490px;
+      height: fit-content;
+      border-radius: 4px;
+      border-style: none;
+      font-size: 14px;
+      left: 310px;
+      top: 20px;
+    }
 
     .output-search {
       display: flex;
-      height: 33px;
-      width: 500px;
+      height: 39px;
+      width: 300px;
       position: relative;
-      left: 290px;
-      top: 22px;
-      border-radius: 8px;
+      right: 0px;
+      border-radius: 4px;
       border-style: none;
-      font-size: 14px;
       box-shadow: 1px 1.5px rgb(173, 173, 173);
     }
 
-    .search-icon {
+    .search-btn {
       display: flex;
-      height: 30px;
-      width: 90px;
+      background-color: #696969;
+      height: 38px;
+      width: 84px;
       position: relative;
-      color: #fff;
-      left: 300px;
-      top: 25px;
+      align-content: center;
+      justify-content: center;
+      left: 390px;
+      top: 1px;
+      padding: 10px;
     }
 
     .checkbox {
@@ -49,7 +62,7 @@ export const SearchSpace = styled.div`
       display: flex;
       flex-direction: row;
       position: relative;
-      right: 430px;
+      right: 240px;
       top: 90px;
       height: 30px;
       width: 670px;
@@ -57,36 +70,23 @@ export const SearchSpace = styled.div`
 
     .checkbox-label {
       color: black;
+      font-weight: 100;
       font-size: 12.5px;
       margin-left: 5px;
-      margin-top: 2px;
-    }
-
-    .logout {
-      display: flex;
-      position: relative;
-      height: 38px;
-      width: 38px;
-      color: #fff;
-      left: 625px;
-      top: 23px
+      margin-top: 3px;
     }
 
     .arrow {
       display: flex;
       position: relative;
-      height: 38px;
-      width: 38px;
-      right: 570px;
+      height: 42px;
+      width: 42px;
+      right: 400px;
       top: 20px;
       color: #fff;
     }
 
     .arrow:hover {
-      filter: brightness(70%);
-    }
-
-    .logout:hover {
       filter: brightness(70%);
     }
 
@@ -103,10 +103,10 @@ export const OutputsSpace = styled.div`
     bottom: 700px;
     height: 500px;
     width: 620px;
-    left: 300px;
+    left: 360px;
 
     .main-data-div {
-      background-color: #688da2;
+      background-color: #4F4F4F;
       display: flex;
       flex-direction: column;
       height: 315px;
@@ -123,12 +123,12 @@ export const OutputsSpace = styled.div`
       position: relative;
       color: black;
       width: 170px;
-      bottom: 135px;
+      bottom: 150px;
       left: 110px;
       margin-top: 10px;
       color: white;
       font-size: 17px;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       text-align: center;
       border-bottom: 0.5px solid white;
     }
@@ -142,7 +142,7 @@ export const OutputsSpace = styled.div`
       width: 170px;
       color: white;
       font-size: 17px;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       word-break: keep-all;
       border-bottom: 0.5px solid white;
     }
@@ -150,19 +150,20 @@ export const OutputsSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 64px;
+      top: 342px;
       left: 30px;
-      width: 135px;
+      width: fit-content
     }
 
     .edit-icon {
       position: relative;
       color: white;
       display: flex;
-      height: 45px;
-      width: 45px;
-      padding: 4px;
-      left: 15px;
+      height: 35px;
+      width: 100px;
+      justify-content: center;
+      align-items: center;
+      left: -30px;
     }
 
     .edit-icon:hover {
@@ -177,14 +178,15 @@ export const NewOutput = styled.div`
     align-items: center;
     justify-content: center;
     bottom: 1165px;
-    left: 1020px;
+    left: 1160px;
     height: fit-content;
     width: fit-content;
 
     input {
+      background-color: #DCDCDC;
       height: 30px;
       width: 170px;
-      margin-top: 5px;
+      margin-top: 10px;
       border-top: none;
       border-left: none;
       border-right: none;

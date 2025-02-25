@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaEdit } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -35,7 +35,7 @@ export default function Sales() {
   const [salesData, setSalesData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [rerender, setReRender] = useState(false);
-  const searchSale = document.querySelector(".sale-search");
+  const searchSale = document.querySelector(".search-bar");
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -334,10 +334,13 @@ export default function Sales() {
               return (
                 <div key={sale.id} className="main-data-div">
                   <div className="edit">
-                    <FaEdit
+                    <button
+                      type="button"
                       className="edit-icon"
                       onClick={(e) => SetSales(e, sale.id, sale)}
-                    />
+                    >
+                      Editar
+                    </button>
                   </div>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>

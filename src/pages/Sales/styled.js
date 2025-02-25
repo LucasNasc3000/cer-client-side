@@ -14,15 +14,15 @@ export const SearchSpace = styled.div`
     left: 230px;
 
     .sale-search {
-        display: flex;
-        height: fit-content;
-        width: 490px;
-        position: relative;
-        left: 310px;
-        top: 20px;
-        border-radius: 4px;
-        border-style: none;
-        font-size: 14px;
+      display: flex;
+      height: fit-content;
+      width: 490px;
+      position: relative;
+      left: 310px;
+      top: 20px;
+      border-radius: 4px;
+      border-style: none;
+      font-size: 14px;
     }
 
     .search-bar {
@@ -37,40 +37,40 @@ export const SearchSpace = styled.div`
     }
 
     .search-btn {
-        display: flex;
-        background-color: #696969;
-        height: 38px;
-        width: 84px;
-        position: relative;
-        align-content: center;
-        justify-content: center;
-        left: 320px;
-        top: 1px;
-        padding: 10px;
+      display: flex;
+      background-color: #696969;
+      height: 38px;
+      width: 84px;
+      position: relative;
+      align-content: center;
+      justify-content: center;
+      left: 320px;
+      top: 1px;
+      padding: 10px;
     }
 
     .checkbox {
-        height: 32px;
-        width: 32px;
-        margin-left: 35px;
+      height: 32px;
+      width: 32px;
+       margin-left: 35px;
     }
 
     .checkboxes {
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        right: 340px;
-        top: 90px;
-        height: 30px;
-        width: 670px;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      right: 340px;
+      top: 90px;
+      height: 30px;
+      width: 670px;
     }
 
     .checkbox-label {
-        color: black;
-        font-weight: 100;
-        font-size: 12.5px;
-        margin-left: 5px;
-        margin-top: 8px;
+      color: black;
+      font-weight: 100;
+      font-size: 12.5px;
+      margin-left: 5px;
+      margin-top: 8px;
     }
 
     .arrow {
@@ -84,10 +84,6 @@ export const SearchSpace = styled.div`
     }
 
     .arrow:hover {
-      filter: brightness(70%);
-    }
-
-    .logout:hover {
       filter: brightness(70%);
     }
 
@@ -112,7 +108,7 @@ export const SalesSpace = styled.div`
       margin-top: 15px;
       display: flex;
       flex-direction: column;
-      height: 415px;
+      height: 435px;
       width: 450px;
       margin-left: 70px;
       border-radius: 8px;
@@ -125,7 +121,7 @@ export const SalesSpace = styled.div`
       position: relative;
       color: #fff;
       width: 170px;
-      bottom: 192px;
+      bottom: 232px;
       left: 110px;
       margin-top: 13px;
       color: #fff;
@@ -140,12 +136,12 @@ export const SalesSpace = styled.div`
       display: flex;
       position: relative;
       right: 120px;
-      top: 66px;
+      top: 52px;
       margin-top: 13px;
       width: 170px;
       color: #fff;
       font-size: 16px;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       word-break: keep-all;
       border-bottom: 0.5px solid #fff;
     }
@@ -153,7 +149,7 @@ export const SalesSpace = styled.div`
     .edit {
       display: flex;
       position: relative;
-      top: 480px;
+      top: 500px;
       right: 130px;
       width: fit-content;
     }
@@ -172,7 +168,7 @@ export const SalesSpace = styled.div`
     .btd-button {
       display: flex;
       position: relative;
-      top: 445px;
+      top: 465px;
       left: 50px;
     }
 
@@ -193,18 +189,19 @@ export const NewSale = styled.div`
     width: fit-content;
 
     input {
-        height: 30px;
-        width: 170px;
-        margin-top: 5px;
-        border-top: none;
-        border-left: none;
-        border-right: none;
-        border-bottom: 0.5px solid black;
+      background-color: #DCDCDC;
+      height: 30px;
+      width: 170px;
+      margin-top: 10px;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 0.5px solid black;
     }
 
     .btn {
-        height: 40px;
-        width: 120px;
-        margin-top: 15px;
+      height: 40px;
+      width: 120px;
+      margin-top: 15px;
     }
 `;

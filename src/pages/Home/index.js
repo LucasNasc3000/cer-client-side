@@ -7,7 +7,6 @@
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import React, { useEffect, useState } from "react";
-import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";
@@ -16,7 +15,6 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
 import history from "../../services/history";
-import * as actions from "../../store/modules/auth/actions";
 import { HomeContainer } from "./styled";
 
 Chart.register(CategoryScale);
@@ -171,17 +169,9 @@ export default function Home() {
     ],
   };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
-
   return (
     <HomeContainer>
       <Header />
-      <MdLogout size={39} class="logout" onClick={(e) => handleLogout(e)} />
       <BarChart chartData={chartData} />
       <BarChartProducts chartData={chartDataProducts} />
     </HomeContainer>
