@@ -1,24 +1,18 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-alert */
 /* eslint-disable camelcase */
-/* eslint-disable react/forbid-prop-types */
 import { get } from "lodash";
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import history from "../../services/history";
-import * as actions from "../../store/modules/auth/actions";
 import { AdvicesContainer, AdvicesSpace, NewAdvice } from "./styled";
 
 export default function Advices() {
-  const dispatch = useDispatch();
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
@@ -176,13 +170,6 @@ export default function Advices() {
     }
   }
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
-
   const Clear = (e) => {
     e.preventDefault();
     clearDirectExecution();
@@ -238,7 +225,6 @@ export default function Advices() {
   return (
     <AdvicesContainer>
       <Header />
-      <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
       <AdvicesSpace>
         {advices.map((advice) => {
           return (
@@ -247,18 +233,20 @@ export default function Advices() {
               <div className="data-div">{advice.email_body}</div>
               <div className="data-div">{advice.date}</div>
               <div className="data-div">{advice.hour}</div>
-              <div className="edit">
-                <FaEdit
-                  className="edit-icon"
-                  onClick={(e) => SetInputs(e, advice)}
-                />
-              </div>
-              <div className="delete">
-                <FaTrash
-                  className="delete-icon"
-                  onClick={(e) => DeleteAdvice(e, advice.id, advice.subject)}
-                />
-              </div>
+              <button
+                type="button"
+                className="edit-icon"
+                onClick={(e) => SetInputs(e, advice)}
+              >
+                Editar
+              </button>
+              <button
+                type="button"
+                className="delete-icon"
+                onClick={(e) => DeleteAdvice(e, advice.id, advice.subject)}
+              >
+                Excluir
+              </button>
             </div>
           );
         })}
