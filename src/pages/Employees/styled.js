@@ -11,48 +11,53 @@ export const SearchSpace = styled.div`
   flex-direction: row;
   position: relative;
   height: 120px;
-  width: 1290px;
+  width: 1280px;
   bottom: 750px;
-  left: 230px;
+  left: 250px;
+
+  .search-space {
+    display: flex;
+    height: fit-content;
+    width: 430px;
+    position: relative;
+    left: 310px;
+    top: 20px;
+    border-radius: 4px;
+    border-style: none;
+    font-size: 14px;
+  }
 
   .input-search {
     display: flex;
-    height: 35px;
-    width: 390px;
     position: relative;
-    left: 285px;
-    top: 23px;
-    border-radius: 8px;
+    width: 300px;
+    height: 39px;
+    right: 70px;
     border-style: none;
-    font-size: 14px;
+    border-radius: 4px;
     box-shadow: 1px 1.5px rgb(173, 173, 173);
   }
 
-  .search-icon {
+  .search-btn {
     display: flex;
-    height: 32px;
-    width: 92px;
+    background-color: #696969;
+    height: 38px;
+    width: 84px;
     position: relative;
-    color: #fff;
-    left: 290px;
-    top: 25px;
+    align-content: center;
+    justify-content: center;
+    left: 320px;
+    top: 1px;
+    padding: 10px;
+    box-shadow: 1px 1.5px rgb(173, 173, 173);
   }
 
   .exemp-list {
     height: 35px;
     width: 190px;
     margin-left: 365px;
-    margin-top: 24px;
-  }
-
-  .logout {
-    display: flex;
-    position: relative;
-    height: 38px;
-    width: 38px;
-    color: #fff;
-    left: 145px;
-    top: 22px;
+    margin-top: 22px;
+    box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
 
   .arrow {
@@ -60,16 +65,12 @@ export const SearchSpace = styled.div`
     position: relative;
     height: 42px;
     width: 42px;
-    right: 1040px;
+    right: 895px;
     top: 20px;
     color: #fff;
   }
 
   .arrow:hover {
-    filter: brightness(70%);
-  }
-
-  .logout:hover {
     filter: brightness(70%);
   }
 
@@ -82,24 +83,26 @@ export const EmployeeInputs = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 1400px;
+  bottom: 1230px;
   left: 1130px;
   width: 350px;
   height: 600px;
 
   input {
+    background-color: #dcdcdc;
     width: 220px;
     height: 36px;
-    margin-top: 7px;
+    margin-top: 15px;
     margin-left: 70px;
     border-style: none;
-    border-radius: 4px;
+    border-bottom: 0.5px solid black;
   }
 
   button {
     margin-top: 10px;
     margin-left: 80px;
     width: 200px;
+    box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
 
   .btn-cancel {
@@ -134,8 +137,9 @@ export const EmployeeCards = styled.div`
   bottom: 740px;
   left: 470px;
   width: 600px;
-  height: 710px;
+  height: 585px;
   overflow-y: auto;
+  overflow-x: hidden;
 
   div {
     display: flex;
@@ -143,21 +147,35 @@ export const EmployeeCards = styled.div`
     position: relative;
     margin-left: 80px;
     margin-top: 5px;
+    color: #fff;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
   }
 
   .main-data-div {
-    background-color: #688da2;
+    background-color: #4f4f4f;
     top: 10px;
-    margin-top: 20px;
-    width: 440px;
-    height: 250px;
+    margin-top: 25px;
+    margin-left: 40px;
+    width: 510px;
+    height: 310px;
     border-radius: 6px;
     box-shadow: 3px 1.8px rgb(149, 148, 148);
   }
 
   .name {
     font-size: 24px;
-    left: 0px;
+    left: 30px;
     top: 5px;
     font-weight: bold;
   }
@@ -166,21 +184,20 @@ export const EmployeeCards = styled.div`
     border-bottom: 1px solid white;
     padding: 3px;
     width: 335px;
-    bottom: 30px;
-    right: 60px;
+    bottom: 25px;
+    right: 15px;
   }
 
   .id {
     width: 310px;
     bottom: 56px;
-    right: 30px;
+    left: 15px;
     word-break: break-all;
   }
 
   .email {
-    left: 0px;
-    top: -68px;
-    bottom: 25px;
+    left: 50px;
+    top: -70px;
     width: 100px;
   }
 
@@ -188,21 +205,21 @@ export const EmployeeCards = styled.div`
     top: -40px;
     border-bottom: 1px solid white;
     padding: 3px;
-    right: 60px;
+    right: 14px;
     width: 255px;
   }
 
   .permission-label {
     top: -50px;
     border-bottom: 1px solid white;
-    right: 60px;
+    right: 14px;
     padding: 3px;
     width: 255px;
   }
 
   .permission {
-    left: 30px;
-    top: -77px;
+    left: 76px;
+    top: -80px;
     bottom: 25px;
     width: 120px;
     word-break: break-all;
@@ -212,32 +229,34 @@ export const EmployeeCards = styled.div`
   .al-label {
     border-bottom: none;
     top: -60px;
-    right: 60px;
+    right: 14px;
     border-bottom: 1px solid white;
     padding: 3px;
     width: 305px;
   }
 
   .a-l {
-    top: -87px;
-    left: 190px;
+    top: -92px;
+    left: 230px;
     bottom: 25px;
     width: 100px;
   }
 
-  .edit-icon {
+  .edit-btn {
     display: flex;
     position: relative;
     bottom: 23px;
     right: 60px;
+    width: fit-content;
   }
 
-  .del-icon {
+  .del-btn {
     display: flex;
     position: relative;
-    bottom: 50px;
-    right: 20px;
+    bottom: 10px;
+    right: 65px;
     color: red;
+    width: fit-content;
   }
 
   .edit-icon:hover {

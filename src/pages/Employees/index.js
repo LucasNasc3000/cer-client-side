@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaPlus, FaRegEdit, FaSearch } from "react-icons/fa";
-import { MdDelete, MdLogout } from "react-icons/md";
+import { FaArrowLeft, FaPlus, FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -200,27 +200,25 @@ export function Employees() {
     }
   };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-
-    dispatch(actions.loginFailure());
-    history.push("/");
-  };
-
   return (
     <EmployeesListContainer>
       <Header />
       <SearchSpace>
-        <FaSearch
-          size={30}
-          className="search-icon"
-          onClick={(e) => DoSearch(e)}
-        />
-        <input
-          type="text"
-          placeholder="Pesquisar funcionário pelo id"
-          className="input-search"
-        />
+        <div className="search-space">
+          <button
+            type="button"
+            className="search-btn"
+            onClick={(e) => DoSearch(e)}
+          >
+            Pesquisar
+          </button>
+          <input
+            type="text"
+            placeholder="Pesquisar funcionário pelo id"
+            className="input-search"
+          />
+        </div>
+
         <button
           type="button"
           className="exemp-list"
@@ -228,8 +226,6 @@ export function Employees() {
         >
           Listar ex-funcionários
         </button>
-
-        <MdLogout size={27} class="logout" onClick={(e) => handleLogout(e)} />
 
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
       </SearchSpace>
@@ -240,16 +236,20 @@ export function Employees() {
                 <div className="main-data-div">
                   <div key={empData.id}>
                     <div className="name">{empData.name}</div>
-                    <FaRegEdit
-                      size={25}
-                      className="edit-icon"
+                    <button
+                      type="button"
+                      className="edit-btn"
                       onClick={(e) => SetInputs(e, empData.id, empData)}
-                    />
-                    <MdDelete
-                      size={30}
-                      className="del-icon"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="del-btn"
                       onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                    />
+                    >
+                      Desligar
+                    </button>
                     <div className="id-label">Id:</div>
                     <div className="id">{empData.id}</div>
                     <div className="email-label">E-mail:</div>
@@ -272,16 +272,20 @@ export function Employees() {
                 <div className="main-data-div">
                   <div key={empData.id}>
                     <div className="name">{empData.name}</div>
-                    <FaRegEdit
-                      size={25}
-                      className="edit-icon"
+                    <button
+                      type="button"
+                      className="edit-btn"
                       onClick={(e) => SetInputs(e, empData.id, empData)}
-                    />
-                    <MdDelete
-                      size={30}
-                      className="del-icon"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="del-btn"
                       onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                    />
+                    >
+                      Desligar
+                    </button>
                     <div className="id-label">Id:</div>
                     <div className="id">{empData.id}</div>
                     <div className="email-label">E-mail:</div>
