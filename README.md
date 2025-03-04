@@ -11,12 +11,24 @@ O cadastro dos administradores no aplicativo é realizado por mim e o login apó
 - Axios
 
 ## Status
-### Em desenvolvimento 🛠️
+### Finalizado ✔️
 
-## Previa
+## Demonstração
 
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
-<p font=12>Página com parte do CRUD dos funcionários</p>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/dashboard.png" width=820 heigth=820/>
+<p font=12>Dashboard</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/inputs.png" width=820 heigth=820/>
+<p font=12>Insumos</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/sales.png" width=820 heigth=820/>
+<p font=12>Vendas</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/advices.png" width=820 heigth=820/>
+<p font=12>Lembretes</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/employees.png" width=820 heigth=820/>
+<p font=12>Funcionários</p>
 <br><br>
 
 # Storage Manager System
@@ -32,10 +44,22 @@ Administrators are registered in the application by me, and login after registra
 - Axios
 
 ## Status
-In development 🛠️
+Finished ✔️
 
-## Preview
+## Demonstration
 
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
-<p font=12>Employees page with part of employees CRUD</p>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/dashboard.png" width=820 heigth=820/>
+<p font=12>Dashboard</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/inputs.png" width=820 heigth=820/>
+<p font=12>Inputs</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/sales.png" width=820 heigth=820/>
+<p font=12>Sales</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/advices.png" width=820 heigth=820/>
+<p font=12>Advices</p>
+<br><br>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/employees.png" width=820 heigth=820/>
+<p font=12>Employees</p>
 <br><br>
