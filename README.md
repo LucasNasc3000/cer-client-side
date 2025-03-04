@@ -10,6 +10,15 @@ O cadastro dos administradores no aplicativo é realizado por mim e o login apó
 - Sagas
 - Axios
 
+## Variáveis de ambiente:<br>
+REACT_APP_ADMIN_ROLE=admin<br>
+REACT_APP_OUTPUTS=saídas<br>
+REACT_APP_INPUTS=insumos<br>
+REACT_APP_IOUT=insumos e saídas<br>
+REACT_APP_SALES=vendas<br>
+REACT_APP_SOUT=vendas e saídas<br>
+REACT_APP_SIOUT=saídas, vendas e insumos<br>
+
 ## Status
 ### Finalizado ✔️
 
@@ -42,6 +51,15 @@ Administrators are registered in the application by me, and login after registra
 - Redux
 - Sagas
 - Axios
+
+## Environment variables:<br>
+REACT_APP_ADMIN_ROLE=admin<br>
+REACT_APP_OUTPUTS=for outputs<br>
+REACT_APP_INPUTS=for inputs<br>
+REACT_APP_IOUT=for inputs and outputs<br>
+REACT_APP_SALES=for sales<br>
+REACT_APP_SOUT=for sales and outputs<br>
+REACT_APP_SIOUT=for sales, inputs and outputs<br>
 
 ## Status
 Finished ✔️
