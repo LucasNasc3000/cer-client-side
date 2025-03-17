@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 export const InputsContainer = styled.div`
   overflow: hidden;
+  height: 840px;
 `;
 
 export const SearchSpace = styled.div`
@@ -12,7 +13,7 @@ export const SearchSpace = styled.div`
   position: relative;
   height: 120px;
   width: 1290px;
-  bottom: 750px;
+  bottom: 830px;
   left: 250px;
 
   .search-space {
@@ -100,10 +101,10 @@ export const InputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 700px;
+  bottom: 740px;
   height: 500px;
   width: 620px;
-  left: 360px;
+  left: 390px;
 
   .main-data-div {
     background-color: #4f4f4f;
@@ -199,7 +200,7 @@ export const NewInput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1205px;
+  bottom: 1275px;
   left: 1160px;
   height: fit-content;
   width: fit-content;

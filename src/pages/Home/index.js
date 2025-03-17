@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
+import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
@@ -172,6 +173,7 @@ export default function Home() {
   return (
     <HomeContainer>
       <Header />
+      <Footer />
       <BarChart chartData={chartData} />
       <BarChartProducts chartData={chartDataProducts} />
     </HomeContainer>

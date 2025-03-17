@@ -2,15 +2,14 @@
 import styled from "styled-components";
 
 export const UserContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  height: 840px;
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 690px;
+  bottom: 750px;
   left: 590px;
   height: 500px;
   width: 450px;

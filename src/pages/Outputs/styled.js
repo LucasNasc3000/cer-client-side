@@ -3,6 +3,7 @@ import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
 export const OutputsContainer = styled.div`
+  height: 840px;
   overflow: hidden;
 `;
 
@@ -12,7 +13,7 @@ export const SearchSpace = styled.div`
   position: relative;
   height: 120px;
   width: 1290px;
-  bottom: 750px;
+  bottom: 830px;
   left: 250px;
 
   .search-space {
@@ -81,7 +82,7 @@ export const SearchSpace = styled.div`
     position: relative;
     height: 42px;
     width: 42px;
-    right: 400px;
+    right: 340px;
     top: 20px;
     color: #fff;
   }
@@ -100,10 +101,10 @@ export const OutputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 700px;
+  bottom: 760px;
   height: 500px;
   width: 620px;
-  left: 360px;
+  left: 420px;
 
   .main-data-div {
     background-color: #4f4f4f;
@@ -199,7 +200,7 @@ export const NewOutput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1165px;
+  bottom: 1215px;
   left: 1160px;
   height: fit-content;
   width: fit-content;

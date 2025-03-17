@@ -65,7 +65,9 @@ export function Employees() {
 
   async function getEmployees() {
     try {
-      const employeesSearch = await axios.get(`/employees/search/boss/${boss}`);
+      const employeesSearch = await axios.post(`/employees/search/boss/`, {
+        boss,
+      });
       setEmployees(employeesSearch.data);
     } catch (err) {
       const errors = get(err, "response.data.error", []);

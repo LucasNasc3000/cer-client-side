@@ -1,16 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
 
-export const SalesContainer = styled.div``;
+export const SalesContainer = styled.div`
+  height: 840px;
+`;
 
 export const SearchSpace = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
   height: 120px;
-  width: 1300px;
-  bottom: 749px;
-  left: 230px;
+  width: 1280px;
+  bottom: 829px;
+  left: 260px;
 
   .sale-search {
     display: flex;
@@ -98,10 +100,10 @@ export const SalesSpace = styled.div`
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  bottom: 700px;
+  bottom: 760px;
   height: 500px;
   width: 580px;
-  left: 420px;
+  left: 450px;
 
   .main-data-div {
     background-color: #4f4f4f;
@@ -282,7 +284,7 @@ export const NewSale = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1155px;
+  bottom: 1235px;
   left: 1180px;
   height: fit-content;
   width: fit-content;

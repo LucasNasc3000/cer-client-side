@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Footer from "../../components/Footer/index";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -217,6 +218,7 @@ export default function Sales() {
   return (
     <SalesContainer>
       <Header />
+      <Footer />
       <SearchSpace>
         <div className="sale-search">
           <button

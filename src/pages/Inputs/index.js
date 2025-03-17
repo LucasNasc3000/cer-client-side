@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -219,6 +220,7 @@ export default function Inputs() {
   return (
     <InputsContainer>
       <Header />
+      <Footer />
       <SearchSpace>
         <div className="search-space">
           <button

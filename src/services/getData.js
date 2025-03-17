@@ -12,9 +12,9 @@ export default async function GetData(bossId, path, employee_id, permission) {
   const joinData = [];
 
   try {
-    const getEmployeesByBoss = await axios.get(
-      `/employees/search/boss/${bossId}`
-    );
+    const getEmployeesByBoss = await axios.post(`/employees/search/boss/`, {
+      boss: bossId,
+    });
 
     const employeesIds = getEmployeesByBoss.data.map((employees) => {
       return employees.id;
