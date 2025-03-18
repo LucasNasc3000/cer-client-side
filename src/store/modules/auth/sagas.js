@@ -107,6 +107,7 @@ function* registerRequest({ payload }) {
     address_allowed,
     bossMid,
   } = payload;
+  console.log(bossMid === "");
 
   if (bossMid === "") boss = null;
   else boss = bossMid;

@@ -14,7 +14,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [adminpassword, setAdminPassword] = useState("");
   const [permission, setPermission] = useState("");
-  const [boss, setBoss] = useState("");
+  const [bossMid, setBossMid] = useState("");
   const [address_allowed, setAddressAllowed] = useState("");
 
   const handleSubmit = (e) => {
@@ -28,7 +28,7 @@ export default function Register() {
         adminpassword,
         permission,
         address_allowed,
-        boss,
+        bossMid,
       })
     );
   };
@@ -76,12 +76,14 @@ export default function Register() {
         />
         <input
           type="text"
-          value={boss}
-          onChange={(e) => setBoss(e.target.value)}
+          value={bossMid}
+          onChange={(e) => setBossMid(e.target.value)}
           placeholder="Digite o nome do chefe"
         />
         <Btn>
-          <button type="submit">Entrar</button>
+          <button type="submit" onClick={(e) => handleSubmit(e)}>
+            Cadastrar
+          </button>
         </Btn>
         <Link to="/login" className="login-link">
           Login
