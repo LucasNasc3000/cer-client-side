@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const AdvicesContainer = styled.div`
-  display: flex;
-  overflow-x: visible;
+  height: 840px;
 `;
 
 export const AdvicesSpace = styled.div`
@@ -11,8 +10,8 @@ export const AdvicesSpace = styled.div`
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  top: 45px;
-  left: 50px;
+  bottom: 800px;
+  left: 300px;
   height: 630px;
   width: 850px;
 
@@ -97,8 +96,8 @@ export const NewAdvice = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  top: 215px;
-  left: 130px;
+  bottom: 1310px;
+  left: 1210px;
   height: fit-content;
   width: fit-content;
 

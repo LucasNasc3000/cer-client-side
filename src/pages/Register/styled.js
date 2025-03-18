@@ -24,22 +24,39 @@ export const Btn = styled.button`
   transition: all 160ms;
   width: 150px;
   margin-left: 170px;
-  margin-top: 60px;
+  margin-top: 40px;
 `;
 
 export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 490px;
-  height: 615px;
-  margin-top: 60px;
+  height: 665px;
+  margin-top: 30px;
   margin-left: 520px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   overflow: hidden;
+`;
 
-  .register-link {
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+
+  input {
+    height: 40px;
+    width: 340px;
+    font-size: 15px;
+    border: 1px solid #ddd;
+    padding: 0 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+    margin-left: 80px;
+  }
+
+  .login-link {
     display: flex;
     position: relative;
     left: 205px;
@@ -51,25 +68,8 @@ export const FormContainer = styled.div`
     border-bottom: solid black 0.5px;
   }
 
-  .register-link:hover {
+  .login-link:hover {
     border-bottom: none;
-  }
-`;
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 15px;
-
-  input {
-    height: 40px;
-    width: 330px;
-    font-size: 18px;
-    border: 1px solid #ddd;
-    padding: 0 10px;
-    border-radius: 4px;
-    margin-top: 30px;
-    margin-left: 80px;
   }
 
   &:focus {

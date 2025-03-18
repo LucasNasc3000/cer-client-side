@@ -10,6 +10,7 @@ import Inputs from "../pages/Inputs";
 import Login from "../pages/Login";
 import Outputs from "../pages/Outputs";
 import Profile from "../pages/Perfil";
+import Register from "../pages/Register";
 import Sales from "../pages/Sales";
 import MyRoute from "./MyRoute";
 
@@ -19,7 +20,8 @@ import MyRoute from "./MyRoute";
 export default function Routes() {
   return (
     <Switch>
-      <MyRoute exact path="/" component={Login} isClosed={false} />
+      <MyRoute exact path="/login" component={Login} isClosed={false} />
+      <MyRoute exact path="/" component={Register} isClosed={false} />
       <MyRoute exact path="/home" component={Home} isClosed />
       <MyRoute exact path="/inputs" component={Inputs} isClosed />
       <MyRoute exact path="/sales" component={Sales} isClosed />

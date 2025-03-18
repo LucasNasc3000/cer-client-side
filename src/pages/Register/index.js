@@ -1,42 +1,41 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
-import { get } from "lodash";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import * as actions from "../../store/modules/auth/actions";
 import { Btn, Form, FormContainer, Title } from "./styled";
 
-export default function Login(props) {
+export default function Register() {
   const dispatch = useDispatch();
-
-  const prevPath = get(props, "location.state.prevPath", "/");
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [adminpassword, setAdminPassword] = useState("");
   const [permission, setPermission] = useState("");
+  const [boss, setBoss] = useState("");
+  const [address_allowed, setAddressAllowed] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Ação disparada que delega a responsabilidade para a função loginRequest (mesmo nome da action) no sagas, que além de
-    // enviar o email e a senha, envia o caminho que o usuário estava antes de ser deslogado da aplicação.
     dispatch(
-      actions.loginRequest({
+      actions.registerRequest({
         name,
         email,
         password,
         adminpassword,
         permission,
-        prevPath,
+        address_allowed,
+        boss,
       })
     );
   };
 
   return (
     <FormContainer>
-      <Title>Login</Title>
+      <Title>Cadastre-se</Title>
 
       <Form onSubmit={handleSubmit}>
         <input
@@ -69,11 +68,23 @@ export default function Login(props) {
           onChange={(e) => setPermission(e.target.value)}
           placeholder="Digite sua permissão"
         />
+        <input
+          type="text"
+          value={address_allowed}
+          onChange={(e) => setAddressAllowed(e.target.value)}
+          placeholder="Digite se tem permissão para receber e-mails"
+        />
+        <input
+          type="text"
+          value={boss}
+          onChange={(e) => setBoss(e.target.value)}
+          placeholder="Digite o nome do chefe"
+        />
         <Btn>
           <button type="submit">Entrar</button>
         </Btn>
-        <Link to="/" className="register-link">
-          Cadastrar
+        <Link to="/login" className="login-link">
+          Login
         </Link>
       </Form>
     </FormContainer>

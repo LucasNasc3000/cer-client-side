@@ -97,6 +97,7 @@ async function getBossData(bossName) {
 // Esta função atualiza dos dados do usuário
 // eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
+  let boss = "";
   const {
     name,
     email,
@@ -104,8 +105,11 @@ function* registerRequest({ payload }) {
     adminpassword,
     permission,
     address_allowed,
-    boss,
+    bossMid,
   } = payload;
+
+  if (bossMid === "") boss = null;
+  else boss = bossMid;
 
   try {
     yield call(axios.post, "/employees", {

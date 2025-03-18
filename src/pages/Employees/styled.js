@@ -2,8 +2,8 @@ import styled from "styled-components";
 import * as colors from "../../config/colors";
 
 export const EmployeesListContainer = styled.div`
-  height: 740px;
-  overflow-x: hidden;
+  height: 840px;
+  overflow: hidden;
 `;
 
 export const SearchSpace = styled.div`
@@ -12,7 +12,7 @@ export const SearchSpace = styled.div`
   position: relative;
   height: 120px;
   width: 1280px;
-  bottom: 750px;
+  bottom: 830px;
   left: 250px;
 
   .search-space {
@@ -65,7 +65,7 @@ export const SearchSpace = styled.div`
     position: relative;
     height: 42px;
     width: 42px;
-    right: 895px;
+    right: 875px;
     top: 20px;
     color: #fff;
   }
@@ -83,7 +83,7 @@ export const EmployeeInputs = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 1230px;
+  bottom: 1290px;
   left: 1130px;
   width: 350px;
   height: 600px;
@@ -134,10 +134,10 @@ export const EmployeeCards = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 740px;
+  bottom: 800px;
   left: 470px;
   width: 600px;
-  height: 585px;
+  height: 575px;
   overflow-y: auto;
   overflow-x: hidden;
 

@@ -5,6 +5,7 @@ import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Footer from "../../components/Footer/index";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -225,6 +226,7 @@ export default function Advices() {
   return (
     <AdvicesContainer>
       <Header />
+      <Footer />
       <AdvicesSpace>
         {advices.map((advice) => {
           return (

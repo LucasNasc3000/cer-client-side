@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Footer from "../../components/Footer/index";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -205,6 +206,7 @@ export function Employees() {
   return (
     <EmployeesListContainer>
       <Header />
+      <Footer />
       <SearchSpace>
         <div className="search-space">
           <button
