@@ -14,6 +14,7 @@ import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import history from "../../services/history";
 import { HomeContainer } from "./styled";
@@ -25,6 +26,7 @@ export default function Home() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const headerid = useSelector((state) => state.auth.headerid);
   const dispatch = useDispatch();
+  const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [outputsData, setOutputsData] = useState([]);
   const [datesAndLength, setDatesAndLength] = useState([]);
@@ -57,10 +59,22 @@ export default function Home() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
+    async function ExecuteGetBossId() {
+      const get = await GetBossId(headerid, emailStored);
+
+      if (typeof get === "undefined" || !get) return;
+
+      setBossId(get);
+    }
+
+    ExecuteGetBossId();
+  }, [bossId, emailStored, headerid]);
+
+  useEffect(() => {
     async function GetOutputsData() {
       try {
         const outputs = await GetData(
-          employee_id,
+          bossId,
           "outputs",
           employee_id,
           permission
@@ -76,7 +90,7 @@ export default function Home() {
     }
 
     GetOutputsData();
-  }, [employee_id, permission]);
+  }, [employee_id, permission, bossId]);
 
   function DaysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
@@ -114,9 +128,8 @@ export default function Home() {
 
         for (let i = 0; i < dates.length; i++) {
           // eslint-disable-next-line no-await-in-loop
-          const getSalesByDates = await axios.post(`/sales/search/date`, {
+          const getSalesByDates = await axios.post("/sales/search/date", {
             saledateBody: dates[i],
-            forDashboard: true,
           });
 
           preDatesAndLength.push({

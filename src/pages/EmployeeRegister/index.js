@@ -18,7 +18,7 @@ export function EmployeeRegister() {
   const [permission, setPermission] = useState("");
   const [address_allowed, setAddressAllowed] = useState("");
   const [bossName, setBossName] = useState("");
-  let boss = "";
+  let bossMid = "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export function EmployeeRegister() {
         `/employees/search/uniquename/${bossName}`
       );
 
-      boss = bossData.data.id;
+      bossMid = bossData.data.id;
     } catch (err) {
       const errors = get(err, "response.data.error", []);
 
@@ -51,7 +51,7 @@ export function EmployeeRegister() {
         adminpassword,
         permission,
         address_allowed,
-        boss,
+        bossMid,
       })
     );
 
@@ -62,7 +62,7 @@ export function EmployeeRegister() {
     setAddressAllowed("");
     setPermission("");
     setBossName("");
-    boss = "";
+    bossMid = "";
   };
 
   return (
