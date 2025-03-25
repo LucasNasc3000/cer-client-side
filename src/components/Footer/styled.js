@@ -31,11 +31,14 @@ export const MainContainer = styled.div`
       sans-serif;
   }
 
-  .text2 {
+  .link {
     display: flex;
     position: relative;
-    top: 25px;
-    right: 225px;
+    top: 26px;
+    margin-left: 10px;
+    font-size: 18px;
+    right: 235px;
+    color: #fff;
     font-weight: 100;
     font-family:
       system-ui,
@@ -49,5 +52,9 @@ export const MainContainer = styled.div`
       "Open Sans",
       "Helvetica Neue",
       sans-serif;
+  }
+
+  .link:hover {
+    border-bottom: solid #fff 0.5px;
   }
 `;

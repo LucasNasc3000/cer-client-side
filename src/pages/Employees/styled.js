@@ -134,7 +134,7 @@ export const EmployeeCards = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 800px;
+  bottom: 830px;
   left: 470px;
   width: 600px;
   height: 575px;
@@ -245,7 +245,7 @@ export const EmployeeCards = styled.div`
   .edit-btn {
     display: flex;
     position: relative;
-    bottom: 23px;
+    top: 10px;
     right: 60px;
     width: fit-content;
   }
@@ -253,7 +253,7 @@ export const EmployeeCards = styled.div`
   .del-btn {
     display: flex;
     position: relative;
-    bottom: 10px;
+    top: 20px;
     right: 65px;
     color: red;
     width: fit-content;
