@@ -177,6 +177,7 @@ export const EmployeeCards = styled.div`
     font-size: 24px;
     left: 30px;
     top: 5px;
+    height: 50px;
     font-weight: bold;
   }
 

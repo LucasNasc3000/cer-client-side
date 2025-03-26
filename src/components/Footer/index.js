@@ -9,7 +9,7 @@ export default function Footer() {
         lucasnascdev@gmail.com
       </a>
       <a
-        href="www.linkedin.com/in/lucas-nascimento-fortunato-b63162297"
+        href="https://www.linkedin.com/in/lucas-nascimento-fortunato-b63162297"
         className="link"
       >
         LinkedIn

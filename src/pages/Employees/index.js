@@ -1,7 +1,6 @@
 import { get } from "lodash";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaPlus, FaRegEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -312,16 +311,20 @@ export function Employees() {
                 <div className="main-data-div">
                   <div key={empData.id}>
                     <div className="name">{empData.name}</div>
-                    <FaRegEdit
-                      size={25}
-                      className="edit-icon"
+                    <button
+                      type="button"
+                      className="edit-btn"
                       onClick={(e) => SetInputs(e, empData.id, empData)}
-                    />
-                    <MdDelete
-                      size={30}
-                      className="del-icon"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="del-btn"
                       onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                    />
+                    >
+                      Desligar
+                    </button>
                     <div className="id-label">Id:</div>
                     <div className="id">{empData.id}</div>
                     <div className="email-label">E-mail:</div>
