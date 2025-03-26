@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Analytics } from "@vercel/analytics/dist/react";
+import { Analytics } from "@vercel/analytics";
 import React from "react";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
