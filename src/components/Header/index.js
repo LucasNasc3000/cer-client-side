@@ -40,9 +40,6 @@ export default function Header() {
                 <Link to="/employees" class="employees">
                   Funcionários
                 </Link>
-                <Link to="/advices" class="advices">
-                  Lembretes
-                </Link>
                 <button type="button" onClick={(e) => logout(e)} className="logout-btn">
                   Sair
                 </button>
@@ -114,9 +111,6 @@ export default function Header() {
                 <Link to="/profile" class="profile">
                   Perfil
                 </Link>
-                <Link to="/advices" class="advices">
-                  Lembretes
-                </Link>
                 <button type="button" onClick={(e) => logout(e)} className="logout-btn">
                   Sair
                 </button>
@@ -136,9 +130,6 @@ export default function Header() {
                 </Link>
                 <Link to="/profile" class="profile">
                   Perfil
-                </Link>
-                <Link to="/advices" class="advices">
-                  Lembretes
                 </Link>
                 <button type="button" onClick={(e) => logout(e)} className="logout-btn">
                   Sair
@@ -162,9 +153,6 @@ export default function Header() {
                 </Link>
                 <Link to="/profile" class="profile">
                   Perfil
-                </Link>
-                <Link to="/advices" class="advices">
-                  Lembretes
                 </Link>
                 <button type="button" onClick={(e) => logout(e)} className="logout-btn">
                   Sair

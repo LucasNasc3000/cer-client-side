@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Footer from "../../components/Footer/index";
 import Header from "../../components/Header";
@@ -14,14 +14,12 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import * as actionsDataTransfer from "../../store/modules/dataTransfer/actions";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
-  const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
   const [client_name, setClientName] = useState("");
@@ -208,13 +206,6 @@ export default function Sales() {
     }
   };
 
-  const Transfer = (e, saleData) => {
-    e.preventDefault();
-    dispatch(actionsDataTransfer.saleDataTransfer(saleData));
-
-    history.push("/advices");
-  };
-
   return (
     <SalesContainer>
       <Header />
@@ -316,13 +307,6 @@ export default function Sales() {
                       Editar
                     </button>
                   </div>
-                  <button
-                    type="button"
-                    className="btd-button"
-                    onClick={(e) => Transfer(e, sale)}
-                  >
-                    Agendar lembrete de aniversário
-                  </button>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
                   <div className="label">Nome cliente: </div>

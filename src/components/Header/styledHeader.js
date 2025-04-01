@@ -97,21 +97,6 @@ export const MainHeader = styled.nav`
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  .advices {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    color: #fff;
-    height: 45px;
-    width: 165px;
-    align-items: center;
-    justify-content: center;
-    left: 28px;
-    top: 54px;
-    font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-
   .logout-btn {
     background-color: #4F4F4F;
     display: flex;
@@ -151,10 +136,6 @@ export const MainHeader = styled.nav`
     filter: brightness(70%);
   }
 
-  .advices:hover {
-    filter: brightness(70%);
-  }
-
   .logout-btn:hover {
     color:rgb(243, 64, 64);
   }
@@ -164,7 +145,6 @@ export const MainHeader = styled.nav`
   .sales-icon,
   .outputs-icon,
   .employees-icon,
-  .advices-icon,
   .logout-btn,
   .profile-icon {
     margin-right: 20px;

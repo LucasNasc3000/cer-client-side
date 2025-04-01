@@ -33,9 +33,6 @@ REACT_APP_SIOUT=saídas, vendas e insumos<br>
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/sales.png" width=820 heigth=820/>
 <p font=12>Vendas</p>
 <br><br>
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/advices.png" width=820 heigth=820/>
-<p font=12>Lembretes</p>
-<br><br>
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/employees.png" width=820 heigth=820/>
 <p font=12>Funcionários</p>
 <br><br>
@@ -74,9 +71,6 @@ Finished ✔️
 <br><br>
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/sales.png" width=820 heigth=820/>
 <p font=12>Sales</p>
-<br><br>
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/advices.png" width=820 heigth=820/>
-<p font=12>Advices</p>
 <br><br>
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/employees.png" width=820 heigth=820/>
 <p font=12>Employees</p>

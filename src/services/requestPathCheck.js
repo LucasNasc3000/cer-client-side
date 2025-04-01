@@ -33,14 +33,6 @@ export default async function PathCheck(path, employeesId) {
 
       return registersBy;
     }
-
-    if (path === "advices") {
-      const registersBy = await axios.get(
-        `/${path}/search/employeeid/${employeesId}`
-      );
-
-      return registersBy;
-    }
   } catch (err) {
     console.log("Erro na verificação do caminho");
   }
