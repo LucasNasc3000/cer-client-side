@@ -110,7 +110,7 @@ export const SalesSpace = styled.div`
     margin-top: 15px;
     display: flex;
     flex-direction: column;
-    height: 435px;
+    height: 385px;
     width: 450px;
     margin-left: 70px;
     border-radius: 8px;
@@ -124,7 +124,7 @@ export const SalesSpace = styled.div`
     margin-top: 15px;
     display: flex;
     flex-direction: column;
-    height: 435px;
+    height: 385px;
     width: 450px;
     margin-left: 70px;
     border-radius: 8px;
@@ -137,7 +137,7 @@ export const SalesSpace = styled.div`
     position: relative;
     color: #fff;
     width: 170px;
-    bottom: 232px;
+    bottom: 182px;
     left: 110px;
     margin-top: 13px;
     color: #fff;
@@ -163,7 +163,7 @@ export const SalesSpace = styled.div`
     position: relative;
     color: #fff;
     width: 170px;
-    bottom: 211px;
+    bottom: 182px;
     left: 110px;
     margin-top: 13px;
     color: #fff;
@@ -189,7 +189,7 @@ export const SalesSpace = styled.div`
     display: flex;
     position: relative;
     right: 120px;
-    top: 52px;
+    top: 66px;
     margin-top: 13px;
     width: 170px;
     color: #fff;
@@ -214,7 +214,7 @@ export const SalesSpace = styled.div`
     display: flex;
     position: relative;
     right: 110px;
-    top: 72px;
+    top: 66px;
     margin-top: 13px;
     width: 170px;
     color: #fff;
@@ -238,8 +238,8 @@ export const SalesSpace = styled.div`
   .edit {
     display: flex;
     position: relative;
-    top: 500px;
-    right: 130px;
+    top: 410px;
+    left: 28px;
     width: fit-content;
   }
 
@@ -248,7 +248,7 @@ export const SalesSpace = styled.div`
     color: white;
     display: flex;
     height: 35px;
-    width: 65px;
+    width: 100px;
     justify-content: center;
     align-items: center;
     left: -30px;
@@ -259,11 +259,11 @@ export const SalesSpace = styled.div`
     color: white;
     display: flex;
     height: 35px;
-    width: 95px;
+    width: 100px;
     justify-content: center;
     align-items: center;
     left: 0px;
-    top: 470px;
+    top: 415px;
   }
 
   .btd-button {
