@@ -27,7 +27,6 @@ export default function Sales() {
   const [address, setAddress] = useState("");
   const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
-  const [client_birthday, setClientBirthday] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
   const [bossId, setBossId] = useState("");
@@ -89,7 +88,6 @@ export default function Sales() {
     setPhoneNumber("");
     setAddress("");
     setProducts("");
-    setClientBirthday("");
     searchSale.value = "";
     setSearchResults([]);
   };
@@ -108,7 +106,6 @@ export default function Sales() {
     setPhoneNumber(data.phone_number);
     setAddress(data.address);
     setProducts(data.products);
-    setClientBirthday(data.client_birthday);
   };
 
   async function GetSales() {
@@ -162,7 +159,7 @@ export default function Sales() {
       address,
       products,
       employee_id,
-      client_birthday,
+      client_birthday: null,
     };
 
     const update = await Update(saleId, data, "sales");
@@ -187,7 +184,7 @@ export default function Sales() {
       address,
       products,
       employee_id,
-      client_birthday,
+      client_birthday: null,
     };
 
     const register = await Register(data, "sales");
@@ -283,14 +280,6 @@ export default function Sales() {
             onChange={(e) => setSearchParam(e.target.name)}
           />
           <h3 className="checkbox-label">Registrado por</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="clientbirthday"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Anv. cliente</h3>
         </div>
       </SearchSpace>
       <SalesSpace>
@@ -312,7 +301,6 @@ export default function Sales() {
                   <div className="label">Nome cliente: </div>
                   <div className="label">Telefone: </div>
                   <div className="label">Endereço: </div>
-                  <div className="label">Anv. Cliente: </div>
                   <div className="label">Funcionário: </div>
                   <div className="label">Produtos: </div>
                   <div className="data-div">{sale.date}</div>
@@ -320,7 +308,6 @@ export default function Sales() {
                   <div className="data-div">{sale.client_name}</div>
                   <div className="data-div">{sale.phone_number}</div>
                   <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.client_birthday}</div>
                   <div className="data-div">{sale.employee_id}</div>
                   <div className="data-div">{sale.products}</div>
                 </div>
@@ -344,7 +331,6 @@ export default function Sales() {
                   <div className="label-search">Telefone: </div>
                   <div className="label-search">Endereço: </div>
                   <div className="label-search">Produtos: </div>
-                  <div className="label-search">Anv. Cliente: </div>
                   <div className="label-search">Funcionário: </div>
                   <div className="data-div-search">{sale.date}</div>
                   <div className="data-div-search">{sale.hour}</div>
@@ -352,7 +338,6 @@ export default function Sales() {
                   <div className="data-div-search">{sale.phone_number}</div>
                   <div className="data-div-search">{sale.address}</div>
                   <div className="data-div-search">{sale.products}</div>
-                  <div className="data-div-search">{sale.client_birthday}</div>
                   <div className="data-div-search">{sale.employee_id}</div>
                 </div>
               );
@@ -388,12 +373,6 @@ export default function Sales() {
           placeholder="Produtos ex: coxinha,suco"
           value={products}
           onChange={(e) => setProducts(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Anv. Cliente ex: 15-02"
-          value={client_birthday}
-          onChange={(e) => setClientBirthday(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar

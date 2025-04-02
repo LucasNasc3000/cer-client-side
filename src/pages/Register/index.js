@@ -14,7 +14,6 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [adminpassword, setAdminPassword] = useState("");
   const [permission, setPermission] = useState("");
-  const [bossMid, setBossMid] = useState("");
   const [address_allowed, setAddressAllowed] = useState("");
 
   const handleSubmit = (e) => {
@@ -28,7 +27,7 @@ export default function Register() {
         adminpassword,
         permission,
         address_allowed,
-        bossMid,
+        bossMid: "",
       })
     );
   };
@@ -73,12 +72,6 @@ export default function Register() {
           value={address_allowed}
           onChange={(e) => setAddressAllowed(e.target.value)}
           placeholder="Digite se tem permissão para receber e-mails"
-        />
-        <input
-          type="text"
-          value={bossMid}
-          onChange={(e) => setBossMid(e.target.value)}
-          placeholder="Digite o nome do chefe"
         />
         <Btn>
           <button type="submit" onClick={(e) => handleSubmit(e)}>
