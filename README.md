@@ -23,7 +23,14 @@ REACT_APP_SIOUT=saídas, vendas e insumos<br>
 ### Finalizado ✔️
 
 ## Demonstração
+### Deploy
+No campo permissão do formulário de cadastro digite fullAccess e no último campo, referente a autorização para receber e-mails digite y.
+Caso queira testar a funcionalidade de cadastrar funcionários use estas permissões: inputs-outputs, salesInOutCRUS ou sales-outputsCRUS<br>
+Use este site para criar e-mails temporários caso queira testar as funcionalidades de envio de e-mails:<br>
+➡️ https://mediapyro.com/<br>
+➡️ https://storage-manager-demo.vercel.app/
 
+### Prints
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/dashboard.png" width=820 heigth=820/>
 <p font=12>Dashboard</p>
 <br><br>
@@ -62,7 +69,14 @@ REACT_APP_SIOUT=for sales, inputs and outputs<br>
 Finished ✔️
 
 ## Demonstration
+### Deploy
+In the permission field ("Digite sua permissão") of the registration form, type fullAccess and in the last field, regarding authorization to receive emails, type y.
+If you want to test the functionality of registering employees, use these permissions: inputs-outputs, salesInOutCRUS or sales-outputsCRUS<br>
+Use this site to create temporary emails if you want to test the email sending functionality:<br>
+➡️ https://mediapyro.com/<br>
+➡️ https://storage-manager-demo.vercel.app/
 
+### Screenshots
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/dashboard.png" width=820 heigth=820/>
 <p font=12>Dashboard</p>
 <br><br>
