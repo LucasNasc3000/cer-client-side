@@ -2,6 +2,7 @@
   "name": "frontend-controle-de-estoque-ext",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://18.229.158.107",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
