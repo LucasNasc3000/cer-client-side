@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
+import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
@@ -21,6 +22,14 @@ import {
 } from "./styled";
 
 export default function Outputs() {
+  const getAdmin = SecretsHandler("admin");
+  const getOutputsAccess = SecretsHandler("outputsAccess");
+  const getSalesOutputsAccess = SecretsHandler("salesOutputsAccess");
+  const getInputsOutputsAccess = SecretsHandler("inputsOutputsAccess");
+  const getSalesOutputsInputsAccess = SecretsHandler(
+    "salesOutputsInputsAccess"
+  );
+
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
@@ -43,11 +52,11 @@ export default function Outputs() {
   useEffect(() => {
     const PermissionCheck = () => {
       if (
-        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== process.env.REACT_APP_OUTPUTS &&
-        permissionlStored !== process.env.REACT_APP_IOUT &&
-        permissionlStored !== process.env.REACT_APP_SOUT &&
-        permissionlStored !== process.env.REACT_APP_SIOUT
+        permissionlStored !== getAdmin &&
+        permissionlStored !== getOutputsAccess &&
+        permissionlStored !== getInputsOutputsAccess &&
+        permissionlStored !== getSalesOutputsAccess &&
+        permissionlStored !== getSalesOutputsInputsAccess
       )
         history.goBack();
     };

@@ -6,12 +6,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import Header from "../../components/Header";
+import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
 import history from "../../services/history";
@@ -20,6 +21,8 @@ import { HomeContainer } from "./styled";
 Chart.register(CategoryScale);
 
 export default function Home() {
+  const getAdmin = SecretsHandler("admin");
+
   const permission = useSelector((state) => state.auth.permission);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const headerid = useSelector((state) => state.auth.headerid);
@@ -30,7 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     const PermissionCheck = () => {
-      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
+      if (permission !== getAdmin) history.goBack();
     };
 
     PermissionCheck();

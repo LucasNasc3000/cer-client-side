@@ -1,11 +1,12 @@
 import { get } from "lodash";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft, FaPlus, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
+import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import history from "../../services/history";
@@ -18,6 +19,8 @@ import {
 } from "./styled";
 
 export function Employees() {
+  const getAdmin = SecretsHandler("admin");
+
   const dispatch = useDispatch();
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
@@ -35,7 +38,7 @@ export function Employees() {
 
   useEffect(() => {
     const PermissionCheck = () => {
-      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
+      if (permission !== getAdmin) history.goBack();
     };
 
     PermissionCheck();

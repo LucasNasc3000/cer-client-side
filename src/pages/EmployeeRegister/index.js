@@ -1,14 +1,18 @@
 /* eslint-disable camelcase */
 import { get } from "lodash";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
+import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
+import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { EmployeeRegisterContainer, Form } from "./styled";
 
 export function EmployeeRegister() {
+  const getAdmin = SecretsHandler("admin");
+
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -19,6 +23,14 @@ export function EmployeeRegister() {
   const [address_allowed, setAddressAllowed] = useState("");
   const [bossName, setBossName] = useState("");
   let boss = "";
+
+  useEffect(() => {
+    const PermissionCheck = () => {
+      if (permission !== getAdmin) history.goBack();
+    };
+
+    PermissionCheck();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
