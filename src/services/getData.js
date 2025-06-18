@@ -3,10 +3,13 @@
 /* eslint-disable no-plusplus */
 import { get } from "lodash";
 import { toast } from "react-toastify";
+import SecretsHandler from "../secretsHandler";
 import axios from "./axios";
 import PathCheck from "./requestPathCheck";
 
 export default async function GetData(bossId, path, employee_id, permission) {
+  const getAdmin = SecretsHandler("admin");
+
   const rawData = [];
   const allData = [];
   const joinData = [];
@@ -31,7 +34,7 @@ export default async function GetData(bossId, path, employee_id, permission) {
     }
 
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
-    if (permission === process.env.REACT_APP_ADMIN_ROLE) {
+    if (permission === getAdmin) {
       const bossOwnRegisters = await PathCheck(path, employee_id);
       joinData.push(...bossOwnRegisters.data);
     } else {

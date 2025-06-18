@@ -18,6 +18,8 @@ import * as actions from "./actions";
 // O terceiro parâmetro de get será um valor padrão
 
 function persistRehydrate({ payload }) {
+  const getAdmin = SecretsHandler("admin");
+
   const token = get(payload, "auth.token", "");
   if (!token) return;
   axios.defaults.headers.Authorization = `Bearer ${token}`;
@@ -25,7 +27,7 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
 
-  if (payload.auth.permission !== process.env.REACT_APP_ADMIN_ROLE) {
+  if (payload.auth.permission !== getAdmin) {
     axios.defaults.headers.headerid = payload.auth.headerid;
   }
 }

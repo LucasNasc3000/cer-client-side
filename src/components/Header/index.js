@@ -1,12 +1,22 @@
 /* eslint-disable prettier/prettier */
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import SecretsHandler from "../../secretsHandler";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { MainHeader } from "./styledHeader";
 
 export default function Header() {
+  const getAdmin = SecretsHandler("admin");
+  const getInputsAccess = SecretsHandler("inputsAccess");
+  const getOutputsAccess = SecretsHandler("outputsAccess");
+  const getSalesAccess = SecretsHandler("salesAccess");
+  const getSalesOutputsAccess = SecretsHandler("salesOutputsAccess");
+  const getInputsOutputsAccess = SecretsHandler("inputsOutputsAccess");
+  const getSalesOutputsInputsAccess = SecretsHandler(
+    "salesOutputsInputsAccess"
+  );
+
   const permissison = useSelector((state) => state.auth.permission);
   const dispatch = useDispatch();
 
@@ -20,7 +30,7 @@ export default function Header() {
     return(
         <MainHeader>
           {
-            permissison === process.env.REACT_APP_ADMIN_ROLE ? (
+            permissison === getAdmin ? (
               <>
                 <Link to="/home" class="home">
                   Dashboard
@@ -52,7 +62,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_OUTPUTS ? (
+            permissison === getOutputsAccess ? (
               <>
                 <Link to="/outputs" class="outputs">
                   Saídas
@@ -69,7 +79,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_INPUTS ? (
+            permissison === getInputsAccess ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -86,7 +96,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_IOUT ? (
+            permissison === getInputsOutputsAccess ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -106,7 +116,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_SALES ? (
+            permissison === getSalesAccess ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -126,7 +136,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_SOUT ? (
+            permissison === getSalesOutputsAccess? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -149,7 +159,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_SIOUT ? (
+            permissison === getSalesOutputsInputsAccess ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
