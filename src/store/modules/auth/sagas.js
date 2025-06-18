@@ -4,6 +4,7 @@
 import { get } from "lodash";
 import { toast } from "react-toastify";
 import { all, call, put, takeLatest } from "redux-saga/effects";
+import SecretsHandler from "../../../secretsHandler";
 import axios from "../../../services/axios";
 import history from "../../../services/history";
 import * as types from "../types";
@@ -31,6 +32,16 @@ function persistRehydrate({ payload }) {
 
 function* loginRequest({ payload }) {
   try {
+    const getAdmin = SecretsHandler("admin");
+    const getInputsAccess = SecretsHandler("inputsAccess");
+    const getOutputsAccess = SecretsHandler("outputsAccess");
+    const getSalesAccess = SecretsHandler("salesAccess");
+    const getSalesOutputsAccess = SecretsHandler("salesOutputsAccess");
+    const getInputsOutputsAccess = SecretsHandler("inputsOutputsAccess");
+    const getSalesOutputsInputsAccess = SecretsHandler(
+      "salesOutputsInputsAccess"
+    );
+
     const response = yield call(axios.post, "/tokens", payload);
     yield put(actions.loginSuccess({ ...response.data }));
 
@@ -42,7 +53,7 @@ function* loginRequest({ payload }) {
     axios.defaults.headers.adminpassword = payload.adminpassword;
     axios.defaults.headers.permission = payload.permission;
 
-    if (payload.permission !== process.env.REACT_APP_ADMIN_ROLE) {
+    if (payload.permission !== getAdmin) {
       axios.defaults.headers.headerid = response.data.employee.id;
     }
 
@@ -50,31 +61,31 @@ function* loginRequest({ payload }) {
 
     // eslint-disable-next-line default-case
     switch (permission) {
-      case process.env.REACT_APP_ADMIN_ROLE:
+      case getAdmin:
         history.push("/home");
         break;
 
-      case process.env.REACT_APP_INPUTS:
+      case getInputsAccess:
         history.push("/inputs");
         break;
 
-      case process.env.REACT_APP_OUTPUTS:
+      case getOutputsAccess:
         history.push("/outputs");
         break;
 
-      case process.env.REACT_APP_SALES:
+      case getSalesAccess:
         history.push("/sales");
         break;
 
-      case process.env.REACT_APP_IOUT:
+      case getInputsOutputsAccess:
         history.push("/inputs");
         break;
 
-      case process.env.REACT_APP_SOUT:
+      case getSalesOutputsAccess:
         history.push("/outputs");
         break;
 
-      case process.env.REACT_APP_SIOUT:
+      case getSalesOutputsInputsAccess:
         history.push("/sales");
         break;
     }
