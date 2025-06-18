@@ -1,10 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
 import { get } from "lodash";
 import { toast } from "react-toastify";
 import { all, call, put, takeLatest } from "redux-saga/effects";
-import SecretsHandler from "../../../secretsHandler";
 import axios from "../../../services/axios";
 import history from "../../../services/history";
 import * as types from "../types";
@@ -18,8 +18,6 @@ import * as actions from "./actions";
 // O terceiro parâmetro de get será um valor padrão
 
 function persistRehydrate({ payload }) {
-  const getAdmin = SecretsHandler("admin");
-
   const token = get(payload, "auth.token", "");
   if (!token) return;
   axios.defaults.headers.Authorization = `Bearer ${token}`;
@@ -27,23 +25,13 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
 
-  if (payload.auth.permission !== getAdmin) {
+  if (payload.auth.permission !== window._env_.REACT_APP_ADMIN_ROLE) {
     axios.defaults.headers.headerid = payload.auth.headerid;
   }
 }
 
 function* loginRequest({ payload }) {
   try {
-    const getAdmin = SecretsHandler("admin");
-    const getInputsAccess = SecretsHandler("inputsAccess");
-    const getOutputsAccess = SecretsHandler("outputsAccess");
-    const getSalesAccess = SecretsHandler("salesAccess");
-    const getSalesOutputsAccess = SecretsHandler("salesOutputsAccess");
-    const getInputsOutputsAccess = SecretsHandler("inputsOutputsAccess");
-    const getSalesOutputsInputsAccess = SecretsHandler(
-      "salesOutputsInputsAccess"
-    );
-
     const response = yield call(axios.post, "/tokens", payload);
     yield put(actions.loginSuccess({ ...response.data }));
 
@@ -55,7 +43,7 @@ function* loginRequest({ payload }) {
     axios.defaults.headers.adminpassword = payload.adminpassword;
     axios.defaults.headers.permission = payload.permission;
 
-    if (payload.permission !== getAdmin) {
+    if (payload.permission !== window._env_.REACT_APP_ADMIN_ROLE) {
       axios.defaults.headers.headerid = response.data.employee.id;
     }
 
@@ -63,31 +51,31 @@ function* loginRequest({ payload }) {
 
     // eslint-disable-next-line default-case
     switch (permission) {
-      case getAdmin:
+      case window._env_.REACT_APP_ADMIN_ROLE:
         history.push("/home");
         break;
 
-      case getInputsAccess:
+      case window._env_.REACT_APP_INPUTS:
         history.push("/inputs");
         break;
 
-      case getOutputsAccess:
+      case window._env_.REACT_APP_OUTPUTS:
         history.push("/outputs");
         break;
 
-      case getSalesAccess:
+      case window._env_.REACT_APP_SALES:
         history.push("/sales");
         break;
 
-      case getInputsOutputsAccess:
+      case window._env_.REACT_APP_IOUT:
         history.push("/inputs");
         break;
 
-      case getSalesOutputsAccess:
+      case window._env_.REACT_APP_SOUT:
         history.push("/outputs");
         break;
 
-      case getSalesOutputsInputsAccess:
+      case window._env_.REACT_APP_SIOUT:
         history.push("/sales");
         break;
     }

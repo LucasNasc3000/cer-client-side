@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
@@ -6,7 +7,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
-import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
@@ -17,13 +17,6 @@ import Update from "../../services/update";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
-  const getAdmin = SecretsHandler("admin");
-  const getInputsAccess = SecretsHandler("inputsAccess");
-  const getInputsOutputsAccess = SecretsHandler("inputsOutputsAccess");
-  const getSalesOutputsInputsAccess = SecretsHandler(
-    "salesOutputsInputsAccess"
-  );
-
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
@@ -52,10 +45,10 @@ export default function Inputs() {
   useEffect(() => {
     const PermissionCheck = () => {
       if (
-        permissionlStored !== getAdmin &&
-        permissionlStored !== getInputsAccess &&
-        permissionlStored !== getInputsOutputsAccess &&
-        permissionlStored !== getSalesOutputsInputsAccess
+        permissionlStored !== window._env_.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== window._env_.REACT_APP_INPUTS &&
+        permissionlStored !== window._env_.REACT_APP_IOUT &&
+        permissionlStored !== window._env_.REACT_APP_SIOUT
       )
         history.goBack();
     };

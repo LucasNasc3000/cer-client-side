@@ -1,4 +1,4 @@
-import SecretsHandler from "../../../secretsHandler";
+/* eslint-disable no-underscore-dangle */
 import axios from "../../../services/axios";
 import * as types from "../types";
 
@@ -19,13 +19,11 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case types.LOGIN_SUCCESS: {
-      const getAdmin = SecretsHandler("admin");
-
       const newState = { ...state };
       newState.isLoggedIn = true;
       newState.token = action.payload.token;
 
-      if (newState.permission !== getAdmin) {
+      if (newState.permission !== window._env_.REACT_APP_ADMIN_ROLE) {
         newState.headerid = action.payload.employee.id;
       }
 

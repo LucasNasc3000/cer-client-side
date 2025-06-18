@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-plusplus */
@@ -12,7 +13,6 @@ import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import Header from "../../components/Header";
-import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
 import history from "../../services/history";
@@ -21,8 +21,6 @@ import { HomeContainer } from "./styled";
 Chart.register(CategoryScale);
 
 export default function Home() {
-  const getAdmin = SecretsHandler("admin");
-
   const permission = useSelector((state) => state.auth.permission);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const headerid = useSelector((state) => state.auth.headerid);
@@ -33,7 +31,7 @@ export default function Home() {
 
   useEffect(() => {
     const PermissionCheck = () => {
-      if (permission !== getAdmin) history.goBack();
+      if (permission !== window._env_.REACT_APP_ADMIN_ROLE) history.goBack();
     };
 
     PermissionCheck();

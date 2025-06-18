@@ -1,18 +1,16 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 import { get } from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
-import SecretsHandler from "../../secretsHandler";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { EmployeeRegisterContainer, Form } from "./styled";
 
 export function EmployeeRegister() {
-  const getAdmin = SecretsHandler("admin");
-
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -26,7 +24,7 @@ export function EmployeeRegister() {
 
   useEffect(() => {
     const PermissionCheck = () => {
-      if (permission !== getAdmin) history.goBack();
+      if (permission !== window._env_.REACT_APP_ADMIN_ROLE) history.goBack();
     };
 
     PermissionCheck();
