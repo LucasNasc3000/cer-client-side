@@ -10,14 +10,18 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:alpine as production
+
+COPY --from=builder /app/build /usr/share/nginx/html
+
+COPY ./entrypoint.sh /docker-entrypoint.sh
+
+RUN chmod +x /docker-entrypoint.sh
 
 RUN rm /etc/nginx/conf.d/default.conf
 
 COPY mainconfig.conf /etc/nginx/conf.d/mainconfig.conf
 
-COPY --from=builder /app/build /usr/share/nginx/html
-
 EXPOSE 80
 
-CMD [ "nginx", "-g", "daemon off;" ]
+CMD [ "/docker-entrypoint.sh" ]
