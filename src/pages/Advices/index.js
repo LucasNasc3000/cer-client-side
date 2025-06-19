@@ -2,7 +2,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable camelcase */
 import { get } from "lodash";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";

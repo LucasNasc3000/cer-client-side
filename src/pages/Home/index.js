@@ -6,7 +6,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";

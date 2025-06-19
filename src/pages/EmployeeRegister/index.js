@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { get } from "lodash";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
