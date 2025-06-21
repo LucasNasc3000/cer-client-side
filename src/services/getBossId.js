@@ -7,6 +7,7 @@ export default async function GetBossId(headerid, email) {
       const bossData = await axios.get(`/employees/search/email/${email}`);
 
       const { id } = bossData.data;
+      // id aqui
       return id;
     }
     const employeeData = await axios.get(`/employees/search/email/${email}`);
