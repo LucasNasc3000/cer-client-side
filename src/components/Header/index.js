@@ -21,7 +21,7 @@ export default function Header() {
     return(
         <MainHeader>
           {
-            permissison === window._env_.REACT_APP_ADMIN_ROLE ? (
+            permissison === process.env.REACT_APP_ADMIN_ROLE ? (
               <>
                 <Link to="/home" class="home">
                   Dashboard
@@ -53,7 +53,7 @@ export default function Header() {
             )
           }
           {
-            permissison === window._env_.REACT_APP_OUTPUTS ? (
+            permissison === process.env.REACT_APP_OUTPUTS ? (
               <>
                 <Link to="/outputs" class="outputs">
                   Saídas
@@ -70,7 +70,7 @@ export default function Header() {
             )
           }
           {
-            permissison === window._env_.REACT_APP_INPUTS ? (
+            permissison === process.env.REACT_APP_INPUTS ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -87,7 +87,7 @@ export default function Header() {
             )
           }
           {
-            permissison === window._env_.REACT_APP_IOUT ? (
+            permissison === process.env.REACT_APP_IOUT ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -107,7 +107,7 @@ export default function Header() {
             )
           }
           {
-            permissison === window._env_.REACT_APP_SALES ? (
+            permissison === process.env.REACT_APP_SALES ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -127,7 +127,7 @@ export default function Header() {
             )
           }
           {
-            permissison === window._env_.REACT_APP_SOUT ? (
+            permissison === process.env.REACT_APP_SOUT ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -150,7 +150,7 @@ export default function Header() {
             )
           }
           {
-            permissison === window._env_.REACT_APP_SIOUT ? (
+            permissison === process.env.REACT_APP_SIOUT ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas

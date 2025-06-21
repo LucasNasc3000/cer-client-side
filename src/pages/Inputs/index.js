@@ -45,10 +45,10 @@ export default function Inputs() {
   useEffect(() => {
     const PermissionCheck = () => {
       if (
-        permissionlStored !== window._env_.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== window._env_.REACT_APP_INPUTS &&
-        permissionlStored !== window._env_.REACT_APP_IOUT &&
-        permissionlStored !== window._env_.REACT_APP_SIOUT
+        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== process.env.REACT_APP_INPUTS &&
+        permissionlStored !== process.env.REACT_APP_IOUT &&
+        permissionlStored !== process.env.REACT_APP_SIOUT
       )
         history.goBack();
     };

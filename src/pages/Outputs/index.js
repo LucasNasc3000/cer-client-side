@@ -44,11 +44,11 @@ export default function Outputs() {
   useEffect(() => {
     const PermissionCheck = () => {
       if (
-        permissionlStored !== window._env_.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== window._env_.REACT_APP_OUTPUTS &&
-        permissionlStored !== window._env_.REACT_APP_IOUT &&
-        permissionlStored !== window._env_.REACT_APP_SOUT &&
-        permissionlStored !== window._env_.REACT_APP_SIOUT
+        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== process.env.REACT_APP_OUTPUTS &&
+        permissionlStored !== process.env.REACT_APP_IOUT &&
+        permissionlStored !== process.env.REACT_APP_SOUT &&
+        permissionlStored !== process.env.REACT_APP_SIOUT
       )
         history.goBack();
     };

@@ -2,5 +2,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://storagemanagerapi.com.br",
+  baseURL: "https://grid-stock.com.br/api",
 });

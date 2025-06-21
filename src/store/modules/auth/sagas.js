@@ -25,7 +25,7 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
 
-  if (payload.auth.permission !== window._env_.REACT_APP_ADMIN_ROLE) {
+  if (payload.auth.permission !== process.env.REACT_APP_ADMIN_ROLE) {
     axios.defaults.headers.headerid = payload.auth.headerid;
   }
 }
@@ -43,7 +43,7 @@ function* loginRequest({ payload }) {
     axios.defaults.headers.adminpassword = payload.adminpassword;
     axios.defaults.headers.permission = payload.permission;
 
-    if (payload.permission !== window._env_.REACT_APP_ADMIN_ROLE) {
+    if (payload.permission !== process.env.REACT_APP_ADMIN_ROLE) {
       axios.defaults.headers.headerid = response.data.employee.id;
     }
 
@@ -51,31 +51,31 @@ function* loginRequest({ payload }) {
 
     // eslint-disable-next-line default-case
     switch (permission) {
-      case window._env_.REACT_APP_ADMIN_ROLE:
+      case process.env.REACT_APP_ADMIN_ROLE:
         history.push("/home");
         break;
 
-      case window._env_.REACT_APP_INPUTS:
+      case process.env.REACT_APP_INPUTS:
         history.push("/inputs");
         break;
 
-      case window._env_.REACT_APP_OUTPUTS:
+      case process.env.REACT_APP_OUTPUTS:
         history.push("/outputs");
         break;
 
-      case window._env_.REACT_APP_SALES:
+      case process.env.REACT_APP_SALES:
         history.push("/sales");
         break;
 
-      case window._env_.REACT_APP_IOUT:
+      case process.env.REACT_APP_IOUT:
         history.push("/inputs");
         break;
 
-      case window._env_.REACT_APP_SOUT:
+      case process.env.REACT_APP_SOUT:
         history.push("/outputs");
         break;
 
-      case window._env_.REACT_APP_SIOUT:
+      case process.env.REACT_APP_SIOUT:
         history.push("/sales");
         break;
     }

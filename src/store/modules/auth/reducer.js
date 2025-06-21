@@ -23,7 +23,7 @@ export default function (state = initialState, action) {
       newState.isLoggedIn = true;
       newState.token = action.payload.token;
 
-      if (newState.permission !== window._env_.REACT_APP_ADMIN_ROLE) {
+      if (newState.permission !== process.env.REACT_APP_ADMIN_ROLE) {
         newState.headerid = action.payload.employee.id;
       }
 

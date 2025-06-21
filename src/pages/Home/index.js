@@ -31,7 +31,7 @@ export default function Home() {
 
   useEffect(() => {
     const PermissionCheck = () => {
-      if (permission !== window._env_.REACT_APP_ADMIN_ROLE) history.goBack();
+      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
     };
 
     PermissionCheck();

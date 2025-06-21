@@ -36,10 +36,10 @@ export default function Advices() {
   useEffect(() => {
     const PermissionCheck = () => {
       if (
-        permissionlStored !== window._env_.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== window._env_.REACT_APP_SALES &&
-        permissionlStored !== window._env_.REACT_APP_SOUT &&
-        permissionlStored !== window._env_.REACT_APP_SIOUT
+        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
+        permissionlStored !== process.env.REACT_APP_SALES &&
+        permissionlStored !== process.env.REACT_APP_SOUT &&
+        permissionlStored !== process.env.REACT_APP_SIOUT
       )
         history.goBack();
     };
