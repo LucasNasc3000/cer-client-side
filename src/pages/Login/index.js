@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { get } from "lodash";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import * as actions from "../../store/modules/auth/actions";

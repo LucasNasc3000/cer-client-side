@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from "react";
 import { Switch } from "react-router-dom";
 
 import Advices from "../pages/Advices";
