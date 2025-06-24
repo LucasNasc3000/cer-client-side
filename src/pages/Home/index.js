@@ -33,8 +33,6 @@ export default function Home() {
     const PermissionCheck = () => {
       if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
     };
-    console.log(process.env.REACT_APP_ADMIN_ROLE);
-    console.log(permission);
 
     PermissionCheck();
   }, []);

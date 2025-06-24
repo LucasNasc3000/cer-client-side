@@ -13,7 +13,8 @@ export default createGlobalStyle`
 
   body {
     font-family: sans-serif;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: auto;
     background: #DCDCDC;
     color: ${colors.primaryDarkColor};
   }

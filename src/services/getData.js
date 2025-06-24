@@ -36,17 +36,14 @@ export default async function GetData(bossId, path, employee_id, permission) {
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
     if (permission === process.env.REACT_APP_ADMIN_ROLE) {
       const bossOwnRegisters = await PathCheck(path, employee_id);
-      console.log(bossOwnRegisters);
       joinData.push(...bossOwnRegisters.data);
     } else {
       const bossRegisters = await PathCheck(path, bossId);
       joinData.push(...bossRegisters.data);
     }
-    console.log(joinData);
 
     return joinData;
   } catch (err) {
-    console.log(err);
     // eslint-disable-next-line consistent-return
     if (typeof err.response.data === "string") return;
 
