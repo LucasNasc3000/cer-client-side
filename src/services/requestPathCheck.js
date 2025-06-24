@@ -12,6 +12,7 @@ export default async function PathCheck(path, employeesId) {
         employeeidBody: employeesId,
         forListInputs: true,
       });
+      console.log(registersBy);
 
       return registersBy;
     }

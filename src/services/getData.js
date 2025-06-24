@@ -17,18 +17,20 @@ export default async function GetData(bossId, path, employee_id, permission) {
       `/employees/search/boss/${bossId}`
     );
 
-    const employeesIds = getEmployeesByBoss.data.map((employees) => {
-      return employees.id;
-    });
+    if (getEmployeesByBoss.length < 1) {
+      const employeesIds = getEmployeesByBoss.data.map((employees) => {
+        return employees.id;
+      });
 
-    for (let i = 0; i < employeesIds.length; i++) {
-      const registers = await PathCheck(path, employeesIds[i]);
-      if (registers.data) rawData.push(registers.data);
-    }
+      for (let i = 0; i < employeesIds.length; i++) {
+        const registers = await PathCheck(path, employeesIds[i]);
+        if (registers.data) rawData.push(registers.data);
+      }
 
-    for (let i = 0; i < rawData.length; i++) {
-      const join = allData.concat(rawData[i]);
-      joinData.push(...join);
+      for (let i = 0; i < rawData.length; i++) {
+        const join = allData.concat(rawData[i]);
+        joinData.push(...join);
+      }
     }
 
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
