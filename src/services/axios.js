@@ -2,5 +2,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://grid-stock.com.br/api",
+  baseURL: "http://localhost:3333",
 });
