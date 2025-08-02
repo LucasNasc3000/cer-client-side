@@ -141,6 +141,7 @@ export default function Inputs() {
     console.log(element);
 
     element.value = data.type;
+    element.focus();
 
     // setInputId(idParam);
     // setType(data.type);

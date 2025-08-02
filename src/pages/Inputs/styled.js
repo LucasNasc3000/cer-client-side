@@ -106,33 +106,33 @@ export const InputsSpace = styled.div`
   left: 360px;
 
   .main-data-div {
-    background-color: #4f4f4f;
+    background-color: white;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
     height: 440px;
-    width: 450px;
-    margin-top: 10px;
+    width: 490px;
+    margin-top: 25px;
     margin-left: 90px;
-    border-radius: 8px;
+    border-radius: 10px;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
   .data-div {
     display: flex;
-    background-color: #a5a4a4ff;
+    background-color: #dad7d7ff;
     color: black;
     width: 170px;
-    height: 37px;
+    height: 38px;
     border-radius: 8px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     left: 110px;
-    margin-top: 1px;
+    margin-top: 0px;
     border: none;
     font-size: 16px;
     font-family:
@@ -151,7 +151,11 @@ export const InputsSpace = styled.div`
   }
 
   .data-wrap {
-    margin-top: 10px;
+    position: relative;
+    margin-top: 40px;
+    margin-left: 20px;
+    bottom: 360px;
+    right: 10px;
     display: flex;
     background-color: #666565ff;
     height: fit-content;
@@ -161,9 +165,13 @@ export const InputsSpace = styled.div`
 
   .label {
     display: flex;
-    margin-top: 10px;
+    position: relative;
+    margin-top: 55px;
+    margin-left: 62px;
+    bottom: 15px;
+    color: black;
+    right: 50px;
     width: 170px;
-    color: #fff;
     font-size: 17px;
     font-family:
       system-ui,
@@ -194,7 +202,7 @@ export const InputsSpace = styled.div`
     width: 43px;
     justify-content: center;
     align-items: center;
-    background-color: #666565ff;
+    background-color: #dad7d7ff;
     padding: 10px;
     border-radius: 8px;
     margin-top: 0px;
@@ -210,6 +218,19 @@ export const InputsSpace = styled.div`
 
   .data-div::placeholder {
     color: black;
+    font-size: 15px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
   }
 
   .edit-icon:hover {
@@ -229,7 +250,7 @@ export const NewInput = styled.div`
   width: fit-content;
 
   input {
-    background-color: #dcdcdc;
+    background-color: #f5f4f4ff;
     height: 30px;
     width: 170px;
     margin-top: 15px;
