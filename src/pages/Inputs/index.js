@@ -325,15 +325,6 @@ export default function Inputs() {
           ? inputsData.map((input) => {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
-                  <div className="edit">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id, input)}
-                    >
-                      <GoPencil />
-                    </button>
-                  </div>
                   <div className="label">Tipo: </div>
                   <div className="label">Nome: </div>
                   <div className="label">Quantidade: </div>
@@ -344,13 +335,13 @@ export default function Inputs() {
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="test">
+                  <div className="data-wrap">
                     <button
                       type="button"
                       className="edit-icon"
                       onClick={(e) => SetInputs(e, input.id + 1, input)}
                     >
-                      <GoPencil />
+                      <GoPencil size={30} className="pencil" />
                     </button>
                     <input
                       type="text"
@@ -359,15 +350,141 @@ export default function Inputs() {
                       placeholder={input.type}
                     />
                   </div>
-                  <div className="data-div">{input.name}</div>
-                  <div className="data-div">{input.quantity}</div>
-                  <div className="data-div">{input.totalweight}</div>
-                  <div className="data-div">{input.weightperunit}</div>
-                  <div className="data-div">{input.supplier}</div>
-                  <div className="data-div">{input.expirationdate}</div>
-                  <div className="data-div">{input.minimun_quantity}</div>
-                  <div className="data-div">{input.rateisnear}</div>
-                  <div className="data-div">{input.employee_id}</div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.name}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.quantity}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.totalweight}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.weightperunit}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.supplier}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.expirationdate}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.minimun_quantity}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.rateisnear}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil size={35} className="pencil" />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.employee_id}
+                    />
+                  </div>
                 </div>
               );
             })

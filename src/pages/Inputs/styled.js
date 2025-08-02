@@ -108,7 +108,10 @@ export const InputsSpace = styled.div`
   .main-data-div {
     background-color: #4f4f4f;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    flex-shrink: 0;
     height: 440px;
     width: 450px;
     margin-top: 10px;
@@ -120,13 +123,17 @@ export const InputsSpace = styled.div`
   }
 
   .data-div {
-    position: relative;
+    display: flex;
     background-color: #a5a4a4ff;
     color: black;
     width: 170px;
-    bottom: 222px;
+    height: 37px;
+    border-radius: 8px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     left: 110px;
-    margin-top: 10px;
+    margin-top: 1px;
+    border: none;
     font-size: 16px;
     font-family:
       system-ui,
@@ -143,11 +150,17 @@ export const InputsSpace = styled.div`
     text-align: center;
   }
 
+  .data-wrap {
+    margin-top: 10px;
+    display: flex;
+    background-color: #666565ff;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 8px;
+  }
+
   .label {
     display: flex;
-    position: relative;
-    right: 120px;
-    top: 109px;
     margin-top: 10px;
     width: 170px;
     color: #fff;
@@ -167,23 +180,36 @@ export const InputsSpace = styled.div`
     word-break: keep-all;
   }
 
-  .edit {
+  /* .edit {
     display: flex;
-    position: relative;
     top: 522px;
     left: 30px;
     width: fit-content;
-  }
+  } */
 
   .edit-icon {
-    position: relative;
     color: white;
     display: flex;
-    height: 35px;
-    width: 100px;
+    height: 38px;
+    width: 43px;
     justify-content: center;
     align-items: center;
-    left: -30px;
+    background-color: #666565ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  .pencil {
+    display: flex;
+    color: white;
+    padding: -2px;
+  }
+
+  .data-div::placeholder {
+    color: black;
   }
 
   .edit-icon:hover {
