@@ -114,7 +114,7 @@ export const MainHeader = styled.nav`
   }
 
   .logout-btn {
-    background-color: #666565ff;
+    background-color: #a5a4a4ff;
     display: flex;
     position: relative;
     top: 100px;

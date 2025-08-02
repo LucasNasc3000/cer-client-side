@@ -121,12 +121,12 @@ export const InputsSpace = styled.div`
 
   .data-div {
     position: relative;
+    background-color: #a5a4a4ff;
     color: black;
     width: 170px;
     bottom: 222px;
     left: 110px;
     margin-top: 10px;
-    color: #fff;
     font-size: 16px;
     font-family:
       system-ui,
@@ -141,7 +141,6 @@ export const InputsSpace = styled.div`
       "Helvetica Neue",
       sans-serif;
     text-align: center;
-    border-bottom: 0.5px solid white;
   }
 
   .label {
@@ -166,7 +165,6 @@ export const InputsSpace = styled.div`
       "Helvetica Neue",
       sans-serif;
     word-break: keep-all;
-    border-bottom: 0.5px solid white;
   }
 
   .edit {

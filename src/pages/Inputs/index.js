@@ -4,6 +4,7 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { GoPencil } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -105,6 +106,8 @@ export default function Inputs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
+  console.log(type);
+
   useEffect(() => {
     if (rerender === true) GetInputs();
     setReRender(false);
@@ -134,16 +137,21 @@ export default function Inputs() {
   const SetInputs = (e, idParam, data) => {
     e.preventDefault();
 
-    setInputId(idParam);
-    setType(data.type);
-    setName(data.name);
-    setInterQuantity(String(data.quantity));
-    setInterTotalWeight(String(data.totalweight));
-    setInterWeightPerUnit(String(data.weightperunit));
-    setSupplier(data.supplier);
-    setExpirationDate(data.expirationdate);
-    setInterMinimunQuantity(String(data.minimun_quantity));
-    setInterRateIsNear(String(data.rateisnear));
+    const element = document.getElementById(String(idParam));
+    console.log(element);
+
+    element.value = data.type;
+
+    // setInputId(idParam);
+    // setType(data.type);
+    // setName(data.name);
+    // setInterQuantity(String(data.quantity));
+    // setInterTotalWeight(String(data.totalweight));
+    // setInterWeightPerUnit(String(data.weightperunit));
+    // setSupplier(data.supplier);
+    // setExpirationDate(data.expirationdate);
+    // setInterMinimunQuantity(String(data.minimun_quantity));
+    // setInterRateIsNear(String(data.rateisnear));
   };
 
   async function SearchInputs(e) {
@@ -316,14 +324,14 @@ export default function Inputs() {
         {searchResults.length < 1
           ? inputsData.map((input) => {
               return (
-                <div key={input.id} className="main-data-div">
+                <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="edit">
                     <button
                       type="button"
                       className="edit-icon"
                       onClick={(e) => SetInputs(e, input.id, input)}
                     >
-                      Editar
+                      <GoPencil />
                     </button>
                   </div>
                   <div className="label">Tipo: </div>
@@ -336,7 +344,21 @@ export default function Inputs() {
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="data-div">{input.type}</div>
+                  <div className="test">
+                    <button
+                      type="button"
+                      className="edit-icon"
+                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                    >
+                      <GoPencil />
+                    </button>
+                    <input
+                      type="text"
+                      className="data-div"
+                      id={input.id + 1}
+                      placeholder={input.type}
+                    />
+                  </div>
                   <div className="data-div">{input.name}</div>
                   <div className="data-div">{input.quantity}</div>
                   <div className="data-div">{input.totalweight}</div>

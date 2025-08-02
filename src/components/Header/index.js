@@ -19,8 +19,14 @@ export default function Header() {
   const logout = (e) => {
     e.preventDefault();
 
-    dispatch(actions.loginFailure());
-    history.push("/");
+    // eslint-disable-next-line no-restricted-globals
+    const logoutClick = confirm("Deseja mesmo sair?")
+
+    if (logoutClick === true) {
+      dispatch(actions.loginFailure());
+      history.push("/");
+    }
+
   };
 
     return(
