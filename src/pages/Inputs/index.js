@@ -125,6 +125,18 @@ export default function Inputs() {
     setInterRateIsNear(0);
     searchInput.value = "";
     setSearchResults([]);
+
+    const dataInputs = document.querySelectorAll(".data-div");
+    const dataInputRateIsNear = document.querySelector(".data-div-rin");
+
+    console.log(dataInputRateIsNear);
+
+    dataInputRateIsNear.value = "";
+
+    dataInputs.forEach((dataDiv) => {
+      // eslint-disable-next-line no-param-reassign
+      dataDiv.value = "";
+    });
   };
 
   const clear = (e) => {
@@ -143,46 +155,55 @@ export default function Inputs() {
     switch (fieldName) {
       case "type":
         element.value = data.type;
+        element.readOnly = false;
         setType(data.type);
         break;
 
       case "name":
         element.value = data.name;
+        element.readOnly = false;
         setName(data.name);
         break;
 
       case "quantity":
         element.value = data.quantity;
+        element.readOnly = false;
         setInterQuantity(String(data.quantity));
         break;
 
       case "totalweight":
         element.value = data.totalweight;
+        element.readOnly = false;
         setInterTotalWeight(String(data.totalweight));
         break;
 
       case "weightperunit":
         element.value = data.weightperunit;
+        element.readOnly = false;
         setInterWeightPerUnit(String(data.weightperunit));
         break;
 
       case "supplier":
         element.value = data.supplier;
+        element.readOnly = false;
         setSupplier(data.supplier);
         break;
 
       case "expirationdate":
         element.value = data.expirationdate;
+        element.readOnly = false;
         setExpirationDate(data.expirationdate);
         break;
 
       case "minimunQuantity":
         element.value = data.minimun_quantity;
+        element.readOnly = false;
         setInterMinimunQuantity(String(data.minimun_quantity));
         break;
 
       case "rateIsNear":
         element.value = data.rateisnear;
+        element.readOnly = false;
         setInterRateIsNear(String(data.rateisnear));
         break;
 
@@ -387,6 +408,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 1}
                       placeholder={input.type}
                     />
@@ -402,6 +424,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 2}
                       placeholder={input.name}
                     />
@@ -419,6 +442,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 3}
                       placeholder={input.quantity}
                     />
@@ -436,6 +460,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 4}
                       placeholder={input.totalweight}
                     />
@@ -453,6 +478,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 5}
                       placeholder={input.weightperunit}
                     />
@@ -470,6 +496,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 6}
                       placeholder={input.supplier}
                     />
@@ -487,6 +514,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
+                      readOnly
                       id={input.id + 7}
                       placeholder={input.expirationdate}
                     />
@@ -505,6 +533,7 @@ export default function Inputs() {
                       type="text"
                       className="data-div"
                       id={input.id + 8}
+                      readOnly
                       placeholder={input.minimun_quantity}
                     />
                   </div>
@@ -520,26 +549,19 @@ export default function Inputs() {
                     </button>
                     <input
                       type="text"
-                      className="data-div"
+                      className="data-div-rin"
                       id={input.id + 9}
+                      readOnly
                       placeholder={input.rateisnear}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 10, input, "employeeId")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
                       type="text"
-                      className="data-div"
+                      className="data-div-eid"
                       id={input.id + 10}
-                      placeholder={input.employee_id}
+                      readOnly
+                      value={input.employee_id}
                     />
                   </div>
                   <button
@@ -552,7 +574,7 @@ export default function Inputs() {
                   <button
                     type="button"
                     className="cancel-changes"
-                    onClick={(e) => IdVerify(e)}
+                    onClick={(e) => clear(e)}
                   >
                     Cancelar
                   </button>

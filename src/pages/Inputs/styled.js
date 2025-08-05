@@ -157,10 +157,56 @@ export const InputsSpace = styled.div`
     bottom: 360px;
     right: 10px;
     display: flex;
-    background-color: #666565ff;
     height: fit-content;
     width: fit-content;
     border-radius: 8px;
+  }
+
+  .data-div-rin {
+    display: flex;
+    background-color: #dad7d7ff;
+    border: none;
+    width: 170px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 16px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    text-align: center;
+  }
+
+  .data-div-eid {
+    display: flex;
+    background-color: #dad7d7ff;
+    border: none;
+    width: 210px;
+    height: 39px;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-size: 11px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    text-align: center;
   }
 
   .label {
@@ -242,6 +288,38 @@ export const InputsSpace = styled.div`
   .data-div::placeholder {
     color: black;
     font-size: 15px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .data-div-eid::placeholder {
+    color: black;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .data-div-rin::placeholder {
+    color: black;
     font-family:
       system-ui,
       -apple-system,
