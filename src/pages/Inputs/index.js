@@ -106,8 +106,6 @@ export default function Inputs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
-  console.log(type);
-
   useEffect(() => {
     if (rerender === true) GetInputs();
     setReRender(false);
@@ -134,25 +132,67 @@ export default function Inputs() {
     clearDirectExecution();
   };
 
-  const SetInputs = (e, idParam, data) => {
+  const SetInputs = (e, idParam, data, fieldName) => {
     e.preventDefault();
 
+    setInputId(data.id);
+
     const element = document.getElementById(String(idParam));
-    console.log(element);
 
-    element.value = data.type;
+    // eslint-disable-next-line default-case
+    switch (fieldName) {
+      case "type":
+        element.value = data.type;
+        setType(data.type);
+        break;
+
+      case "name":
+        element.value = data.name;
+        setName(data.name);
+        break;
+
+      case "quantity":
+        element.value = data.quantity;
+        setInterQuantity(String(data.quantity));
+        break;
+
+      case "totalweight":
+        element.value = data.totalweight;
+        setInterTotalWeight(String(data.totalweight));
+        break;
+
+      case "weightperunit":
+        element.value = data.weightperunit;
+        setInterWeightPerUnit(String(data.weightperunit));
+        break;
+
+      case "supplier":
+        element.value = data.supplier;
+        setSupplier(data.supplier);
+        break;
+
+      case "expirationdate":
+        element.value = data.expirationdate;
+        setExpirationDate(data.expirationdate);
+        break;
+
+      case "minimunQuantity":
+        element.value = data.minimun_quantity;
+        setInterMinimunQuantity(String(data.minimun_quantity));
+        break;
+
+      case "rateIsNear":
+        element.value = data.rateisnear;
+        setInterRateIsNear(String(data.rateisnear));
+        break;
+
+      case "employeeId":
+        element.value = data.employee_id;
+        setEmployeeId(data.employee_id);
+        break;
+    }
+
     element.focus();
-
-    // setInputId(idParam);
-    // setType(data.type);
-    // setName(data.name);
-    // setInterQuantity(String(data.quantity));
-    // setInterTotalWeight(String(data.totalweight));
-    // setInterWeightPerUnit(String(data.weightperunit));
-    // setSupplier(data.supplier);
-    // setExpirationDate(data.expirationdate);
-    // setInterMinimunQuantity(String(data.minimun_quantity));
-    // setInterRateIsNear(String(data.rateisnear));
   };
 
   async function SearchInputs(e) {
@@ -340,7 +380,7 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) => SetInputs(e, input.id + 1, input, "type")}
                     >
                       <GoPencil size={30} className="pencil" />
                     </button>
@@ -355,14 +395,14 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) => SetInputs(e, input.id + 2, input, "name")}
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 2}
                       placeholder={input.name}
                     />
                   </div>
@@ -370,14 +410,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 3, input, "quantity")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 3}
                       placeholder={input.quantity}
                     />
                   </div>
@@ -385,14 +427,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 4, input, "totalweight")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 4}
                       placeholder={input.totalweight}
                     />
                   </div>
@@ -400,14 +444,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 5, input, "weightperunit")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 5}
                       placeholder={input.weightperunit}
                     />
                   </div>
@@ -415,14 +461,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 6, input, "supplier")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 6}
                       placeholder={input.supplier}
                     />
                   </div>
@@ -430,14 +478,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 7, input, "expirationdate")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 7}
                       placeholder={input.expirationdate}
                     />
                   </div>
@@ -445,14 +495,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 8, input, "minimunQuantity")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 8}
                       placeholder={input.minimun_quantity}
                     />
                   </div>
@@ -460,14 +512,16 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 9, input, "rateisnear")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 9}
                       placeholder={input.rateisnear}
                     />
                   </div>
@@ -475,17 +529,33 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input)}
+                      onClick={(e) =>
+                        SetInputs(e, input.id + 10, input, "employeeId")
+                      }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
                       className="data-div"
-                      id={input.id + 1}
+                      id={input.id + 10}
                       placeholder={input.employee_id}
                     />
                   </div>
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => IdVerify(e)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => IdVerify(e)}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               );
             })

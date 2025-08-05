@@ -112,7 +112,7 @@ export const InputsSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 440px;
+    height: 530px;
     width: 490px;
     margin-top: 25px;
     margin-left: 90px;
@@ -196,7 +196,6 @@ export const InputsSpace = styled.div`
   } */
 
   .edit-icon {
-    color: white;
     display: flex;
     height: 38px;
     width: 43px;
@@ -212,8 +211,32 @@ export const InputsSpace = styled.div`
 
   .pencil {
     display: flex;
-    color: white;
+    color: #575757ff;
     padding: -2px;
+  }
+
+  .confirm-changes {
+    display: flex;
+    position: relative;
+    background-color: #a5a4a4ff;
+    bottom: 305px;
+    width: 120px;
+    right: 20px;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
+  .cancel-changes {
+    display: flex;
+    position: relative;
+    background-color: #a5a4a4ff;
+    bottom: 305px;
+    width: 120px;
+    left: 20px;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
   }
 
   .data-div::placeholder {
