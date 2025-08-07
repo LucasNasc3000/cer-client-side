@@ -41,8 +41,6 @@ export default function Inputs() {
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
 
-  let toUpdateData = {};
-
   useEffect(() => {
     const PermissionCheck = () => {
       if (
@@ -137,6 +135,11 @@ export default function Inputs() {
     });
   };
 
+  useEffect(() => {
+    console.log(type);
+    console.log(name);
+  }, [type, name, interquantity]);
+
   const clear = (e) => {
     e.preventDefault();
     clearDirectExecution();
@@ -160,7 +163,7 @@ export default function Inputs() {
 
     const element = document.getElementById(String(idParam));
 
-    toUpdateData = { ...data };
+    SetValues(data);
 
     // eslint-disable-next-line default-case
     switch (fieldName) {
@@ -232,21 +235,50 @@ export default function Inputs() {
     return;
   }
 
-  const PreUpdate = (e) => {
-    e.preventDefault();
+  const ElementNameVerify = async (elementData) => {
+    const input = document.getElementById(String(elementData.id));
 
-    SetValues(toUpdateData);
+    // eslint-disable-next-line default-case
+    switch (true) {
+      case elementData.name === "type":
+        setType(elementData.value);
+        input.value = elementData.value;
+        break;
+      case elementData.name === "name":
+        setName(elementData.value);
+        input.value = elementData.value;
+        break;
+      case elementData.name === "quantity":
+        setInterQuantity(elementData.value);
+        input.value = elementData.value;
+        break;
+    }
+  };
 
+  const PreUpdate = async () => {
+    const elementData = [];
     const all = document.querySelectorAll(".data-div");
 
     all.forEach((element) => {
       if (element.value) {
+        elementData.push({
+          id: element.id,
+          name: element.name,
+          value: element.value,
+        });
       }
     });
+
+    for (let i = 0; i < elementData.length; i++) {
+      ElementNameVerify(elementData[i]);
+    }
   };
 
   const InputUpdate = async (e) => {
     e.preventDefault();
+
+    await PreUpdate();
+    console.log(type);
 
     const data = {
       type,
@@ -261,11 +293,17 @@ export default function Inputs() {
       interrateisnear,
     };
 
+    console.log(data);
+
     // const update = await Update(inputId, data, "inputs");
     // setReRender(update);
 
     // clearDirectExecution();
   };
+
+  console.log(type);
+  console.log(name);
+  console.log(interquantity);
 
   const InputRegister = async (e) => {
     e.preventDefault();
@@ -577,7 +615,7 @@ export default function Inputs() {
                   <button
                     type="button"
                     className="confirm-changes"
-                    onClick={(e) => PreUpdate(e)}
+                    onClick={(e) => InputUpdate(e)}
                   >
                     Salvar
                   </button>
