@@ -100,7 +100,7 @@ export const InputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 700px;
+  bottom: 705px;
   height: 500px;
   width: 620px;
   left: 360px;
@@ -112,10 +112,10 @@ export const InputsSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 530px;
-    width: 490px;
+    height: 515px;
+    width: 515px;
     margin-top: 25px;
-    margin-left: 90px;
+    margin-left: 70px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -265,7 +265,7 @@ export const InputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 305px;
+    bottom: 320px;
     width: 120px;
     right: 20px;
     justify-content: center;
@@ -277,7 +277,7 @@ export const InputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 305px;
+    bottom: 320px;
     width: 120px;
     left: 20px;
     justify-content: center;
@@ -345,7 +345,7 @@ export const NewInput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1205px;
+  bottom: 1195px;
   left: 1160px;
   height: fit-content;
   width: fit-content;
@@ -354,7 +354,7 @@ export const NewInput = styled.div`
     background-color: #f5f4f4ff;
     height: 30px;
     width: 170px;
-    margin-top: 15px;
+    margin-top: 10px;
     border-top: none;
     border-left: none;
     border-right: none;
@@ -362,6 +362,11 @@ export const NewInput = styled.div`
   }
 
   .btn {
+    display: flex;
+    position: relative;
+    top: 20px;
+    justify-content: center;
+    align-items: center;
     height: 40px;
     width: 120px;
     margin-top: 15px;

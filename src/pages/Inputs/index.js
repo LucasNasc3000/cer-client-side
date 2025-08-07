@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
@@ -14,7 +16,6 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import Update from "../../services/update";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
@@ -31,17 +32,16 @@ export default function Inputs() {
   const [expirationdate, setExpirationDate] = useState("");
   const [interminimun_quantity, setInterMinimunQuantity] = useState("");
   const [interrateisnear, setInterRateIsNear] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
   const [inputId, setInputId] = useState(0);
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line no-unused-vars
   const [inputsData, setInputsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+
+  let toUpdateData = {};
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -129,8 +129,6 @@ export default function Inputs() {
     const dataInputs = document.querySelectorAll(".data-div");
     const dataInputRateIsNear = document.querySelector(".data-div-rin");
 
-    console.log(dataInputRateIsNear);
-
     dataInputRateIsNear.value = "";
 
     dataInputs.forEach((dataDiv) => {
@@ -144,72 +142,71 @@ export default function Inputs() {
     clearDirectExecution();
   };
 
+  const SetValues = (dataObject) => {
+    setInputId(dataObject.id);
+    setType(dataObject.type);
+    setName(dataObject.name);
+    setInterQuantity(String(dataObject.quantity));
+    setInterTotalWeight(String(dataObject.totalweight));
+    setInterWeightPerUnit(String(dataObject.weightperunit));
+    setSupplier(dataObject.supplier);
+    setExpirationDate(dataObject.expirationdate);
+    setInterMinimunQuantity(String(dataObject.minimun_quantity));
+    setInterRateIsNear(String(dataObject.rateisnear));
+  };
+
   const SetInputs = (e, idParam, data, fieldName) => {
     e.preventDefault();
 
-    setInputId(data.id);
-
     const element = document.getElementById(String(idParam));
+
+    toUpdateData = { ...data };
 
     // eslint-disable-next-line default-case
     switch (fieldName) {
       case "type":
         element.value = data.type;
         element.readOnly = false;
-        setType(data.type);
         break;
 
       case "name":
         element.value = data.name;
         element.readOnly = false;
-        setName(data.name);
         break;
 
       case "quantity":
         element.value = data.quantity;
         element.readOnly = false;
-        setInterQuantity(String(data.quantity));
         break;
 
       case "totalweight":
         element.value = data.totalweight;
         element.readOnly = false;
-        setInterTotalWeight(String(data.totalweight));
         break;
 
       case "weightperunit":
         element.value = data.weightperunit;
         element.readOnly = false;
-        setInterWeightPerUnit(String(data.weightperunit));
         break;
 
       case "supplier":
         element.value = data.supplier;
         element.readOnly = false;
-        setSupplier(data.supplier);
         break;
 
       case "expirationdate":
         element.value = data.expirationdate;
         element.readOnly = false;
-        setExpirationDate(data.expirationdate);
         break;
 
       case "minimunQuantity":
         element.value = data.minimun_quantity;
         element.readOnly = false;
-        setInterMinimunQuantity(String(data.minimun_quantity));
         break;
 
       case "rateIsNear":
         element.value = data.rateisnear;
         element.readOnly = false;
-        setInterRateIsNear(String(data.rateisnear));
-        break;
-
-      case "employeeId":
-        element.value = data.employee_id;
-        setEmployeeId(data.employee_id);
         break;
     }
 
@@ -235,7 +232,22 @@ export default function Inputs() {
     return;
   }
 
-  const InputUpdate = async () => {
+  const PreUpdate = (e) => {
+    e.preventDefault();
+
+    SetValues(toUpdateData);
+
+    const all = document.querySelectorAll(".data-div");
+
+    all.forEach((element) => {
+      if (element.value) {
+      }
+    });
+  };
+
+  const InputUpdate = async (e) => {
+    e.preventDefault();
+
     const data = {
       type,
       name,
@@ -249,42 +261,31 @@ export default function Inputs() {
       interrateisnear,
     };
 
-    const update = await Update(inputId, data, "inputs");
-    setReRender(update);
+    // const update = await Update(inputId, data, "inputs");
+    // setReRender(update);
 
-    clearDirectExecution();
+    // clearDirectExecution();
   };
 
   const InputRegister = async (e) => {
     e.preventDefault();
 
     const data = {
-      type,
-      name,
-      interquantity,
-      intertotalweight,
-      interweightperunit,
-      supplier,
-      expirationdate,
-      employee_id,
-      interminimun_quantity,
-      interrateisnear,
+      type: document.querySelector("#type").value,
+      name: document.querySelector("#name").value,
+      interquantity: document.querySelector("#quantity").value,
+      intertotalweight: document.querySelector("#totalweight").value,
+      interweightperunit: document.querySelector("#weightperunit").value,
+      supplier: document.querySelector("#supplier").value,
+      expirationdate: document.querySelector("#expirationdate").value,
+      interminimun_quantity: document.querySelector("#minimunQuantity").value,
+      interrateisnear: document.querySelector("#rateisnear").value,
     };
 
     const register = await Register(data, "inputs");
     setReRender(register);
 
     clearDirectExecution();
-  };
-
-  const IdVerify = (e) => {
-    e.preventDefault();
-
-    if (inputId !== 0) {
-      InputUpdate();
-    } else {
-      InputRegister(e);
-    }
   };
 
   return (
@@ -407,6 +408,7 @@ export default function Inputs() {
                     </button>
                     <input
                       type="text"
+                      name="type"
                       className="data-div"
                       readOnly
                       id={input.id + 1}
@@ -422,6 +424,7 @@ export default function Inputs() {
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
+                      name="name"
                       type="text"
                       className="data-div"
                       readOnly
@@ -440,6 +443,7 @@ export default function Inputs() {
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
+                      name="quantity"
                       type="text"
                       className="data-div"
                       readOnly
@@ -458,6 +462,7 @@ export default function Inputs() {
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
+                      name="totalweight"
                       type="text"
                       className="data-div"
                       readOnly
@@ -476,6 +481,7 @@ export default function Inputs() {
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
+                      name="weightperunit"
                       type="text"
                       className="data-div"
                       readOnly
@@ -494,6 +500,7 @@ export default function Inputs() {
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
+                      name="supplier"
                       type="text"
                       className="data-div"
                       readOnly
@@ -512,6 +519,7 @@ export default function Inputs() {
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
+                      name="expirationdate"
                       type="text"
                       className="data-div"
                       readOnly
@@ -531,6 +539,7 @@ export default function Inputs() {
                     </button>
                     <input
                       type="text"
+                      name="minimunQuantity"
                       className="data-div"
                       id={input.id + 8}
                       readOnly
@@ -542,13 +551,14 @@ export default function Inputs() {
                       type="button"
                       className="edit-icon"
                       onClick={(e) =>
-                        SetInputs(e, input.id + 9, input, "rateisnear")
+                        SetInputs(e, input.id + 9, input, "rateIsNear")
                       }
                     >
                       <GoPencil size={35} className="pencil" />
                     </button>
                     <input
                       type="text"
+                      name="rateisnear"
                       className="data-div-rin"
                       id={input.id + 9}
                       readOnly
@@ -567,7 +577,7 @@ export default function Inputs() {
                   <button
                     type="button"
                     className="confirm-changes"
-                    onClick={(e) => IdVerify(e)}
+                    onClick={(e) => PreUpdate(e)}
                   >
                     Salvar
                   </button>
@@ -620,54 +630,63 @@ export default function Inputs() {
       <NewInput>
         <input
           type="text"
+          id="type"
           placeholder="Tipo ex: cereais"
           value={type}
           onChange={(e) => setType(e.target.value)}
         />
         <input
           type="text"
+          id="name"
           placeholder="Nome ex: arroz branco"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
+          id="quantity"
           placeholder="Quantidade ex: 25"
           value={interquantity}
           onChange={(e) => setInterQuantity(e.target.value)}
         />
         <input
           type="text"
+          id="totalweight"
           placeholder="Peso total ex: 10,50 (kg)"
           value={intertotalweight}
           onChange={(e) => setInterTotalWeight(e.target.value)}
         />
         <input
           type="text"
+          id="weightperunit"
           placeholder="Peso unitário ex: 1 (kg)"
           value={interweightperunit}
           onChange={(e) => setInterWeightPerUnit(e.target.value)}
         />
         <input
           type="text"
+          id="supplier"
           placeholder="Fornecedor ex: shopee"
           value={supplier}
           onChange={(e) => setSupplier(e.target.value)}
         />
         <input
           type="text"
+          id="expirationdate"
           placeholder="Validade ex: 25-03-2027"
           value={expirationdate}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
         <input
           type="text"
+          id="minimunQuantity"
           placeholder="quantidade mínima ex: 5"
           value={interminimun_quantity}
           onChange={(e) => setInterMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
+          id="rateisnear"
           placeholder="Próximo ao limite ex: 10"
           value={interrateisnear}
           onChange={(e) => setInterRateIsNear(e.target.value)}
@@ -675,7 +694,7 @@ export default function Inputs() {
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button type="button" className="btn" onClick={(e) => InputRegister(e)}>
           Adicionar
         </button>
       </NewInput>
