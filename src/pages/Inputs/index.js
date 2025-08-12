@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
@@ -6,7 +8,6 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { GoPencil } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -35,6 +36,7 @@ export default function Inputs() {
   const [searchParam, setSearchParam] = useState("");
   const [inputId, setInputId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
+  const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
@@ -97,6 +99,7 @@ export default function Inputs() {
     if (typeof inputs === "undefined" || !inputs) return;
 
     setInputsData(inputs);
+    setInputsDataBackup(inputs);
   }
 
   useEffect(() => {
@@ -121,99 +124,26 @@ export default function Inputs() {
     setExpirationDate("");
     setInterMinimunQuantity(0);
     setInterRateIsNear(0);
-    searchInput.value = "";
     setSearchResults([]);
-
-    const dataInputs = document.querySelectorAll(".data-div");
-    const dataInputRateIsNear = document.querySelector(".data-div-rin");
-
-    dataInputRateIsNear.value = "";
-
-    dataInputs.forEach((dataDiv) => {
-      // eslint-disable-next-line no-param-reassign
-      dataDiv.value = "";
-    });
+    setInputsData(inputsDataBackup);
+    searchInput.value = "";
   };
-
-  useEffect(() => {
-    console.log(type);
-    console.log(name);
-  }, [type, name, interquantity]);
 
   const clear = (e) => {
     e.preventDefault();
+
     clearDirectExecution();
   };
 
-  const SetValues = (dataObject) => {
-    setInputId(dataObject.id);
-    setType(dataObject.type);
-    setName(dataObject.name);
-    setInterQuantity(String(dataObject.quantity));
-    setInterTotalWeight(String(dataObject.totalweight));
-    setInterWeightPerUnit(String(dataObject.weightperunit));
-    setSupplier(dataObject.supplier);
-    setExpirationDate(dataObject.expirationdate);
-    setInterMinimunQuantity(String(dataObject.minimun_quantity));
-    setInterRateIsNear(String(dataObject.rateisnear));
-  };
+  const HandleChange = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
 
-  const SetInputs = (e, idParam, data, fieldName) => {
-    e.preventDefault();
-
-    const element = document.getElementById(String(idParam));
-
-    SetValues(data);
-
-    // eslint-disable-next-line default-case
-    switch (fieldName) {
-      case "type":
-        element.value = data.type;
-        element.readOnly = false;
-        break;
-
-      case "name":
-        element.value = data.name;
-        element.readOnly = false;
-        break;
-
-      case "quantity":
-        element.value = data.quantity;
-        element.readOnly = false;
-        break;
-
-      case "totalweight":
-        element.value = data.totalweight;
-        element.readOnly = false;
-        break;
-
-      case "weightperunit":
-        element.value = data.weightperunit;
-        element.readOnly = false;
-        break;
-
-      case "supplier":
-        element.value = data.supplier;
-        element.readOnly = false;
-        break;
-
-      case "expirationdate":
-        element.value = data.expirationdate;
-        element.readOnly = false;
-        break;
-
-      case "minimunQuantity":
-        element.value = data.minimun_quantity;
-        element.readOnly = false;
-        break;
-
-      case "rateIsNear":
-        element.value = data.rateisnear;
-        element.readOnly = false;
-        break;
-    }
-
-    element.focus();
+    setInputsData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
   };
 
   async function SearchInputs(e) {
@@ -235,75 +165,16 @@ export default function Inputs() {
     return;
   }
 
-  const ElementNameVerify = async (elementData) => {
-    const input = document.getElementById(String(elementData.id));
-
-    // eslint-disable-next-line default-case
-    switch (true) {
-      case elementData.name === "type":
-        setType(elementData.value);
-        input.value = elementData.value;
-        break;
-      case elementData.name === "name":
-        setName(elementData.value);
-        input.value = elementData.value;
-        break;
-      case elementData.name === "quantity":
-        setInterQuantity(elementData.value);
-        input.value = elementData.value;
-        break;
-    }
-  };
-
-  const PreUpdate = async () => {
-    const elementData = [];
-    const all = document.querySelectorAll(".data-div");
-
-    all.forEach((element) => {
-      if (element.value) {
-        elementData.push({
-          id: element.id,
-          name: element.name,
-          value: element.value,
-        });
-      }
-    });
-
-    for (let i = 0; i < elementData.length; i++) {
-      ElementNameVerify(elementData[i]);
-    }
-  };
-
-  const InputUpdate = async (e) => {
+  const InputUpdate = async (e, objectData) => {
     e.preventDefault();
 
-    await PreUpdate();
-    console.log(type);
-
-    const data = {
-      type,
-      name,
-      interquantity,
-      intertotalweight,
-      interweightperunit,
-      supplier,
-      expirationdate,
-      employee_id,
-      interminimun_quantity,
-      interrateisnear,
-    };
-
-    console.log(data);
+    console.log(objectData);
 
     // const update = await Update(inputId, data, "inputs");
     // setReRender(update);
 
     // clearDirectExecution();
   };
-
-  console.log(type);
-  console.log(name);
-  console.log(interquantity);
 
   const InputRegister = async (e) => {
     e.preventDefault();
@@ -437,181 +308,90 @@ export default function Inputs() {
                   <div className="label">Próximo ao limite: </div>
                   <div className="label">Funcionário: </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 1, input, "type")}
-                    >
-                      <GoPencil size={30} className="pencil" />
-                    </button>
                     <input
                       type="text"
                       name="type"
                       className="data-div"
-                      readOnly
-                      id={input.id + 1}
-                      placeholder={input.type}
+                      value={input.type}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id + 2, input, "name")}
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
+                      type="text"
                       name="name"
-                      type="text"
                       className="data-div"
-                      readOnly
-                      id={input.id + 2}
-                      placeholder={input.name}
+                      value={input.name}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 3, input, "quantity")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
+                      type="text"
                       name="quantity"
-                      type="text"
                       className="data-div"
-                      readOnly
-                      id={input.id + 3}
-                      placeholder={input.quantity}
+                      value={input.quantity}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 4, input, "totalweight")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
+                      type="text"
                       name="totalweight"
-                      type="text"
                       className="data-div"
-                      readOnly
-                      id={input.id + 4}
-                      placeholder={input.totalweight}
+                      value={input.totalweight}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 5, input, "weightperunit")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
+                      type="text"
                       name="weightperunit"
-                      type="text"
                       className="data-div"
-                      readOnly
-                      id={input.id + 5}
-                      placeholder={input.weightperunit}
+                      value={input.weightperunit}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 6, input, "supplier")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
+                      type="text"
                       name="supplier"
-                      type="text"
                       className="data-div"
-                      readOnly
-                      id={input.id + 6}
-                      placeholder={input.supplier}
+                      value={input.supplier}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 7, input, "expirationdate")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
+                      type="text"
                       name="expirationdate"
-                      type="text"
                       className="data-div"
-                      readOnly
-                      id={input.id + 7}
-                      placeholder={input.expirationdate}
+                      value={input.expirationdate}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 8, input, "minimunQuantity")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
                     <input
                       type="text"
-                      name="minimunQuantity"
+                      name="minimun_quantity"
                       className="data-div"
-                      id={input.id + 8}
-                      readOnly
-                      placeholder={input.minimun_quantity}
+                      value={input.minimun_quantity}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) =>
-                        SetInputs(e, input.id + 9, input, "rateIsNear")
-                      }
-                    >
-                      <GoPencil size={35} className="pencil" />
-                    </button>
-                    <input
-                      type="text"
-                      name="rateisnear"
-                      className="data-div-rin"
-                      id={input.id + 9}
-                      readOnly
-                      placeholder={input.rateisnear}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <input
-                      type="text"
-                      className="data-div-eid"
-                      id={input.id + 10}
-                      readOnly
-                      value={input.employee_id}
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="rateisnear"
+                    className="data-div-rin"
+                    value={input.rateisnear}
+                    onChange={(e) => HandleChange(e, input.id)}
+                  />
+                  <input
+                    type="text"
+                    className="data-div-eid"
+                    readOnly
+                    value={input.employee_id}
+                  />
                   <button
                     type="button"
                     className="confirm-changes"

@@ -126,11 +126,9 @@ export const InputsSpace = styled.div`
     display: flex;
     background-color: #dad7d7ff;
     color: black;
-    width: 170px;
+    width: max-content;
     height: 38px;
     border-radius: 8px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     left: 110px;
     margin-top: 0px;
     border: none;
@@ -153,22 +151,23 @@ export const InputsSpace = styled.div`
   .data-wrap {
     position: relative;
     margin-top: 40px;
-    margin-left: 20px;
+    margin-left: 50px;
     bottom: 360px;
-    right: 10px;
+    right: 40px;
     display: flex;
     height: fit-content;
     width: fit-content;
     border-radius: 8px;
+    background-color: aqua;
   }
 
   .data-div-rin {
     display: flex;
+    position: relative;
+
     background-color: #dad7d7ff;
     border: none;
     width: 170px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
     font-size: 16px;
     font-family:
       system-ui,
@@ -192,7 +191,7 @@ export const InputsSpace = styled.div`
     width: 210px;
     height: 39px;
     border-radius: 8px;
-    margin-right: 10px;
+    margin: 0px;
     font-size: 11px;
     font-family:
       system-ui,
