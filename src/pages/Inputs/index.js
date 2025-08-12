@@ -379,19 +379,23 @@ export default function Inputs() {
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
-                  <input
-                    type="text"
-                    name="rateisnear"
-                    className="data-div-rin"
-                    value={input.rateisnear}
-                    onChange={(e) => HandleChange(e, input.id)}
-                  />
-                  <input
-                    type="text"
-                    className="data-div-eid"
-                    readOnly
-                    value={input.employee_id}
-                  />
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="rateisnear"
+                      className="data-div"
+                      value={input.rateisnear}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={input.employee_id}
+                    />
+                  </div>
+
                   <button
                     type="button"
                     className="confirm-changes"
@@ -411,16 +415,7 @@ export default function Inputs() {
             })
           : searchResults.map((input) => {
               return (
-                <div key={input.id} className="main-data-div">
-                  <div className="edit">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id, input)}
-                    >
-                      Editar
-                    </button>
-                  </div>
+                <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="label">Tipo: </div>
                   <div className="label">Nome: </div>
                   <div className="label">Quantidade: </div>
@@ -431,16 +426,109 @@ export default function Inputs() {
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="data-div">{input.type}</div>
-                  <div className="data-div">{input.name}</div>
-                  <div className="data-div">{input.quantity}</div>
-                  <div className="data-div">{input.totalweight}</div>
-                  <div className="data-div">{input.weightperunit}</div>
-                  <div className="data-div">{input.supplier}</div>
-                  <div className="data-div">{input.expirationdate}</div>
-                  <div className="data-div">{input.minimun_quantity}</div>
-                  <div className="data-div">{input.rateisnear}</div>
-                  <div className="data-div">{input.employee_id}</div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="type"
+                      className="data-div"
+                      value={input.type}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={input.name}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="quantity"
+                      className="data-div"
+                      value={input.quantity}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="totalweight"
+                      className="data-div"
+                      value={input.totalweight}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="weightperunit"
+                      className="data-div"
+                      value={input.weightperunit}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="supplier"
+                      className="data-div"
+                      value={input.supplier}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="expirationdate"
+                      className="data-div"
+                      value={input.expirationdate}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="minimun_quantity"
+                      className="data-div"
+                      value={input.minimun_quantity}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="rateisnear"
+                      className="data-div"
+                      value={input.rateisnear}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={input.employee_id}
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => InputUpdate(e)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e)}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               );
             })}

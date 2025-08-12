@@ -161,53 +161,6 @@ export const InputsSpace = styled.div`
     background-color: aqua;
   }
 
-  .data-div-rin {
-    display: flex;
-    position: relative;
-
-    background-color: #dad7d7ff;
-    border: none;
-    width: 170px;
-    font-size: 16px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-    text-align: center;
-  }
-
-  .data-div-eid {
-    display: flex;
-    background-color: #dad7d7ff;
-    border: none;
-    width: 210px;
-    height: 39px;
-    border-radius: 8px;
-    margin: 0px;
-    font-size: 11px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-    text-align: center;
-  }
-
   .label {
     display: flex;
     position: relative;
@@ -264,7 +217,7 @@ export const InputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 320px;
+    bottom: 315px;
     width: 120px;
     right: 20px;
     justify-content: center;
@@ -276,9 +229,9 @@ export const InputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 320px;
+    bottom: 315px;
     width: 120px;
-    left: 20px;
+    right: 5px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
