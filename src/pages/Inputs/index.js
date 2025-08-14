@@ -126,6 +126,7 @@ export default function Inputs() {
     setSearchResults([]);
     setInputsData(inputsDataBackup);
     searchInput.value = "";
+    setSearchParam("");
   };
 
   const clear = (e) => {
@@ -209,6 +210,7 @@ export default function Inputs() {
 
     clearDirectExecution();
   };
+  console.log(searchParam);
 
   return (
     <InputsContainer>
@@ -231,79 +233,26 @@ export default function Inputs() {
         </div>
 
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
-        <div className="checkboxes">
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="type"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Tipo</h3>
 
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="name"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Nome</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="quantity"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Quantidade</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="totalweight"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Peso total</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="weightperunit"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Peso unitário</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="supplier"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Fornecedor</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="expirationdate"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data de validade</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="minimunquantity"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Quantidade mínima</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="employeeid"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Registrado por</h3>
-        </div>
+        <p className="filter-select-label">Filtrar por:</p>
+        <select
+          name="search-options"
+          className="options"
+          id="filter-select"
+          onChange={(e) => setSearchParam(e.target.value)}
+        >
+          <option value="">Selecione</option>
+          <option value="type">Tipo</option>
+          <option value="name">Nome</option>
+          <option value="quantity">Quantidade</option>
+          <option value="totalweight">Peso total</option>
+          <option value="weightperunit">Peso unitário</option>
+          <option value="supplier">Fornecedor</option>
+          <option value="expirationdate">Data de validade</option>
+          <option value="minimun_quantity">Quantidade mínima</option>
+          <option value="rateisnear">Próximo ao limite</option>
+          <option value="employee">Funcionário</option>
+        </select>
       </SearchSpace>
       <InputsSpace>
         {searchResults.length < 1

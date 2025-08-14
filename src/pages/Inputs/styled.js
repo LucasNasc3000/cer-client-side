@@ -86,6 +86,56 @@ export const SearchSpace = styled.div`
     color: #fff;
   }
 
+  .options {
+    display: flex;
+    position: relative;
+    background-color: #dad7d7ff;
+    margin-left: 660px;
+    bottom: 65px;
+    height: 35px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .filter-select-label {
+    display: flex;
+    position: relative;
+    left: 630px;
+    bottom: 70px;
+    height: 20px;
+    background-color: aqua;
+    width: 150px;
+    color: black;
+    font-size: 18px;
+    font-weight: normal;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
   .arrow:hover {
     filter: brightness(70%);
   }
