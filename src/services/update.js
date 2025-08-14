@@ -2,29 +2,15 @@
 /* eslint-disable camelcase */
 import { get } from "lodash";
 import { toast } from "react-toastify";
-import { toInt } from "validator";
 import axios from "./axios";
 
 export default async function Update(id, data, registerType) {
   try {
     if (registerType === "inputs") {
-      const quantity = toInt(data.interquantity);
-      const totalweight = toInt(data.intertotalweight);
-      const weightperunit = toInt(data.interweightperunit);
-      const minimun_quantity = toInt(data.interminimun_quantity);
-      const rateisnear = toInt(data.interrateisnear);
-
-      const finalData = {
-        quantity,
-        totalweight,
-        weightperunit,
-        minimun_quantity,
-        rateisnear,
-        ...data,
-      };
+      const { created_at, updated_at, ...allowedData } = data;
 
       await axios.put(`/inputs/${id}`, {
-        ...finalData,
+        ...allowedData,
       });
     }
 

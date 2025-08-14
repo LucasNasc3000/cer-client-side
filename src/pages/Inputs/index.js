@@ -1,6 +1,6 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
@@ -17,6 +17,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
+import Update from "../../services/update";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
@@ -34,7 +35,6 @@ export default function Inputs() {
   const [interminimun_quantity, setInterMinimunQuantity] = useState("");
   const [interrateisnear, setInterRateIsNear] = useState("");
   const [searchParam, setSearchParam] = useState("");
-  const [inputId, setInputId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -114,16 +114,15 @@ export default function Inputs() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setInputId(0);
     setType("");
     setName("");
-    setInterQuantity(0);
-    setInterTotalWeight(0);
-    setInterWeightPerUnit(0);
+    setInterQuantity(null);
+    setInterTotalWeight(null);
+    setInterWeightPerUnit(null);
     setSupplier("");
     setExpirationDate("");
-    setInterMinimunQuantity(0);
-    setInterRateIsNear(0);
+    setInterMinimunQuantity(null);
+    setInterRateIsNear(null);
     setSearchResults([]);
     setInputsData(inputsDataBackup);
     searchInput.value = "";
@@ -168,12 +167,26 @@ export default function Inputs() {
   const InputUpdate = async (e, objectData) => {
     e.preventDefault();
 
-    console.log(objectData);
+    const toNumberFields = [
+      "quantity",
+      "totalweight",
+      "weightperunit",
+      "minimun_quantity",
+      "rateisnear",
+    ];
 
-    // const update = await Update(inputId, data, "inputs");
-    // setReRender(update);
+    toNumberFields.forEach((field) => {
+      if (typeof objectData[field] === "string") {
+        const parsedValue = parseInt(objectData[field], 10);
+        objectData[field] = parsedValue;
+      }
+    });
 
-    // clearDirectExecution();
+    const update = await Update(objectData.id, objectData, "inputs");
+
+    setReRender(update);
+
+    clearDirectExecution();
   };
 
   const InputRegister = async (e) => {
@@ -395,11 +408,10 @@ export default function Inputs() {
                       value={input.employee_id}
                     />
                   </div>
-
                   <button
                     type="button"
                     className="confirm-changes"
-                    onClick={(e) => InputUpdate(e)}
+                    onClick={(e) => InputUpdate(e, input)}
                   >
                     Salvar
                   </button>
@@ -552,21 +564,21 @@ export default function Inputs() {
           type="text"
           id="quantity"
           placeholder="Quantidade ex: 25"
-          value={interquantity}
+          value={interquantity || ""}
           onChange={(e) => setInterQuantity(e.target.value)}
         />
         <input
           type="text"
           id="totalweight"
           placeholder="Peso total ex: 10,50 (kg)"
-          value={intertotalweight}
+          value={intertotalweight || ""}
           onChange={(e) => setInterTotalWeight(e.target.value)}
         />
         <input
           type="text"
           id="weightperunit"
           placeholder="Peso unitário ex: 1 (kg)"
-          value={interweightperunit}
+          value={interweightperunit || ""}
           onChange={(e) => setInterWeightPerUnit(e.target.value)}
         />
         <input
@@ -587,14 +599,14 @@ export default function Inputs() {
           type="text"
           id="minimunQuantity"
           placeholder="quantidade mínima ex: 5"
-          value={interminimun_quantity}
+          value={interminimun_quantity || ""}
           onChange={(e) => setInterMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
           id="rateisnear"
           placeholder="Próximo ao limite ex: 10"
-          value={interrateisnear}
+          value={interrateisnear || ""}
           onChange={(e) => setInterRateIsNear(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
