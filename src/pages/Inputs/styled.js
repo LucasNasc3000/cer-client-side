@@ -23,7 +23,7 @@ export const SearchSpace = styled.div`
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    left: 310px;
+    left: 360px;
     top: 20px;
     border-bottom: 1px solid black;
   }
@@ -54,10 +54,10 @@ export const SearchSpace = styled.div`
   .arrow {
     display: flex;
     position: relative;
-    height: 42px;
-    width: 42px;
-    right: 300px;
-    top: 20px;
+    height: 32px;
+    width: 32px;
+    right: 180px;
+    top: 30px;
     color: #fff;
   }
 
@@ -91,7 +91,7 @@ export const SearchSpace = styled.div`
     justify-content: center;
     align-items: center;
     top: 22px;
-    left: 350px;
+    left: 450px;
   }
 
   .filter-select-label {
@@ -135,10 +135,10 @@ export const InputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 705px;
+  bottom: 735px;
   height: 500px;
   width: 620px;
-  left: 360px;
+  left: 400px;
 
   .main-data-div {
     background-color: white;
@@ -262,8 +262,8 @@ export const NewInput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1195px;
-  left: 1160px;
+  bottom: 1225px;
+  left: 1230px;
   height: fit-content;
   width: fit-content;
 

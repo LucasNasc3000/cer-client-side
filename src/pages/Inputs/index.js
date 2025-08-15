@@ -204,6 +204,7 @@ export default function Inputs() {
       expirationdate: document.querySelector("#expirationdate").value,
       interminimun_quantity: document.querySelector("#minimunQuantity").value,
       interrateisnear: document.querySelector("#rateisnear").value,
+      employee_id,
     };
 
     const register = await Register(data, "inputs");
@@ -227,7 +228,7 @@ export default function Inputs() {
           </button>
           <input
             type="text"
-            placeholder="Pesquisar insumo..."
+            placeholder="Pesquisar..."
             className="input-search"
           />
         </div>
