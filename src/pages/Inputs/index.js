@@ -8,6 +8,7 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -210,7 +211,6 @@ export default function Inputs() {
 
     clearDirectExecution();
   };
-  console.log(searchParam);
 
   return (
     <InputsContainer>
@@ -223,7 +223,7 @@ export default function Inputs() {
             className="search-btn"
             onClick={(e) => SearchInputs(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
@@ -232,27 +232,29 @@ export default function Inputs() {
           />
         </div>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
+        <FaArrowLeft size={35} className="arrow" onClick={(e) => clear(e)} />
 
-        <p className="filter-select-label">Filtrar por:</p>
-        <select
-          name="search-options"
-          className="options"
-          id="filter-select"
-          onChange={(e) => setSearchParam(e.target.value)}
-        >
-          <option value="">Selecione</option>
-          <option value="type">Tipo</option>
-          <option value="name">Nome</option>
-          <option value="quantity">Quantidade</option>
-          <option value="totalweight">Peso total</option>
-          <option value="weightperunit">Peso unitário</option>
-          <option value="supplier">Fornecedor</option>
-          <option value="expirationdate">Data de validade</option>
-          <option value="minimun_quantity">Quantidade mínima</option>
-          <option value="rateisnear">Próximo ao limite</option>
-          <option value="employee">Funcionário</option>
-        </select>
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="type">Tipo</option>
+            <option value="name">Nome</option>
+            <option value="quantity">Quantidade</option>
+            <option value="totalweight">Peso total</option>
+            <option value="weightperunit">Peso unitário</option>
+            <option value="supplier">Fornecedor</option>
+            <option value="expirationdate">Data de validade</option>
+            <option value="minimun_quantity">Quantidade mínima</option>
+            <option value="rateisnear">Próximo ao limite</option>
+            <option value="employee">Funcionário</option>
+          </select>
+        </div>
       </SearchSpace>
       <InputsSpace>
         {searchResults.length < 1

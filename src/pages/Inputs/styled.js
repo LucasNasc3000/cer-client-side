@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
-// import * as colors from "../../config/colors";
 
 export const InputsContainer = styled.div`
   overflow: hidden;
@@ -18,62 +17,38 @@ export const SearchSpace = styled.div`
   .search-space {
     display: flex;
     position: relative;
-    width: 490px;
+    background-color: #f5f4f4ff;
     height: fit-content;
-    border-radius: 4px;
-    border-style: none;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
     left: 310px;
     top: 20px;
+    border-bottom: 1px solid black;
   }
 
   .input-search {
     display: flex;
     height: 39px;
-    width: 300px;
-    position: relative;
-    right: 70px;
+    width: 250px;
+    right: 20px;
     border-radius: 4px;
     border-style: none;
-    box-shadow: 1px 1.5px rgb(173, 173, 173);
+    background-color: #f5f4f4ff;
   }
 
   .search-btn {
     display: flex;
-    background-color: #696969;
-    height: 38px;
-    width: 84px;
-    position: relative;
+    height: fit-content;
+    width: fit-content;
+    background-color: #f5f4f4ff;
+    color: #a5a4a4ff;
     align-content: center;
     justify-content: center;
     left: 320px;
     top: 1px;
-    padding: 10px;
-    box-shadow: 1px 1.5px rgb(102, 96, 96);
-  }
-
-  .checkbox {
-    height: 32px;
-    width: 32px;
-    margin-left: 35px;
-  }
-
-  .checkboxes {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    right: 370px;
-    top: 90px;
-    height: 30px;
-    width: 670px;
-  }
-
-  .checkbox-label {
-    color: black;
-    font-weight: 100;
-    font-size: 12.5px;
-    margin-left: 5px;
-    margin-top: 8px;
+    padding: 5px;
   }
 
   .arrow {
@@ -81,17 +56,14 @@ export const SearchSpace = styled.div`
     position: relative;
     height: 42px;
     width: 42px;
-    right: 400px;
+    right: 300px;
     top: 20px;
     color: #fff;
   }
 
   .options {
     display: flex;
-    position: relative;
     background-color: #dad7d7ff;
-    margin-left: 660px;
-    bottom: 65px;
     height: 35px;
     font-size: 15px;
     padding: 5px;
@@ -111,16 +83,25 @@ export const SearchSpace = styled.div`
       sans-serif;
   }
 
-  .filter-select-label {
+  .filter-space {
     display: flex;
     position: relative;
-    left: 630px;
-    bottom: 70px;
-    height: 20px;
-    background-color: aqua;
-    width: 150px;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    top: 22px;
+    left: 350px;
+  }
+
+  .filter-select-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 85px;
     color: black;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: normal;
     font-family:
       system-ui,
@@ -136,12 +117,16 @@ export const SearchSpace = styled.div`
       sans-serif;
   }
 
+  .search-btn:hover {
+    filter: brightness(99%);
+  }
+
   .arrow:hover {
     filter: brightness(70%);
   }
 
   .search-icon:hover {
-    filter: brightness(80%);
+    filter: brightness(70%);
   }
 `;
 
@@ -236,27 +221,6 @@ export const InputsSpace = styled.div`
     word-break: keep-all;
   }
 
-  /* .edit {
-    display: flex;
-    top: 522px;
-    left: 30px;
-    width: fit-content;
-  } */
-
-  .edit-icon {
-    display: flex;
-    height: 38px;
-    width: 43px;
-    justify-content: center;
-    align-items: center;
-    background-color: #dad7d7ff;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-  }
-
   .pencil {
     display: flex;
     color: #575757ff;
@@ -285,55 +249,6 @@ export const InputsSpace = styled.div`
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
-  }
-
-  .data-div::placeholder {
-    color: black;
-    font-size: 15px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-  }
-
-  .data-div-eid::placeholder {
-    color: black;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-  }
-
-  .data-div-rin::placeholder {
-    color: black;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
   }
 
   .edit-icon:hover {
