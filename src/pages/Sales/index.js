@@ -4,6 +4,7 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -30,10 +31,8 @@ export default function Sales() {
   const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [client_birthday, setClientBirthday] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
   const [bossId, setBossId] = useState("");
-  const [saleId, setSaleId] = useState("");
   const [salesData, setSalesData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [rerender, setReRender] = useState(false);
@@ -92,8 +91,9 @@ export default function Sales() {
     setAddress("");
     setProducts("");
     setClientBirthday("");
-    searchSale.value = "";
+    setSearchParam("");
     setSearchResults([]);
+    searchSale.value = "";
   };
 
   const clear = (e) => {
@@ -101,16 +101,15 @@ export default function Sales() {
     clearDirectExecution();
   };
 
-  const SetSales = (e, idParam, data) => {
-    e.preventDefault();
+  const HandleChange = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
 
-    setSaleId(idParam);
-    setDate(data.date);
-    setClientName(data.client_name);
-    setPhoneNumber(data.phone_number);
-    setAddress(data.address);
-    setProducts(data.products);
-    setClientBirthday(data.client_birthday);
+    setSalesData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
   };
 
   async function GetSales() {
@@ -156,24 +155,17 @@ export default function Sales() {
     return;
   }
 
-  async function SaleUpdate() {
-    const data = {
-      date,
-      client_name,
-      phone_number,
-      address,
-      products,
-      employee_id,
-      client_birthday,
-    };
+  const SaleUpdate = async (e, objectData) => {
+    e.preventDefault();
 
-    const update = await Update(saleId, data, "sales");
+    const update = await Update(objectData.id, objectData, "sales");
+
     setReRender(update);
 
     clearDirectExecution();
-  }
+  };
 
-  async function SaleRegister(e) {
+  const SaleRegister = async (e) => {
     e.preventDefault();
 
     const ddate = new Date();
@@ -182,30 +174,21 @@ export default function Sales() {
     });
 
     const data = {
-      date,
+      date: document.querySelector("#date").value,
       hour,
-      client_name,
-      phone_number,
-      address,
-      products,
+      client_name: document.querySelector("#clientName").value,
+      phone_number: document.querySelector("#phoneNumber").value,
+      address: document.querySelector("#address").value,
+      products: document.querySelector("#products").value,
       employee_id,
-      client_birthday,
+      client_birthday: document.querySelector("#clientBirthday").value,
     };
 
     const register = await Register(data, "sales");
+
     setReRender(register);
 
     clearDirectExecution();
-  }
-
-  const IdVerify = (e) => {
-    e.preventDefault();
-
-    if (saleId !== "") {
-      SaleUpdate();
-    } else {
-      SaleRegister(e);
-    }
   };
 
   const Transfer = (e, saleData) => {
@@ -219,156 +202,239 @@ export default function Sales() {
     <SalesContainer>
       <Header />
       <SearchSpace>
-        <div className="sale-search">
+        <div className="search-space">
           <button
             type="button"
-            onClick={(e) => SearchSales(e)}
+            size={30}
             className="search-btn"
+            onClick={(e) => SearchSales(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
-            placeholder="Pesquisar venda..."
-            className="search-bar"
+            placeholder="Pesquisar..."
+            className="input-search"
           />
         </div>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
-        <div className="checkboxes">
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="date"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data</h3>
+        <FaArrowLeft size={35} className="arrow" onClick={(e) => clear(e)} />
 
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="hour"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Hora</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="clientname"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Nome cliente</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="phonenumber"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Telefone</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="address"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Endereço</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="products"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Produtos</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="employeeid"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Registrado por</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="clientbirthday"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Anv. cliente</h3>
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="date">Date</option>
+            <option value="hour">Hora</option>
+            <option value="clientName">Nome do cliente</option>
+            <option value="phoneNumber">Telefone</option>
+            <option value="address">Endereço</option>
+            <option value="products">Produtos</option>
+            <option value="clientBirthday">Aniversário do cliente</option>
+            <option value="employee">Funcionário</option>
+          </select>
         </div>
       </SearchSpace>
       <SalesSpace>
         {searchResults.length < 1
           ? salesData.map((sale) => {
               return (
-                <div key={sale.id} className="main-data-div">
-                  <div className="edit">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetSales(e, sale.id, sale)}
-                    >
-                      Editar
-                    </button>
+                <div key={sale.id} className="main-data-div" id={sale.id}>
+                  <div className="label">Date: </div>
+                  <div className="label">Hora: </div>
+                  <div className="label">Nome do cliente: </div>
+                  <div className="label">Telefone: </div>
+                  <div className="label">Endereço: </div>
+                  <div className="label">Produtos: </div>
+                  <div className="label">Aniversário do cliente: </div>
+                  <div className="label">Funcionário: </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={sale.date}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={sale.hour}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="client_name"
+                      className="data-div"
+                      value={sale.client_name}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="phone_number"
+                      className="data-div"
+                      value={sale.phone_number}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="address"
+                      className="data-div"
+                      value={sale.address}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="products"
+                      className="data-div"
+                      value={sale.products}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="client_birthday"
+                      className="data-div"
+                      value={sale.client_birthday}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={sale.employee_id}
+                    />
                   </div>
                   <button
                     type="button"
-                    className="btd-button"
-                    onClick={(e) => Transfer(e, sale)}
+                    className="confirm-changes"
+                    onClick={(e) => SaleUpdate(e, sale)}
                   >
-                    Agendar lembrete de aniversário
+                    Salvar
                   </button>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome cliente: </div>
-                  <div className="label">Telefone: </div>
-                  <div className="label">Endereço: </div>
-                  <div className="label">Anv. Cliente: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="label">Produtos: </div>
-                  <div className="data-div">{sale.date}</div>
-                  <div className="data-div">{sale.hour}</div>
-                  <div className="data-div">{sale.client_name}</div>
-                  <div className="data-div">{sale.phone_number}</div>
-                  <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.client_birthday}</div>
-                  <div className="data-div">{sale.employee_id}</div>
-                  <div className="data-div">{sale.products}</div>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e)}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               );
             })
           : searchResults.map((sale) => {
               return (
-                <div key={sale.id} className="main-data-div-search">
-                  <div className="edit-search">
-                    <button
-                      type="button"
-                      className="edit-icon-search"
-                      onClick={(e) => SetSales(e, sale.id, sale)}
-                    >
-                      Editar
-                    </button>
+                <div key={sale.id} className="main-data-div" id={sale.id}>
+                  <div className="label">Date: </div>
+                  <div className="label">Hora: </div>
+                  <div className="label">Nome do cliente: </div>
+                  <div className="label">Telefone: </div>
+                  <div className="label">Endereço: </div>
+                  <div className="label">Produtos: </div>
+                  <div className="label">Aniversário do cliente: </div>
+                  <div className="label">Funcionário: </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={sale.date}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
                   </div>
-                  <div className="label-search">Data: </div>
-                  <div className="label-search">Hora: </div>
-                  <div className="label-search">Nome cliente: </div>
-                  <div className="label-search">Telefone: </div>
-                  <div className="label-search">Endereço: </div>
-                  <div className="label-search">Produtos: </div>
-                  <div className="label-search">Anv. Cliente: </div>
-                  <div className="label-search">Funcionário: </div>
-                  <div className="data-div-search">{sale.date}</div>
-                  <div className="data-div-search">{sale.hour}</div>
-                  <div className="data-div-search">{sale.client_name}</div>
-                  <div className="data-div-search">{sale.phone_number}</div>
-                  <div className="data-div-search">{sale.address}</div>
-                  <div className="data-div-search">{sale.products}</div>
-                  <div className="data-div-search">{sale.client_birthday}</div>
-                  <div className="data-div-search">{sale.employee_id}</div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={sale.hour}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="client_name"
+                      className="data-div"
+                      value={sale.client_name}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="phone_number"
+                      className="data-div"
+                      value={sale.phone_number}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="address"
+                      className="data-div"
+                      value={sale.address}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="products"
+                      className="data-div"
+                      value={sale.products}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="client_birthday"
+                      className="data-div"
+                      value={sale.client_birthday}
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={sale.employee_id}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => SaleUpdate(e)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e)}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               );
             })}
@@ -376,36 +442,42 @@ export default function Sales() {
       <NewSale>
         <input
           type="text"
+          id="date"
           placeholder="Data ex: 02-07-2025"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
         <input
           type="text"
+          id="clientName"
           placeholder="Nome cliente ex: Joao silva"
           value={client_name}
           onChange={(e) => setClientName(e.target.value)}
         />
         <input
           type="text"
+          id="phoneNumber"
           placeholder="Tel ex: 11 11111-2222"
           value={phone_number}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input
           type="text"
+          id="address"
           placeholder="Endereço ex: Rua tal, 123"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
         <input
           type="text"
+          id="products"
           placeholder="Produtos ex: coxinha,suco"
           value={products}
           onChange={(e) => setProducts(e.target.value)}
         />
         <input
           type="text"
+          id="clientBirthday"
           placeholder="Anv. Cliente ex: 15-02"
           value={client_birthday}
           onChange={(e) => setClientBirthday(e.target.value)}
@@ -413,7 +485,7 @@ export default function Sales() {
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button type="button" className="btn" onClick={(e) => SaleRegister(e)}>
           Adicionar
         </button>
       </NewSale>
