@@ -18,72 +18,108 @@ export const SearchSpace = styled.div`
   .search-space {
     display: flex;
     position: relative;
-    width: 490px;
+    background-color: #f5f4f4ff;
     height: fit-content;
-    border-radius: 4px;
-    border-style: none;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
-    left: 310px;
+    left: 360px;
     top: 20px;
+    border-bottom: 1px solid black;
   }
 
   .output-search {
     display: flex;
     height: 39px;
-    width: 300px;
-    position: relative;
-    right: 0px;
+    width: 250px;
+    right: 20px;
     border-radius: 4px;
     border-style: none;
-    box-shadow: 1px 1.5px rgb(173, 173, 173);
+    background-color: #f5f4f4ff;
   }
 
   .search-btn {
     display: flex;
-    background-color: #696969;
-    height: 38px;
-    width: 84px;
-    position: relative;
+    height: fit-content;
+    width: fit-content;
+    background-color: #f5f4f4ff;
+    color: #a5a4a4ff;
     align-content: center;
     justify-content: center;
-    left: 390px;
+    left: 320px;
     top: 1px;
-    padding: 10px;
-    box-shadow: 1px 1.5px rgb(102, 96, 96);
-  }
-
-  .checkbox {
-    height: 13px;
-    width: 13px;
-    margin-left: 35px;
-  }
-
-  .checkboxes {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    right: 240px;
-    top: 90px;
-    height: 30px;
-    width: 670px;
-  }
-
-  .checkbox-label {
-    color: black;
-    font-weight: 100;
-    font-size: 12.5px;
-    margin-left: 5px;
-    margin-top: 0px;
+    padding: 5px;
   }
 
   .arrow {
     display: flex;
     position: relative;
-    height: 42px;
-    width: 42px;
-    right: 400px;
-    top: 20px;
+    height: 32px;
+    width: 32px;
+    right: 180px;
+    top: 30px;
     color: #fff;
+  }
+
+  .options {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 35px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .filter-space {
+    display: flex;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    top: 22px;
+    left: 450px;
+  }
+
+  .filter-select-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 85px;
+    color: black;
+    font-size: 15px;
+    font-weight: normal;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .search-btn:hover {
+    filter: brightness(99%);
   }
 
   .arrow:hover {
@@ -91,7 +127,7 @@ export const SearchSpace = styled.div`
   }
 
   .search-icon:hover {
-    filter: brightness(80%);
+    filter: brightness(70%);
   }
 `;
 
@@ -100,34 +136,39 @@ export const OutputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 700px;
+  bottom: 735px;
   height: 500px;
   width: 620px;
-  left: 360px;
+  left: 400px;
 
   .main-data-div {
-    background-color: #4f4f4f;
+    background-color: white;
     display: flex;
-    flex-direction: column;
-    height: 315px;
-    width: 450px;
-    margin-top: 10px;
-    margin-left: 90px;
-    border-radius: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 515px;
+    width: 515px;
+    margin-top: 25px;
+    margin-left: 70px;
+    border-radius: 10px;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
   .data-div {
-    position: relative;
+    display: flex;
+    background-color: #dad7d7ff;
     color: black;
-    width: 170px;
-    bottom: 150px;
+    width: max-content;
+    height: 38px;
+    border-radius: 8px;
     left: 110px;
-    margin-top: 10px;
-    color: white;
-    font-size: 17px;
+    margin-top: 0px;
+    border: none;
+    font-size: 16px;
     font-family:
       system-ui,
       -apple-system,
@@ -141,17 +182,30 @@ export const OutputsSpace = styled.div`
       "Helvetica Neue",
       sans-serif;
     text-align: center;
-    border-bottom: 0.5px solid white;
+  }
+
+  .data-wrap {
+    position: relative;
+    margin-top: 40px;
+    margin-left: 50px;
+    bottom: 360px;
+    right: 40px;
+    display: flex;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 8px;
+    background-color: aqua;
   }
 
   .label {
     display: flex;
     position: relative;
-    right: 120px;
-    top: 50px;
-    margin-top: 10px;
+    margin-top: 55px;
+    margin-left: 62px;
+    bottom: 15px;
+    color: black;
+    right: 50px;
     width: 170px;
-    color: white;
     font-size: 17px;
     font-family:
       system-ui,
@@ -166,26 +220,30 @@ export const OutputsSpace = styled.div`
       "Helvetica Neue",
       sans-serif;
     word-break: keep-all;
-    border-bottom: 0.5px solid white;
   }
 
-  .edit {
+  .confirm-changes {
     display: flex;
     position: relative;
-    top: 342px;
-    left: 30px;
-    width: fit-content;
-  }
-
-  .edit-icon {
-    position: relative;
-    color: white;
-    display: flex;
-    height: 35px;
-    width: 100px;
+    background-color: #a5a4a4ff;
+    bottom: 315px;
+    width: 120px;
+    right: 20px;
     justify-content: center;
-    align-items: center;
-    left: -30px;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
+  .cancel-changes {
+    display: flex;
+    position: relative;
+    background-color: #a5a4a4ff;
+    bottom: 315px;
+    width: 120px;
+    right: 5px;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
   }
 
   .edit-icon:hover {
@@ -199,8 +257,8 @@ export const NewOutput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1165px;
-  left: 1160px;
+  bottom: 1225px;
+  left: 1230px;
   height: fit-content;
   width: fit-content;
 
@@ -208,7 +266,7 @@ export const NewOutput = styled.div`
     background-color: #dcdcdc;
     height: 30px;
     width: 170px;
-    margin-top: 15px;
+    margin-top: 10px;
     border-top: none;
     border-left: none;
     border-right: none;
@@ -216,6 +274,11 @@ export const NewOutput = styled.div`
   }
 
   .btn {
+    display: flex;
+    position: relative;
+    top: 20px;
+    justify-content: center;
+    align-items: center;
     height: 40px;
     width: 120px;
     margin-top: 15px;

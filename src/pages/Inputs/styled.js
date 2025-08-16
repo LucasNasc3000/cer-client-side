@@ -221,12 +221,6 @@ export const InputsSpace = styled.div`
     word-break: keep-all;
   }
 
-  .pencil {
-    display: flex;
-    color: #575757ff;
-    padding: -2px;
-  }
-
   .confirm-changes {
     display: flex;
     position: relative;

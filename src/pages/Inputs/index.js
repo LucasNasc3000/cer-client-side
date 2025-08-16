@@ -208,6 +208,7 @@ export default function Inputs() {
     };
 
     const register = await Register(data, "inputs");
+
     setReRender(register);
 
     clearDirectExecution();

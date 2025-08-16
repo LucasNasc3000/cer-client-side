@@ -4,6 +4,7 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -31,9 +32,6 @@ export default function Outputs() {
   const [type, setType] = useState("");
   const [unities, setUnities] = useState("");
   const [searchParam, setSearchParam] = useState("");
-  const [outputId, setOutputId] = useState(0);
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line no-unused-vars
   const [outputsData, setOutputsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const searchOutput = document.querySelector(".output-search");
@@ -112,13 +110,13 @@ export default function Outputs() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setOutputId(0);
     setType("");
     setName("");
     setUnities("");
     setDate("");
-    searchOutput.value = "";
+    setSearchParam("");
     setSearchResults([]);
+    searchOutput.value = "";
   };
 
   const clear = (e) => {
@@ -126,14 +124,15 @@ export default function Outputs() {
     clearDirectExecution();
   };
 
-  const SetOutputs = (e, idParam, data) => {
-    e.preventDefault();
+  const HandleChange = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
 
-    setOutputId(idParam);
-    setDate(data.date);
-    setName(data.name);
-    setType(data.type);
-    setUnities(data.unities);
+    setOutputsData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
   };
 
   async function SearchOutputs(e) {
@@ -155,22 +154,25 @@ export default function Outputs() {
     return;
   }
 
-  const OutputUpdate = async () => {
+  const OutputUpdate = async (e, objectData) => {
+    e.preventDefault();
+
     const ddate = new Date();
     const hour = ddate.toLocaleTimeString("pt-br", {
       hourCycle: "h24",
     });
 
     const data = {
-      date,
+      date: objectData.date,
       hour,
-      name,
-      type,
-      unities,
+      name: objectData.name,
+      type: objectData.type,
+      unities: objectData.unities,
       employee_id,
     };
 
-    const update = await Update(outputId, data, "outputs");
+    const update = await Update(objectData.id, data, "outputs");
+
     setReRender(update);
 
     clearDirectExecution();
@@ -185,28 +187,19 @@ export default function Outputs() {
     });
 
     const data = {
-      date,
+      date: document.querySelector("#date").value,
       hour,
-      name,
-      type,
-      unities,
+      name: document.querySelector("#name").value,
+      type: document.querySelector("#type").value,
+      unities: document.querySelector("#type").value,
       employee_id,
     };
 
     const register = await Register(data, "outputs");
+
     setReRender(register);
 
     clearDirectExecution();
-  };
-
-  const IdVerify = (e) => {
-    e.preventDefault();
-
-    if (outputId !== 0) {
-      OutputUpdate();
-    } else {
-      OutputRegister(e);
-    }
   };
 
   return (
@@ -216,122 +209,194 @@ export default function Outputs() {
         <div className="search-space">
           <button
             type="button"
+            size={30}
             className="search-btn"
             onClick={(e) => SearchOutputs(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
-            placeholder="Pesquisar saída..."
+            placeholder="Pesquisar..."
             className="output-search"
           />
         </div>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
-        <div className="checkboxes">
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="date"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data</h3>
+        <FaArrowLeft size={35} className="arrow" onClick={(e) => clear(e)} />
 
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="hour"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Hora</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="name"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Nome</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="type"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Tipo</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="unities"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Unidades</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="employeeid"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Registrado por</h3>
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="date">Data</option>
+            <option value="hour">Hora</option>
+            <option value="name">Nome</option>
+            <option value="type">Tipo</option>
+            <option value="unities">Unidades</option>
+            <option value="employee">Funcionário</option>
+          </select>
         </div>
       </SearchSpace>
       <OutputsSpace>
         {searchResults.length < 1
           ? outputsData.map((output) => {
               return (
-                <div key={output.id} className="main-data-div">
-                  <div className="edit">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetOutputs(e, output.id, output)}
-                    >
-                      Editar
-                    </button>
-                  </div>
+                <div key={output.id} className="main-data-div" id={output.id}>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
                   <div className="label">Nome: </div>
                   <div className="label">Tipo: </div>
                   <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="data-div">{output.date}</div>
-                  <div className="data-div">{output.hour}</div>
-                  <div className="data-div">{output.name}</div>
-                  <div className="data-div">{output.type}</div>
-                  <div className="data-div">{output.unities}</div>
-                  <div className="data-div">{output.employee_id}</div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={output.date}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={output.hour}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={output.name}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="type"
+                      className="data-div"
+                      value={output.type}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="unities"
+                      className="data-div"
+                      value={output.unities}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={output.employee_id}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => OutputUpdate(e, output)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e)}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               );
             })
           : searchResults.map((output) => {
               return (
-                <div key={output.id} className="main-data-div">
-                  <div className="edit">
-                    <button
-                      type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetOutputs(e, output.id, output)}
-                    >
-                      Editar
-                    </button>
-                  </div>
+                <div key={output.id} className="main-data-div" id={output.id}>
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
                   <div className="label">Nome: </div>
                   <div className="label">Tipo: </div>
                   <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
-                  <div className="data-div">{output.date}</div>
-                  <div className="data-div">{output.hour}</div>
-                  <div className="data-div">{output.name}</div>
-                  <div className="data-div">{output.type}</div>
-                  <div className="data-div">{output.unities}</div>
-                  <div className="data-div">{output.employee_id}</div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={output.date}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={output.hour}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={output.name}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="type"
+                      className="data-div"
+                      value={output.type}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="unities"
+                      className="data-div"
+                      value={output.unities}
+                      onChange={(e) => HandleChange(e, output.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={output.employee_id}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => OutputUpdate(e)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e)}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               );
             })}
@@ -364,7 +429,11 @@ export default function Outputs() {
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => OutputRegister(e)}
+        >
           Adicionar
         </button>
       </NewOutput>
