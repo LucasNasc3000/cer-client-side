@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -15,14 +15,13 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import * as actionsDataTransfer from "../../store/modules/dataTransfer/actions";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
   const [client_name, setClientName] = useState("");
@@ -84,7 +83,6 @@ export default function Sales() {
   }, [headerid, emailStored, employee_id]);
 
   const clearDirectExecution = () => {
-    setSaleId("");
     setDate("");
     setClientName("");
     setPhoneNumber("");
@@ -191,12 +189,12 @@ export default function Sales() {
     clearDirectExecution();
   };
 
-  const Transfer = (e, saleData) => {
-    e.preventDefault();
-    dispatch(actionsDataTransfer.saleDataTransfer(saleData));
+  // const Transfer = (e, saleData) => {
+  //   e.preventDefault();
+  //   dispatch(actionsDataTransfer.saleDataTransfer(saleData));
 
-    history.push("/advices");
-  };
+  //   history.push("/advices");
+  // };
 
   return (
     <SalesContainer>
@@ -214,7 +212,7 @@ export default function Sales() {
           <input
             type="text"
             placeholder="Pesquisar..."
-            className="input-search"
+            className="sale-search"
           />
         </div>
 

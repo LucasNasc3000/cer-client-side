@@ -8,79 +8,115 @@ export const SearchSpace = styled.div`
   flex-direction: row;
   position: relative;
   height: 120px;
-  width: 1300px;
-  bottom: 749px;
-  left: 230px;
+  width: 1290px;
+  bottom: 750px;
+  left: 250px;
+
+  .search-space {
+    display: flex;
+    position: relative;
+    background-color: #f5f4f4ff;
+    height: fit-content;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    left: 360px;
+    top: 20px;
+    border-bottom: 1px solid black;
+  }
 
   .sale-search {
     display: flex;
-    height: fit-content;
-    width: 490px;
-    position: relative;
-    left: 310px;
-    top: 20px;
-    border-radius: 4px;
-    border-style: none;
-    font-size: 14px;
-  }
-
-  .search-bar {
-    display: flex;
-    position: relative;
-    width: 300px;
     height: 39px;
-    right: 70px;
-    border-style: none;
+    width: 250px;
+    right: 20px;
     border-radius: 4px;
-    box-shadow: 1px 1.5px rgb(173, 173, 173);
+    border-style: none;
+    background-color: #f5f4f4ff;
   }
 
   .search-btn {
     display: flex;
-    background-color: #696969;
-    height: 38px;
-    width: 84px;
-    position: relative;
+    height: fit-content;
+    width: fit-content;
+    background-color: #f5f4f4ff;
+    color: #a5a4a4ff;
     align-content: center;
     justify-content: center;
     left: 320px;
     top: 1px;
-    padding: 10px;
-    box-shadow: 1px 1.5px rgb(173, 173, 173);
-  }
-
-  .checkbox {
-    height: 32px;
-    width: 32px;
-    margin-left: 35px;
-  }
-
-  .checkboxes {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    right: 340px;
-    top: 90px;
-    height: 30px;
-    width: 670px;
-  }
-
-  .checkbox-label {
-    color: black;
-    font-weight: 100;
-    font-size: 12.5px;
-    margin-left: 5px;
-    margin-top: 8px;
+    padding: 5px;
   }
 
   .arrow {
     display: flex;
     position: relative;
-    height: 42px;
-    width: 42px;
-    right: 380px;
-    top: 20px;
+    height: 32px;
+    width: 32px;
+    right: 180px;
+    top: 30px;
     color: #fff;
+  }
+
+  .options {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 35px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .filter-space {
+    display: flex;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    top: 22px;
+    left: 450px;
+  }
+
+  .filter-select-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 85px;
+    color: black;
+    font-size: 15px;
+    font-weight: normal;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .search-btn:hover {
+    filter: brightness(99%);
   }
 
   .arrow:hover {
@@ -88,7 +124,7 @@ export const SearchSpace = styled.div`
   }
 
   .search-icon:hover {
-    filter: brightness(80%);
+    filter: brightness(70%);
   }
 `;
 
@@ -97,27 +133,29 @@ export const SalesSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  overflow-x: hidden;
-  bottom: 700px;
+  bottom: 735px;
   height: 500px;
-  width: 580px;
-  left: 420px;
+  width: 620px;
+  left: 400px;
 
   .main-data-div {
-    background-color: #4f4f4f;
-    margin-top: 15px;
+    background-color: white;
     display: flex;
-    flex-direction: column;
-    height: 435px;
-    width: 450px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 515px;
+    width: 515px;
+    margin-top: 25px;
     margin-left: 70px;
-    border-radius: 8px;
+    border-radius: 10px;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
-  .main-data-div-search {
+  /* .main-data-div-search {
     background-color: #4f4f4f;
     margin-top: 15px;
     display: flex;
@@ -129,16 +167,18 @@ export const SalesSpace = styled.div`
     justify-content: center;
     align-items: center;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  }
+  } */
 
   .data-div {
-    position: relative;
-    color: #fff;
-    width: 170px;
-    bottom: 232px;
+    display: flex;
+    background-color: #dad7d7ff;
+    color: black;
+    width: max-content;
+    height: 38px;
+    border-radius: 8px;
     left: 110px;
-    margin-top: 13px;
-    color: #fff;
+    margin-top: 0px;
+    border: none;
     font-size: 16px;
     font-family:
       system-ui,
@@ -153,11 +193,9 @@ export const SalesSpace = styled.div`
       "Helvetica Neue",
       sans-serif;
     text-align: center;
-    line-break: auto;
-    border-bottom: 0.5px solid #fff;
   }
 
-  .data-div-search {
+  /* .data-div-search {
     position: relative;
     color: #fff;
     width: 170px;
@@ -181,17 +219,31 @@ export const SalesSpace = styled.div`
     text-align: center;
     line-break: auto;
     border-bottom: 0.5px solid #fff;
+  } */
+
+  .data-wrap {
+    position: relative;
+    margin-top: 40px;
+    margin-left: 50px;
+    bottom: 360px;
+    right: 40px;
+    display: flex;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 8px;
+    background-color: aqua;
   }
 
   .label {
     display: flex;
     position: relative;
-    right: 120px;
-    top: 52px;
-    margin-top: 13px;
+    margin-top: 55px;
+    margin-left: 62px;
+    bottom: 15px;
+    color: black;
+    right: 50px;
     width: 170px;
-    color: #fff;
-    font-size: 16px;
+    font-size: 17px;
     font-family:
       system-ui,
       -apple-system,
@@ -205,10 +257,9 @@ export const SalesSpace = styled.div`
       "Helvetica Neue",
       sans-serif;
     word-break: keep-all;
-    border-bottom: 0.5px solid #fff;
   }
 
-  .label-search {
+  /* .label-search {
     display: flex;
     position: relative;
     right: 110px;
@@ -231,28 +282,9 @@ export const SalesSpace = styled.div`
       sans-serif;
     word-break: keep-all;
     border-bottom: 0.5px solid #fff;
-  }
+  } */
 
-  .edit {
-    display: flex;
-    position: relative;
-    top: 500px;
-    right: 130px;
-    width: fit-content;
-  }
-
-  .edit-icon {
-    position: relative;
-    color: white;
-    display: flex;
-    height: 35px;
-    width: 65px;
-    justify-content: center;
-    align-items: center;
-    left: -30px;
-  }
-
-  .edit-icon-search {
+  /* .edit-icon-search {
     position: relative;
     color: white;
     display: flex;
@@ -262,6 +294,30 @@ export const SalesSpace = styled.div`
     align-items: center;
     left: 0px;
     top: 470px;
+  } */
+
+  .confirm-changes {
+    display: flex;
+    position: relative;
+    background-color: #a5a4a4ff;
+    bottom: 315px;
+    width: 120px;
+    right: 20px;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
+  .cancel-changes {
+    display: flex;
+    position: relative;
+    background-color: #a5a4a4ff;
+    bottom: 315px;
+    width: 120px;
+    right: 5px;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
   }
 
   .btd-button {
@@ -282,16 +338,16 @@ export const NewSale = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1155px;
-  left: 1180px;
+  bottom: 1225px;
+  left: 1230px;
   height: fit-content;
   width: fit-content;
 
   input {
-    background-color: #dcdcdc;
+    background-color: #f5f4f4ff;
     height: 30px;
     width: 170px;
-    margin-top: 15px;
+    margin-top: 10px;
     border-top: none;
     border-left: none;
     border-right: none;
