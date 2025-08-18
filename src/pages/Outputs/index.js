@@ -33,6 +33,7 @@ export default function Outputs() {
   const [unities, setUnities] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [outputsData, setOutputsData] = useState([]);
+  const [outputsDataBackup, setOutputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const searchOutput = document.querySelector(".output-search");
   const [bossId, setBossId] = useState("");
@@ -96,6 +97,7 @@ export default function Outputs() {
     if (typeof outputs === "undefined" || !outputs) return;
 
     setOutputsData(outputs);
+    setOutputsDataBackup(outputs);
   }
 
   useEffect(() => {
@@ -117,6 +119,7 @@ export default function Outputs() {
     setSearchParam("");
     setSearchResults([]);
     searchOutput.value = "";
+    setOutputsData(outputsDataBackup);
   };
 
   const clear = (e) => {

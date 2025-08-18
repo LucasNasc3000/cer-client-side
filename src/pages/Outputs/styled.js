@@ -66,6 +66,7 @@ export const SearchSpace = styled.div`
     display: flex;
     background-color: #dad7d7ff;
     height: 35px;
+    width: 161px;
     font-size: 15px;
     padding: 5px;
     border: none;
@@ -148,8 +149,8 @@ export const OutputsSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 515px;
-    width: 515px;
+    height: 380px;
+    width: 495px;
     margin-top: 25px;
     margin-left: 70px;
     border-radius: 10px;
@@ -185,12 +186,12 @@ export const OutputsSpace = styled.div`
   }
 
   .data-wrap {
+    display: flex;
     position: relative;
     margin-top: 40px;
     margin-left: 50px;
-    bottom: 360px;
+    bottom: 200px;
     right: 40px;
-    display: flex;
     height: fit-content;
     width: fit-content;
     border-radius: 8px;
@@ -226,7 +227,7 @@ export const OutputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 315px;
+    bottom: 140px;
     width: 120px;
     right: 20px;
     justify-content: center;
@@ -238,7 +239,7 @@ export const OutputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 315px;
+    bottom: 140px;
     width: 120px;
     right: 5px;
     justify-content: center;
@@ -263,7 +264,7 @@ export const NewOutput = styled.div`
   width: fit-content;
 
   input {
-    background-color: #dcdcdc;
+    background-color: #f5f4f4ff;
     height: 30px;
     width: 170px;
     margin-top: 10px;
