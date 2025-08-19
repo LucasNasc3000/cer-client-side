@@ -39,6 +39,7 @@ export default function Inputs() {
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -124,10 +125,13 @@ export default function Inputs() {
     setExpirationDate("");
     setInterMinimunQuantity(null);
     setInterRateIsNear(null);
-    setSearchResults([]);
     setInputsData(inputsDataBackup);
-    searchInput.value = "";
     setSearchParam("");
+    setSearchResults([]);
+    searchInput.value = "";
+
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   const clear = (e) => {
@@ -135,11 +139,27 @@ export default function Inputs() {
     clearDirectExecution();
   };
 
+  const ClearSearch = (e) => {
+    e.preventDefault();
+    setSearchResults(searchResultsBackup);
+  };
+
   const HandleChange = (e, itemId) => {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
     setInputsData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const HandleChangeSearch = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    setSearchResults((prevData) =>
       prevData.map((item) =>
         item.id === itemId ? { ...item, [name]: value } : item
       )
@@ -157,11 +177,13 @@ export default function Inputs() {
 
     if (Array.isArray(search)) {
       setSearchResults(search);
+      setSearchResultsBackup(search);
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
     return;
   }
 
@@ -396,7 +418,7 @@ export default function Inputs() {
                       name="type"
                       className="data-div"
                       value={input.type}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -405,7 +427,7 @@ export default function Inputs() {
                       name="name"
                       className="data-div"
                       value={input.name}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -414,7 +436,7 @@ export default function Inputs() {
                       name="quantity"
                       className="data-div"
                       value={input.quantity}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -423,7 +445,7 @@ export default function Inputs() {
                       name="totalweight"
                       className="data-div"
                       value={input.totalweight}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -432,7 +454,7 @@ export default function Inputs() {
                       name="weightperunit"
                       className="data-div"
                       value={input.weightperunit}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -441,7 +463,7 @@ export default function Inputs() {
                       name="supplier"
                       className="data-div"
                       value={input.supplier}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -450,7 +472,7 @@ export default function Inputs() {
                       name="expirationdate"
                       className="data-div"
                       value={input.expirationdate}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -459,7 +481,7 @@ export default function Inputs() {
                       name="minimun_quantity"
                       className="data-div"
                       value={input.minimun_quantity}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -468,7 +490,7 @@ export default function Inputs() {
                       name="rateisnear"
                       className="data-div"
                       value={input.rateisnear}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -482,14 +504,14 @@ export default function Inputs() {
                   <button
                     type="button"
                     className="confirm-changes"
-                    onClick={(e) => InputUpdate(e)}
+                    onClick={(e) => InputUpdate(e, input)}
                   >
                     Salvar
                   </button>
                   <button
                     type="button"
                     className="cancel-changes"
-                    onClick={(e) => clear(e)}
+                    onClick={(e) => ClearSearch(e)}
                   >
                     Cancelar
                   </button>

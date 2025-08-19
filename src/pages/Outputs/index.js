@@ -35,6 +35,7 @@ export default function Outputs() {
   const [outputsData, setOutputsData] = useState([]);
   const [outputsDataBackup, setOutputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const searchOutput = document.querySelector(".output-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -118,8 +119,11 @@ export default function Outputs() {
     setDate("");
     setSearchParam("");
     setSearchResults([]);
-    searchOutput.value = "";
     setOutputsData(outputsDataBackup);
+    searchOutput.value = "";
+
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   const clear = (e) => {
@@ -127,11 +131,27 @@ export default function Outputs() {
     clearDirectExecution();
   };
 
+  const ClearSearch = (e) => {
+    e.preventDefault();
+    setSearchResults(searchResultsBackup);
+  };
+
   const HandleChange = (e, itemId) => {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
     setOutputsData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const HandleChangeSearch = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    setSearchResults((prevData) =>
       prevData.map((item) =>
         item.id === itemId ? { ...item, [name]: value } : item
       )
@@ -149,11 +169,13 @@ export default function Outputs() {
 
     if (Array.isArray(search)) {
       setSearchResults(search);
+      setSearchResultsBackup(search);
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
     return;
   }
 
@@ -340,7 +362,7 @@ export default function Outputs() {
                       name="date"
                       className="data-div"
                       value={output.date}
-                      onChange={(e) => HandleChange(e, output.id)}
+                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -349,7 +371,7 @@ export default function Outputs() {
                       name="hour"
                       className="data-div"
                       value={output.hour}
-                      onChange={(e) => HandleChange(e, output.id)}
+                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -358,7 +380,7 @@ export default function Outputs() {
                       name="name"
                       className="data-div"
                       value={output.name}
-                      onChange={(e) => HandleChange(e, output.id)}
+                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -367,7 +389,7 @@ export default function Outputs() {
                       name="type"
                       className="data-div"
                       value={output.type}
-                      onChange={(e) => HandleChange(e, output.id)}
+                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -376,7 +398,7 @@ export default function Outputs() {
                       name="unities"
                       className="data-div"
                       value={output.unities}
-                      onChange={(e) => HandleChange(e, output.id)}
+                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -389,14 +411,14 @@ export default function Outputs() {
                   <button
                     type="button"
                     className="confirm-changes"
-                    onClick={(e) => OutputUpdate(e)}
+                    onClick={(e) => OutputUpdate(e, output)}
                   >
                     Salvar
                   </button>
                   <button
                     type="button"
                     className="cancel-changes"
-                    onClick={(e) => clear(e)}
+                    onClick={(e) => ClearSearch(e)}
                   >
                     Cancelar
                   </button>

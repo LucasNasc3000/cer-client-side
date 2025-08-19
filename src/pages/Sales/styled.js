@@ -145,7 +145,7 @@ export const SalesSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 515px;
+    height: 445px;
     width: 515px;
     margin-top: 25px;
     margin-left: 70px;
@@ -177,6 +177,7 @@ export const SalesSpace = styled.div`
     height: 38px;
     border-radius: 8px;
     left: 110px;
+    top: 120px;
     margin-top: 0px;
     border: none;
     font-size: 16px;
@@ -222,16 +223,15 @@ export const SalesSpace = styled.div`
   } */
 
   .data-wrap {
+    display: flex;
     position: relative;
     margin-top: 40px;
     margin-left: 50px;
-    bottom: 360px;
+    bottom: 280px;
     right: 40px;
-    display: flex;
     height: fit-content;
     width: fit-content;
     border-radius: 8px;
-    background-color: aqua;
   }
 
   .label {
@@ -300,7 +300,7 @@ export const SalesSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 315px;
+    bottom: 230px;
     width: 120px;
     right: 20px;
     justify-content: center;
@@ -312,7 +312,7 @@ export const SalesSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 315px;
+    bottom: 230px;
     width: 120px;
     right: 5px;
     justify-content: center;
@@ -355,6 +355,11 @@ export const NewSale = styled.div`
   }
 
   .btn {
+    display: flex;
+    position: relative;
+    top: 20px;
+    justify-content: center;
+    align-items: center;
     height: 40px;
     width: 120px;
     margin-top: 15px;

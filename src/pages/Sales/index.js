@@ -33,9 +33,11 @@ export default function Sales() {
   const [searchParam, setSearchParam] = useState("");
   const [bossId, setBossId] = useState("");
   const [salesData, setSalesData] = useState([]);
+  const [salesDataBackup, setSalesDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [rerender, setReRender] = useState(false);
-  const searchSale = document.querySelector(".search-bar");
+  const searchSale = document.querySelector(".sale-search");
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -91,7 +93,11 @@ export default function Sales() {
     setClientBirthday("");
     setSearchParam("");
     setSearchResults([]);
+    setSalesData(salesDataBackup);
     searchSale.value = "";
+
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   const clear = (e) => {
@@ -99,11 +105,27 @@ export default function Sales() {
     clearDirectExecution();
   };
 
+  const ClearSearch = (e) => {
+    e.preventDefault();
+    setSearchResults(searchResultsBackup);
+  };
+
   const HandleChange = (e, itemId) => {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
     setSalesData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const HandleChangeSearch = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    setSearchResults((prevData) =>
       prevData.map((item) =>
         item.id === itemId ? { ...item, [name]: value } : item
       )
@@ -121,6 +143,7 @@ export default function Sales() {
     if (typeof sales === "undefined" || !sales) return;
 
     setSalesData(sales);
+    setSalesDataBackup(sales);
   }
 
   useEffect(() => {
@@ -145,11 +168,13 @@ export default function Sales() {
 
     if (Array.isArray(search)) {
       setSearchResults(search);
+      setSearchResultsBackup(search);
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
     return;
   }
 
@@ -355,7 +380,7 @@ export default function Sales() {
                       name="date"
                       className="data-div"
                       value={sale.date}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -364,7 +389,7 @@ export default function Sales() {
                       name="hour"
                       className="data-div"
                       value={sale.hour}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -373,7 +398,7 @@ export default function Sales() {
                       name="client_name"
                       className="data-div"
                       value={sale.client_name}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -382,7 +407,7 @@ export default function Sales() {
                       name="phone_number"
                       className="data-div"
                       value={sale.phone_number}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -391,7 +416,7 @@ export default function Sales() {
                       name="address"
                       className="data-div"
                       value={sale.address}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -400,7 +425,7 @@ export default function Sales() {
                       name="products"
                       className="data-div"
                       value={sale.products}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -409,7 +434,7 @@ export default function Sales() {
                       name="client_birthday"
                       className="data-div"
                       value={sale.client_birthday}
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -422,14 +447,14 @@ export default function Sales() {
                   <button
                     type="button"
                     className="confirm-changes"
-                    onClick={(e) => SaleUpdate(e)}
+                    onClick={(e) => SaleUpdate(e, sale)}
                   >
                     Salvar
                   </button>
                   <button
                     type="button"
                     className="cancel-changes"
-                    onClick={(e) => clear(e)}
+                    onClick={(e) => ClearSearch(e)}
                   >
                     Cancelar
                   </button>

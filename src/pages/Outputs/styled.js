@@ -195,7 +195,6 @@ export const OutputsSpace = styled.div`
     height: fit-content;
     width: fit-content;
     border-radius: 8px;
-    background-color: aqua;
   }
 
   .label {
