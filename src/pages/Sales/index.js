@@ -30,6 +30,7 @@ export default function Sales() {
   const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [client_birthday, setClientBirthday] = useState("");
+  const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [bossId, setBossId] = useState("");
   const [salesData, setSalesData] = useState([]);
@@ -91,6 +92,7 @@ export default function Sales() {
     setAddress("");
     setProducts("");
     setClientBirthday("");
+    setPrice("");
     setSearchParam("");
     setSearchResults([]);
     setSalesData(salesDataBackup);
@@ -205,6 +207,7 @@ export default function Sales() {
       products: document.querySelector("#products").value,
       employee_id,
       client_birthday: document.querySelector("#clientBirthday").value,
+      price: document.querySelector("#price").value,
     };
 
     const register = await Register(data, "sales");
@@ -260,6 +263,7 @@ export default function Sales() {
             <option value="products">Produtos</option>
             <option value="clientBirthday">Aniversário do cliente</option>
             <option value="employee">Funcionário</option>
+            <option value="price">Preço</option>
           </select>
         </div>
       </SearchSpace>
@@ -276,6 +280,7 @@ export default function Sales() {
                   <div className="label">Produtos: </div>
                   <div className="label">Aniversário do cliente: </div>
                   <div className="label">Funcionário: </div>
+                  <div className="label">Preço: </div>
                   <div className="data-wrap">
                     <input
                       type="text"
@@ -344,6 +349,15 @@ export default function Sales() {
                       type="text"
                       className="data-div"
                       value={sale.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={sale.price}
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <button
@@ -374,6 +388,7 @@ export default function Sales() {
                   <div className="label">Produtos: </div>
                   <div className="label">Aniversário do cliente: </div>
                   <div className="label">Funcionário: </div>
+                  <div className="label">Preço: </div>
                   <div className="data-wrap">
                     <input
                       type="text"
@@ -442,6 +457,15 @@ export default function Sales() {
                       type="text"
                       className="data-div"
                       value={sale.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={sale.price}
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <button
@@ -504,6 +528,13 @@ export default function Sales() {
           placeholder="Anv. Cliente ex: 15-02"
           value={client_birthday}
           onChange={(e) => setClientBirthday(e.target.value)}
+        />
+        <input
+          type="text"
+          id="price"
+          placeholder="Anv. Cliente ex: 15-02"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar

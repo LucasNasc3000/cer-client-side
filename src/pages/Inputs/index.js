@@ -35,6 +35,7 @@ export default function Inputs() {
   const [expirationdate, setExpirationDate] = useState("");
   const [interminimun_quantity, setInterMinimunQuantity] = useState("");
   const [interrateisnear, setInterRateIsNear] = useState("");
+  const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
@@ -123,6 +124,7 @@ export default function Inputs() {
     setInterWeightPerUnit(null);
     setSupplier("");
     setExpirationDate("");
+    setPrice("");
     setInterMinimunQuantity(null);
     setInterRateIsNear(null);
     setInputsData(inputsDataBackup);
@@ -226,6 +228,7 @@ export default function Inputs() {
       interminimun_quantity: document.querySelector("#minimunQuantity").value,
       interrateisnear: document.querySelector("#rateisnear").value,
       employee_id,
+      price: document.querySelector("#price").value,
     };
 
     const register = await Register(data, "inputs");
@@ -276,6 +279,7 @@ export default function Inputs() {
             <option value="minimun_quantity">Quantidade mínima</option>
             <option value="rateisnear">Próximo ao limite</option>
             <option value="employee">Funcionário</option>
+            <option value="price">Preço</option>
           </select>
         </div>
       </SearchSpace>
@@ -294,6 +298,7 @@ export default function Inputs() {
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
                   <div className="label">Funcionário: </div>
+                  <div className="label">Preço: </div>
                   <div className="data-wrap">
                     <input
                       type="text"
@@ -380,6 +385,15 @@ export default function Inputs() {
                       type="text"
                       className="data-div"
                       value={input.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={input.price}
+                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <button
@@ -412,6 +426,7 @@ export default function Inputs() {
                   <div className="label">Quantidade mínima: </div>
                   <div className="label">Próximo ao limite: </div>
                   <div className="label">Funcionário: </div>
+                  <div className="label">Preço: </div>
                   <div className="data-wrap">
                     <input
                       type="text"
@@ -500,7 +515,15 @@ export default function Inputs() {
                       value={input.employee_id}
                     />
                   </div>
-
+                  <div className="data-wrap">
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={input.price}
+                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
                   <button
                     type="button"
                     className="confirm-changes"
@@ -582,6 +605,13 @@ export default function Inputs() {
           placeholder="Próximo ao limite ex: 10"
           value={interrateisnear || ""}
           onChange={(e) => setInterRateIsNear(e.target.value)}
+        />
+        <input
+          type="text"
+          id="price"
+          placeholder="Preço ex: 10.90"
+          value={price || ""}
+          onChange={(e) => setPrice(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
