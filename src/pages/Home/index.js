@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
@@ -12,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
+import { PieChart } from "../../components/Charts/PieChart";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
@@ -27,7 +29,11 @@ export default function Home() {
   const dispatch = useDispatch();
   const [employee_id, setEmployeeId] = useState("");
   const [outputsData, setOutputsData] = useState([]);
+  const [inputsData, setInputsData] = useState([]);
   const [datesAndLength, setDatesAndLength] = useState([]);
+  const [colorsCollection, setColorsCollection] = useState([]);
+  const [dataPieChart, setDataPieChart] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -76,6 +82,28 @@ export default function Home() {
     }
 
     GetOutputsData();
+  }, [employee_id, permission]);
+
+  useEffect(() => {
+    async function GetInputsData() {
+      try {
+        const inputs = await GetData(
+          employee_id,
+          "inputs",
+          employee_id,
+          permission
+        );
+
+        if (typeof inputs === "undefined" || !inputs) return;
+
+        setInputsData(inputs);
+      } catch (err) {
+        if (typeof err.response.data === "string") return;
+        toast.error("Erro ao obter dados dos insumos");
+      }
+    }
+
+    GetInputsData();
   }, [employee_id, permission]);
 
   function DaysInMonth(month, year) {
@@ -135,6 +163,53 @@ export default function Home() {
     SearchForSalesByDates();
   }, [employee_id]);
 
+  useEffect(() => {
+    function GetColors(r, g, b) {
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function MakingColors() {
+      const toColorsCollection = [];
+
+      // for (let i = 0; i < inputsData.length; i++) {
+      //   let r = i + 14 * 10;
+      //   let g = i + 12 * 10;
+      //   let b = i + 10 * 3;
+
+      //   // let colors = GetColors(r, g, b);
+      //   toColorsCollection.push("rgb(157, 255, 200)", "rgb(157, 100, 200)", "rgb(122, 155, 100)");
+      // }
+      toColorsCollection.push(
+        "rgb(157, 255, 200)",
+        "rgb(157, 100, 200)",
+        "rgb(122, 155, 100)"
+      );
+
+      setColorsCollection(toColorsCollection);
+      setIsLoading(false);
+    }
+
+    MakingColors();
+  }, [inputsData]);
+
+  useEffect(() => {
+    function FillTheChart() {
+      setDataPieChart({
+        labels: inputsData.map((inputData) => inputData.name),
+        datasets: [
+          {
+            label: "Insumo",
+            data: inputsData.map((inputData) => inputData.quantity),
+            backgroundColor: colorsCollection,
+            hoverOffset: 4,
+          },
+        ],
+      });
+    }
+
+    FillTheChart();
+  }, [colorsCollection, inputsData]);
+
   // eslint-disable-next-line no-unused-vars
   const chartData = {
     labels: datesAndLength.map((date) => {
@@ -175,6 +250,11 @@ export default function Home() {
       <Header />
       <BarChart chartData={chartData} />
       <BarChartProducts chartData={chartDataProducts} />
+      {isLoading === false ? (
+        <PieChart chartData={dataPieChart} />
+      ) : (
+        <div>Carregando...</div>
+      )}
     </HomeContainer>
   );
 }
