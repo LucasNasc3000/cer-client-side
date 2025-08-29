@@ -19,7 +19,7 @@ export function PieChart({ chartData }) {
                 text: "Distribuição de insumos",
               },
               legend: {
-                display: false,
+                display: true,
               },
             },
           }}

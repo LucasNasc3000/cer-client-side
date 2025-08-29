@@ -8,11 +8,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
+import Decimal from "decimal.js";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { BarChart } from "../../components/Charts/BarChart";
-import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import { PieChart } from "../../components/Charts/PieChart";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -28,6 +27,8 @@ export default function Home() {
   const headerid = useSelector((state) => state.auth.headerid);
   const dispatch = useDispatch();
   const [employee_id, setEmployeeId] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [prices, setPrices] = useState([]);
   const [outputsData, setOutputsData] = useState([]);
   const [inputsData, setInputsData] = useState([]);
   const [datesAndLength, setDatesAndLength] = useState([]);
@@ -62,27 +63,27 @@ export default function Home() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
-  useEffect(() => {
-    async function GetOutputsData() {
-      try {
-        const outputs = await GetData(
-          employee_id,
-          "outputs",
-          employee_id,
-          permission
-        );
+  // useEffect(() => {
+  //   async function GetOutputsData() {
+  //     try {
+  //       const outputs = await GetData(
+  //         employee_id,
+  //         "outputs",
+  //         employee_id,
+  //         permission
+  //       );
 
-        if (typeof outputs === "undefined" || !outputs) return;
+  //       if (typeof outputs === "undefined" || !outputs) return;
 
-        setOutputsData(outputs);
-      } catch (err) {
-        if (typeof err.response.data === "string") return;
-        toast.error("Erro ao obter dados das saídas");
-      }
-    }
+  //       setOutputsData(outputs);
+  //     } catch (err) {
+  //       if (typeof err.response.data === "string") return;
+  //       toast.error("Erro ao obter dados das saídas");
+  //     }
+  //   }
 
-    GetOutputsData();
-  }, [employee_id, permission]);
+  //   GetOutputsData();
+  // }, [employee_id, permission]);
 
   useEffect(() => {
     async function GetInputsData() {
@@ -106,84 +107,87 @@ export default function Home() {
     GetInputsData();
   }, [employee_id, permission]);
 
-  function DaysInMonth(month, year) {
-    return new Date(year, month, 0).getDate();
-  }
+  // function DaysInMonth(month, year) {
+  //   return new Date(year, month, 0).getDate();
+  // }
 
-  function GetDates() {
-    const dates = [];
-    const date = new Date();
-    const month = date.toLocaleDateString("pt-br", {
-      month: "2-digit",
-    });
-    const year = date.toLocaleDateString("pt-br", {
-      year: "numeric",
-    });
-    const daysInMonth = DaysInMonth(month, year);
+  // function GetDates() {
+  //   const dates = [];
+  //   const date = new Date();
+  //   const month = date.toLocaleDateString("pt-br", {
+  //     month: "2-digit",
+  //   });
+  //   const year = date.toLocaleDateString("pt-br", {
+  //     year: "numeric",
+  //   });
+  //   const daysInMonth = DaysInMonth(month, year);
 
-    for (let i = 0; i < daysInMonth + 1; i++) {
-      dates.push(String(`${i}-${month}-${year}`));
-    }
+  //   for (let i = 0; i < daysInMonth + 1; i++) {
+  //     dates.push(String(`${i}-${month}-${year}`));
+  //   }
 
-    for (let i = 0; i < 10; i++) {
-      dates[i] = `0${i}-${month}-${year}`;
-    }
+  //   for (let i = 0; i < 10; i++) {
+  //     dates[i] = `0${i}-${month}-${year}`;
+  //   }
 
-    dates.shift();
+  //   dates.shift();
 
-    return dates;
-  }
+  //   return dates;
+  // }
 
-  useEffect(() => {
-    async function SearchForSalesByDates() {
-      try {
-        const dates = GetDates();
-        const preDatesAndLength = [];
+  // useEffect(() => {
+  //   async function SearchForSalesByDates() {
+  //     try {
+  //       const dates = GetDates();
+  //       const preDatesAndLength = [];
 
-        for (let i = 0; i < dates.length; i++) {
-          // eslint-disable-next-line no-await-in-loop
-          const getSalesByDates = await axios.post(`/sales/search/date`, {
-            saledateBody: dates[i],
-            forDashboard: true,
-          });
+  //       for (let i = 0; i < dates.length; i++) {
+  //         // eslint-disable-next-line no-await-in-loop
+  //         const getSalesByDates = await axios.post(`/sales/search/date`, {
+  //           saledateBody: dates[i],
+  //           forDashboard: true,
+  //         });
 
-          preDatesAndLength.push({
-            date: dates[i],
-            salesNumber: getSalesByDates.data,
-          });
-        }
+  //         preDatesAndLength.push({
+  //           date: dates[i],
+  //           salesNumber: getSalesByDates.data,
+  //         });
+  //       }
 
-        setDatesAndLength(preDatesAndLength);
-      } catch (err) {
-        if (typeof err.response.data === "string") return;
-        toast.error("Erro ao obter vendas nas datas especificadas");
-      }
-    }
+  //       setDatesAndLength(preDatesAndLength);
+  //     } catch (err) {
+  //       if (typeof err.response.data === "string") return;
+  //       toast.error("Erro ao obter vendas nas datas especificadas");
+  //     }
+  //   }
 
-    SearchForSalesByDates();
-  }, [employee_id]);
+  //   SearchForSalesByDates();
+  // }, [employee_id]);
 
   useEffect(() => {
     function GetColors(r, g, b) {
       return `rgb(${r}, ${g}, ${b})`;
     }
 
+    function RandomNumber(min, max) {
+      if (min < 0) return "The min is 0";
+
+      if (max > 255) return "The max is 255";
+
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     function MakingColors() {
       const toColorsCollection = [];
 
-      // for (let i = 0; i < inputsData.length; i++) {
-      //   let r = i + 14 * 10;
-      //   let g = i + 12 * 10;
-      //   let b = i + 10 * 3;
+      for (let i = 0; i < inputsData.length; i++) {
+        let r = RandomNumber(0, 255);
+        let g = RandomNumber(0, 255);
+        let b = RandomNumber(0, 255);
 
-      //   // let colors = GetColors(r, g, b);
-      //   toColorsCollection.push("rgb(157, 255, 200)", "rgb(157, 100, 200)", "rgb(122, 155, 100)");
-      // }
-      toColorsCollection.push(
-        "rgb(157, 255, 200)",
-        "rgb(157, 100, 200)",
-        "rgb(122, 155, 100)"
-      );
+        let colors = GetColors(r, g, b);
+        toColorsCollection.push(colors);
+      }
 
       setColorsCollection(toColorsCollection);
       setIsLoading(false);
@@ -201,7 +205,7 @@ export default function Home() {
             label: "Insumo",
             data: inputsData.map((inputData) => inputData.quantity),
             backgroundColor: colorsCollection,
-            hoverOffset: 4,
+            hoverOffset: 6,
           },
         ],
       });
@@ -210,51 +214,70 @@ export default function Home() {
     FillTheChart();
   }, [colorsCollection, inputsData]);
 
-  // eslint-disable-next-line no-unused-vars
-  const chartData = {
-    labels: datesAndLength.map((date) => {
-      return date.date;
-    }),
-    datasets: [
-      {
-        label: "Vendas realizadas neste dia",
-        data: datesAndLength.map((sale) => {
-          return sale.salesNumber;
-        }),
-        skipNull: true,
-        maxBarThicness: 10,
-        backgroundColor: ["gray"],
-      },
-    ],
-  };
+  useEffect(() => {
+    const inputsPrices = inputsData.map((input) => input.price);
+    setPrices(inputsPrices);
+  }, [inputsData]);
 
-  const chartDataProducts = {
-    labels: outputsData.map((data) => {
-      return data.name;
-    }),
-    datasets: [
-      {
-        label: "Saídas por unidade (total)",
-        data: outputsData.map((data) => {
-          return data.unities;
-        }),
-        skipNull: true,
-        maxBarThicness: 10,
-        backgroundColor: ["gray"],
-      },
-    ],
-  };
+  useEffect(() => {
+    if (prices.length > 0) {
+      const sumOfPrices = prices.reduce((acc, currentVal) => {
+        return acc.plus(new Decimal(currentVal));
+      }, new Decimal(0));
+
+      setTotalPrice(sumOfPrices.toString());
+    }
+  }, [prices, totalPrice, inputsData]);
+
+  console.log(totalPrice);
+
+  // eslint-disable-next-line no-unused-vars
+  // const chartData = {
+  //   labels: datesAndLength.map((date) => {
+  //     return date.date;
+  //   }),
+  //   datasets: [
+  //     {
+  //       label: "Vendas realizadas neste dia",
+  //       data: datesAndLength.map((sale) => {
+  //         return sale.salesNumber;
+  //       }),
+  //       skipNull: true,
+  //       maxBarThicness: 10,
+  //       backgroundColor: ["gray"],
+  //     },
+  //   ],
+  // };
+
+  // const chartDataProducts = {
+  //   labels: outputsData.map((data) => {
+  //     return data.name;
+  //   }),
+  //   datasets: [
+  //     {
+  //       label: "Saídas por unidade (total)",
+  //       data: outputsData.map((data) => {
+  //         return data.unities;
+  //       }),
+  //       skipNull: true,
+  //       maxBarThicness: 10,
+  //       backgroundColor: ["gray"],
+  //     },
+  //   ],
+  // };
 
   return (
     <HomeContainer>
       <Header />
-      <BarChart chartData={chartData} />
-      <BarChartProducts chartData={chartDataProducts} />
       {isLoading === false ? (
         <PieChart chartData={dataPieChart} />
       ) : (
         <div>Carregando...</div>
       )}
+      <div className="price">
+        <p className="text">Gasto total de insumos</p>
+        {totalPrice}
+      </div>
     </HomeContainer>
   );
 }
