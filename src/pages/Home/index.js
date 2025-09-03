@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable prefer-const */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
@@ -35,6 +36,7 @@ export default function Home() {
   const [colorsCollection, setColorsCollection] = useState([]);
   const [dataPieChart, setDataPieChart] = useState({});
   const [dataForPriceAndMonth, setDataForPriceAndMonth] = useState({});
+  const [priceMonths, setPriceMonths] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -203,30 +205,42 @@ export default function Home() {
       const pricesInMonth = [];
       const priceAndMonths = [];
 
-      inputsData.map((input) => {
-        for (let i = 0; i < 12; i++) {
-          const months = [];
+      if (inputsData && inputsData.length > 0) {
+        const data = inputsData.map((input) => {
+          for (let i = 0; i < 12; i++) {
+            const months = [];
 
-          const isolatedMonth = input.find(
-            (inputCreatedAt) => inputCreatedAt.created_at[6] === i
-          );
+            const isolatedMonth = input.find(
+              (inputCreatedAt) =>
+                parseInt(inputCreatedAt.created_at[6], 10) === i
+            );
 
-          months.push(isolatedMonth.price);
+            months.push(isolatedMonth.price);
 
-          const sum = months.reduce((acc, currentVal) => {
-            return acc.plus(new Decimal(currentVal));
-          }, new Decimal(0));
+            console.log(isolatedMonth);
 
-          pricesInMonth.push(sum.toString());
-        }
+            const sum = months.reduce((acc, currentVal) => {
+              return acc.plus(new Decimal(currentVal));
+            }, new Decimal(0));
 
-        for (let i = 0; i < 12; i++) {
-          priceAndMonths.push({
-            month: i,
-            price: pricesInMonth[i],
-          });
-        }
-      });
+            pricesInMonth.push(sum.toString());
+          }
+
+          for (let i = 0; i < 12; i++) {
+            priceAndMonths.push({
+              month: i,
+              totalPrice: pricesInMonth[i],
+            });
+          }
+        });
+      }
+
+      for (let i = 0; i < 12; i++) {
+        priceAndMonths.push({
+          month: i,
+          totalPrice: pricesInMonth[i],
+        });
+      }
 
       priceAndMonths.map((element) => {
         if (element.month.length === 1) {
@@ -236,9 +250,16 @@ export default function Home() {
         }
       });
 
-      // colocar o /2025
+      priceAndMonths.map((element) => {
+        // eslint-disable-next-line no-param-reassign
+        element.month = `${element.month}/2025`;
+      });
     }
 
+    GetMonths();
+  }, [inputsData]);
+
+  useEffect(() => {
     function FillTheChart() {
       setDataPieChart({
         labels: inputsData.map((inputData) => inputData.name),
@@ -251,25 +272,25 @@ export default function Home() {
           },
         ],
       });
-
-      setDataPriceMonthChart({
-        labels: GetMonths.map((date) => date),
-        datasets: [
-          {
-            label: "Gasto total com insumos no mês",
-            data: inputsData.map((input) => {
-              return input.price;
-            }),
-            skipNull: true,
-            maxBarThicness: 10,
-            backgroundColor: ["gray"],
-          },
-        ],
-      });
     }
 
     FillTheChart();
   }, [colorsCollection, inputsData]);
+
+  useEffect(() => {
+    setDataPriceMonthChart({
+      labels: priceMonths.map((date) => date.month),
+      datasets: [
+        {
+          label: "Gasto total com insumos no mês",
+          data: priceMonths.map((price) => price.price),
+          skipNull: true,
+          maxBarThicness: 10,
+          backgroundColor: ["rgb(48, 48, 48)"],
+        },
+      ],
+    });
+  }, [inputsData, priceMonths]);
 
   useEffect(() => {
     const inputsPrices = inputsData.map((input) => input.price);

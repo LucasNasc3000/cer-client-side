@@ -4,7 +4,7 @@ import { object } from "prop-types";
 import { Bar } from "react-chartjs-2";
 import { ChartContainer } from "./styled-barchat";
 
-export function BarChart({ chartData }) {
+export function BarChartTotalPriceInputs({ chartData }) {
   return (
     <ChartContainer>
       <div className="chart-container">
@@ -19,7 +19,7 @@ export function BarChart({ chartData }) {
                 text: "Número de vendas por mês",
               },
               legend: {
-                display: false,
+                display: true,
               },
             },
           }}
@@ -29,7 +29,7 @@ export function BarChart({ chartData }) {
   );
 }
 
-BarChart.propTypes = {
+BarChartTotalPriceInputs.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   chartData: object.isRequired,
 };
