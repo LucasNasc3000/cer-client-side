@@ -11,9 +11,9 @@ export const HomeContainer = styled.div`
     display: flex;
     position: relative;
     height: 90px;
-    width: 200px;
-    bottom: 600px;
-    left: 400px;
+    width: fit-content;
+    bottom: 920px;
+    left: 750px;
     justify-content: center;
     align-items: center;
     font-weight: bolder;
@@ -22,11 +22,19 @@ export const HomeContainer = styled.div`
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
+  .total-price {
+    display: flex;
+    position: relative;
+    top: 15px;
+    right: 95px;
+  }
+
   .text {
     display: flex;
-    font-size: 15px;
-    margin-bottom: 40px;
+    position: relative;
+    font-size: 17px;
+    bottom: 30px;
+    left: 80px;
     width: 190px;
-    background-color: aqua;
   }
 `;

@@ -13,7 +13,7 @@ import Decimal from "decimal.js";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { BarChartTotalPriceInputs } from "../../components/Charts/BarChartTotalPriceInputs";
+import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalPriceInputs";
 import { PieChart } from "../../components/Charts/PieChart";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -263,27 +263,25 @@ export default function Home() {
     }
 
     GetMonths();
-  }, [inputsData, priceMonths]);
+  }, [inputsData]);
 
   useEffect(() => {
-    function FillTheChart() {
-      setDataPieChart({
-        labels: inputsData.map((inputData) => inputData.name),
-        datasets: [
-          {
-            label: "Insumo",
-            data: inputsData.map((inputData) => inputData.quantity),
-            backgroundColor: colorsCollection,
-            hoverOffset: 6,
-          },
-        ],
-      });
+    setDataPieChart({
+      labels: inputsData.map((inputData) => inputData.name),
+      datasets: [
+        {
+          label: "Insumo",
+          data: inputsData.map((inputData) => inputData.quantity),
+          backgroundColor: colorsCollection,
+          hoverOffset: 6,
+        },
+      ],
+    });
 
-      setIsLoadingPieChart1(false);
-    }
-
-    FillTheChart();
+    setIsLoadingPieChart1(false);
   }, [colorsCollection, inputsData]);
+
+  // Trocar nomes das variaveis de bar para line
 
   useEffect(() => {
     setDataPriceMonthChart({
@@ -304,10 +302,7 @@ export default function Home() {
 
   useEffect(() => {
     const inputsPrices = inputsData.map((input) => input.price);
-
     setPrices(inputsPrices);
-
-    setIsLoadingTotalPrice(false);
   }, [inputsData]);
 
   useEffect(() => {
@@ -318,12 +313,13 @@ export default function Home() {
 
       const priceToString = sumOfPrices.toString();
 
-      if (priceToString.length === 3) {
+      if (priceToString.length === 4) {
         setTotalPrice(`${priceToString}0`);
         return;
       }
 
       setTotalPrice(sumOfPrices.toString());
+      setIsLoadingTotalPrice(false);
     }
   }, [prices, totalPrice, inputsData]);
 
@@ -358,12 +354,16 @@ export default function Home() {
       ) : (
         <div>Carregando...</div>
       )}
-      <div className="price">
-        <p className="text">Gasto total de insumos</p>
-        {totalPrice}
-      </div>
       {isLoadingFinal === false ? (
-        <BarChartTotalPriceInputs chartData={dataPriceMonthChart} />
+        <div className="price">
+          <p className="text">Gasto total de insumos</p>
+          <div className="total-price">R$ {totalPrice}</div>
+        </div>
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <LineChartTotalPriceInputs chartData={dataPriceMonthChart} />
       ) : (
         <div>Carregando...</div>
       )}

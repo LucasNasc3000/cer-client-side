@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/react-in-jsx-scope */
 import { object } from "prop-types";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { ChartContainer } from "./styled-barchat";
 
-export function BarChartTotalPriceInputs({ chartData }) {
+export function LineChartTotalPriceInputs({ chartData }) {
   return (
     <ChartContainer>
       <div className="chart-container">
-        <Bar
+        <Line
           data={chartData}
           options={{
             responsive: true,
@@ -16,7 +16,7 @@ export function BarChartTotalPriceInputs({ chartData }) {
             plugins: {
               title: {
                 display: true,
-                text: "Número de vendas por mês",
+                text: "Gasto total com insumos no mês",
               },
               legend: {
                 display: false,
@@ -29,7 +29,7 @@ export function BarChartTotalPriceInputs({ chartData }) {
   );
 }
 
-BarChartTotalPriceInputs.propTypes = {
+LineChartTotalPriceInputs.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   chartData: object.isRequired,
 };
