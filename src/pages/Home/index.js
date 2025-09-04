@@ -13,6 +13,7 @@ import Decimal from "decimal.js";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { BarChartTotalPriceInputs } from "../../components/Charts/BarChartTotalPriceInputs";
 import { PieChart } from "../../components/Charts/PieChart";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -30,15 +31,15 @@ export default function Home() {
   const [employee_id, setEmployeeId] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [prices, setPrices] = useState([]);
-  const [outputsData, setOutputsData] = useState([]);
   const [inputsData, setInputsData] = useState([]);
-  const [datesAndLength, setDatesAndLength] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
   const [dataPieChart, setDataPieChart] = useState({});
-  const [dataForPriceAndMonth, setDataForPriceAndMonth] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
+  const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
+  const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
+  const [isLoadingFinal, setIsLoadingFinal] = useState(true);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -46,7 +47,7 @@ export default function Home() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permission]);
 
   useEffect(() => {
     async function headerIdCheck() {
@@ -194,7 +195,6 @@ export default function Home() {
       }
 
       setColorsCollection(toColorsCollection);
-      setIsLoading(false);
     }
 
     MakingColors();
@@ -202,62 +202,68 @@ export default function Home() {
 
   useEffect(() => {
     function GetMonths() {
-      const pricesInMonth = [];
+      // O ano vai ter que ser dinamico, com um select
+      const priceAndMonthsRefined = [];
       const priceAndMonths = [];
 
-      if (inputsData && inputsData.length > 0) {
-        const data = inputsData.map((input) => {
-          for (let i = 0; i < 12; i++) {
-            const months = [];
-
-            const isolatedMonth = input.find(
-              (inputCreatedAt) =>
-                parseInt(inputCreatedAt.created_at[6], 10) === i
-            );
-
-            months.push(isolatedMonth.price);
-
-            console.log(isolatedMonth);
-
-            const sum = months.reduce((acc, currentVal) => {
-              return acc.plus(new Decimal(currentVal));
-            }, new Decimal(0));
-
-            pricesInMonth.push(sum.toString());
-          }
-
-          for (let i = 0; i < 12; i++) {
-            priceAndMonths.push({
-              month: i,
-              totalPrice: pricesInMonth[i],
-            });
-          }
-        });
-      }
-
-      for (let i = 0; i < 12; i++) {
-        priceAndMonths.push({
-          month: i,
-          totalPrice: pricesInMonth[i],
-        });
-      }
-
-      priceAndMonths.map((element) => {
-        if (element.month.length === 1) {
-          const withZero = `0${element.month}`;
-          // eslint-disable-next-line no-param-reassign
-          element.month = withZero;
+      for (let i = 1; i < 13; i++) {
+        if (i >= 10) {
+          priceAndMonthsRefined.push({
+            month: `${i}/2025`,
+            prices: [],
+            total: "",
+          });
+        } else {
+          priceAndMonthsRefined.push({
+            month: `0${i}/2025`,
+            prices: [],
+            total: "",
+          });
         }
-      });
+      }
 
-      priceAndMonths.map((element) => {
-        // eslint-disable-next-line no-param-reassign
-        element.month = `${element.month}/2025`;
-      });
+      if (inputsData && inputsData.length > 0) {
+        inputsData.map((input) => {
+          priceAndMonths.push({
+            month: input.created_at[6],
+            price: input.price,
+          });
+        });
+
+        for (let i = 0; i < priceAndMonths.length; i++) {
+          if (priceAndMonths[i].month.length === 1) {
+            const withZero = `0${priceAndMonths[i].month}`;
+            priceAndMonths[i].month = withZero;
+          }
+        }
+
+        priceAndMonths.forEach((element) => {
+          const month = parseInt(element.month, 10);
+
+          if (priceAndMonthsRefined[month - 1]) {
+            priceAndMonthsRefined[month - 1].prices.push(element.price);
+          }
+        });
+
+        priceAndMonthsRefined.forEach((element) => {
+          const sum = element.prices.reduce((acc, currentVal) => {
+            return acc.plus(new Decimal(currentVal));
+          }, new Decimal(0));
+
+          element.total = sum.toString();
+
+          if (element.total.length === 4) {
+            const withZero = `${element.total}0`;
+            element.total = withZero;
+          }
+        });
+
+        setPriceMonths(priceAndMonthsRefined);
+      }
     }
 
     GetMonths();
-  }, [inputsData]);
+  }, [inputsData, priceMonths]);
 
   useEffect(() => {
     function FillTheChart() {
@@ -272,6 +278,8 @@ export default function Home() {
           },
         ],
       });
+
+      setIsLoadingPieChart1(false);
     }
 
     FillTheChart();
@@ -283,18 +291,23 @@ export default function Home() {
       datasets: [
         {
           label: "Gasto total com insumos no mês",
-          data: priceMonths.map((price) => price.price),
+          data: priceMonths.map((price) => price.total),
           skipNull: true,
           maxBarThicness: 10,
           backgroundColor: ["rgb(48, 48, 48)"],
         },
       ],
     });
+
+    setIsLoadingPriceMonths(false);
   }, [inputsData, priceMonths]);
 
   useEffect(() => {
     const inputsPrices = inputsData.map((input) => input.price);
+
     setPrices(inputsPrices);
+
+    setIsLoadingTotalPrice(false);
   }, [inputsData]);
 
   useEffect(() => {
@@ -313,6 +326,12 @@ export default function Home() {
       setTotalPrice(sumOfPrices.toString());
     }
   }, [prices, totalPrice, inputsData]);
+
+  useEffect(() => {
+    if (isLoadingPieChart1 && isLoadingTotalPrice && isLoadingPriceMonths) {
+      setIsLoadingFinal(false);
+    }
+  }, [isLoadingPieChart1, isLoadingTotalPrice, isLoadingPriceMonths]);
 
   // const chartDataProducts = {
   //   labels: outputsData.map((data) => {
@@ -334,7 +353,7 @@ export default function Home() {
   return (
     <HomeContainer>
       <Header />
-      {isLoading === false ? (
+      {isLoadingFinal === false ? (
         <PieChart chartData={dataPieChart} />
       ) : (
         <div>Carregando...</div>
@@ -343,6 +362,11 @@ export default function Home() {
         <p className="text">Gasto total de insumos</p>
         {totalPrice}
       </div>
+      {isLoadingFinal === false ? (
+        <BarChartTotalPriceInputs chartData={dataPriceMonthChart} />
+      ) : (
+        <div>Carregando...</div>
+      )}
     </HomeContainer>
   );
 }

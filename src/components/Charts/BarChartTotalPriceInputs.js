@@ -19,7 +19,7 @@ export function BarChartTotalPriceInputs({ chartData }) {
                 text: "Número de vendas por mês",
               },
               legend: {
-                display: true,
+                display: false,
               },
             },
           }}
