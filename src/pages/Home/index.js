@@ -32,9 +32,11 @@ export default function Home() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [prices, setPrices] = useState([]);
   const [inputsData, setInputsData] = useState([]);
+  const [salesData, setSalesData] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
-  const [dataPieChart, setDataPieChart] = useState({});
+  const [dataPieChartInputs, setDataPieChartInputs] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
+  const [productsCount, setProductsCount] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
   const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
   const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
@@ -110,6 +112,28 @@ export default function Home() {
     }
 
     GetInputsData();
+  }, [employee_id, permission]);
+
+  useEffect(() => {
+    async function GetSalesData() {
+      try {
+        const sales = await GetData(
+          employee_id,
+          "sales",
+          employee_id,
+          permission
+        );
+
+        if (typeof sales === "undefined" || !sales) return;
+
+        setSalesData(sales);
+      } catch (err) {
+        if (typeof err.response.data === "string") return;
+        toast.error("Erro ao obter dados das vendas");
+      }
+    }
+
+    GetSalesData();
   }, [employee_id, permission]);
 
   // function DaysInMonth(month, year) {
@@ -266,7 +290,62 @@ export default function Home() {
   }, [inputsData]);
 
   useEffect(() => {
-    setDataPieChart({
+    function countItems(arr, value) {
+      return arr.filter((item) => item === value).length;
+    }
+
+    function GetProducts() {
+      const justProducts = [];
+      const splittedCommaProducts = [];
+      const productCount = [];
+      const withCommaElements = [];
+      const withoutCommaElements = [];
+
+      salesData.map((sale) => {
+        justProducts.push(sale.products);
+      });
+
+      justProducts.forEach((element) => {
+        if (element.includes(",")) {
+          withCommaElements.push(element);
+        } else {
+          withoutCommaElements.push(element);
+        }
+      });
+
+      withCommaElements.forEach((element) => {
+        const separatedElements = element.split(",");
+        splittedCommaProducts.push(...separatedElements);
+      });
+
+      const allProducts = withoutCommaElements.concat(splittedCommaProducts);
+
+      allProducts.forEach((element) => {
+        const count = countItems(allProducts, element);
+
+        productCount.push({
+          count,
+          product: element,
+        });
+      });
+
+      for (let i = 0; i < productCount.length; i++) {
+        if (i <= productCount - 1) {
+          if (productCount[i].product === productCount[i + 1].product) {
+            const index = productCount.indexOf(productCount[i].product);
+            productCount.splice(index, 1);
+          }
+        }
+      }
+
+      console.log(productCount);
+    }
+
+    GetProducts();
+  }, [salesData]);
+
+  useEffect(() => {
+    setDataPieChartInputs({
       labels: inputsData.map((inputData) => inputData.name),
       datasets: [
         {
@@ -281,8 +360,6 @@ export default function Home() {
     setIsLoadingPieChart1(false);
   }, [colorsCollection, inputsData]);
 
-  // Trocar nomes das variaveis de bar para line
-
   useEffect(() => {
     setDataPriceMonthChart({
       labels: priceMonths.map((date) => date.month),
@@ -292,7 +369,8 @@ export default function Home() {
           data: priceMonths.map((price) => price.total),
           skipNull: true,
           maxBarThicness: 10,
-          backgroundColor: ["rgb(48, 48, 48)"],
+          backgroundColor: ["rgba(4, 148, 170, 1)"],
+          borderColor: ["rgba(4, 148, 170, 1)"],
         },
       ],
     });
@@ -350,7 +428,7 @@ export default function Home() {
     <HomeContainer>
       <Header />
       {isLoadingFinal === false ? (
-        <PieChart chartData={dataPieChart} />
+        <PieChart chartData={dataPieChartInputs} />
       ) : (
         <div>Carregando...</div>
       )}
