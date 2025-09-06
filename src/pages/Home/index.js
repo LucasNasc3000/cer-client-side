@@ -15,10 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalPriceInputs";
 import { PieChart } from "../../components/Charts/PieChart";
+import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
 import history from "../../services/history";
+import MakingColors from "./MakingColors";
 import { HomeContainer } from "./styled";
 
 Chart.register(CategoryScale);
@@ -35,12 +37,14 @@ export default function Home() {
   const [salesData, setSalesData] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
   const [dataPieChartInputs, setDataPieChartInputs] = useState({});
+  const [dataPieChartSalesPC, setDataPieChartSalesPC] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
   const [productsCount, setProductsCount] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
   const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
   const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
   const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
+  const [isLoadingPieChart2, setIsLoadingPieChart2] = useState(true);
   const [isLoadingFinal, setIsLoadingFinal] = useState(true);
 
   useEffect(() => {
@@ -194,35 +198,14 @@ export default function Home() {
   // }, [employee_id]);
 
   useEffect(() => {
-    function GetColors(r, g, b) {
-      return `rgb(${r}, ${g}, ${b})`;
-    }
+    const allColors = [];
+    const colorsInputsChart = MakingColors(inputsData);
+    const colorsProductsCountChart = MakingColors(productsCount);
 
-    function RandomNumber(min, max) {
-      if (min < 0) return "The min is 0";
+    allColors.push(colorsInputsChart, colorsProductsCountChart);
 
-      if (max > 255) return "The max is 255";
-
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function MakingColors() {
-      const toColorsCollection = [];
-
-      for (let i = 0; i < inputsData.length; i++) {
-        let r = RandomNumber(0, 255);
-        let g = RandomNumber(0, 255);
-        let b = RandomNumber(0, 255);
-
-        let colors = GetColors(r, g, b);
-        toColorsCollection.push(colors);
-      }
-
-      setColorsCollection(toColorsCollection);
-    }
-
-    MakingColors();
-  }, [inputsData]);
+    setColorsCollection(allColors);
+  }, [inputsData, productsCount]);
 
   useEffect(() => {
     function GetMonths() {
@@ -290,14 +273,9 @@ export default function Home() {
   }, [inputsData]);
 
   useEffect(() => {
-    function countItems(arr, value) {
-      return arr.filter((item) => item === value).length;
-    }
-
     function GetProducts() {
       const justProducts = [];
       const splittedCommaProducts = [];
-      const productCount = [];
       const withCommaElements = [];
       const withoutCommaElements = [];
 
@@ -320,25 +298,20 @@ export default function Home() {
 
       const allProducts = withoutCommaElements.concat(splittedCommaProducts);
 
-      allProducts.forEach((element) => {
-        const count = countItems(allProducts, element);
+      const counts = {};
 
-        productCount.push({
-          count,
-          product: element,
-        });
+      allProducts.forEach((element) => {
+        counts[element] = (counts[element] || 0) + 1;
       });
 
-      for (let i = 0; i < productCount.length; i++) {
-        if (i <= productCount - 1) {
-          if (productCount[i].product === productCount[i + 1].product) {
-            const index = productCount.indexOf(productCount[i].product);
-            productCount.splice(index, 1);
-          }
-        }
-      }
+      const productCount = Object.keys(counts).map((product) => {
+        return {
+          count: counts[product],
+          product,
+        };
+      });
 
-      console.log(productCount);
+      setProductsCount(productCount);
     }
 
     GetProducts();
@@ -351,7 +324,7 @@ export default function Home() {
         {
           label: "Insumo",
           data: inputsData.map((inputData) => inputData.quantity),
-          backgroundColor: colorsCollection,
+          backgroundColor: colorsCollection[0],
           hoverOffset: 6,
         },
       ],
@@ -359,6 +332,22 @@ export default function Home() {
 
     setIsLoadingPieChart1(false);
   }, [colorsCollection, inputsData]);
+
+  useEffect(() => {
+    setDataPieChartSalesPC({
+      labels: productsCount.map((product) => product.product),
+      datasets: [
+        {
+          label: "Quantidade",
+          data: productsCount.map((count) => count.count),
+          backgroundColor: colorsCollection[1],
+          hoverOffset: 6,
+        },
+      ],
+    });
+
+    setIsLoadingPieChart2(false);
+  }, [colorsCollection, productsCount]);
 
   useEffect(() => {
     setDataPriceMonthChart({
@@ -402,10 +391,20 @@ export default function Home() {
   }, [prices, totalPrice, inputsData]);
 
   useEffect(() => {
-    if (isLoadingPieChart1 && isLoadingTotalPrice && isLoadingPriceMonths) {
+    if (
+      isLoadingPieChart1 &&
+      isLoadingPieChart2 &&
+      isLoadingTotalPrice &&
+      isLoadingPriceMonths
+    ) {
       setIsLoadingFinal(false);
     }
-  }, [isLoadingPieChart1, isLoadingTotalPrice, isLoadingPriceMonths]);
+  }, [
+    isLoadingPieChart1,
+    isLoadingTotalPrice,
+    isLoadingPriceMonths,
+    isLoadingPieChart2,
+  ]);
 
   // const chartDataProducts = {
   //   labels: outputsData.map((data) => {
@@ -442,6 +441,11 @@ export default function Home() {
       )}
       {isLoadingFinal === false ? (
         <LineChartTotalPriceInputs chartData={dataPriceMonthChart} />
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <PieChartProductsCount chartData={dataPieChartSalesPC} />
       ) : (
         <div>Carregando...</div>
       )}
