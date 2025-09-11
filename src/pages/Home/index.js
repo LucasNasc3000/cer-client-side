@@ -214,17 +214,18 @@ export default function Home() {
       // O ano vai ter que ser dinamico, com um select
       const priceAndMonthsRefined = [];
       const priceAndMonths = [];
+      const priceAndMonthsByYear = [];
 
       for (let i = 1; i < 13; i++) {
         if (i >= 10) {
           priceAndMonthsRefined.push({
-            month: `${i}/2025`,
+            month: `${i}/${setYear || setCurrentYear}`,
             prices: [],
             total: "",
           });
         } else {
           priceAndMonthsRefined.push({
-            month: `0${i}/2025`,
+            month: `0${i}/${setYear || setCurrentYear}`,
             prices: [],
             total: "",
           });
@@ -233,10 +234,22 @@ export default function Home() {
 
       if (inputsData && inputsData.length > 0) {
         inputsData.map((input) => {
-          priceAndMonths.push({
-            month: input.created_at[6],
-            price: input.price,
-          });
+          if (setYear !== "") {
+            if (input.created_at.slice(0, 4) === setYear) {
+              priceAndMonths.push({
+                month: input.created_at[6],
+                price: input.price,
+              });
+            }
+            return;
+          }
+
+          if (input.created_at.slice(0, 4) === setCurrentYear) {
+            priceAndMonths.push({
+              month: input.created_at[6],
+              price: input.price,
+            });
+          }
         });
 
         for (let i = 0; i < priceAndMonths.length; i++) {
@@ -272,7 +285,7 @@ export default function Home() {
     }
 
     GetMonths();
-  }, [inputsData]);
+  }, [inputsData, setCurrentYear, setYear]);
 
   useEffect(() => {
     function GetYear() {
@@ -467,7 +480,13 @@ export default function Home() {
       {isLoadingFinal === false ? (
         <div className="price">
           <p className="text">Gasto total de insumos por ano</p>
-          <div className="total-price">R$ {totalPrice}</div>
+          <div className="total-price">
+            {totalPrice ? (
+              `R$ ${totalPrice}`
+            ) : (
+              <p className="warn">Não há insumos registrados neste ano</p>
+            )}
+          </div>
         </div>
       ) : (
         <div>Carregando...</div>

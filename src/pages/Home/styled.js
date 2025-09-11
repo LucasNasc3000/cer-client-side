@@ -80,4 +80,12 @@ export const HomeContainer = styled.div`
       "Helvetica Neue",
       sans-serif;
   }
+
+  .warn {
+    display: flex;
+    position: relative;
+    right: 70px;
+    font-size: 18px;
+    color: black;
+  }
 `;
