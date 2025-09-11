@@ -26,15 +26,58 @@ export const HomeContainer = styled.div`
     display: flex;
     position: relative;
     top: 15px;
-    right: 95px;
+    right: 115px;
   }
 
   .text {
     display: flex;
     position: relative;
-    font-size: 17px;
+    font-size: 15px;
     bottom: 30px;
     left: 80px;
-    width: 190px;
+    width: 230px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-space {
+    display: flex;
+    color: black;
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    bottom: 800px;
+    left: 1080px;
+  }
+
+  .filter-select-label {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    right: 6px;
+  }
+
+  .options {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 35px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
   }
 `;

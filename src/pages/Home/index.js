@@ -31,8 +31,10 @@ export default function Home() {
   const headerid = useSelector((state) => state.auth.headerid);
   const dispatch = useDispatch();
   const [employee_id, setEmployeeId] = useState("");
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [prices, setPrices] = useState([]);
+  const [priceYear, setPriceYear] = useState({});
+  const [setCurrentYear, setSetCurrentYear] = useState("");
+  const [setYear, setSetYear] = useState("");
+  const [totalPrice, setTotalPrice] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [salesData, setSalesData] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
@@ -273,6 +275,46 @@ export default function Home() {
   }, [inputsData]);
 
   useEffect(() => {
+    function GetYear() {
+      // O ano vai ter que ser dinamico, com um select
+      const priceAndYear = [];
+      const priceAndYearRefined = {};
+
+      if (inputsData && inputsData.length > 0) {
+        inputsData.map((input) => {
+          priceAndYear.push({
+            year: input.created_at.slice(0, 4),
+            price: input.price,
+          });
+        });
+      }
+
+      const totalPerYear = priceAndYear.reduce((acc, current) => {
+        const { year, price } = current;
+
+        const priceDecimal = new Decimal(price);
+
+        if (acc[year]) {
+          acc[year] = acc[year].plus(priceDecimal);
+        } else {
+          acc[year] = priceDecimal;
+        }
+
+        return acc;
+      }, {});
+
+      // eslint-disable-next-line no-restricted-syntax, guard-for-in
+      for (const year in totalPerYear) {
+        priceAndYearRefined[year] = totalPerYear[year].toFixed(2);
+      }
+
+      setPriceYear(priceAndYearRefined);
+    }
+
+    GetYear();
+  }, [inputsData]);
+
+  useEffect(() => {
     function GetProducts() {
       const justProducts = [];
       const splittedCommaProducts = [];
@@ -368,27 +410,18 @@ export default function Home() {
   }, [inputsData, priceMonths]);
 
   useEffect(() => {
-    const inputsPrices = inputsData.map((input) => input.price);
-    setPrices(inputsPrices);
-  }, [inputsData]);
+    const date = new Date();
+    const currentYear = date.getFullYear().toString();
 
-  useEffect(() => {
-    if (prices.length > 0) {
-      const sumOfPrices = prices.reduce((acc, currentVal) => {
-        return acc.plus(new Decimal(currentVal));
-      }, new Decimal(0));
+    setSetCurrentYear(currentYear);
 
-      const priceToString = sumOfPrices.toString();
-
-      if (priceToString.length === 4) {
-        setTotalPrice(`${priceToString}0`);
-        return;
-      }
-
-      setTotalPrice(sumOfPrices.toString());
-      setIsLoadingTotalPrice(false);
+    if (setYear !== "") {
+      setTotalPrice(priceYear[setYear]);
+      return;
     }
-  }, [prices, totalPrice, inputsData]);
+
+    setTotalPrice(priceYear[setCurrentYear]);
+  }, [priceYear, inputsData, setYear, setCurrentYear]);
 
   useEffect(() => {
     if (
@@ -433,12 +466,25 @@ export default function Home() {
       )}
       {isLoadingFinal === false ? (
         <div className="price">
-          <p className="text">Gasto total de insumos</p>
+          <p className="text">Gasto total de insumos por ano</p>
           <div className="total-price">R$ {totalPrice}</div>
         </div>
       ) : (
         <div>Carregando...</div>
       )}
+      <div className="filter-space">
+        <p className="filter-select-label">Filtrar por ano: </p>
+        <select
+          name="search-options"
+          className="options"
+          id="filter-select"
+          onChange={(e) => setSetYear(e.target.value)}
+        >
+          <option value={setCurrentYear}>{setCurrentYear}</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+        </select>
+      </div>
       {isLoadingFinal === false ? (
         <LineChartTotalPriceInputs chartData={dataPriceMonthChart} />
       ) : (
