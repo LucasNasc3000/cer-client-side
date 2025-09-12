@@ -34,6 +34,7 @@ export default function Home() {
   const [priceYear, setPriceYear] = useState({});
   const [setCurrentYear, setSetCurrentYear] = useState("");
   const [setYear, setSetYear] = useState("");
+  const [years, setYears] = useState([]);
   const [totalPrice, setTotalPrice] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [salesData, setSalesData] = useState([]);
@@ -47,6 +48,7 @@ export default function Home() {
   const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
   const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
   const [isLoadingPieChart2, setIsLoadingPieChart2] = useState(true);
+  const [isLoadingRegisterYears, setIsLoadingRegisterYears] = useState(true);
   const [isLoadingFinal, setIsLoadingFinal] = useState(true);
 
   useEffect(() => {
@@ -75,28 +77,6 @@ export default function Home() {
 
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
-
-  // useEffect(() => {
-  //   async function GetOutputsData() {
-  //     try {
-  //       const outputs = await GetData(
-  //         employee_id,
-  //         "outputs",
-  //         employee_id,
-  //         permission
-  //       );
-
-  //       if (typeof outputs === "undefined" || !outputs) return;
-
-  //       setOutputsData(outputs);
-  //     } catch (err) {
-  //       if (typeof err.response.data === "string") return;
-  //       toast.error("Erro ao obter dados das saídas");
-  //     }
-  //   }
-
-  //   GetOutputsData();
-  // }, [employee_id, permission]);
 
   useEffect(() => {
     async function GetInputsData() {
@@ -288,6 +268,33 @@ export default function Home() {
   }, [inputsData, setCurrentYear, setYear]);
 
   useEffect(() => {
+    function GetRegisterYears() {
+      const yearsMid = [];
+
+      if (inputsData.length > 0) {
+        inputsData.map((input) => {
+          yearsMid.push(input.created_at.slice(0, 4));
+        });
+
+        yearsMid.reduce((acc, current) => {
+          if (current === acc) {
+            yearsMid.splice(current);
+          }
+
+          return acc;
+        }, []);
+
+        console.log(yearsMid);
+
+        setYears(yearsMid);
+        setIsLoadingRegisterYears(false);
+      }
+    }
+
+    GetRegisterYears();
+  }, [inputsData]);
+
+  useEffect(() => {
     function GetYear() {
       // O ano vai ter que ser dinamico, com um select
       const priceAndYear = [];
@@ -441,7 +448,8 @@ export default function Home() {
       isLoadingPieChart1 &&
       isLoadingPieChart2 &&
       isLoadingTotalPrice &&
-      isLoadingPriceMonths
+      isLoadingPriceMonths &&
+      isLoadingRegisterYears
     ) {
       setIsLoadingFinal(false);
     }
@@ -450,24 +458,8 @@ export default function Home() {
     isLoadingTotalPrice,
     isLoadingPriceMonths,
     isLoadingPieChart2,
+    isLoadingRegisterYears,
   ]);
-
-  // const chartDataProducts = {
-  //   labels: outputsData.map((data) => {
-  //     return data.name;
-  //   }),
-  //   datasets: [
-  //     {
-  //       label: "Saídas por unidade (total)",
-  //       data: outputsData.map((data) => {
-  //         return data.unities;
-  //       }),
-  //       skipNull: true,
-  //       maxBarThicness: 10,
-  //       backgroundColor: ["gray"],
-  //     },
-  //   ],
-  // };
 
   return (
     <HomeContainer>
@@ -491,19 +483,28 @@ export default function Home() {
       ) : (
         <div>Carregando...</div>
       )}
-      <div className="filter-space">
-        <p className="filter-select-label">Filtrar por ano: </p>
-        <select
-          name="search-options"
-          className="options"
-          id="filter-select"
-          onChange={(e) => setSetYear(e.target.value)}
-        >
-          <option value={setCurrentYear}>{setCurrentYear}</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-        </select>
-      </div>
+      {isLoadingFinal === false ? (
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por ano: </p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSetYear(e.target.value)}
+          >
+            {years.map((year) => {
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      ) : (
+        <div>Carregando...</div>
+      )}
+
       {isLoadingFinal === false ? (
         <LineChartTotalPriceInputs chartData={dataPriceMonthChart} />
       ) : (
