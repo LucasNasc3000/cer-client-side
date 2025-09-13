@@ -276,16 +276,8 @@ export default function Sales() {
           ? salesData.map((sale) => {
               return (
                 <div key={sale.id} className="main-data-div" id={sale.id}>
-                  <div className="label">Date: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome do cliente: </div>
-                  <div className="label">Telefone: </div>
-                  <div className="label">Endereço: </div>
-                  <div className="label">Produtos: </div>
-                  <div className="label">Aniversário do cliente: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="label">Preço: </div>
                   <div className="data-wrap">
+                    <div className="label">Date: </div>
                     <input
                       type="text"
                       name="date"
@@ -295,6 +287,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Hora: </div>
                     <input
                       type="text"
                       name="hour"
@@ -304,6 +297,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Nome do cliente: </div>
                     <input
                       type="text"
                       name="client_name"
@@ -313,6 +307,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Telefone: </div>
                     <input
                       type="text"
                       name="phone_number"
@@ -322,6 +317,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Endereço: </div>
                     <input
                       type="text"
                       name="address"
@@ -331,6 +327,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Produtos: </div>
                     <input
                       type="text"
                       name="products"
@@ -340,6 +337,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Aniversário do cliente: </div>
                     <input
                       type="text"
                       name="client_birthday"
@@ -349,35 +347,39 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
                     <input
                       type="text"
                       className="data-div"
                       value={sale.employee_id}
                     />
                   </div>
-                  <div className="data-wrap">
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div"
+                      className="data-div-price"
                       value={sale.price}
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
-                  <button
-                    type="button"
-                    className="confirm-changes"
-                    onClick={(e) => SaleUpdate(e, sale)}
-                  >
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel-changes"
-                    onClick={(e) => clear(e)}
-                  >
-                    Cancelar
-                  </button>
+                  <div className="buttons">
+                    <button
+                      type="button"
+                      className="confirm-changes"
+                      onClick={(e) => SaleUpdate(e, sale)}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => clear(e)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </div>
               );
             })

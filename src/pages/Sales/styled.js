@@ -135,8 +135,10 @@ export const SalesSpace = styled.div`
   overflow-y: auto;
   bottom: 735px;
   height: 500px;
-  width: 620px;
-  left: 400px;
+  width: 820px;
+  left: 320px;
+  padding: 20px;
+  align-items: center;
 
   .main-data-div {
     background-color: white;
@@ -145,10 +147,9 @@ export const SalesSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 545px;
-    width: 515px;
-    margin-top: 25px;
-    margin-left: 70px;
+    height: 555px;
+    margin-top: 20px;
+    padding: 10px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -162,9 +163,6 @@ export const SalesSpace = styled.div`
     width: max-content;
     height: 38px;
     border-radius: 8px;
-    left: 110px;
-    top: 120px;
-    margin-top: 0px;
     border: none;
     font-size: 16px;
     font-family:
@@ -182,27 +180,44 @@ export const SalesSpace = styled.div`
     text-align: center;
   }
 
-  .data-wrap {
+  .data-div-price {
     display: flex;
-    position: relative;
-    margin-top: 40px;
-    margin-left: 50px;
-    bottom: 280px;
-    right: 40px;
-    height: fit-content;
-    width: fit-content;
+    background-color: #dad7d7ff;
+    color: black;
+    width: max-content;
+    height: 38px;
     border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    text-align: center;
   }
 
-  .label {
+  .data-wrap-price {
     display: flex;
-    position: relative;
-    margin-top: 55px;
-    margin-left: 62px;
-    bottom: 15px;
+    margin-left: 50px;
+    margin-top: 10px;
+    height: fit-content;
+    margin-right: 20px;
+    width: fit-content;
+  }
+
+  .label-price {
+    display: flex;
     color: black;
     right: 50px;
-    width: 170px;
+    width: 100px;
     font-size: 17px;
     font-family:
       system-ui,
@@ -219,13 +234,50 @@ export const SalesSpace = styled.div`
     word-break: keep-all;
   }
 
+  .data-wrap {
+    display: flex;
+    height: fit-content;
+    margin-right: 30px;
+    margin-top: 15px;
+    width: fit-content;
+  }
+
+  .label {
+    display: flex;
+    color: black;
+    right: 50px;
+    width: 130px;
+    font-size: 17px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    word-break: keep-all;
+  }
+
+  .buttons {
+    display: flex;
+    margin-top: 40px;
+    margin-right: 150px;
+    margin-left: 120px;
+    gap: 20px;
+    width: fit-content;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
   .confirm-changes {
     display: flex;
-    position: relative;
     background-color: #a5a4a4ff;
-    bottom: 230px;
-    width: 120px;
-    right: 20px;
+    width: 180px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
@@ -233,11 +285,8 @@ export const SalesSpace = styled.div`
 
   .cancel-changes {
     display: flex;
-    position: relative;
     background-color: #a5a4a4ff;
-    bottom: 230px;
-    width: 120px;
-    right: 5px;
+    width: 180px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
