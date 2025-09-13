@@ -269,24 +269,18 @@ export default function Home() {
 
   useEffect(() => {
     function GetRegisterYears() {
-      const yearsMid = [];
+      const allYears = [];
 
       if (inputsData.length > 0) {
         inputsData.map((input) => {
-          yearsMid.push(input.created_at.slice(0, 4));
+          allYears.push(input.created_at.slice(0, 4));
         });
 
-        yearsMid.reduce((acc, current) => {
-          if (current === acc) {
-            yearsMid.splice(current);
-          }
+        const fixingDuplicatedYears = new Set(allYears);
 
-          return acc;
-        }, []);
+        const fixedYears = [...fixingDuplicatedYears];
 
-        console.log(yearsMid);
-
-        setYears(yearsMid);
+        setYears(fixedYears);
         setIsLoadingRegisterYears(false);
       }
     }

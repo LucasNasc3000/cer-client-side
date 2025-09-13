@@ -288,18 +288,8 @@ export default function Inputs() {
           ? inputsData.map((input) => {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
-                  <div className="label">Tipo: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Quantidade: </div>
-                  <div className="label">Peso total: </div>
-                  <div className="label">Peso unitário: </div>
-                  <div className="label">Fornecedor: </div>
-                  <div className="label">Data validade: </div>
-                  <div className="label">Quantidade mínima: </div>
-                  <div className="label">Próximo ao limite: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="label">Preço: </div>
                   <div className="data-wrap">
+                    <div className="label">Tipo: </div>
                     <input
                       type="text"
                       name="type"
@@ -309,6 +299,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Nome: </div>
                     <input
                       type="text"
                       name="name"
@@ -318,6 +309,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Quantidade: </div>
                     <input
                       type="text"
                       name="quantity"
@@ -327,6 +319,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Peso total: </div>
                     <input
                       type="text"
                       name="totalweight"
@@ -336,6 +329,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Peso unitário: </div>
                     <input
                       type="text"
                       name="weightperunit"
@@ -345,6 +339,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Fornecedor: </div>
                     <input
                       type="text"
                       name="supplier"
@@ -354,6 +349,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Data validade: </div>
                     <input
                       type="text"
                       name="expirationdate"
@@ -363,6 +359,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
                       name="minimun_quantity"
@@ -372,6 +369,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Próximo ao limite: </div>
                     <input
                       type="text"
                       name="rateisnear"
@@ -381,35 +379,39 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
                     <input
                       type="text"
                       className="data-div"
                       value={input.employee_id}
                     />
                   </div>
-                  <div className="data-wrap">
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div"
+                      className="data-div-price"
                       value={input.price}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
-                  <button
-                    type="button"
-                    className="confirm-changes"
-                    onClick={(e) => InputUpdate(e, input)}
-                  >
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel-changes"
-                    onClick={(e) => clear(e)}
-                  >
-                    Cancelar
-                  </button>
+                  <div className="buttons">
+                    <button
+                      type="button"
+                      className="confirm-changes"
+                      onClick={(e) => InputUpdate(e, input)}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => clear(e)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </div>
               );
             })
