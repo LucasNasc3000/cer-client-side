@@ -145,7 +145,7 @@ export const SalesSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 445px;
+    height: 545px;
     width: 515px;
     margin-top: 25px;
     margin-left: 70px;
@@ -154,20 +154,6 @@ export const SalesSpace = styled.div`
     align-items: center;
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
-
-  /* .main-data-div-search {
-    background-color: #4f4f4f;
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    height: 435px;
-    width: 450px;
-    margin-left: 70px;
-    border-radius: 8px;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  } */
 
   .data-div {
     display: flex;
@@ -195,32 +181,6 @@ export const SalesSpace = styled.div`
       sans-serif;
     text-align: center;
   }
-
-  /* .data-div-search {
-    position: relative;
-    color: #fff;
-    width: 170px;
-    bottom: 211px;
-    left: 110px;
-    margin-top: 13px;
-    color: #fff;
-    font-size: 16px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-    text-align: center;
-    line-break: auto;
-    border-bottom: 0.5px solid #fff;
-  } */
 
   .data-wrap {
     display: flex;
@@ -258,43 +218,6 @@ export const SalesSpace = styled.div`
       sans-serif;
     word-break: keep-all;
   }
-
-  /* .label-search {
-    display: flex;
-    position: relative;
-    right: 110px;
-    top: 72px;
-    margin-top: 13px;
-    width: 170px;
-    color: #fff;
-    font-size: 16px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-    word-break: keep-all;
-    border-bottom: 0.5px solid #fff;
-  } */
-
-  /* .edit-icon-search {
-    position: relative;
-    color: white;
-    display: flex;
-    height: 35px;
-    width: 95px;
-    justify-content: center;
-    align-items: center;
-    left: 0px;
-    top: 470px;
-  } */
 
   .confirm-changes {
     display: flex;

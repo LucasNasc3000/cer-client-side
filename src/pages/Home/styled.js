@@ -4,8 +4,9 @@ import * as colors from "../../config/colors";
 
 export const HomeContainer = styled.div`
   height: 683px;
-  width: 1270px;
+  width: 100%;
   background-color: ${colors.primaryDarkColor};
+  overflow-y: auto;
 
   .price {
     display: flex;

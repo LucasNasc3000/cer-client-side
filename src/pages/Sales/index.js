@@ -193,6 +193,10 @@ export default function Sales() {
   const SaleRegister = async (e) => {
     e.preventDefault();
 
+    const takeCommaPrice = document
+      .querySelector("#price")
+      .value.replace(",", ".");
+
     const ddate = new Date();
     const hour = ddate.toLocaleTimeString("pt-br", {
       hourCycle: "h24",
@@ -207,7 +211,7 @@ export default function Sales() {
       products: document.querySelector("#products").value,
       employee_id,
       client_birthday: document.querySelector("#clientBirthday").value,
-      price: document.querySelector("#price").value,
+      price: takeCommaPrice,
     };
 
     const register = await Register(data, "sales");

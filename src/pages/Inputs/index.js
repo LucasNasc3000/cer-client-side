@@ -217,18 +217,30 @@ export default function Inputs() {
   const InputRegister = async (e) => {
     e.preventDefault();
 
+    const takeCommaPrice = document
+      .querySelector("#price")
+      .value.replace(",", ".");
+
+    const takeCommaTotalweight = document
+      .querySelector("#totalweight")
+      .value.replace(",", ".");
+
+    const takeCommaWeighperunit = document
+      .querySelector("#weightperunit")
+      .value.replace(",", ".");
+
     const data = {
       type: document.querySelector("#type").value,
       name: document.querySelector("#name").value,
       interquantity: document.querySelector("#quantity").value,
-      intertotalweight: document.querySelector("#totalweight").value,
-      interweightperunit: document.querySelector("#weightperunit").value,
+      intertotalweight: takeCommaTotalweight,
+      interweightperunit: takeCommaWeighperunit,
       supplier: document.querySelector("#supplier").value,
       expirationdate: document.querySelector("#expirationdate").value,
       interminimun_quantity: document.querySelector("#minimunQuantity").value,
       interrateisnear: document.querySelector("#rateisnear").value,
       employee_id,
-      price: document.querySelector("#price").value,
+      price: takeCommaPrice,
     };
 
     const register = await Register(data, "inputs");
