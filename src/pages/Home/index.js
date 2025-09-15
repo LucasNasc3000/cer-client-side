@@ -248,6 +248,12 @@ export default function Home() {
         });
 
         priceAndMonthsRefined.forEach((element) => {
+          element.prices = element.prices.map((price) => {
+            return price.replace(",", ".");
+          });
+        });
+
+        priceAndMonthsRefined.forEach((element) => {
           const sum = element.prices.reduce((acc, currentVal) => {
             return acc.plus(new Decimal(currentVal));
           }, new Decimal(0));
@@ -300,6 +306,11 @@ export default function Home() {
             year: input.created_at.slice(0, 4),
             price: input.price,
           });
+        });
+
+        priceAndYear.forEach((element) => {
+          // eslint-disable-next-line no-return-assign
+          return (element.price = element.price.replace(",", "."));
         });
       }
 
@@ -436,6 +447,14 @@ export default function Home() {
 
     setTotalPrice(priceYear[setCurrentYear]);
   }, [priceYear, inputsData, setYear, setCurrentYear]);
+
+  useEffect(() => {
+    if (totalPrice) {
+      const replaceDot = totalPrice.replace(".", ",");
+      setTotalPrice(replaceDot);
+      setIsLoadingTotalPrice(false);
+    }
+  }, [totalPrice]);
 
   useEffect(() => {
     if (
