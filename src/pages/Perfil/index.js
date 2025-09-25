@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import { isEmail } from "validator";
+import { useEffect, useState } from "react";
 import { MdLogout } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { isEmail } from "validator";
 import Header from "../../components/Header";
-import { UserContainer, Form } from "./styled";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
+import { Form, UserContainer } from "./styled";
 
 export default function Profile() {
   const userId = useSelector((state) => state.auth.user.id);

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { FaSearch, FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
-import { toast } from "react-toastify";
-import { MdLogout } from "react-icons/md";
 import { get } from "lodash";
+import { useEffect, useState } from "react";
+import { FaArrowLeft, FaEdit, FaSearch, FaTrash } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import Header from "../../components/Header";
 import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
-import Header from "../../components/Header";
-import { InputsContainer, SearchSpace, InputsSpace, NewInput } from "./styled";
+import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ export default function Inputs() {
   const [fornecedorValue, setFornecedor] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
+  const [isUpdated, setIsUpdated] = useState(true);
   const [id, setId] = useState(0);
   const [inputsData, setInputsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -36,8 +37,11 @@ export default function Inputs() {
       }
     }
 
+    if (isUpdated === true) GetData();
+
     GetData();
-  });
+    setIsUpdated(false);
+  }, [isUpdated]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -86,7 +90,7 @@ export default function Inputs() {
     }
   }
 
-  async function InputUpdate() {
+  async function InputUpdate(e) {
     try {
       await axios.put(`/inputs/${id}`, {
         nome: nomeValue,
@@ -98,14 +102,21 @@ export default function Inputs() {
         data_compra: dataCompra,
       });
 
-      clear();
+      setIsUpdated(true);
+      clear(e);
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
+      console.log(err);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro ao atualizar insumo. Verifique os dados inseridos");
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar atualizar insumo");
+        }
+        return false;
       }
     }
   }
@@ -124,16 +135,20 @@ export default function Inputs() {
         data_compra: dataCompra,
       });
 
-      clear();
+      setIsUpdated(true);
+      clear(e);
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error(
-          "Erro ao cadastrar novo insumo. Verifique os dados inseridos"
-        );
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar cadastrar insumo");
+        }
+        return false;
       }
     }
   }
@@ -158,7 +173,7 @@ export default function Inputs() {
     e.preventDefault();
 
     if (id !== 0) {
-      InputUpdate();
+      InputUpdate(e);
     } else {
       InputRegister(e);
     }

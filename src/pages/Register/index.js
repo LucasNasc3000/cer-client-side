@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { isEmail } from "validator";
 import { Link } from "react-router-dom";
-import { Form, Title, FormContainerRegister, BtnRegister } from "./styled";
+import { toast } from "react-toastify";
+import { isEmail } from "validator";
 import * as actions from "../../store/modules/auth/actions";
+import { BtnRegister, Form, FormContainerRegister, Title } from "./styled";
 
 // O input não precisa de id por estar dentro de label, que já tem o nome do campo no htmlFor
 export default function Register() {

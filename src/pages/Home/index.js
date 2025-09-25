@@ -1,16 +1,16 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from "react";
-import { MdLogout } from "react-icons/md";
-import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
+import Chart from "chart.js/auto";
+import { useEffect, useState } from "react";
+import { MdLogout } from "react-icons/md";
 import { toast } from "react-toastify";
-import { HomeContainer } from "./styled";
 import { BarChart } from "../../components/Charts/BarChart";
 import { BarChartProducts } from "../../components/Charts/BarChartProducts";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import { HomeContainer } from "./styled";
 
 Chart.register(CategoryScale);
 

@@ -1,13 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState } from "react";
+import { get } from "lodash";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isEmail } from "validator";
-import { useDispatch } from "react-redux";
-import { get } from "lodash";
-import { Link } from "react-router-dom";
 
-import { Form, Title, FormContainer, Btn } from "./styled";
 import * as actions from "../../store/modules/auth/actions";
+import { Btn, Form, FormContainer, Title } from "./styled";
 
 export default function Login(props) {
   const dispatch = useDispatch();

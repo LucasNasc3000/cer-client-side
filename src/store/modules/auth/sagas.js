@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { call, put, all, takeLatest } from "redux-saga/effects";
-import { toast } from "react-toastify";
 import { get } from "lodash";
-import * as actions from "./actions";
-import * as types from "../types";
+import { toast } from "react-toastify";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 import axios from "../../../services/axios";
 import history from "../../../services/history";
+import * as types from "../types";
+import * as actions from "./actions";
 
 // O call chama uma função (pode ser normal ou geradora) que retorna uma promise (aqui são os dados do usuário e o token)
 // O put dispara uma ação

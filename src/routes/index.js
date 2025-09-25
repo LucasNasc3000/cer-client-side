@@ -1,14 +1,14 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/no-extraneous-dependencies */
-import React from "react";
 import { Switch } from "react-router-dom";
 
-import MyRoute from "./MyRoute";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
 import Inputs from "../pages/Inputs";
-import Sales from "../pages/Sales";
+import Login from "../pages/Login";
 import Profile from "../pages/Perfil";
+import Register from "../pages/Register";
+import Sales from "../pages/Sales";
+import MyRoute from "./MyRoute";
 
 // O switch faz com que somente uma rota seja chamada por vez
 // <Route path="/" component={Login} /> faz com que o componente Login seja renderizado na raiz da aplicação (a primeira página a ser vista)

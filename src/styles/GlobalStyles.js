@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { styled, createGlobalStyle } from "styled-components";
-import * as colors from "../config/colors";
 import "react-toastify/dist/ReactToastify.css";
+import { createGlobalStyle, styled } from "styled-components";
+import * as colors from "../config/colors";
 
 export default createGlobalStyle`
   *{

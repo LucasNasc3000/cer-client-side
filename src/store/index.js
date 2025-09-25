@@ -1,7 +1,7 @@
 /* Os estados neste arquivo são globais, são os mesmos em qualquer lugar da aplicação. É isso que o redux faz.
    E isso é necessário quando o estado de algum componente precisaria passar por vários componentes */
 /* eslint-disable import/no-extraneous-dependencies */
-import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import { applyMiddleware, legacy_createStore as createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 
 import persistStore from "redux-persist/es/persistStore";
