@@ -84,7 +84,7 @@ export default function Inputs() {
         `/inputs/search/${searchParam}/${searchInput.value}`
       );
       setSearchResults(results.data);
-      clear();
+      clear(e);
     } catch (err) {
       toast.error(err);
     }
@@ -106,7 +106,6 @@ export default function Inputs() {
       clear(e);
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
-      console.log(err);
 
       if (err) {
         if (errors.length > 0) {
@@ -153,6 +152,7 @@ export default function Inputs() {
     }
   }
 
+  // eslint-disable-next-line consistent-return
   const Delete = async (e, idParam) => {
     e.preventDefault();
 
@@ -161,10 +161,15 @@ export default function Inputs() {
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido");
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar deletar insumo");
+        }
+        return false;
       }
     }
   };

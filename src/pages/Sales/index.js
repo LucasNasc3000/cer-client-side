@@ -20,6 +20,7 @@ export default function Sales() {
   const [telefoneCliente, setTelefoneCliente] = useState("");
   const [enderecoCliente, setEnderecoCliente] = useState("");
   const [dataVenda, setDataVenda] = useState("");
+  const [isUpdated, setIsUpdated] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [searchParam, setSearchParam] = useState("");
   const [id, setId] = useState(0);
@@ -37,8 +38,11 @@ export default function Sales() {
       }
     }
 
+    if (isUpdated === true) GetData();
+
     GetData();
-  });
+    setIsUpdated(false);
+  }, [isUpdated]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -83,13 +87,13 @@ export default function Sales() {
         `/sales/search/${searchParam}/${searchInput.value}`
       );
       setSearchResults(result.data);
-      clear();
+      clear(e);
     } catch (err) {
       toast.error(err);
     }
   }
 
-  async function SaleUpdate() {
+  async function SaleUpdate(e) {
     try {
       await axios.put(`/sales/${id}`, {
         produto,
@@ -101,14 +105,20 @@ export default function Sales() {
         data_venda: dataVenda,
       });
 
-      clear();
+      clear(e);
+      setIsUpdated(true);
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro ao atualizar venda. Verifique os dados inseridos");
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar atualizar venda");
+        }
+        return false;
       }
     }
   }
@@ -127,20 +137,25 @@ export default function Sales() {
         data_venda: dataVenda,
       });
 
-      clear();
+      clear(e);
+      setIsUpdated(true);
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error(
-          "Erro ao cadastrar nova venda. Verifique os dados inseridos"
-        );
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido ao tentar atualizar venda");
+        }
+        return false;
       }
     }
   }
 
+  // eslint-disable-next-line consistent-return
   const Delete = async (e, idParam) => {
     e.preventDefault();
 
@@ -149,10 +164,15 @@ export default function Sales() {
     } catch (err) {
       const errors = get(err, "response.data.errors", []);
 
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      } else {
-        toast.error("Erro desconhecido");
+      if (err) {
+        if (errors.length > 0) {
+          errors.map((error) => toast.error(error));
+        }
+
+        if (err && errors.length < 1) {
+          toast.error("Erro desconhecido");
+        }
+        return false;
       }
     }
   };
@@ -161,7 +181,7 @@ export default function Sales() {
     e.preventDefault();
 
     if (id !== 0) {
-      SaleUpdate();
+      SaleUpdate(e);
     } else {
       SaleRegister(e);
     }
