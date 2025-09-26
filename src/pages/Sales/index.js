@@ -87,7 +87,6 @@ export default function Sales() {
         `/sales/search/${searchParam}/${searchInput.value}`
       );
       setSearchResults(result.data);
-      clear(e);
     } catch (err) {
       toast.error(err);
     }

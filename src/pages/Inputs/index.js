@@ -84,7 +84,6 @@ export default function Inputs() {
         `/inputs/search/${searchParam}/${searchInput.value}`
       );
       setSearchResults(results.data);
-      clear(e);
     } catch (err) {
       toast.error(err);
     }
