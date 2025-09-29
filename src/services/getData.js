@@ -52,7 +52,7 @@ export default async function GetData(bossId, path, employee_id, permission) {
     if (err && errors.length < 1) {
       // eslint-disable-next-line default-case
       switch (path) {
-        case "inputs":
+        case "inputs" || "inputsHistory":
           toast.error("Erro desconhecido ao tentar exibir insumos");
           break;
 

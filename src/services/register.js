@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import { toInt } from "validator";
 import axios from "./axios";
 
+let translatedRegisterType = "";
+
 export default async function Register(data, registerType) {
   try {
-    if (registerType === "inputs") {
+    if (registerType === "inputsHistory") {
       const quantity = toInt(data.interquantity);
       const totalweight = toInt(data.intertotalweight);
       const weightperunit = toInt(data.interweightperunit);
@@ -23,7 +25,7 @@ export default async function Register(data, registerType) {
         ...data,
       };
 
-      await axios.post("/inputs", {
+      await axios.post("/inputsHistory", {
         ...finalData,
       });
     }
@@ -51,17 +53,20 @@ export default async function Register(data, registerType) {
 
     // eslint-disable-next-line default-case
     switch (registerType) {
-      case "inputs":
+      case "inputs" || "inputsHistory":
         const inputName = data.name;
+        translatedRegisterType = "insumo";
         toast.success(`${inputName} adicionado`);
         break;
 
       case "sales":
+        translatedRegisterType = "venda";
         toast.success("Venda adicionada");
         break;
 
       case "outputs":
         const outputName = data.name;
+        translatedRegisterType = "saída";
         toast.success(`${outputName} adicionado`);
         break;
     }
@@ -75,7 +80,9 @@ export default async function Register(data, registerType) {
       }
 
       if (err && errors.length < 1) {
-        toast.error(`Erro desconhecido ao tentar cadastrar ${registerType}`);
+        toast.error(
+          `Erro desconhecido ao tentar cadastrar ${translatedRegisterType}`
+        );
       }
       return false;
     }

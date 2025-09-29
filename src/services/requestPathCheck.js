@@ -12,7 +12,15 @@ export default async function PathCheck(path, employeesId) {
         employeeidBody: employeesId,
         forListInputs: true,
       });
-      console.log(registersBy);
+
+      return registersBy;
+    }
+
+    if (path === "inputsHistory") {
+      const registersBy = await axios.post(`/${path}/search/employeeid/`, {
+        employeeidBody: employeesId,
+        forListInputs: true,
+      });
 
       return registersBy;
     }
@@ -43,6 +51,8 @@ export default async function PathCheck(path, employeesId) {
       return registersBy;
     }
   } catch (err) {
-    console.log("Erro na verificação do caminho");
+    console.log(
+      "Erro na verificação do caminho. Retirar este consolelog depois"
+    );
   }
 }

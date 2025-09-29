@@ -19,7 +19,7 @@ export default async function DoSearch(path, searchParam, searchValue) {
       if (err && errors.length < 1) {
         // eslint-disable-next-line default-case
         switch (path) {
-          case "inputs":
+          case "inputs" || "inputsHistory":
             toast.error("Erro desconhecido ao tentar pesquisar insumo");
             break;
 

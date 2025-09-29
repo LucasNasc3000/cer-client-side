@@ -52,7 +52,7 @@ export default function Sales() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {

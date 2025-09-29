@@ -22,12 +22,12 @@ import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
-export default function Inputs() {
+export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
 
-  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
   const [name, setName] = useState("");
   const [interquantity, setInterQuantity] = useState("");
   const [intertotalweight, setInterTotalWeight] = useState("");
@@ -118,7 +118,7 @@ export default function Inputs() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setCategory("");
+    setType("");
     setName("");
     setInterQuantity(null);
     setInterTotalWeight(null);
@@ -248,7 +248,7 @@ export default function Inputs() {
       .value.replace(",", ".");
 
     const data = {
-      category: document.querySelector("#category").value,
+      type: document.querySelector("#type").value,
       name: document.querySelector("#name").value,
       interquantity: document.querySelector("#quantity").value,
       intertotalweight: takeCommaTotalweight,
@@ -261,7 +261,7 @@ export default function Inputs() {
       price: takeCommaPrice,
     };
 
-    const register = await Register(data, "inputsHistory");
+    const register = await Register(data, "inputs");
 
     setReRender(register);
 
@@ -573,22 +573,26 @@ export default function Inputs() {
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
-                  <div className="buttons">
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => InputUpdate(e, input)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e)}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
+                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
+                    <div className="buttons">
+                      <button
+                        type="button"
+                        className="confirm-changes"
+                        onClick={(e) => InputUpdate(e, input)}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             })}

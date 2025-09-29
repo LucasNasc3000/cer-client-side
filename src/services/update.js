@@ -45,7 +45,6 @@ export default async function Update(id, data, registerType) {
 
     return true;
   } catch (err) {
-    console.log(err);
     const errors = get(err, "response.data.error", []);
 
     if (err) {
