@@ -10,33 +10,21 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import history from "../../services/history";
-import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
+import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
 
 export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
 
-  const [type, setType] = useState("");
-  const [name, setName] = useState("");
-  const [interquantity, setInterQuantity] = useState("");
-  const [intertotalweight, setInterTotalWeight] = useState("");
-  const [interweightperunit, setInterWeightPerUnit] = useState("");
-  const [supplier, setSupplier] = useState("");
-  const [expirationdate, setExpirationDate] = useState("");
-  const [interminimun_quantity, setInterMinimunQuantity] = useState("");
-  const [interrateisnear, setInterRateIsNear] = useState("");
-  const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
@@ -95,7 +83,7 @@ export default function InputsCurrent() {
   async function GetInputs() {
     const inputs = await GetData(
       bossId,
-      "inputsHistory",
+      "inputs",
       employee_id,
       permissionlStored
     );
@@ -118,18 +106,7 @@ export default function InputsCurrent() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setType("");
-    setName("");
-    setInterQuantity(null);
-    setInterTotalWeight(null);
-    setInterWeightPerUnit(null);
-    setSupplier("");
-    setExpirationDate("");
-    setPrice("");
-    setInterMinimunQuantity(null);
-    setInterRateIsNear(null);
     setInputsData(inputsDataBackup);
-
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
 
@@ -165,6 +142,8 @@ export default function InputsCurrent() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
+    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+
     setSearchResults((prevData) =>
       prevData.map((item) =>
         item.id === itemId ? { ...item, [name]: value } : item
@@ -177,11 +156,7 @@ export default function InputsCurrent() {
 
     const inArray = [];
 
-    const search = await DoSearch(
-      "inputsHistory",
-      searchParam,
-      searchInput.value
-    );
+    const search = await DoSearch("inputs", searchParam, searchInput.value);
 
     if (typeof search === "undefined" || !search) return;
 
@@ -200,27 +175,24 @@ export default function InputsCurrent() {
   const InputUpdate = async (e, objectData) => {
     e.preventDefault();
 
+    const decimalRegex = /^\d+(?:[.,]\d+)$/;
+
     const toNumberFields = [
       "quantity",
-      "totalweight",
+      "price",
       "weightperunit",
       "minimun_quantity",
       "rateisnear",
     ];
 
     toNumberFields.forEach((field) => {
-      if (typeof objectData[field] === "string") {
-        if (objectData.weightperunit) {
-          objectData.weightperunit = objectData.weightperunit.replace(",", ".");
-          objectData.weightperunit = parseFloat(objectData.weightperunit);
-        }
+      if (decimalRegex.test(objectData[field])) {
+        objectData[field] = objectData[field].replace(",", ".");
 
-        if (objectData.totalweight) {
-          objectData.totalweight = objectData.totalweight.replace(",", ".");
-          objectData.totalweight = parseFloat(objectData.totalweight);
-        }
+        objectData[field] = parseFloat(objectData[field]);
 
         const parsedValue = parseInt(objectData[field], 10);
+
         objectData[field] = parsedValue;
       }
     });
@@ -228,42 +200,6 @@ export default function InputsCurrent() {
     const update = await Update(objectData.id, objectData, "inputs");
 
     setReRender(update);
-
-    clearDirectExecution();
-  };
-
-  const InputRegister = async (e) => {
-    e.preventDefault();
-
-    const takeCommaPrice = document
-      .querySelector("#price")
-      .value.replace(",", ".");
-
-    const takeCommaTotalweight = document
-      .querySelector("#totalweight")
-      .value.replace(",", ".");
-
-    const takeCommaWeighperunit = document
-      .querySelector("#weightperunit")
-      .value.replace(",", ".");
-
-    const data = {
-      type: document.querySelector("#type").value,
-      name: document.querySelector("#name").value,
-      interquantity: document.querySelector("#quantity").value,
-      intertotalweight: takeCommaTotalweight,
-      interweightperunit: takeCommaWeighperunit,
-      supplier: document.querySelector("#supplier").value,
-      expirationdate: document.querySelector("#expirationdate").value,
-      interminimun_quantity: document.querySelector("#minimunQuantity").value,
-      interrateisnear: document.querySelector("#rateisnear").value,
-      employee_id,
-      price: takeCommaPrice,
-    };
-
-    const register = await Register(data, "inputs");
-
-    setReRender(register);
 
     clearDirectExecution();
   };
@@ -303,7 +239,7 @@ export default function InputsCurrent() {
             onChange={(e) => setSearchParam(e.target.value)}
           >
             <option value="">Selecione</option>
-            <option value="type">Tipo</option>
+            <option value="category">Categoria</option>
             <option value="name">Nome</option>
             <option value="quantity">Quantidade</option>
             <option value="totalweight">Peso total</option>
@@ -323,12 +259,12 @@ export default function InputsCurrent() {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="data-wrap">
-                    <div className="label">Tipo: </div>
+                    <div className="label">Categoria: </div>
                     <input
                       type="text"
-                      name="type"
+                      name="category"
                       className="data-div"
-                      value={input.type}
+                      value={input.category}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -446,18 +382,9 @@ export default function InputsCurrent() {
                       >
                         Cancelar
                       </button>
-                      <div className="inputs-current-link">
-                        <Link to="/inputs-current">
-                          <p className="link-text">Ver estoque em tempo real</p>
-                        </Link>
-                      </div>
                     </div>
                   ) : (
-                    <div className="inputs-current-link">
-                      <Link to="/inputs-current">
-                        <p className="link-text">Ver estoque em tempo real</p>
-                      </Link>
-                    </div>
+                    ""
                   )}
                 </div>
               );
@@ -466,12 +393,12 @@ export default function InputsCurrent() {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="data-wrap">
-                    <div className="label">Tipo: </div>
+                    <div className="label">Categoria: </div>
                     <input
                       type="text"
-                      name="type"
+                      name="category"
                       className="data-div"
-                      value={input.type}
+                      value={input.category}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -597,84 +524,6 @@ export default function InputsCurrent() {
               );
             })}
       </InputsSpace>
-      <NewInput>
-        <input
-          type="text"
-          id="type"
-          placeholder="Tipo ex: cereais"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        />
-        <input
-          type="text"
-          id="name"
-          placeholder="Nome ex: arroz branco"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          id="quantity"
-          placeholder="Quantidade ex: 25"
-          value={interquantity || ""}
-          onChange={(e) => setInterQuantity(e.target.value)}
-        />
-        <input
-          type="text"
-          id="totalweight"
-          placeholder="Peso total ex: 10,50 (kg)"
-          value={intertotalweight || ""}
-          onChange={(e) => setInterTotalWeight(e.target.value)}
-        />
-        <input
-          type="text"
-          id="weightperunit"
-          placeholder="Peso unitário ex: 1 (kg)"
-          value={interweightperunit || ""}
-          onChange={(e) => setInterWeightPerUnit(e.target.value)}
-        />
-        <input
-          type="text"
-          id="supplier"
-          placeholder="Fornecedor ex: shopee"
-          value={supplier}
-          onChange={(e) => setSupplier(e.target.value)}
-        />
-        <input
-          type="text"
-          id="expirationdate"
-          placeholder="Validade ex: 25-03-2027"
-          value={expirationdate}
-          onChange={(e) => setExpirationDate(e.target.value)}
-        />
-        <input
-          type="text"
-          id="minimunQuantity"
-          placeholder="quantidade mínima ex: 5"
-          value={interminimun_quantity || ""}
-          onChange={(e) => setInterMinimunQuantity(e.target.value)}
-        />
-        <input
-          type="text"
-          id="rateisnear"
-          placeholder="Próximo ao limite ex: 10"
-          value={interrateisnear || ""}
-          onChange={(e) => setInterRateIsNear(e.target.value)}
-        />
-        <input
-          type="text"
-          id="price"
-          placeholder="Preço ex: 10.90"
-          value={price || ""}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-        <button type="button" className="btn" onClick={clear}>
-          Cancelar
-        </button>
-        <button type="button" className="btn" onClick={(e) => InputRegister(e)}>
-          Adicionar
-        </button>
-      </NewInput>
     </InputsContainer>
   );
 }

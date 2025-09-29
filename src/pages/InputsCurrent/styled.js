@@ -298,38 +298,3 @@ export const InputsSpace = styled.div`
     filter: brightness(80%);
   }
 `;
-
-export const NewInput = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  bottom: 1225px;
-  left: 1230px;
-  height: fit-content;
-  width: fit-content;
-
-  input {
-    background-color: #f5f4f4ff;
-    height: 30px;
-    width: 170px;
-    margin-top: 10px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 0.5px solid black;
-  }
-
-  .btn {
-    display: flex;
-    position: relative;
-    top: 20px;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    width: 120px;
-    margin-top: 15px;
-    box-shadow: 1px 1.5px rgb(102, 96, 96);
-  }
-`;

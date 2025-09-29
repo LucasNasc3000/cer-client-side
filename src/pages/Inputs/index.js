@@ -19,7 +19,6 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import Update from "../../services/update";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
@@ -30,7 +29,7 @@ export default function Inputs() {
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [interquantity, setInterQuantity] = useState("");
-  const [intertotalweight, setInterTotalWeight] = useState("");
+  const [reason, setReason] = useState("");
   const [interweightperunit, setInterWeightPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
   const [expirationdate, setExpirationDate] = useState("");
@@ -148,30 +147,6 @@ export default function Inputs() {
     options.value = "";
   };
 
-  const HandleChange = (e, itemId) => {
-    // eslint-disable-next-line no-shadow
-    const { name, value } = e.target;
-
-    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
-
-    setInputsData((prevData) =>
-      prevData.map((item) =>
-        item.id === itemId ? { ...item, [name]: value } : item
-      )
-    );
-  };
-
-  const HandleChangeSearch = (e, itemId) => {
-    // eslint-disable-next-line no-shadow
-    const { name, value } = e.target;
-
-    setSearchResults((prevData) =>
-      prevData.map((item) =>
-        item.id === itemId ? { ...item, [name]: value } : item
-      )
-    );
-  };
-
   async function SearchInputs(e) {
     e.preventDefault();
 
@@ -197,50 +172,11 @@ export default function Inputs() {
     return;
   }
 
-  const InputUpdate = async (e, objectData) => {
-    e.preventDefault();
-
-    const toNumberFields = [
-      "quantity",
-      "totalweight",
-      "weightperunit",
-      "minimun_quantity",
-      "rateisnear",
-    ];
-
-    toNumberFields.forEach((field) => {
-      if (typeof objectData[field] === "string") {
-        if (objectData.weightperunit) {
-          objectData.weightperunit = objectData.weightperunit.replace(",", ".");
-          objectData.weightperunit = parseFloat(objectData.weightperunit);
-        }
-
-        if (objectData.totalweight) {
-          objectData.totalweight = objectData.totalweight.replace(",", ".");
-          objectData.totalweight = parseFloat(objectData.totalweight);
-        }
-
-        const parsedValue = parseInt(objectData[field], 10);
-        objectData[field] = parsedValue;
-      }
-    });
-
-    const update = await Update(objectData.id, objectData, "inputs");
-
-    setReRender(update);
-
-    clearDirectExecution();
-  };
-
   const InputRegister = async (e) => {
     e.preventDefault();
 
     const takeCommaPrice = document
       .querySelector("#price")
-      .value.replace(",", ".");
-
-    const takeCommaTotalweight = document
-      .querySelector("#totalweight")
       .value.replace(",", ".");
 
     const takeCommaWeighperunit = document
@@ -250,8 +186,8 @@ export default function Inputs() {
     const data = {
       category: document.querySelector("#category").value,
       name: document.querySelector("#name").value,
+      reason: document.querySelector("#reason").value,
       interquantity: document.querySelector("#quantity").value,
-      intertotalweight: takeCommaTotalweight,
       interweightperunit: takeCommaWeighperunit,
       supplier: document.querySelector("#supplier").value,
       expirationdate: document.querySelector("#expirationdate").value,
@@ -305,8 +241,11 @@ export default function Inputs() {
             <option value="">Selecione</option>
             <option value="category">Categoria</option>
             <option value="name">Nome</option>
+            <option value="reason">Motivo</option>
             <option value="quantity">Quantidade</option>
-            <option value="totalweight">Peso total</option>
+            <option value="totalweightPerRegister">
+              Peso total por registro
+            </option>
             <option value="weightperunit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
             <option value="expirationdate">Data de validade</option>
@@ -314,6 +253,7 @@ export default function Inputs() {
             <option value="rateisnear">Próximo ao limite</option>
             <option value="employee">Funcionário</option>
             <option value="price">Preço</option>
+            <option value="totalprice">Preço total</option>
           </select>
         </div>
       </SearchSpace>
@@ -329,7 +269,6 @@ export default function Inputs() {
                       name="category"
                       className="data-div"
                       value={input.category}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -339,7 +278,15 @@ export default function Inputs() {
                       name="name"
                       className="data-div"
                       value={input.name}
-                      onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={input.reason}
                     />
                   </div>
                   <div className="data-wrap">
@@ -349,17 +296,15 @@ export default function Inputs() {
                       name="quantity"
                       className="data-div"
                       value={input.quantity}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Peso total: </div>
+                    <div className="label">Peso total por registro: </div>
                     <input
                       type="text"
-                      name="totalweight"
+                      name="totalweightPerRegister"
                       className="data-div"
-                      value={input.totalweight}
-                      onChange={(e) => HandleChange(e, input.id)}
+                      value={input.totalweight_per_register}
                     />
                   </div>
                   <div className="data-wrap">
@@ -369,7 +314,6 @@ export default function Inputs() {
                       name="weightperunit"
                       className="data-div"
                       value={input.weightperunit}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -379,7 +323,6 @@ export default function Inputs() {
                       name="supplier"
                       className="data-div"
                       value={input.supplier}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -389,7 +332,6 @@ export default function Inputs() {
                       name="expirationdate"
                       className="data-div"
                       value={input.expirationdate}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -399,7 +341,6 @@ export default function Inputs() {
                       name="minimun_quantity"
                       className="data-div"
                       value={input.minimun_quantity}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -409,7 +350,6 @@ export default function Inputs() {
                       name="rateisnear"
                       className="data-div"
                       value={input.rateisnear}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -427,38 +367,28 @@ export default function Inputs() {
                       name="price"
                       className="data-div-price"
                       value={input.price}
-                      onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
-                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
-                    <div className="buttons">
-                      <button
-                        type="button"
-                        className="confirm-changes"
-                        onClick={(e) => InputUpdate(e, input)}
-                      >
-                        Salvar
-                      </button>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço total: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div-price"
+                      value={input.totalprice}
+                    />
+                  </div>
+                  <div className="buttons">
+                    <Link to="/inputsCurrent" className="link-button">
                       <button
                         type="button"
                         className="cancel-changes"
                         onClick={(e) => clear(e)}
                       >
-                        Cancelar
+                        Ver estoque em tempo real
                       </button>
-                      <div className="inputs-current-link">
-                        <Link to="/inputs-current">
-                          <p className="link-text">Ver estoque em tempo real</p>
-                        </Link>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="inputs-current-link">
-                      <Link to="/inputs-current">
-                        <p className="link-text">Ver estoque em tempo real</p>
-                      </Link>
-                    </div>
-                  )}
+                    </Link>
+                  </div>
                 </div>
               );
             })
@@ -472,7 +402,6 @@ export default function Inputs() {
                       name="category"
                       className="data-div"
                       value={input.category}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -482,7 +411,15 @@ export default function Inputs() {
                       name="name"
                       className="data-div"
                       value={input.name}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={input.reason}
                     />
                   </div>
                   <div className="data-wrap">
@@ -492,17 +429,15 @@ export default function Inputs() {
                       name="quantity"
                       className="data-div"
                       value={input.quantity}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Peso total: </div>
+                    <div className="label">Peso total por registro: </div>
                     <input
                       type="text"
-                      name="totalweight"
+                      name="totalweightPerRegister"
                       className="data-div"
-                      value={input.totalweight}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
+                      value={input.totalweight_per_register}
                     />
                   </div>
                   <div className="data-wrap">
@@ -512,7 +447,6 @@ export default function Inputs() {
                       name="weightperunit"
                       className="data-div"
                       value={input.weightperunit}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -522,7 +456,6 @@ export default function Inputs() {
                       name="supplier"
                       className="data-div"
                       value={input.supplier}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -532,7 +465,6 @@ export default function Inputs() {
                       name="expirationdate"
                       className="data-div"
                       value={input.expirationdate}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -542,7 +474,6 @@ export default function Inputs() {
                       name="minimun_quantity"
                       className="data-div"
                       value={input.minimun_quantity}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -552,7 +483,6 @@ export default function Inputs() {
                       name="rateisnear"
                       className="data-div"
                       value={input.rateisnear}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -570,24 +500,27 @@ export default function Inputs() {
                       name="price"
                       className="data-div-price"
                       value={input.price}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço total: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div-price"
+                      value={input.totalprice}
                     />
                   </div>
                   <div className="buttons">
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => InputUpdate(e, input)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e)}
-                    >
-                      Cancelar
-                    </button>
+                    <Link to="/inputsCurrent" className="link-button">
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Ver estoque em tempo real
+                      </button>
+                    </Link>
                   </div>
                 </div>
               );
@@ -610,17 +543,17 @@ export default function Inputs() {
         />
         <input
           type="text"
+          id="reason"
+          placeholder="Motivo ex: entrada, reposição, etc..."
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+        <input
+          type="text"
           id="quantity"
           placeholder="Quantidade ex: 25"
           value={interquantity || ""}
           onChange={(e) => setInterQuantity(e.target.value)}
-        />
-        <input
-          type="text"
-          id="totalweight"
-          placeholder="Peso total ex: 10,50 (kg)"
-          value={intertotalweight || ""}
-          onChange={(e) => setInterTotalWeight(e.target.value)}
         />
         <input
           type="text"
