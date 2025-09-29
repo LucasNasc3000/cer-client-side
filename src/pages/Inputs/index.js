@@ -303,7 +303,7 @@ export default function Inputs() {
             onChange={(e) => setSearchParam(e.target.value)}
           >
             <option value="">Selecione</option>
-            <option value="type">Tipo</option>
+            <option value="category">Categoria</option>
             <option value="name">Nome</option>
             <option value="quantity">Quantidade</option>
             <option value="totalweight">Peso total</option>
@@ -323,12 +323,12 @@ export default function Inputs() {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="data-wrap">
-                    <div className="label">Tipo: </div>
+                    <div className="label">Categoria: </div>
                     <input
                       type="text"
-                      name="type"
+                      name="category"
                       className="data-div"
-                      value={input.type}
+                      value={input.category}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -466,12 +466,12 @@ export default function Inputs() {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="data-wrap">
-                    <div className="label">Tipo: </div>
+                    <div className="label">Categoria: </div>
                     <input
                       type="text"
-                      name="type"
+                      name="category"
                       className="data-div"
-                      value={input.type}
+                      value={input.category}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -596,10 +596,10 @@ export default function Inputs() {
       <NewInput>
         <input
           type="text"
-          id="type"
-          placeholder="Tipo ex: cereais"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          id="category"
+          placeholder="Categoria ex: cereais"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
         />
         <input
           type="text"
