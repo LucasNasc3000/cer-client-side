@@ -120,7 +120,6 @@ export default function Inputs() {
     setCategory("");
     setName("");
     setInterQuantity(null);
-    setInterTotalWeight(null);
     setInterWeightPerUnit(null);
     setSupplier("");
     setExpirationDate("");
@@ -360,31 +359,27 @@ export default function Inputs() {
                       value={input.employee_id}
                     />
                   </div>
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço unitário: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div-price"
+                      className="data-div"
                       value={input.price}
                     />
                   </div>
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço total: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço total: </div>
                     <input
                       type="text"
                       name="totalprice"
-                      className="data-div-price"
+                      className="data-div"
                       value={input.totalprice}
                     />
                   </div>
                   <div className="buttons">
                     <Link to="/inputsCurrent" className="link-button">
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
+                      <button type="button" className="cancel-changes">
                         Ver estoque em tempo real
                       </button>
                     </Link>

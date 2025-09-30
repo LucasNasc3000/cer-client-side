@@ -181,6 +181,7 @@ export default function InputsCurrent() {
       "quantity",
       "price",
       "weightperunit",
+      "totalweight",
       "minimun_quantity",
       "rateisnear",
     ];

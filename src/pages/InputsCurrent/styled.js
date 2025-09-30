@@ -141,6 +141,7 @@ export const InputsSpace = styled.div`
   left: 320px;
   padding: 20px;
   align-items: center;
+  background-color: aqua;
 
   .main-data-div {
     background-color: white;

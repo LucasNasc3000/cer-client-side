@@ -150,8 +150,8 @@ export const InputsSpace = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     height: 555px;
-    margin-top: 20px;
-    padding: 10px;
+    margin-top: 25px;
+    padding: 15px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;

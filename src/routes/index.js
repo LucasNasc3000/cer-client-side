@@ -6,6 +6,7 @@ import { EmployeeRegister } from "../pages/EmployeeRegister";
 import { Employees } from "../pages/Employees";
 import Home from "../pages/Home";
 import Inputs from "../pages/Inputs";
+import InputsCurrent from "../pages/InputsCurrent";
 import Login from "../pages/Login";
 import Outputs from "../pages/Outputs";
 import Profile from "../pages/Perfil";
@@ -21,6 +22,7 @@ export default function Routes() {
       <MyRoute exact path="/" component={Login} isClosed={false} />
       <MyRoute exact path="/home" component={Home} isClosed />
       <MyRoute exact path="/inputs" component={Inputs} isClosed />
+      <MyRoute exact path="/inputsCurrent" component={InputsCurrent} isClosed />
       <MyRoute exact path="/sales" component={Sales} isClosed />
       <MyRoute exact path="/outputs" component={Outputs} isClosed />
       <MyRoute exact path="/profile" component={Profile} isClosed />
