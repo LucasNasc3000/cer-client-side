@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalPriceInputs";
 import { PieChart } from "../../components/Charts/PieChart";
+import { PieChartInputsReasons } from "../../components/Charts/PieChartInputsReasons";
 import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -40,14 +41,17 @@ export default function Home() {
   const [salesData, setSalesData] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
   const [dataPieChartInputs, setDataPieChartInputs] = useState({});
+  const [dataPieChartInputsRs, setDataPieChartInputsRs] = useState({});
   const [dataPieChartSalesPC, setDataPieChartSalesPC] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
   const [productsCount, setProductsCount] = useState([]);
+  const [reasonsCount, setReasonsCount] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
   const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
   const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
   const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
   const [isLoadingPieChart2, setIsLoadingPieChart2] = useState(true);
+  const [isLoadingPieChart3, setIsLoadingPieChart3] = useState(true);
   const [isLoadingRegisterYears, setIsLoadingRegisterYears] = useState(true);
   const [isLoadingFinal, setIsLoadingFinal] = useState(true);
 
@@ -385,6 +389,33 @@ export default function Home() {
   }, [salesData]);
 
   useEffect(() => {
+    function GetInputsReasons() {
+      const reasons = [];
+
+      inputsData.map((input) => {
+        reasons.push(input.reason);
+      });
+
+      const counts = {};
+
+      reasons.forEach((element) => {
+        counts[element] = (counts[element] || 0) + 1;
+      });
+
+      const reasonCount = Object.keys(counts).map((reason) => {
+        return {
+          count: counts[reason],
+          reason,
+        };
+      });
+
+      setReasonsCount(reasonCount);
+    }
+
+    GetInputsReasons();
+  }, [inputsData]);
+
+  useEffect(() => {
     setDataPieChartInputs({
       labels: inputsData.map((inputData) => inputData.name),
       datasets: [
@@ -399,6 +430,22 @@ export default function Home() {
 
     setIsLoadingPieChart1(false);
   }, [colorsCollection, inputsData]);
+
+  useEffect(() => {
+    setDataPieChartInputsRs({
+      labels: reasonsCount.map((reason) => reason.reason),
+      datasets: [
+        {
+          label: "Vezes que um insumo foi registrado por este motivo",
+          data: reasonsCount.map((count) => count.count),
+          backgroundColor: colorsCollection[1],
+          hoverOffset: 6,
+        },
+      ],
+    });
+
+    setIsLoadingPieChart3(false);
+  }, [colorsCollection, reasonsCount]);
 
   useEffect(() => {
     setDataPieChartSalesPC({
@@ -460,6 +507,7 @@ export default function Home() {
     if (
       isLoadingPieChart1 &&
       isLoadingPieChart2 &&
+      isLoadingPieChart3 &&
       isLoadingTotalPrice &&
       isLoadingPriceMonths &&
       isLoadingRegisterYears
@@ -471,6 +519,7 @@ export default function Home() {
     isLoadingTotalPrice,
     isLoadingPriceMonths,
     isLoadingPieChart2,
+    isLoadingPieChart3,
     isLoadingRegisterYears,
   ]);
 
@@ -479,6 +528,11 @@ export default function Home() {
       <Header />
       {isLoadingFinal === false ? (
         <PieChart chartData={dataPieChartInputs} />
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <PieChartInputsReasons chartData={dataPieChartInputsRs} />
       ) : (
         <div>Carregando...</div>
       )}
