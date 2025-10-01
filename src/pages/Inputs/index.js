@@ -193,7 +193,7 @@ export default function Inputs() {
 
     setReRender(register);
 
-    // clearDirectExecution();
+    clearDirectExecution();
   };
 
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
 import { get } from "lodash";
@@ -10,25 +11,12 @@ let translatedRegisterType = "";
 export default async function Register(data, registerType) {
   try {
     if (registerType === "inputsHistory") {
-      const quantity = toInt(data.interquantity);
-      const minimun_quantity = toInt(data.interminimun_quantity);
-      const rateisnear = toInt(data.interrateisnear);
-
-      const {
-        interquantity,
-        interminimun_quantity,
-        interrateisnear,
-        ...removingKeys
-      } = data;
-
-      removingKeys.quantity = quantity;
-      removingKeys.minimun_quantity = minimun_quantity;
-      removingKeys.rateisnear = rateisnear;
-
-      console.log(removingKeys);
+      data.quantity = toInt(data.quantity);
+      data.minimun_quantity = toInt(data.minimun_quantity);
+      data.rateisnear = toInt(data.rateisnear);
 
       await axios.post("/inputsHistory", {
-        ...removingKeys,
+        ...data,
       });
     }
 

@@ -137,11 +137,10 @@ export const InputsSpace = styled.div`
   overflow-y: auto;
   bottom: 735px;
   height: 500px;
-  width: 1290px;
-  left: 320px;
+  width: 820px;
+  left: 420px;
   padding: 20px;
   align-items: center;
-  background-color: aqua;
 
   .main-data-div {
     background-color: white;
@@ -151,7 +150,6 @@ export const InputsSpace = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     height: 555px;
-    width: 720px;
     margin-top: 20px;
     padding: 10px;
     border-radius: 10px;
