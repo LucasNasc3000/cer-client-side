@@ -28,13 +28,13 @@ export default function Inputs() {
 
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
-  const [interquantity, setInterQuantity] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [reason, setReason] = useState("");
-  const [interweightperunit, setInterWeightPerUnit] = useState("");
+  const [weightperunit, setWeightPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
   const [expirationdate, setExpirationDate] = useState("");
-  const [interminimun_quantity, setInterMinimunQuantity] = useState("");
-  const [interrateisnear, setInterRateIsNear] = useState("");
+  const [minimun_quantity, setMinimunQuantity] = useState("");
+  const [rateisnear, setRateIsNear] = useState("");
   const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [inputsData, setInputsData] = useState([]);
@@ -119,13 +119,14 @@ export default function Inputs() {
   const clearDirectExecution = () => {
     setCategory("");
     setName("");
-    setInterQuantity(null);
-    setInterWeightPerUnit(null);
+    setReason("");
+    setQuantity(null);
+    setWeightPerUnit(null);
     setSupplier("");
     setExpirationDate("");
     setPrice("");
-    setInterMinimunQuantity(null);
-    setInterRateIsNear(null);
+    setMinimunQuantity(null);
+    setRateIsNear(null);
     setInputsData(inputsDataBackup);
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
@@ -174,33 +175,25 @@ export default function Inputs() {
   const InputRegister = async (e) => {
     e.preventDefault();
 
-    const takeCommaPrice = document
-      .querySelector("#price")
-      .value.replace(",", ".");
-
-    const takeCommaWeighperunit = document
-      .querySelector("#weightperunit")
-      .value.replace(",", ".");
-
     const data = {
       category: document.querySelector("#category").value,
       name: document.querySelector("#name").value,
       reason: document.querySelector("#reason").value,
-      interquantity: document.querySelector("#quantity").value,
-      interweightperunit: takeCommaWeighperunit,
+      quantity: document.querySelector("#quantity").value,
+      weightperunit: document.querySelector("#weightperunit").value,
+      price: document.querySelector("#price").value,
       supplier: document.querySelector("#supplier").value,
       expirationdate: document.querySelector("#expirationdate").value,
-      interminimun_quantity: document.querySelector("#minimunQuantity").value,
-      interrateisnear: document.querySelector("#rateisnear").value,
       employee_id,
-      price: takeCommaPrice,
+      minimun_quantity: document.querySelector("#minimunQuantity").value,
+      rateisnear: document.querySelector("#rateisnear").value,
     };
 
     const register = await Register(data, "inputsHistory");
 
     setReRender(register);
 
-    clearDirectExecution();
+    // clearDirectExecution();
   };
 
   return (
@@ -547,15 +540,15 @@ export default function Inputs() {
           type="text"
           id="quantity"
           placeholder="Quantidade ex: 25"
-          value={interquantity || ""}
-          onChange={(e) => setInterQuantity(e.target.value)}
+          value={quantity || ""}
+          onChange={(e) => setQuantity(e.target.value)}
         />
         <input
           type="text"
           id="weightperunit"
           placeholder="Peso unitário ex: 1 (kg)"
-          value={interweightperunit || ""}
-          onChange={(e) => setInterWeightPerUnit(e.target.value)}
+          value={weightperunit || ""}
+          onChange={(e) => setWeightPerUnit(e.target.value)}
         />
         <input
           type="text"
@@ -575,20 +568,20 @@ export default function Inputs() {
           type="text"
           id="minimunQuantity"
           placeholder="quantidade mínima ex: 5"
-          value={interminimun_quantity || ""}
-          onChange={(e) => setInterMinimunQuantity(e.target.value)}
+          value={minimun_quantity || ""}
+          onChange={(e) => setMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
           id="rateisnear"
           placeholder="Próximo ao limite ex: 10"
-          value={interrateisnear || ""}
-          onChange={(e) => setInterRateIsNear(e.target.value)}
+          value={rateisnear || ""}
+          onChange={(e) => setRateIsNear(e.target.value)}
         />
         <input
           type="text"
           id="price"
-          placeholder="Preço ex: 10.90"
+          placeholder="Preço unitário ex: 10.90"
           value={price || ""}
           onChange={(e) => setPrice(e.target.value)}
         />

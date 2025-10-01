@@ -137,7 +137,7 @@ export const InputsSpace = styled.div`
   overflow-y: auto;
   bottom: 735px;
   height: 500px;
-  width: 820px;
+  width: 1290px;
   left: 320px;
   padding: 20px;
   align-items: center;
@@ -151,6 +151,7 @@ export const InputsSpace = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     height: 555px;
+    width: 720px;
     margin-top: 20px;
     padding: 10px;
     border-radius: 10px;

@@ -2,7 +2,7 @@
 import styled from "styled-components";
 
 export const InputsContainer = styled.div`
-  overflow: hidden;
+  overflow: auto;
 `;
 
 export const SearchSpace = styled.div`

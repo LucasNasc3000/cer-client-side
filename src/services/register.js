@@ -11,22 +11,24 @@ export default async function Register(data, registerType) {
   try {
     if (registerType === "inputsHistory") {
       const quantity = toInt(data.interquantity);
-      const totalweight = toInt(data.intertotalweight);
-      const weightperunit = toInt(data.interweightperunit);
       const minimun_quantity = toInt(data.interminimun_quantity);
       const rateisnear = toInt(data.interrateisnear);
 
-      const finalData = {
-        quantity,
-        totalweight,
-        weightperunit,
-        minimun_quantity,
-        rateisnear,
-        ...data,
-      };
+      const {
+        interquantity,
+        interminimun_quantity,
+        interrateisnear,
+        ...removingKeys
+      } = data;
+
+      removingKeys.quantity = quantity;
+      removingKeys.minimun_quantity = minimun_quantity;
+      removingKeys.rateisnear = rateisnear;
+
+      console.log(removingKeys);
 
       await axios.post("/inputsHistory", {
-        ...finalData,
+        ...removingKeys,
       });
     }
 
