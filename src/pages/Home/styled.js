@@ -23,6 +23,21 @@ export const HomeContainer = styled.div`
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
+  .price-today {
+    display: flex;
+    position: relative;
+    height: 90px;
+    width: fit-content;
+    bottom: 1128px;
+    left: 720px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 40px;
+    color: black;
+    box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
+  }
+
   .total-price {
     display: flex;
     position: relative;

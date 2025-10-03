@@ -11,12 +11,12 @@ import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import Decimal from "decimal.js";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalPriceInputs";
-import { PieChart } from "../../components/Charts/PieChart";
-import { PieChartInputsReasons } from "../../components/Charts/PieChartInputsReasons";
-import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount";
+import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalProceInputs/LineChartTotalPriceInputs";
+import { PieChart } from "../../components/Charts/PieChartInputsNames/PieChart";
+import { PieChartInputsReasons } from "../../components/Charts/PieChartInputsReasons/PieChartInputsReasons";
+import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount/PieChartProductsCount";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
@@ -30,7 +30,6 @@ export default function Home() {
   const permission = useSelector((state) => state.auth.permission);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const headerid = useSelector((state) => state.auth.headerid);
-  const dispatch = useDispatch();
   const [employee_id, setEmployeeId] = useState("");
   const [priceYear, setPriceYear] = useState({});
   const [setCurrentYear, setSetCurrentYear] = useState("");
@@ -45,10 +44,12 @@ export default function Home() {
   const [dataPieChartInputsRs, setDataPieChartInputsRs] = useState({});
   const [dataPieChartSalesPC, setDataPieChartSalesPC] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
+  const [priceDay, setPriceDay] = useState("");
   const [productsCount, setProductsCount] = useState([]);
   const [reasonsCount, setReasonsCount] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
   const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
+  const [isLoadingTotalPriceDay, setIsLoadingTotalPriceDay] = useState(true);
   const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
   const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
   const [isLoadingPieChart2, setIsLoadingPieChart2] = useState(true);
@@ -217,10 +218,43 @@ export default function Home() {
   }, [inputsData, productsCount]);
 
   useEffect(() => {
+    function GetDays() {
+      const date = new Date();
+      const fullDate = date.toLocaleDateString("pt-br");
+      const fullDateReplaceBars = fullDate.replace(/\//g, "-");
+      const pricesToday = [];
+
+      salesData.map((sale) => {
+        if (sale.date === fullDateReplaceBars) {
+          const commaReplaced = sale.price.replace(",", ".");
+          const decimalPrice = new Decimal(commaReplaced);
+          pricesToday.push(decimalPrice.toString());
+        }
+      });
+
+      const sum = pricesToday.reduce((acc, currentVal) => {
+        return acc.plus(new Decimal(currentVal));
+      }, new Decimal(0));
+
+      const total = sum.toString();
+
+      if (total.length === 4) {
+        const withZero = `${total}0`;
+        setPriceDay(withZero);
+        return;
+      }
+
+      setPriceDay(total);
+      setIsLoadingTotalPriceDay(false);
+    }
+
+    GetDays();
+  }, [salesData]);
+
+  useEffect(() => {
     function GetMonths() {
       const priceAndMonthsRefined = [];
       const priceAndMonths = [];
-      const priceAndMonthsByYear = [];
 
       for (let i = 1; i < 13; i++) {
         if (i >= 10) {
@@ -377,6 +411,51 @@ export default function Home() {
 
     GetYear();
   }, [inputsData]);
+
+  useEffect(() => {
+    function GetYearSales() {
+      // O ano vai ter que ser dinamico, com um select
+      const priceAndYear = [];
+      const priceAndYearRefined = {};
+
+      if (salesData && salesData.length > 0) {
+        salesData.map((sale) => {
+          priceAndYear.push({
+            year: sale.created_at.slice(0, 4),
+            price: sale.price,
+          });
+        });
+
+        priceAndYear.forEach((element) => {
+          // eslint-disable-next-line no-return-assign
+          return (element.price = element.price.replace(",", "."));
+        });
+      }
+
+      const totalPerYear = priceAndYear.reduce((acc, current) => {
+        const { year, price } = current;
+
+        const priceDecimal = new Decimal(price);
+
+        if (acc[year]) {
+          acc[year] = acc[year].plus(priceDecimal);
+        } else {
+          acc[year] = priceDecimal;
+        }
+
+        return acc;
+      }, {});
+
+      // eslint-disable-next-line no-restricted-syntax, guard-for-in
+      for (const year in totalPerYear) {
+        priceAndYearRefined[year] = totalPerYear[year].toFixed(2);
+      }
+
+      setPriceYearSales(priceAndYearRefined);
+    }
+
+    GetYearSales();
+  }, [salesData]);
 
   useEffect(() => {
     function GetProducts() {
@@ -544,6 +623,7 @@ export default function Home() {
       isLoadingPieChart2 &&
       isLoadingPieChart3 &&
       isLoadingTotalPrice &&
+      isLoadingTotalPriceDay &&
       isLoadingPriceMonths &&
       isLoadingRegisterYears
     ) {
@@ -552,6 +632,7 @@ export default function Home() {
   }, [
     isLoadingPieChart1,
     isLoadingTotalPrice,
+    isLoadingTotalPriceDay,
     isLoadingPriceMonths,
     isLoadingPieChart2,
     isLoadingPieChart3,
@@ -614,6 +695,21 @@ export default function Home() {
       )}
       {isLoadingFinal === false ? (
         <PieChartProductsCount chartData={dataPieChartSalesPC} />
+      ) : (
+        <div>Carregando...</div>
+      )}
+
+      {isLoadingFinal === false ? (
+        <div className="price-today">
+          <p className="text">Total vendido hoje</p>
+          <div className="total-price">
+            {priceDay ? (
+              `R$ ${priceDay}`
+            ) : (
+              <p className="warn">Nada foi vendido hoje</p>
+            )}
+          </div>
+        </div>
       ) : (
         <div>Carregando...</div>
       )}
