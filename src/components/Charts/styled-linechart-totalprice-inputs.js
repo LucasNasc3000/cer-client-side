@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const ChartContainer = styled.div`
   display: flex;
   position: relative;
-  bottom: 790px;
-  left: 290px;
+  bottom: 950px;
+  left: 270px;
   height: 300px;
   width: fit-content;
 

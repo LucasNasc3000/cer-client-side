@@ -2,7 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { object } from "prop-types";
 import { Line } from "react-chartjs-2";
-import { ChartContainer } from "./styled-barchat";
+import { ChartContainer } from "./styled-linechart-totalprice-inputs";
 
 export function LineChartTotalPriceInputs({ chartData }) {
   return (

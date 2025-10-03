@@ -38,6 +38,7 @@ export default function Home() {
   const [years, setYears] = useState([]);
   const [totalPrice, setTotalPrice] = useState("");
   const [inputsData, setInputsData] = useState([]);
+  const [inputsHistoryData, setInputsHistoryData] = useState([]);
   const [salesData, setSalesData] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
   const [dataPieChartInputs, setDataPieChartInputs] = useState({});
@@ -102,6 +103,28 @@ export default function Home() {
     }
 
     GetInputsData();
+  }, [employee_id, permission]);
+
+  useEffect(() => {
+    async function GetInputsHistoryData() {
+      try {
+        const inputs = await GetData(
+          employee_id,
+          "inputsHistory",
+          employee_id,
+          permission
+        );
+
+        if (typeof inputs === "undefined" || !inputs) return;
+
+        setInputsHistoryData(inputs);
+      } catch (err) {
+        if (typeof err.response.data === "string") return;
+        toast.error("Erro ao obter dados dos insumos");
+      }
+    }
+
+    GetInputsHistoryData();
   }, [employee_id, permission]);
 
   useEffect(() => {
@@ -195,7 +218,6 @@ export default function Home() {
 
   useEffect(() => {
     function GetMonths() {
-      // O ano vai ter que ser dinamico, com um select
       const priceAndMonthsRefined = [];
       const priceAndMonths = [];
       const priceAndMonthsByYear = [];
@@ -220,6 +242,12 @@ export default function Home() {
         inputsData.map((input) => {
           if (setYear !== "") {
             if (input.created_at.slice(0, 4) === setYear) {
+              if (input.created_at[5] !== 0) {
+                priceAndMonths.push({
+                  month: input.created_at[5] + input.created_at[6],
+                  price: input.price,
+                });
+              }
               priceAndMonths.push({
                 month: input.created_at[6],
                 price: input.price,
@@ -229,6 +257,13 @@ export default function Home() {
           }
 
           if (input.created_at.slice(0, 4) === setCurrentYear) {
+            if (input.created_at[5] !== 0) {
+              priceAndMonths.push({
+                month: input.created_at[5] + input.created_at[6],
+                price: input.price,
+              });
+            }
+
             priceAndMonths.push({
               month: input.created_at[6],
               price: input.price,
@@ -392,7 +427,7 @@ export default function Home() {
     function GetInputsReasons() {
       const reasons = [];
 
-      inputsData.map((input) => {
+      inputsHistoryData.map((input) => {
         reasons.push(input.reason);
       });
 
@@ -413,7 +448,7 @@ export default function Home() {
     }
 
     GetInputsReasons();
-  }, [inputsData]);
+  }, [inputsHistoryData]);
 
   useEffect(() => {
     setDataPieChartInputs({

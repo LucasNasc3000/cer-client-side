@@ -13,8 +13,8 @@ export const HomeContainer = styled.div`
     position: relative;
     height: 90px;
     width: fit-content;
-    bottom: 920px;
-    left: 750px;
+    bottom: 980px;
+    left: 510px;
     justify-content: center;
     align-items: center;
     font-weight: bolder;
@@ -47,8 +47,8 @@ export const HomeContainer = styled.div`
     width: fit-content;
     height: fit-content;
     position: relative;
-    bottom: 800px;
-    left: 1080px;
+    bottom: 960px;
+    left: 1065px;
   }
 
   .filter-select-label {
