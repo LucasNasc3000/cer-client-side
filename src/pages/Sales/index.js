@@ -545,7 +545,7 @@ export default function Sales() {
         <input
           type="text"
           id="price"
-          placeholder="Anv. Cliente ex: 15-02"
+          placeholder="Preço ex: 15,99"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
