@@ -45,6 +45,7 @@ export default function Home() {
   const [inputsData, setInputsData] = useState([]);
   const [inputsHistoryData, setInputsHistoryData] = useState([]);
   const [salesData, setSalesData] = useState([]);
+  const [outputsData, setOutputsData] = useState([]);
   const [colorsCollection, setColorsCollection] = useState([]);
   const [dataPieChartInputs, setDataPieChartInputs] = useState({});
   const [dataPieChartInputsRs, setDataPieChartInputsRs] = useState({});
@@ -162,6 +163,28 @@ export default function Home() {
     }
 
     GetSalesData();
+  }, [employee_id, permission]);
+
+  useEffect(() => {
+    async function GetOutputsData() {
+      try {
+        const outputs = await GetData(
+          employee_id,
+          "outputs",
+          employee_id,
+          permission
+        );
+
+        if (typeof outputs === "undefined" || !outputs) return;
+
+        setOutputsData(outputs);
+      } catch (err) {
+        if (typeof err.response.data === "string") return;
+        toast.error("Erro ao obter dados das saídas");
+      }
+    }
+
+    GetOutputsData();
   }, [employee_id, permission]);
 
   useEffect(() => {
