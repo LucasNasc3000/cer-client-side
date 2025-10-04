@@ -13,7 +13,8 @@ import Decimal from "decimal.js";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalProceInputs/LineChartTotalPriceInputs";
+import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTotalPriceInputs/LineChartTotalPriceInputs";
+import { LineChartTotalPriceSales } from "../../components/Charts/LineChartTotalPriceSales/LineChartTotalPriceSales";
 import { PieChart } from "../../components/Charts/PieChartInputsNames/PieChart";
 import { PieChartInputsReasons } from "../../components/Charts/PieChartInputsReasons/PieChartInputsReasons";
 import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount/PieChartProductsCount";
@@ -32,10 +33,15 @@ export default function Home() {
   const headerid = useSelector((state) => state.auth.headerid);
   const [employee_id, setEmployeeId] = useState("");
   const [priceYear, setPriceYear] = useState({});
+  const [priceYearSales, setPriceYearSales] = useState({});
   const [setCurrentYear, setSetCurrentYear] = useState("");
+  const [setCurrentYearSales, setSetCurrentYearSales] = useState("");
   const [setYear, setSetYear] = useState("");
+  const [setYearSales, setSetYearSales] = useState("");
   const [years, setYears] = useState([]);
+  const [yearsSales, setYearsSales] = useState([]);
   const [totalPrice, setTotalPrice] = useState("");
+  const [totalPriceSales, setTotalPriceSales] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [inputsHistoryData, setInputsHistoryData] = useState([]);
   const [salesData, setSalesData] = useState([]);
@@ -44,17 +50,25 @@ export default function Home() {
   const [dataPieChartInputsRs, setDataPieChartInputsRs] = useState({});
   const [dataPieChartSalesPC, setDataPieChartSalesPC] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
+  const [priceMonthsSales, setPriceMonthsSales] = useState([]);
   const [priceDay, setPriceDay] = useState("");
   const [productsCount, setProductsCount] = useState([]);
   const [reasonsCount, setReasonsCount] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
+  const [dataPriceMonthSalesChart, setDataPriceMonthSalesChart] = useState({});
   const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
   const [isLoadingTotalPriceDay, setIsLoadingTotalPriceDay] = useState(true);
   const [isLoadingPriceMonths, setIsLoadingPriceMonths] = useState(true);
+  const [isLoadingPriceMonthsSales, setIsLoadingPriceMonthsSales] =
+    useState(true);
+  const [isLoadingTotalPriceSales, setIsLoadingTotalPriceSales] =
+    useState(true);
   const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
   const [isLoadingPieChart2, setIsLoadingPieChart2] = useState(true);
   const [isLoadingPieChart3, setIsLoadingPieChart3] = useState(true);
   const [isLoadingRegisterYears, setIsLoadingRegisterYears] = useState(true);
+  const [isLoadingRegisterYearsSales, setIsLoadingRegisterYearsSales] =
+    useState(true);
   const [isLoadingFinal, setIsLoadingFinal] = useState(true);
 
   useEffect(() => {
@@ -150,63 +164,6 @@ export default function Home() {
     GetSalesData();
   }, [employee_id, permission]);
 
-  // function DaysInMonth(month, year) {
-  //   return new Date(year, month, 0).getDate();
-  // }
-
-  // function GetDates() {
-  //   const dates = [];
-  //   const date = new Date();
-  //   const month = date.toLocaleDateString("pt-br", {
-  //     month: "2-digit",
-  //   });
-  //   const year = date.toLocaleDateString("pt-br", {
-  //     year: "numeric",
-  //   });
-  //   const daysInMonth = DaysInMonth(month, year);
-
-  //   for (let i = 0; i < daysInMonth + 1; i++) {
-  //     dates.push(String(`${i}-${month}-${year}`));
-  //   }
-
-  //   for (let i = 0; i < 10; i++) {
-  //     dates[i] = `0${i}-${month}-${year}`;
-  //   }
-
-  //   dates.shift();
-
-  //   return dates;
-  // }
-
-  // useEffect(() => {
-  //   async function SearchForSalesByDates() {
-  //     try {
-  //       const dates = GetDates();
-  //       const preDatesAndLength = [];
-
-  //       for (let i = 0; i < dates.length; i++) {
-  //         // eslint-disable-next-line no-await-in-loop
-  //         const getSalesByDates = await axios.post(`/sales/search/date`, {
-  //           saledateBody: dates[i],
-  //           forDashboard: true,
-  //         });
-
-  //         preDatesAndLength.push({
-  //           date: dates[i],
-  //           salesNumber: getSalesByDates.data,
-  //         });
-  //       }
-
-  //       setDatesAndLength(preDatesAndLength);
-  //     } catch (err) {
-  //       if (typeof err.response.data === "string") return;
-  //       toast.error("Erro ao obter vendas nas datas especificadas");
-  //     }
-  //   }
-
-  //   SearchForSalesByDates();
-  // }, [employee_id]);
-
   useEffect(() => {
     const allColors = [];
     const colorsInputsChart = MakingColors(inputsData);
@@ -250,6 +207,88 @@ export default function Home() {
 
     GetDays();
   }, [salesData]);
+
+  useEffect(() => {
+    function GetMonthsSales() {
+      const priceAndMonthsRefined = [];
+      const priceAndMonths = [];
+
+      for (let i = 1; i < 13; i++) {
+        if (i >= 10) {
+          priceAndMonthsRefined.push({
+            month: `${i}/${setYearSales || setCurrentYearSales}`,
+            prices: [],
+            total: "",
+          });
+        } else {
+          priceAndMonthsRefined.push({
+            month: `0${i}/${setYearSales || setCurrentYearSales}`,
+            prices: [],
+            total: "",
+          });
+        }
+      }
+
+      if (salesData && salesData.length > 0) {
+        salesData.map((sale) => {
+          if (setYearSales !== "") {
+            if (sale.date.slice(6, 10) === setYearSales) {
+              priceAndMonths.push({
+                month: sale.date.slice(3, 5),
+                price: sale.price,
+              });
+            }
+            return;
+          }
+
+          if (sale.date.slice(6, 10) === setCurrentYearSales) {
+            priceAndMonths.push({
+              month: sale.date.slice(3, 5),
+              price: sale.price,
+            });
+          }
+        });
+
+        for (let i = 0; i < priceAndMonths.length; i++) {
+          if (priceAndMonths[i].month.length === 1) {
+            const withZero = `0${priceAndMonths[i].month}`;
+            priceAndMonths[i].month = withZero;
+          }
+        }
+
+        priceAndMonths.forEach((element) => {
+          const month = parseInt(element.month, 10);
+
+          if (priceAndMonthsRefined[month - 1]) {
+            priceAndMonthsRefined[month - 1].prices.push(element.price);
+          }
+        });
+
+        priceAndMonthsRefined.forEach((element) => {
+          element.prices = element.prices.map((price) => {
+            return price.replace(",", ".");
+          });
+        });
+
+        priceAndMonthsRefined.forEach((element) => {
+          const sum = element.prices.reduce((acc, currentVal) => {
+            return acc.plus(new Decimal(currentVal));
+          }, new Decimal(0));
+
+          element.total = sum.toString();
+
+          if (element.total.length === 4) {
+            const withZero = `${element.total}0`;
+            element.total = withZero;
+          }
+        });
+
+        setPriceMonthsSales(priceAndMonthsRefined);
+      }
+    }
+
+    GetMonthsSales();
+  }, [salesData, setCurrentYearSales, setYearSales]);
 
   useEffect(() => {
     function GetMonths() {
@@ -347,6 +386,27 @@ export default function Home() {
   }, [inputsData, setCurrentYear, setYear]);
 
   useEffect(() => {
+    function GetRegisterYearsSales() {
+      const allYears = [];
+
+      if (salesData.length > 0) {
+        salesData.map((sale) => {
+          allYears.push(sale.date.slice(6, 10));
+        });
+
+        const fixingDuplicatedYears = new Set(allYears);
+
+        const fixedYears = [...fixingDuplicatedYears];
+
+        setYearsSales(fixedYears);
+        setIsLoadingRegisterYearsSales(false);
+      }
+    }
+
+    GetRegisterYearsSales();
+  }, [salesData]);
+
+  useEffect(() => {
     function GetRegisterYears() {
       const allYears = [];
 
@@ -421,7 +481,7 @@ export default function Home() {
       if (salesData && salesData.length > 0) {
         salesData.map((sale) => {
           priceAndYear.push({
-            year: sale.created_at.slice(0, 4),
+            year: sale.date.slice(6, 10),
             price: sale.price,
           });
         });
@@ -596,6 +656,46 @@ export default function Home() {
   }, [inputsData, priceMonths]);
 
   useEffect(() => {
+    setDataPriceMonthSalesChart({
+      labels: priceMonthsSales.map((date) => date.month),
+      datasets: [
+        {
+          label: "Total em vendas no mês",
+          data: priceMonthsSales.map((price) => price.total),
+          skipNull: true,
+          maxBarThicness: 10,
+          backgroundColor: ["rgba(4, 148, 170, 1)"],
+          borderColor: ["rgba(4, 148, 170, 1)"],
+        },
+      ],
+    });
+
+    setIsLoadingPriceMonthsSales(false);
+  }, [salesData, priceMonthsSales]);
+
+  useEffect(() => {
+    const date = new Date();
+    const currentYear = date.getFullYear().toString();
+
+    setSetCurrentYearSales(currentYear);
+
+    if (setYearSales !== "") {
+      setTotalPriceSales(priceYearSales[setYearSales]);
+      return;
+    }
+
+    setTotalPriceSales(priceYearSales[setCurrentYearSales]);
+  }, [priceYearSales, salesData, setYearSales, setCurrentYearSales]);
+
+  useEffect(() => {
+    if (totalPriceSales) {
+      const replaceDot = totalPriceSales.replace(".", ",");
+      setTotalPriceSales(replaceDot);
+      setIsLoadingTotalPriceSales(false);
+    }
+  }, [totalPriceSales]);
+
+  useEffect(() => {
     const date = new Date();
     const currentYear = date.getFullYear().toString();
 
@@ -625,7 +725,10 @@ export default function Home() {
       isLoadingTotalPrice &&
       isLoadingTotalPriceDay &&
       isLoadingPriceMonths &&
-      isLoadingRegisterYears
+      isLoadingPriceMonthsSales &&
+      isLoadingTotalPriceSales &&
+      isLoadingRegisterYears &&
+      isLoadingRegisterYearsSales
     ) {
       setIsLoadingFinal(false);
     }
@@ -634,9 +737,12 @@ export default function Home() {
     isLoadingTotalPrice,
     isLoadingTotalPriceDay,
     isLoadingPriceMonths,
+    isLoadingPriceMonthsSales,
+    isLoadingTotalPriceSales,
     isLoadingPieChart2,
     isLoadingPieChart3,
     isLoadingRegisterYears,
+    isLoadingRegisterYearsSales,
   ]);
 
   return (
@@ -709,6 +815,46 @@ export default function Home() {
               <p className="warn">Nada foi vendido hoje</p>
             )}
           </div>
+        </div>
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <div className="price-month">
+          <p className="text">Total vendido no ano</p>
+          <div className="total-price">
+            {totalPriceSales ? (
+              `R$ ${totalPriceSales}`
+            ) : (
+              <p className="warn">Nada foi vendido no ano</p>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <LineChartTotalPriceSales chartData={dataPriceMonthSalesChart} />
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <div className="filter-space-sales">
+          <p className="filter-select-label">Filtrar por ano: </p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSetYearSales(e.target.value)}
+          >
+            {yearsSales.map((year) => {
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
+          </select>
         </div>
       ) : (
         <div>Carregando...</div>

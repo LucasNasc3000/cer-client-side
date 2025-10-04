@@ -38,6 +38,21 @@ export const HomeContainer = styled.div`
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
+  .price-month {
+    display: flex;
+    position: relative;
+    height: 90px;
+    width: fit-content;
+    bottom: 1061px;
+    left: 720px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 40px;
+    color: black;
+    box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
+  }
+
   .total-price {
     display: flex;
     position: relative;
@@ -63,6 +78,16 @@ export const HomeContainer = styled.div`
     height: fit-content;
     position: relative;
     bottom: 960px;
+    left: 1065px;
+  }
+
+  .filter-space-sales {
+    display: flex;
+    color: black;
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    bottom: 1295px;
     left: 1065px;
   }
 
