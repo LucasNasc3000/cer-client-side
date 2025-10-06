@@ -16,7 +16,7 @@ export function PieChartOutputsNames({ chartData }) {
             plugins: {
               title: {
                 display: true,
-                text: "Saída do insumo",
+                text: "Distribuição das saídas dos insumos",
               },
               legend: {
                 display: true,

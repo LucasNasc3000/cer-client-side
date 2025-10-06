@@ -17,6 +17,8 @@ import { LineChartTotalPriceInputs } from "../../components/Charts/LineChartTota
 import { LineChartTotalPriceSales } from "../../components/Charts/LineChartTotalPriceSales/LineChartTotalPriceSales";
 import { PieChart } from "../../components/Charts/PieChartInputsNames/PieChart";
 import { PieChartInputsReasons } from "../../components/Charts/PieChartInputsReasons/PieChartInputsReasons";
+import { PieChartOutputsNames } from "../../components/Charts/PieChartOutputsNames/PieChartOutputsNames";
+import { PieChartOutputsReasons } from "../../components/Charts/PieChartOutputsReasons/PieChartOutputsReasons";
 import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount/PieChartProductsCount";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -50,11 +52,15 @@ export default function Home() {
   const [dataPieChartInputs, setDataPieChartInputs] = useState({});
   const [dataPieChartInputsRs, setDataPieChartInputsRs] = useState({});
   const [dataPieChartSalesPC, setDataPieChartSalesPC] = useState({});
+  const [dataPieChartOutputs, setDataPieChartOutputs] = useState({});
+  const [dataPieChartOutputsRs, setDataPieChartOutputsRs] = useState({});
   const [priceMonths, setPriceMonths] = useState([]);
   const [priceMonthsSales, setPriceMonthsSales] = useState([]);
   const [priceDay, setPriceDay] = useState("");
   const [productsCount, setProductsCount] = useState([]);
+  const [outputsCount, setOutputsCount] = useState([]);
   const [reasonsCount, setReasonsCount] = useState([]);
+  const [outputsReasonsCount, setOutputsReasonsCount] = useState([]);
   const [dataPriceMonthChart, setDataPriceMonthChart] = useState({});
   const [dataPriceMonthSalesChart, setDataPriceMonthSalesChart] = useState({});
   const [isLoadingTotalPrice, setIsLoadingTotalPrice] = useState(true);
@@ -67,6 +73,8 @@ export default function Home() {
   const [isLoadingPieChart1, setIsLoadingPieChart1] = useState(true);
   const [isLoadingPieChart2, setIsLoadingPieChart2] = useState(true);
   const [isLoadingPieChart3, setIsLoadingPieChart3] = useState(true);
+  const [isLoadingPieChart4, setIsLoadingPieChart4] = useState(true);
+  const [isLoadingPieChart5, setIsLoadingPieChart5] = useState(true);
   const [isLoadingRegisterYears, setIsLoadingRegisterYears] = useState(true);
   const [isLoadingRegisterYearsSales, setIsLoadingRegisterYearsSales] =
     useState(true);
@@ -613,6 +621,60 @@ export default function Home() {
   }, [inputsHistoryData]);
 
   useEffect(() => {
+    function GetOutputsReasons() {
+      const reasons = [];
+
+      outputsData.map((output) => {
+        reasons.push(output.reason);
+      });
+
+      const counts = {};
+
+      reasons.forEach((element) => {
+        counts[element] = (counts[element] || 0) + 1;
+      });
+
+      const reasonCount = Object.keys(counts).map((reason) => {
+        return {
+          count: counts[reason],
+          reason,
+        };
+      });
+
+      setOutputsReasonsCount(reasonCount);
+    }
+
+    GetOutputsReasons();
+  }, [outputsData]);
+
+  useEffect(() => {
+    function GetOutputsNames() {
+      const outputs = [];
+
+      outputsData.map((output) => {
+        outputs.push(output.name);
+      });
+
+      const counts = {};
+
+      outputs.forEach((element) => {
+        counts[element] = (counts[element] || 0) + 1;
+      });
+
+      const outputCount = Object.keys(counts).map((output) => {
+        return {
+          count: counts[output],
+          output,
+        };
+      });
+
+      setOutputsCount(outputCount);
+    }
+
+    GetOutputsNames();
+  }, [outputsData]);
+
+  useEffect(() => {
     setDataPieChartInputs({
       labels: inputsData.map((inputData) => inputData.name),
       datasets: [
@@ -659,6 +721,38 @@ export default function Home() {
 
     setIsLoadingPieChart2(false);
   }, [colorsCollection, productsCount]);
+
+  useEffect(() => {
+    setDataPieChartOutputsRs({
+      labels: outputsReasonsCount.map((reason) => reason.reason),
+      datasets: [
+        {
+          label: "Vezes que uma saída foi registrada por este motivo",
+          data: outputsReasonsCount.map((count) => count.count),
+          backgroundColor: colorsCollection[1],
+          hoverOffset: 6,
+        },
+      ],
+    });
+
+    setIsLoadingPieChart5(false);
+  }, [colorsCollection, outputsReasonsCount]);
+
+  useEffect(() => {
+    setDataPieChartOutputs({
+      labels: outputsCount.map((output) => output.output),
+      datasets: [
+        {
+          label: "Quantidade de registros de saída",
+          data: outputsCount.map((count) => count.count),
+          backgroundColor: colorsCollection[1],
+          hoverOffset: 6,
+        },
+      ],
+    });
+
+    setIsLoadingPieChart4(false);
+  }, [colorsCollection, outputsCount]);
 
   useEffect(() => {
     setDataPriceMonthChart({
@@ -745,6 +839,8 @@ export default function Home() {
       isLoadingPieChart1 &&
       isLoadingPieChart2 &&
       isLoadingPieChart3 &&
+      isLoadingPieChart4 &&
+      isLoadingPieChart5 &&
       isLoadingTotalPrice &&
       isLoadingTotalPriceDay &&
       isLoadingPriceMonths &&
@@ -764,6 +860,8 @@ export default function Home() {
     isLoadingTotalPriceSales,
     isLoadingPieChart2,
     isLoadingPieChart3,
+    isLoadingPieChart4,
+    isLoadingPieChart5,
     isLoadingRegisterYears,
     isLoadingRegisterYearsSales,
   ]);
@@ -778,6 +876,16 @@ export default function Home() {
       )}
       {isLoadingFinal === false ? (
         <PieChartInputsReasons chartData={dataPieChartInputsRs} />
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <PieChartOutputsNames chartData={dataPieChartOutputs} />
+      ) : (
+        <div>Carregando...</div>
+      )}
+      {isLoadingFinal === false ? (
+        <PieChartOutputsReasons chartData={dataPieChartOutputsRs} />
       ) : (
         <div>Carregando...</div>
       )}
@@ -843,7 +951,7 @@ export default function Home() {
         <div>Carregando...</div>
       )}
       {isLoadingFinal === false ? (
-        <div className="price-month">
+        <div className="price-year">
           <p className="text">Total vendido no ano</p>
           <div className="total-price">
             {totalPriceSales ? (

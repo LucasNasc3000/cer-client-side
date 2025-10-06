@@ -13,8 +13,8 @@ export const HomeContainer = styled.div`
     position: relative;
     height: 90px;
     width: fit-content;
-    bottom: 980px;
-    left: 510px;
+    bottom: 1460px;
+    left: 870px;
     justify-content: center;
     align-items: center;
     font-weight: bolder;
@@ -28,7 +28,7 @@ export const HomeContainer = styled.div`
     position: relative;
     height: 90px;
     width: fit-content;
-    bottom: 1128px;
+    bottom: 1580px;
     left: 720px;
     justify-content: center;
     align-items: center;
@@ -38,12 +38,12 @@ export const HomeContainer = styled.div`
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
-  .price-month {
+  .price-year {
     display: flex;
     position: relative;
     height: 90px;
     width: fit-content;
-    bottom: 1061px;
+    bottom: 1510px;
     left: 720px;
     justify-content: center;
     align-items: center;
@@ -77,7 +77,7 @@ export const HomeContainer = styled.div`
     width: fit-content;
     height: fit-content;
     position: relative;
-    bottom: 960px;
+    bottom: 1400px;
     left: 1065px;
   }
 
@@ -87,7 +87,7 @@ export const HomeContainer = styled.div`
     width: fit-content;
     height: fit-content;
     position: relative;
-    bottom: 1295px;
+    bottom: 1765px;
     left: 1065px;
   }
 
