@@ -52,10 +52,12 @@ export const SearchSpace = styled.div`
   }
 
   .exemp-list {
+    display: flex;
+    position: relative;
     height: 35px;
     width: 190px;
-    margin-left: 365px;
-    margin-top: 22px;
+    left: 750px;
+    top: 24px;
     box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
 
@@ -100,7 +102,7 @@ export const SearchSpace = styled.div`
     justify-content: center;
     align-items: center;
     top: 22px;
-    left: 450px;
+    left: 250px;
   }
 
   .filter-select-label {
@@ -124,6 +126,22 @@ export const SearchSpace = styled.div`
       "Open Sans",
       "Helvetica Neue",
       sans-serif;
+  }
+
+  .link {
+    display: flex;
+    position: relative;
+    width: 230px;
+    height: 35px;
+    top: 82px;
+    left: 20px;
+    background-color: #a5a4a4ff;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    justify-content: space-between;
   }
 
   .search-btn:hover {

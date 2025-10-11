@@ -2,6 +2,7 @@
 import { get } from "lodash";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaPlus } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -248,7 +249,7 @@ export function Employees() {
             className="search-btn"
             onClick={(e) => SearchEmployees(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
@@ -265,7 +266,11 @@ export function Employees() {
           Listar ex-funcionários
         </button>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
+        <FaArrowLeft
+          size={27}
+          className="arrow"
+          onClick={(e) => ClearSearch(e)}
+        />
 
         <div className="filter-space">
           <p className="filter-select-label">Filtrar por:</p>
