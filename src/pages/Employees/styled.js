@@ -70,6 +70,63 @@ export const SearchSpace = styled.div`
     color: #fff;
   }
 
+  .options {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 35px;
+    width: 161px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
+  .filter-space {
+    display: flex;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    top: 22px;
+    left: 450px;
+  }
+
+  .filter-select-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 85px;
+    color: black;
+    font-size: 15px;
+    font-weight: normal;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
   .arrow:hover {
     filter: brightness(70%);
   }

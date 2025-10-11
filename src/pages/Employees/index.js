@@ -10,6 +10,7 @@ import Header from "../../components/Header/index";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import history from "../../services/history";
+import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/auth/actions";
 import {
   EmployeeCards,
@@ -25,7 +26,9 @@ export function Employees() {
   const permission = useSelector((state) => state.auth.permission);
   const searchInput = document.querySelector(".input-search");
   const [employees, setEmployees] = useState([]);
+  const [searchParam, setSearchParam] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [exemployees, setExemployees] = useState([]);
   const [boss, setBoss] = useState("");
   const [bossEdit, setBossEdit] = useState("");
@@ -40,7 +43,7 @@ export function Employees() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permission]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -60,8 +63,11 @@ export function Employees() {
     setAlEdit("");
     setPermissionEdit("");
     setSearchResults([]);
+    setSearchParam("");
     setExemployees([]);
     searchInput.value = "";
+
+    if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   }
 
   async function getEmployees() {
@@ -86,29 +92,24 @@ export function Employees() {
     }
   }
 
-  async function DoSearch(e) {
+  async function SearchEmployees(e) {
     e.preventDefault();
-    try {
-      const results = await axios.get(
-        `/employees/search/id/${searchInput.value}`
-      );
 
-      const inArray = [results.data];
+    const inArray = [];
 
-      setSearchResults(inArray);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
+    const search = await DoSearch("employees", searchParam, searchInput.value);
 
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
+    if (typeof search === "undefined" || !search) return;
 
-        if (err && errors.length < 1) {
-          toast.error("Erro desconhecido ao pesquisar funcionário");
-        }
-      }
+    if (Array.isArray(search)) {
+      setSearchResults(search);
+      setSearchResultsBackup(search);
+      return;
     }
+
+    inArray.push(search);
+    setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
   }
 
   async function ShowExEmployees(e) {
@@ -133,11 +134,13 @@ export function Employees() {
 
   useEffect(() => {
     getEmployees();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boss]);
 
   useEffect(() => {
     if (rerender === true) getEmployees();
     setReRender(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
 
   const clear = (e) => {
@@ -209,13 +212,13 @@ export function Employees() {
           <button
             type="button"
             className="search-btn"
-            onClick={(e) => DoSearch(e)}
+            onClick={(e) => SearchEmployees(e)}
           >
             Pesquisar
           </button>
           <input
             type="text"
-            placeholder="Pesquisar funcionário pelo id"
+            placeholder="Pesquisar funcionário..."
             className="input-search"
           />
         </div>
@@ -229,6 +232,22 @@ export function Employees() {
         </button>
 
         <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
+
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="email">Email</option>
+            <option value="name">Nome</option>
+            <option value="permission">Permissão</option>
+            <option value="id">Id</option>
+          </select>
+        </div>
       </SearchSpace>
       <EmployeeCards>
         {searchResults.length < 1 && exemployees.length < 1
