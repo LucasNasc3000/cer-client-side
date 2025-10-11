@@ -333,14 +333,14 @@ export function Employees() {
                   </div>
                   <button
                     type="button"
-                    className="edit-btn"
+                    className="confirm-changes"
                     onClick={(e) => EmployeeUpdate(e, empData)}
                   >
                     Salvar
                   </button>
                   <button
                     type="button"
-                    className="edit-btn"
+                    className="cancel-changes"
                     onClick={(e) => clear(e, false)}
                   >
                     Cancelar
@@ -402,14 +402,14 @@ export function Employees() {
                   </div>
                   <button
                     type="button"
-                    className="edit-btn"
+                    className="confirm-changes"
                     onClick={(e) => EmployeeUpdate(e, empData)}
                   >
                     Salvar
                   </button>
                   <button
                     type="button"
-                    className="edit-btn"
+                    className="cancel-changes"
                     onClick={(e) => clear(e, true)}
                   >
                     Cancelar
@@ -471,14 +471,14 @@ export function Employees() {
                   </div>
                   <button
                     type="button"
-                    className="edit-btn"
+                    className="confirm-changes"
                     onClick={(e) => EmployeeUpdate(e, empData)}
                   >
                     Salvar
                   </button>
                   <button
                     type="button"
-                    className="edit-btn"
+                    className="cancel-changes"
                     onClick={(e) => ClearSearch(e)}
                   >
                     Cancelar
