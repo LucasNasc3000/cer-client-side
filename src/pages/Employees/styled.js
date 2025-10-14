@@ -66,7 +66,7 @@ export const SearchSpace = styled.div`
     position: relative;
     height: 32px;
     width: 32px;
-    right: 180px;
+    right: 370px;
     top: 30px;
     color: #fff;
   }
@@ -133,8 +133,8 @@ export const SearchSpace = styled.div`
     position: relative;
     width: 230px;
     height: 35px;
-    top: 82px;
-    left: 20px;
+    top: 72px;
+    left: 262px;
     background-color: #a5a4a4ff;
     color: #fff;
     border-radius: 4px;
@@ -142,6 +142,11 @@ export const SearchSpace = styled.div`
     font-size: 15px;
     font-weight: bold;
     justify-content: space-between;
+  }
+
+  .plus-icon {
+    display: flex;
+    margin-right: 10px;
   }
 
   .search-btn:hover {
@@ -153,6 +158,10 @@ export const SearchSpace = styled.div`
   }
 
   .search-icon:hover {
+    filter: brightness(80%);
+  }
+
+  .link:hover {
     filter: brightness(80%);
   }
 `;
@@ -213,20 +222,20 @@ export const EmployeeCards = styled.div`
   flex-direction: column;
   position: relative;
   bottom: 740px;
-  left: 470px;
-  width: 600px;
+  left: 270px;
+  width: fit-content;
   height: 585px;
   overflow-y: auto;
   overflow-x: hidden;
+  background-color: aqua;
+  padding: 20px;
 
   .main-data-div {
     background-color: white;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    flex-grow: 0;
-    flex-shrink: 0;
-    height: 555px;
+    height: fit-content;
+    width: 1200px;
     margin-top: 25px;
     padding: 15px;
     border-radius: 10px;
@@ -241,6 +250,7 @@ export const EmployeeCards = styled.div`
     color: black;
     width: max-content;
     height: 38px;
+    margin-top: 25px;
     border-radius: 8px;
     border: none;
     font-size: 16px;
@@ -261,10 +271,44 @@ export const EmployeeCards = styled.div`
 
   .data-wrap {
     display: flex;
-    height: fit-content;
-    margin-right: 30px;
-    margin-top: 15px;
+    position: relative;
+    height: 70px;
+    left: 190px;
+    bottom: 70px;
     width: fit-content;
+    background-color: beige;
+  }
+
+  .label {
+    display: flex;
+    position: relative;
+    color: black;
+    left: 100px;
+    width: 100px;
+    height: fit-content;
+    background-color: aqua;
+    font-size: 17px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    word-break: keep-all;
+  }
+
+  .buttons {
+    display: flex;
+    background-color: red;
+    height: 50px;
+    width: fit-content;
+    margin-top: 100px;
   }
 
   .confirm-changes {

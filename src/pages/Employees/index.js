@@ -336,27 +336,30 @@ export function Employees() {
                       value={empData.id}
                     />
                   </div>
-                  <button
-                    type="button"
-                    className="confirm-changes"
-                    onClick={(e) => EmployeeUpdate(e, empData)}
-                  >
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel-changes"
-                    onClick={(e) => clear(e, false)}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="button"
-                    className="del-btn"
-                    onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                  >
-                    Desligar
-                  </button>
+
+                  <div className="buttons">
+                    <button
+                      type="button"
+                      className="confirm-changes"
+                      onClick={(e) => EmployeeUpdate(e, empData)}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => clear(e, false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      className="del-btn"
+                      onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
+                    >
+                      Desligar
+                    </button>
+                  </div>
                 </div>
               );
             })
