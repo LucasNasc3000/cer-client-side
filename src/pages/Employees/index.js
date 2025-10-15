@@ -54,6 +54,7 @@ export function Employees() {
     e.preventDefault();
     setSearchParam("");
     setSearchResults([]);
+    setExemployees([]);
     searchInput.value = "";
 
     const options = document.querySelector(".options");
@@ -64,6 +65,7 @@ export function Employees() {
     if (isExemployees === true) setExemployees(exemployeesBackup);
 
     setEmployees(employeesBackup);
+    setExemployees([]);
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   }
@@ -304,7 +306,6 @@ export function Employees() {
                       name="name"
                       className="data-div"
                       value={empData.name}
-                      onChange={(e) => HandleChange(e, empData.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -314,7 +315,6 @@ export function Employees() {
                       name="email"
                       className="data-div"
                       value={empData.email}
-                      onChange={(e) => HandleChange(e, empData.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -376,7 +376,6 @@ export function Employees() {
                       name="name"
                       className="data-div"
                       value={empData.name}
-                      onChange={(e) => HandleChangeExemployees(e, empData.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -386,7 +385,6 @@ export function Employees() {
                       name="email"
                       className="data-div"
                       value={empData.email}
-                      onChange={(e) => HandleChangeExemployees(e, empData.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -445,7 +443,6 @@ export function Employees() {
                       name="name"
                       className="data-div"
                       value={empData.name}
-                      onChange={(e) => HandleChangeSearch(e, empData.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -455,7 +452,6 @@ export function Employees() {
                       name="email"
                       className="data-div"
                       value={empData.email}
-                      onChange={(e) => HandleChangeSearch(e, empData.id)}
                     />
                   </div>
                   <div className="data-wrap">

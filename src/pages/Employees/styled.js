@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const EmployeesListContainer = styled.div`
   height: 740px;
-  overflow: auto;
+  /* overflow: auto; */
 `;
 
 export const SearchSpace = styled.div`
@@ -222,12 +222,11 @@ export const EmployeeCards = styled.div`
   flex-direction: column;
   position: relative;
   bottom: 740px;
-  left: 270px;
+  left: 250px;
   width: fit-content;
   height: 585px;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: aqua;
   padding: 20px;
 
   .main-data-div {
@@ -237,7 +236,7 @@ export const EmployeeCards = styled.div`
     height: fit-content;
     width: 1200px;
     margin-top: 25px;
-    padding: 15px;
+    padding: 30px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -274,9 +273,9 @@ export const EmployeeCards = styled.div`
     position: relative;
     height: 70px;
     left: 190px;
-    bottom: 70px;
+    bottom: 35px;
+    margin-right: 10px;
     width: fit-content;
-    background-color: beige;
   }
 
   .label {
@@ -286,7 +285,6 @@ export const EmployeeCards = styled.div`
     left: 100px;
     width: 100px;
     height: fit-content;
-    background-color: aqua;
     font-size: 17px;
     font-family:
       system-ui,
@@ -305,25 +303,28 @@ export const EmployeeCards = styled.div`
 
   .buttons {
     display: flex;
-    background-color: red;
-    height: 50px;
+    position: relative;
+    right: 585px;
+    height: 40px;
     width: fit-content;
-    margin-top: 100px;
+    margin-top: 70px;
+    top: 20px;
   }
 
   .confirm-changes {
     display: flex;
     background-color: #a5a4a4ff;
-    width: 180px;
+    width: 140px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
+    margin-right: 30px;
   }
 
   .cancel-changes {
     display: flex;
     background-color: #a5a4a4ff;
-    width: 180px;
+    width: 140px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
@@ -331,11 +332,13 @@ export const EmployeeCards = styled.div`
 
   .del-btn {
     display: flex;
-    position: relative;
-    bottom: 10px;
-    right: 65px;
     color: red;
     width: fit-content;
+    width: 140px;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
+    margin-left: 30px;
   }
 
   .edit-icon:hover {
