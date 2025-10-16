@@ -2,7 +2,7 @@
 /* eslint-disable prettier/prettier */
 import { CiCircleCheck, CiUser } from "react-icons/ci";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { MdOutlineBadge } from "react-icons/md";
+import { MdOutlineBadge, MdOutlineUpdate } from "react-icons/md";
 import { TbBaguette } from "react-icons/tb";
 import { TfiDashboard } from "react-icons/tfi";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,6 +41,10 @@ export default function Header() {
                 <Link to="/inputs" class="inputs">
                   <TbBaguette className="input-icon" />
                   Insumos
+                </Link>
+                <Link to="/inputsCurrent" class="inputsCurrent">
+                  <MdOutlineUpdate className="inpusCurrent-icon" />
+                  Insumos em tempo real
                 </Link>
                 <Link to="/sales" class="sales">
                   <HiOutlineShoppingBag className="sale-icon" />

@@ -135,7 +135,7 @@ export const InputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 735px;
+  bottom: 765px;
   height: 500px;
   width: 820px;
   left: 420px;

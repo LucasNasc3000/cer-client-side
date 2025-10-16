@@ -38,6 +38,21 @@ export const MainHeader = styled.nav`
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
+  .inputsCurrent {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    color: #666565ff;
+    height: 60px;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    left: 48px;
+    top: 35px;
+    font-size: 15px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
   .sales {
     position: relative;
     display: flex;
@@ -48,7 +63,7 @@ export const MainHeader = styled.nav`
     align-items: center;
     justify-content: center;
     left: 12px;
-    top: 39px;
+    top: 35px;
     font-size: 18px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
@@ -77,7 +92,7 @@ export const MainHeader = styled.nav`
     width: 170px;
     align-items: center;
     justify-content: center;
-    left: 5px;
+    left: 8px;
     top: 48px;
     font-size: 18px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -117,7 +132,7 @@ export const MainHeader = styled.nav`
     background-color: #a5a4a4ff;
     display: flex;
     position: relative;
-    top: 100px;
+    top: 120px;
     left: 63px;
     height: 45px;
     width: 105px;
@@ -137,6 +152,13 @@ export const MainHeader = styled.nav`
   }
 
   .input-icon {
+    display: flex;
+    height: 25px;
+    width: 25px;
+    margin-right: 15px;
+  }
+
+  .inpusCurrent-icon {
     display: flex;
     height: 25px;
     width: 25px;
@@ -179,6 +201,10 @@ export const MainHeader = styled.nav`
     filter: brightness(10%);
   }
 
+  .inputsCurrent:hover {
+    filter: brightness(10%);
+  }
+
   .sales:hover {
     filter: brightness(10%);
   }
@@ -203,14 +229,4 @@ export const MainHeader = styled.nav`
     color:rgb(243, 64, 64);
   }
 
-  .home-icon,
-  .inputs-icon,
-  .sales-icon,
-  .outputs-icon,
-  .employees-icon,
-  .advices-icon,
-  .logout-btn,
-  .profile-icon {
-    margin-right: 20px;
-  }
 `;
