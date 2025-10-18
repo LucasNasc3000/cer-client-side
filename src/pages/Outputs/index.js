@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -14,7 +14,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import Update from "../../services/update";
+import * as actions from "../../store/modules/dataTransferInput/actions";
 import {
   NewOutput,
   OutputsContainer,
@@ -26,6 +26,8 @@ export default function Outputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
+
+  const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -54,7 +56,7 @@ export default function Outputs() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -117,13 +119,10 @@ export default function Outputs() {
     setName("");
     setUnities("");
     setDate("");
-    setSearchParam("");
-    setSearchResults([]);
     setOutputsData(outputsDataBackup);
-    searchOutput.value = "";
 
-    const options = document.querySelector(".options");
-    options.value = "";
+    if (searchResults.length > 0) setSearchResults(searchResultsBackup);
+    searchOutput.value = "";
   };
 
   const clear = (e) => {
@@ -133,29 +132,12 @@ export default function Outputs() {
 
   const ClearSearch = (e) => {
     e.preventDefault();
-    setSearchResults(searchResultsBackup);
-  };
+    setSearchParam("");
+    setSearchResults([]);
+    searchOutput.value = "";
 
-  const HandleChange = (e, itemId) => {
-    // eslint-disable-next-line no-shadow
-    const { name, value } = e.target;
-
-    setOutputsData((prevData) =>
-      prevData.map((item) =>
-        item.id === itemId ? { ...item, [name]: value } : item
-      )
-    );
-  };
-
-  const HandleChangeSearch = (e, itemId) => {
-    // eslint-disable-next-line no-shadow
-    const { name, value } = e.target;
-
-    setSearchResults((prevData) =>
-      prevData.map((item) =>
-        item.id === itemId ? { ...item, [name]: value } : item
-      )
-    );
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   async function SearchOutputs(e) {
@@ -179,29 +161,29 @@ export default function Outputs() {
     return;
   }
 
-  const OutputUpdate = async (e, objectData) => {
-    e.preventDefault();
+  // const OutputUpdate = async (e, objectData) => {
+  //   e.preventDefault();
 
-    const ddate = new Date();
-    const hour = ddate.toLocaleTimeString("pt-br", {
-      hourCycle: "h24",
-    });
+  //   const ddate = new Date();
+  //   const hour = ddate.toLocaleTimeString("pt-br", {
+  //     hourCycle: "h24",
+  //   });
 
-    const data = {
-      date: objectData.date,
-      hour,
-      name: objectData.name,
-      type: objectData.type,
-      unities: objectData.unities,
-      employee_id,
-    };
+  //   const data = {
+  //     date: objectData.date,
+  //     hour,
+  //     name: objectData.name,
+  //     type: objectData.type,
+  //     unities: objectData.unities,
+  //     employee_id,
+  //   };
 
-    const update = await Update(objectData.id, data, "outputs");
+  //   const update = await Update(objectData.id, data, "outputs");
 
-    setReRender(update);
+  //   setReRender(update);
 
-    clearDirectExecution();
-  };
+  //   clearDirectExecution();
+  // };
 
   const OutputRegister = async (e) => {
     e.preventDefault();
@@ -227,6 +209,13 @@ export default function Outputs() {
     clearDirectExecution();
   };
 
+  const Transfer = (e, inputName) => {
+    e.preventDefault();
+    dispatch(actions.inputDataTransfer({ inputName }));
+
+    history.push("/inputsCurrent");
+  };
+
   return (
     <OutputsContainer>
       <Header />
@@ -247,7 +236,11 @@ export default function Outputs() {
           />
         </div>
 
-        <FaArrowLeft size={35} className="arrow" onClick={(e) => clear(e)} />
+        <FaArrowLeft
+          size={35}
+          className="arrow"
+          onClick={(e) => ClearSearch(e)}
+        />
 
         <div className="filter-space">
           <p className="filter-select-label">Filtrar por:</p>
@@ -284,7 +277,6 @@ export default function Outputs() {
                       name="date"
                       className="data-div"
                       value={output.date}
-                      onChange={(e) => HandleChange(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -293,7 +285,6 @@ export default function Outputs() {
                       name="hour"
                       className="data-div"
                       value={output.hour}
-                      onChange={(e) => HandleChange(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -302,7 +293,6 @@ export default function Outputs() {
                       name="name"
                       className="data-div"
                       value={output.name}
-                      onChange={(e) => HandleChange(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -311,7 +301,6 @@ export default function Outputs() {
                       name="type"
                       className="data-div"
                       value={output.type}
-                      onChange={(e) => HandleChange(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -320,7 +309,6 @@ export default function Outputs() {
                       name="unities"
                       className="data-div"
                       value={output.unities}
-                      onChange={(e) => HandleChange(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -330,20 +318,15 @@ export default function Outputs() {
                       value={output.employee_id}
                     />
                   </div>
-                  <button
-                    type="button"
-                    className="confirm-changes"
-                    onClick={(e) => OutputUpdate(e, output)}
-                  >
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel-changes"
-                    onClick={(e) => clear(e)}
-                  >
-                    Cancelar
-                  </button>
+                  <div className="buttons">
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => Transfer(e, output.name)}
+                    >
+                      Ver estoque em tempo real
+                    </button>
+                  </div>
                 </div>
               );
             })
@@ -362,7 +345,6 @@ export default function Outputs() {
                       name="date"
                       className="data-div"
                       value={output.date}
-                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -371,7 +353,6 @@ export default function Outputs() {
                       name="hour"
                       className="data-div"
                       value={output.hour}
-                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -380,7 +361,6 @@ export default function Outputs() {
                       name="name"
                       className="data-div"
                       value={output.name}
-                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -389,7 +369,6 @@ export default function Outputs() {
                       name="type"
                       className="data-div"
                       value={output.type}
-                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -398,7 +377,6 @@ export default function Outputs() {
                       name="unities"
                       className="data-div"
                       value={output.unities}
-                      onChange={(e) => HandleChangeSearch(e, output.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -408,20 +386,15 @@ export default function Outputs() {
                       value={output.employee_id}
                     />
                   </div>
-                  <button
-                    type="button"
-                    className="confirm-changes"
-                    onClick={(e) => OutputUpdate(e, output)}
-                  >
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel-changes"
-                    onClick={(e) => ClearSearch(e)}
-                  >
-                    Cancelar
-                  </button>
+                  <div className="buttons">
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => Transfer(e, output.name)}
+                    >
+                      Ver estoque em tempo real
+                    </button>
+                  </div>
                 </div>
               );
             })}

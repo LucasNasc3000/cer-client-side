@@ -113,28 +113,6 @@ export default function Sales() {
     options.value = "";
   };
 
-  const HandleChange = (e, itemId) => {
-    // eslint-disable-next-line no-shadow
-    const { name, value } = e.target;
-
-    setSalesData((prevData) =>
-      prevData.map((item) =>
-        item.id === itemId ? { ...item, [name]: value } : item
-      )
-    );
-  };
-
-  const HandleChangeSearch = (e, itemId) => {
-    // eslint-disable-next-line no-shadow
-    const { name, value } = e.target;
-
-    setSearchResults((prevData) =>
-      prevData.map((item) =>
-        item.id === itemId ? { ...item, [name]: value } : item
-      )
-    );
-  };
-
   async function GetSales() {
     const sales = await GetData(
       bossId,
@@ -288,7 +266,6 @@ export default function Sales() {
                       name="date"
                       className="data-div"
                       value={sale.date}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -298,7 +275,6 @@ export default function Sales() {
                       name="hour"
                       className="data-div"
                       value={sale.hour}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -308,7 +284,6 @@ export default function Sales() {
                       name="client_name"
                       className="data-div"
                       value={sale.client_name}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -318,7 +293,6 @@ export default function Sales() {
                       name="phone_number"
                       className="data-div"
                       value={sale.phone_number}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -328,7 +302,6 @@ export default function Sales() {
                       name="address"
                       className="data-div"
                       value={sale.address}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -338,7 +311,6 @@ export default function Sales() {
                       name="products"
                       className="data-div"
                       value={sale.products}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -348,7 +320,6 @@ export default function Sales() {
                       name="client_birthday"
                       className="data-div"
                       value={sale.client_birthday}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -366,7 +337,6 @@ export default function Sales() {
                       name="price"
                       className="data-div-price"
                       value={sale.price}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="buttons">
@@ -398,7 +368,6 @@ export default function Sales() {
                       name="date"
                       className="data-div"
                       value={sale.date}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -408,7 +377,6 @@ export default function Sales() {
                       name="hour"
                       className="data-div"
                       value={sale.hour}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -418,7 +386,6 @@ export default function Sales() {
                       name="client_name"
                       className="data-div"
                       value={sale.client_name}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -428,7 +395,6 @@ export default function Sales() {
                       name="phone_number"
                       className="data-div"
                       value={sale.phone_number}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -438,7 +404,6 @@ export default function Sales() {
                       name="address"
                       className="data-div"
                       value={sale.address}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -448,7 +413,6 @@ export default function Sales() {
                       name="products"
                       className="data-div"
                       value={sale.products}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -458,7 +422,6 @@ export default function Sales() {
                       name="client_birthday"
                       className="data-div"
                       value={sale.client_birthday}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -476,7 +439,6 @@ export default function Sales() {
                       name="price"
                       className="data-div-price"
                       value={sale.price}
-                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="buttons">
