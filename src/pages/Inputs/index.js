@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -48,7 +47,6 @@ export default function Inputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
-  const inputName2 = useSelector((state) => state.dataTransferInput.inputName);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -202,10 +200,9 @@ export default function Inputs() {
 
   const Transfer = (e, inputName) => {
     e.preventDefault();
-    dispatch(actions.inputDataTransfer(inputName));
-    console.log(inputName2);
+    dispatch(actions.inputDataTransfer({ inputName }));
 
-    // history.push("/inputsCurrent");
+    history.push("/inputsCurrent");
   };
 
   return (
@@ -273,6 +270,7 @@ export default function Inputs() {
                       name="category"
                       className="data-div"
                       value={input.category}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -282,6 +280,7 @@ export default function Inputs() {
                       name="name"
                       className="data-div"
                       value={input.name}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -291,6 +290,7 @@ export default function Inputs() {
                       name="reason"
                       className="data-div"
                       value={input.reason}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -300,6 +300,7 @@ export default function Inputs() {
                       name="quantity"
                       className="data-div"
                       value={input.quantity}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -309,6 +310,7 @@ export default function Inputs() {
                       name="totalweightPerRegister"
                       className="data-div"
                       value={input.totalweight_per_register}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -318,6 +320,7 @@ export default function Inputs() {
                       name="weightperunit"
                       className="data-div"
                       value={input.weightperunit}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -327,6 +330,7 @@ export default function Inputs() {
                       name="supplier"
                       className="data-div"
                       value={input.supplier}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -336,6 +340,7 @@ export default function Inputs() {
                       name="expirationdate"
                       className="data-div"
                       value={input.expirationdate}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -345,6 +350,7 @@ export default function Inputs() {
                       name="minimun_quantity"
                       className="data-div"
                       value={input.minimun_quantity}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -354,6 +360,7 @@ export default function Inputs() {
                       name="rateisnear"
                       className="data-div"
                       value={input.rateisnear}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -362,6 +369,7 @@ export default function Inputs() {
                       type="text"
                       className="data-div"
                       value={input.employee_id}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -371,6 +379,7 @@ export default function Inputs() {
                       name="price"
                       className="data-div"
                       value={input.price}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -380,6 +389,7 @@ export default function Inputs() {
                       name="totalprice"
                       className="data-div"
                       value={input.totalprice}
+                      readOnly
                     />
                   </div>
                   <div className="buttons">
@@ -404,6 +414,7 @@ export default function Inputs() {
                       name="category"
                       className="data-div"
                       value={input.category}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -413,6 +424,7 @@ export default function Inputs() {
                       name="name"
                       className="data-div"
                       value={input.name}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -422,6 +434,7 @@ export default function Inputs() {
                       name="reason"
                       className="data-div"
                       value={input.reason}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -431,6 +444,7 @@ export default function Inputs() {
                       name="quantity"
                       className="data-div"
                       value={input.quantity}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -440,6 +454,7 @@ export default function Inputs() {
                       name="totalweightPerRegister"
                       className="data-div"
                       value={input.totalweight_per_register}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -449,6 +464,7 @@ export default function Inputs() {
                       name="weightperunit"
                       className="data-div"
                       value={input.weightperunit}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -458,6 +474,7 @@ export default function Inputs() {
                       name="supplier"
                       className="data-div"
                       value={input.supplier}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -467,6 +484,7 @@ export default function Inputs() {
                       name="expirationdate"
                       className="data-div"
                       value={input.expirationdate}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -476,6 +494,7 @@ export default function Inputs() {
                       name="minimun_quantity"
                       className="data-div"
                       value={input.minimun_quantity}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -485,6 +504,7 @@ export default function Inputs() {
                       name="rateisnear"
                       className="data-div"
                       value={input.rateisnear}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -493,6 +513,7 @@ export default function Inputs() {
                       type="text"
                       className="data-div"
                       value={input.employee_id}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap-price">
@@ -502,6 +523,7 @@ export default function Inputs() {
                       name="price"
                       className="data-div-price"
                       value={input.price}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap-price">
@@ -511,17 +533,17 @@ export default function Inputs() {
                       name="totalprice"
                       className="data-div-price"
                       value={input.totalprice}
+                      readOnly
                     />
                   </div>
                   <div className="buttons">
-                    <Link
-                      to={`/inputsCurrent?autosearch=${input.name}`}
-                      className="link-button"
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={Transfer(input.name)}
                     >
-                      <button type="button" className="cancel-changes">
-                        Ver estoque em tempo real
-                      </button>
-                    </Link>
+                      Ver estoque em tempo real
+                    </button>
                   </div>
                 </div>
               );

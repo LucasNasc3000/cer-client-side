@@ -9,7 +9,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -18,6 +18,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
+import * as actions from "../../store/modules/dataTransferInput/actions";
 import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
 
 export default function InputsCurrent() {
@@ -25,6 +26,8 @@ export default function InputsCurrent() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
   const inputName = useSelector((state) => state.dataTransferInput.inputName);
+
+  const dispatch = useDispatch();
 
   const [searchParam, setSearchParam] = useState("");
   const [inputsData, setInputsData] = useState([]);
@@ -81,14 +84,15 @@ export default function InputsCurrent() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
-  console.log(inputName);
+  useEffect(() => {
+    if (inputName) {
+      searchInput.value = inputName;
+      setSearchParam("name");
+    }
+  }, [inputName, searchInput]);
 
   useEffect(() => {
     async function SearchTheInput() {
-      setSearchParam(inputName);
-
-      searchInput.value = inputName;
-
       const inArray = [];
 
       const search = await DoSearch("inputs", searchParam, searchInput.value);
@@ -107,8 +111,8 @@ export default function InputsCurrent() {
       return;
     }
 
-    if (inputName) SearchTheInput();
-  }, [inputName, searchParam, searchInput]);
+    if (searchParam) SearchTheInput();
+  }, [searchInput, searchParam]);
 
   async function GetInputs() {
     const inputs = await GetData(
@@ -156,6 +160,8 @@ export default function InputsCurrent() {
     setSearchParam("");
     setSearchResults([]);
     searchInput.value = "";
+
+    dispatch(actions.inputDataTransfer({}));
 
     const options = document.querySelector(".options");
     options.value = "";
@@ -391,6 +397,7 @@ export default function InputsCurrent() {
                       type="text"
                       className="data-div"
                       value={input.employee_id}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap-price">
@@ -525,6 +532,7 @@ export default function InputsCurrent() {
                       type="text"
                       className="data-div"
                       value={input.employee_id}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap-price">
