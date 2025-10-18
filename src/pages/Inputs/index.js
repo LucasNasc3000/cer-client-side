@@ -9,7 +9,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -19,12 +19,15 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
+import * as actions from "../../store/modules/dataTransferInput/actions";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
+
+  const dispatch = useDispatch();
 
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
@@ -45,6 +48,7 @@ export default function Inputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const inputName2 = useSelector((state) => state.dataTransferInput.inputName);
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -194,6 +198,14 @@ export default function Inputs() {
     setReRender(register);
 
     clearDirectExecution();
+  };
+
+  const Transfer = (e, inputName) => {
+    e.preventDefault();
+    dispatch(actions.inputDataTransfer(inputName));
+    console.log(inputName2);
+
+    // history.push("/inputsCurrent");
   };
 
   return (
@@ -371,11 +383,13 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="buttons">
-                    <Link to="/inputsCurrent" className="link-button">
-                      <button type="button" className="cancel-changes">
-                        Ver estoque em tempo real
-                      </button>
-                    </Link>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => Transfer(e, input.name)}
+                    >
+                      Ver estoque em tempo real
+                    </button>
                   </div>
                 </div>
               );
@@ -500,12 +514,11 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="buttons">
-                    <Link to="/inputsCurrent" className="link-button">
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
+                    <Link
+                      to={`/inputsCurrent?autosearch=${input.name}`}
+                      className="link-button"
+                    >
+                      <button type="button" className="cancel-changes">
                         Ver estoque em tempo real
                       </button>
                     </Link>

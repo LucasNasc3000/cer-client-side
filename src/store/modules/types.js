@@ -14,6 +14,8 @@ export const ADMIN_UPDATE_REQUEST = "ADMIN_UPDATE_REQUEST";
 
 export const SALE_DATA_TRANSFER = "SALE_DATA_TRANSFER";
 
+export const INPUT_DATA_TRANSFER = "INPUT_DATA_TRANSFER";
+
 /* Esta action vai manter os dados do login no local storage depois que este for feito. Sem ele
   esses dados desaparecerão quando a página for atualizada */
 export const PERSIST_REHYDRATE = "persist/REHYDRATE";

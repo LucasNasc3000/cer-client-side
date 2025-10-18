@@ -24,6 +24,7 @@ export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
+  const inputName = useSelector((state) => state.dataTransferInput.inputName);
 
   const [searchParam, setSearchParam] = useState("");
   const [inputsData, setInputsData] = useState([]);
@@ -80,6 +81,35 @@ export default function InputsCurrent() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
+  console.log(inputName);
+
+  useEffect(() => {
+    async function SearchTheInput() {
+      setSearchParam(inputName);
+
+      searchInput.value = inputName;
+
+      const inArray = [];
+
+      const search = await DoSearch("inputs", searchParam, searchInput.value);
+
+      if (typeof search === "undefined" || !search) return;
+
+      if (Array.isArray(search)) {
+        setSearchResults(search);
+        setSearchResultsBackup(search);
+        return;
+      }
+
+      inArray.push(search);
+      setSearchResults(inArray);
+      setSearchResultsBackup(inArray);
+      return;
+    }
+
+    if (inputName) SearchTheInput();
+  }, [inputName, searchParam, searchInput]);
+
   async function GetInputs() {
     const inputs = await GetData(
       bossId,
@@ -98,6 +128,12 @@ export default function InputsCurrent() {
     GetInputs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setReRender(true);
+    }, 120000);
+  });
 
   useEffect(() => {
     if (rerender === true) GetInputs();
