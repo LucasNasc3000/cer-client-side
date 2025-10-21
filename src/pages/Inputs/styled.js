@@ -285,7 +285,7 @@ export const InputsSpace = styled.div`
     font-size: 15px;
   }
 
-  .cancel-changes {
+  .real-time-stock-btn {
     display: flex;
     background-color: #a5a4a4ff;
     width: 180px;

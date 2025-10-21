@@ -395,7 +395,7 @@ export default function Inputs() {
                   <div className="buttons">
                     <button
                       type="button"
-                      className="cancel-changes"
+                      className="real-time-stock-btn"
                       onClick={(e) => Transfer(e, input.name)}
                     >
                       Ver estoque em tempo real
@@ -539,7 +539,7 @@ export default function Inputs() {
                   <div className="buttons">
                     <button
                       type="button"
-                      className="cancel-changes"
+                      className="real-time-stock-btn"
                       onClick={Transfer(input.name)}
                     >
                       Ver estoque em tempo real

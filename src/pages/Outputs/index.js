@@ -122,7 +122,6 @@ export default function Outputs() {
     setOutputsData(outputsDataBackup);
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
-    searchOutput.value = "";
   };
 
   const clear = (e) => {
@@ -321,7 +320,7 @@ export default function Outputs() {
                   <div className="buttons">
                     <button
                       type="button"
-                      className="cancel-changes"
+                      className="real-time-stock-btn"
                       onClick={(e) => Transfer(e, output.name)}
                     >
                       Ver estoque em tempo real
@@ -389,7 +388,7 @@ export default function Outputs() {
                   <div className="buttons">
                     <button
                       type="button"
-                      className="cancel-changes"
+                      className="real-time-stock-btn"
                       onClick={(e) => Transfer(e, output.name)}
                     >
                       Ver estoque em tempo real

@@ -222,6 +222,17 @@ export const OutputsSpace = styled.div`
     word-break: keep-all;
   }
 
+  .buttons {
+    display: flex;
+    margin-top: 40px;
+    margin-right: 150px;
+    margin-left: 120px;
+    gap: 20px;
+    width: fit-content;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
   .confirm-changes {
     display: flex;
     position: relative;
@@ -234,7 +245,7 @@ export const OutputsSpace = styled.div`
     font-size: 15px;
   }
 
-  .cancel-changes {
+  .real-time-stock-btn {
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
