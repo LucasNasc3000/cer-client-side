@@ -31,8 +31,9 @@ export default function Outputs() {
 
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
   const [unities, setUnities] = useState("");
+  const [reason, setReason] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [outputsData, setOutputsData] = useState([]);
   const [outputsDataBackup, setOutputsDataBackup] = useState([]);
@@ -115,10 +116,11 @@ export default function Outputs() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setType("");
+    setCategory("");
     setName("");
     setUnities("");
     setDate("");
+    setReason("");
     setOutputsData(outputsDataBackup);
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
@@ -196,8 +198,9 @@ export default function Outputs() {
       date: document.querySelector("#date").value,
       hour,
       name: document.querySelector("#name").value,
-      type: document.querySelector("#type").value,
-      unities: document.querySelector("#type").value,
+      category: document.querySelector("#category").value,
+      reason: document.querySelector("#reason"),
+      unities: document.querySelector("#unities").value,
       employee_id,
     };
 
@@ -256,6 +259,7 @@ export default function Outputs() {
             <option value="category">Categoria</option>
             <option value="unities">Unidades</option>
             <option value="employee">Funcionário</option>
+            <option value="reason">Motivo</option>
           </select>
         </div>
       </SearchSpace>
@@ -270,6 +274,7 @@ export default function Outputs() {
                   <div className="label">Categoria: </div>
                   <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
+                  <option value="reason">Motivo</option>
                   <div className="data-wrap">
                     <input
                       type="text"
@@ -315,6 +320,16 @@ export default function Outputs() {
                       type="text"
                       className="data-div"
                       value={output.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={output.reason}
+                      readOnly
                     />
                   </div>
                   <div className="buttons">
@@ -338,6 +353,7 @@ export default function Outputs() {
                   <div className="label">Categoria: </div>
                   <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
+                  <option value="reason">Motivo</option>
                   <div className="data-wrap">
                     <input
                       type="text"
@@ -383,6 +399,16 @@ export default function Outputs() {
                       type="text"
                       className="data-div"
                       value={output.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={output.reason}
+                      readOnly
                     />
                   </div>
                   <div className="buttons">
@@ -415,10 +441,10 @@ export default function Outputs() {
         />
         <input
           type="text"
-          id="type"
-          placeholder="Tipo ex: fruta"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          id="category"
+          placeholder="Categoria ex: fruta"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
         />
         <input
           type="text"
@@ -426,6 +452,13 @@ export default function Outputs() {
           placeholder="Unidades ex: 15"
           value={unities}
           onChange={(e) => setUnities(e.target.value)}
+        />
+        <input
+          type="text"
+          id="reason"
+          placeholder="Motivo ex: venda, vencimento, etc..."
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
