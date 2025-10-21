@@ -34,6 +34,7 @@ export default function InputsCurrent() {
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
+  const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -86,10 +87,10 @@ export default function InputsCurrent() {
 
   useEffect(() => {
     if (inputName) {
-      searchInput.value = inputName;
+      setSearchValueAutoSearch(inputName);
       setSearchParam("name");
     }
-  }, [inputName, searchInput]);
+  }, [inputName]);
 
   useEffect(() => {
     async function SearchTheInput() {
@@ -264,6 +265,7 @@ export default function InputsCurrent() {
             type="text"
             placeholder="Pesquisar..."
             className="input-search"
+            value={searchValueAutoSearch !== "" ? inputName : ""}
           />
         </div>
 

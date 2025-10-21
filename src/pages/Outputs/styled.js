@@ -249,9 +249,9 @@ export const OutputsSpace = styled.div`
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 140px;
-    width: 120px;
-    right: 5px;
+    bottom: 190px;
+    width: 230px;
+    left: 10px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;

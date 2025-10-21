@@ -253,7 +253,7 @@ export default function Outputs() {
             <option value="date">Data</option>
             <option value="hour">Hora</option>
             <option value="name">Nome</option>
-            <option value="type">Tipo</option>
+            <option value="category">Categoria</option>
             <option value="unities">Unidades</option>
             <option value="employee">Funcionário</option>
           </select>
@@ -267,7 +267,7 @@ export default function Outputs() {
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
                   <div className="label">Nome: </div>
-                  <div className="label">Tipo: </div>
+                  <div className="label">Categoria: </div>
                   <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
                   <div className="data-wrap">
@@ -297,9 +297,9 @@ export default function Outputs() {
                   <div className="data-wrap">
                     <input
                       type="text"
-                      name="type"
+                      name="category"
                       className="data-div"
-                      value={output.type}
+                      value={output.category}
                     />
                   </div>
                   <div className="data-wrap">
@@ -335,7 +335,7 @@ export default function Outputs() {
                   <div className="label">Data: </div>
                   <div className="label">Hora: </div>
                   <div className="label">Nome: </div>
-                  <div className="label">Tipo: </div>
+                  <div className="label">Categoria: </div>
                   <div className="label">Unidades: </div>
                   <div className="label">Funcionário: </div>
                   <div className="data-wrap">
@@ -365,9 +365,9 @@ export default function Outputs() {
                   <div className="data-wrap">
                     <input
                       type="text"
-                      name="type"
+                      name="category"
                       className="data-div"
-                      value={output.type}
+                      value={output.category}
                     />
                   </div>
                   <div className="data-wrap">
