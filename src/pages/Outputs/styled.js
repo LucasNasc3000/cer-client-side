@@ -137,10 +137,12 @@ export const OutputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 735px;
+  bottom: 755px;
   height: 500px;
-  width: 620px;
-  left: 400px;
+  width: 820px;
+  left: 350px;
+  padding: 20px;
+  align-items: center;
 
   .main-data-div {
     background-color: white;
@@ -150,9 +152,9 @@ export const OutputsSpace = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     height: 380px;
-    width: 495px;
+    width: 750px;
     margin-top: 25px;
-    margin-left: 70px;
+    padding: 15px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -163,11 +165,10 @@ export const OutputsSpace = styled.div`
     display: flex;
     background-color: #dad7d7ff;
     color: black;
-    width: max-content;
+    width: 190px;
     height: 38px;
     border-radius: 8px;
     left: 110px;
-    margin-top: 0px;
     border: none;
     font-size: 16px;
     font-family:
@@ -187,25 +188,16 @@ export const OutputsSpace = styled.div`
 
   .data-wrap {
     display: flex;
-    position: relative;
-    margin-top: 40px;
-    margin-left: 50px;
-    bottom: 200px;
-    right: 40px;
     height: fit-content;
+    margin-right: 30px;
+    margin-top: 15px;
     width: fit-content;
-    border-radius: 8px;
   }
 
   .label {
     display: flex;
-    position: relative;
-    margin-top: 55px;
-    margin-left: 62px;
-    bottom: 15px;
     color: black;
-    right: 50px;
-    width: 170px;
+    width: 130px;
     font-size: 17px;
     font-family:
       system-ui,
@@ -233,23 +225,11 @@ export const OutputsSpace = styled.div`
     font-size: 15px;
   }
 
-  .confirm-changes {
-    display: flex;
-    position: relative;
-    background-color: #a5a4a4ff;
-    bottom: 140px;
-    width: 120px;
-    right: 20px;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 15px;
-  }
-
   .real-time-stock-btn {
     display: flex;
     position: relative;
     background-color: #a5a4a4ff;
-    bottom: 190px;
+    bottom: 0px;
     width: 230px;
     left: 10px;
     justify-content: center;

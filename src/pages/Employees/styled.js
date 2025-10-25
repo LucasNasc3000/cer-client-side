@@ -222,7 +222,7 @@ export const EmployeeCards = styled.div`
   flex-direction: column;
   position: relative;
   bottom: 740px;
-  left: 250px;
+  left: 280px;
   width: fit-content;
   height: 585px;
   overflow-y: auto;
@@ -234,7 +234,7 @@ export const EmployeeCards = styled.div`
     display: flex;
     flex-direction: row;
     height: fit-content;
-    width: 1200px;
+    width: 1180px;
     margin-top: 25px;
     padding: 30px;
     border-radius: 10px;

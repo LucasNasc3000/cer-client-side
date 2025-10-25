@@ -5,8 +5,9 @@ import styled from "styled-components";
 export const MainHeader = styled.nav`
   background-color: white;
   height: 750px;
-  width: 250px;
-  box-shadow: 2px 2px #f5f4f4ff;
+  width: 280px;
+  /* box-shadow: 2px 2px #f5f4f4ff; */
+  box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
 
   .home {
     position: relative;

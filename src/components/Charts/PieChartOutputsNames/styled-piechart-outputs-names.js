@@ -4,7 +4,7 @@ export const ChartContainer = styled.div`
   display: flex;
   position: relative;
   bottom: 1270px;
-  left: 1080px;
+  left: 1100px;
   height: fit-content;
   width: fit-content;
   padding: 10px;

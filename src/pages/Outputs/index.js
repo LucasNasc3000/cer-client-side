@@ -268,14 +268,8 @@ export default function Outputs() {
           ? outputsData.map((output) => {
               return (
                 <div key={output.id} className="main-data-div" id={output.id}>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Categoria: </div>
-                  <div className="label">Unidades: </div>
-                  <div className="label">Funcionário: </div>
-                  <option value="reason">Motivo</option>
                   <div className="data-wrap">
+                    <div className="label">Data: </div>
                     <input
                       type="text"
                       name="date"
@@ -284,6 +278,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Hora: </div>
                     <input
                       type="text"
                       name="hour"
@@ -292,6 +287,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Nome: </div>
                     <input
                       type="text"
                       name="name"
@@ -300,6 +296,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Categoria: </div>
                     <input
                       type="text"
                       name="category"
@@ -308,6 +305,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Unidades: </div>
                     <input
                       type="text"
                       name="unities"
@@ -316,6 +314,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
                     <input
                       type="text"
                       className="data-div"
@@ -347,14 +346,8 @@ export default function Outputs() {
           : searchResults.map((output) => {
               return (
                 <div key={output.id} className="main-data-div" id={output.id}>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Categoria: </div>
-                  <div className="label">Unidades: </div>
-                  <div className="label">Funcionário: </div>
-                  <option value="reason">Motivo</option>
                   <div className="data-wrap">
+                    <div className="label">Data: </div>
                     <input
                       type="text"
                       name="date"
@@ -363,6 +356,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Hora: </div>
                     <input
                       type="text"
                       name="hour"
@@ -371,6 +365,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Nome: </div>
                     <input
                       type="text"
                       name="name"
@@ -379,6 +374,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Categoria: </div>
                     <input
                       type="text"
                       name="category"
@@ -387,6 +383,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Unidades: </div>
                     <input
                       type="text"
                       name="unities"
@@ -395,6 +392,7 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
                     <input
                       type="text"
                       className="data-div"
