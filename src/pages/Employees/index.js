@@ -208,8 +208,8 @@ export function Employees() {
       })
     );
 
-    clearDirectExecution();
     setReRender(true);
+    clearDirectExecution();
   };
 
   const DeleteAsk = (e, email, idParamExclude) => {
@@ -289,7 +289,7 @@ export function Employees() {
             <option value="id">Id</option>
           </select>
         </div>
-        <Link to="/employee/new" className="link">
+        <Link to="/newEmployee" className="link">
           <FaPlus size={18} className="plus-icon" />
           Adicionar Funcionário
         </Link>
@@ -336,6 +336,15 @@ export function Employees() {
                     name="id"
                     className="data-div"
                     value={empData.id}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">Autorização para receber e-mails </div>
+                  <input
+                    type="text"
+                    name="id"
+                    className="data-div"
+                    value={empData.address_allowed}
                   />
                 </div>
                 <div className="buttons">

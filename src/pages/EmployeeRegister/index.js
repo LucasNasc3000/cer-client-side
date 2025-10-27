@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import { get } from "lodash";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
@@ -12,6 +12,7 @@ import { EmployeeRegisterContainer, Form } from "./styled";
 
 export function EmployeeRegister() {
   const dispatch = useDispatch();
+  const permissionlStored = useSelector((state) => state.auth.permission);
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -24,11 +25,12 @@ export function EmployeeRegister() {
 
   useEffect(() => {
     const PermissionCheck = () => {
-      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
+      if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE)
+        history.goBack();
     };
 
     PermissionCheck();
-  }, []);
+  }, [permissionlStored]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

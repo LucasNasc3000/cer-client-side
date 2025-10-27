@@ -222,12 +222,12 @@ export const EmployeeCards = styled.div`
   flex-direction: column;
   position: relative;
   bottom: 740px;
-  left: 280px;
-  width: fit-content;
+  left: 295px;
+  width: 1220px;
   height: 585px;
   overflow-y: auto;
-  overflow-x: hidden;
   padding: 20px;
+  align-items: center;
 
   .for-empty-results {
     display: flex;
@@ -254,10 +254,12 @@ export const EmployeeCards = styled.div`
     background-color: white;
     display: flex;
     flex-direction: row;
-    height: fit-content;
-    width: 1180px;
-    margin-top: 25px;
-    padding: 30px;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 300px;
+    margin-top: 20px;
+    padding: 10px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -270,7 +272,6 @@ export const EmployeeCards = styled.div`
     color: black;
     width: max-content;
     height: 38px;
-    margin-top: 25px;
     border-radius: 8px;
     border: none;
     font-size: 16px;
@@ -291,21 +292,17 @@ export const EmployeeCards = styled.div`
 
   .data-wrap {
     display: flex;
-    position: relative;
-    height: 70px;
-    left: 190px;
-    bottom: 35px;
-    margin-right: 10px;
+    height: fit-content;
+    margin-right: 20px;
+    margin-top: 15px;
     width: fit-content;
   }
 
   .label {
     display: flex;
-    position: relative;
     color: black;
-    left: 100px;
-    width: 100px;
-    height: fit-content;
+    right: 50px;
+    width: 130px;
     font-size: 17px;
     font-family:
       system-ui,
@@ -324,28 +321,28 @@ export const EmployeeCards = styled.div`
 
   .buttons {
     display: flex;
-    position: relative;
-    right: 585px;
-    height: 40px;
+    margin-top: 40px;
+    margin-right: 150px;
+    margin-left: 120px;
+    gap: 20px;
     width: fit-content;
-    margin-top: 70px;
-    top: 20px;
+    font-weight: 400;
+    font-size: 15px;
   }
 
   .confirm-changes {
     display: flex;
     background-color: #a5a4a4ff;
-    width: 140px;
+    width: 180px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
-    margin-right: 30px;
   }
 
   .cancel-changes {
     display: flex;
     background-color: #a5a4a4ff;
-    width: 140px;
+    width: 180px;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;

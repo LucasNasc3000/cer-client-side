@@ -30,7 +30,7 @@ export default function Routes() {
       <MyRoute exact path="/advices" component={Advices} isClosed />
       <MyRoute
         exact
-        path="/employee/new"
+        path="/newEmployee"
         component={EmployeeRegister}
         isClosed
       />
