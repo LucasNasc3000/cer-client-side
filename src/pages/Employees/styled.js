@@ -229,6 +229,27 @@ export const EmployeeCards = styled.div`
   overflow-x: hidden;
   padding: 20px;
 
+  .for-empty-results {
+    display: flex;
+    font-size: 20px;
+    margin-left: 370px;
+    margin-top: 150px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    text-align: center;
+    color: #a5a4a4ff;
+  }
+
   .main-data-div {
     background-color: white;
     display: flex;

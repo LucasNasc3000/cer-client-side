@@ -93,6 +93,7 @@ export default function Sales() {
     setProducts("");
     setClientBirthday("");
     setPrice("");
+    setSalesData(salesDataBackup);
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
@@ -137,6 +138,32 @@ export default function Sales() {
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
+
+  const HandleChange = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+
+    setSalesData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const HandleChangeSearch = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+
+    setSearchResults((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
 
   async function SearchSales(e) {
     e.preventDefault();
@@ -266,6 +293,10 @@ export default function Sales() {
                       name="date"
                       className="data-div"
                       value={sale.date}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -275,6 +306,10 @@ export default function Sales() {
                       name="hour"
                       className="data-div"
                       value={sale.hour}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -284,6 +319,10 @@ export default function Sales() {
                       name="client_name"
                       className="data-div"
                       value={sale.client_name}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -293,6 +332,10 @@ export default function Sales() {
                       name="phone_number"
                       className="data-div"
                       value={sale.phone_number}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -302,6 +345,10 @@ export default function Sales() {
                       name="address"
                       className="data-div"
                       value={sale.address}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -311,6 +358,10 @@ export default function Sales() {
                       name="products"
                       className="data-div"
                       value={sale.products}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -320,6 +371,10 @@ export default function Sales() {
                       name="client_birthday"
                       className="data-div"
                       value={sale.client_birthday}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -328,6 +383,7 @@ export default function Sales() {
                       type="text"
                       className="data-div"
                       value={sale.employee_id}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap-price">
@@ -337,6 +393,10 @@ export default function Sales() {
                       name="price"
                       className="data-div-price"
                       value={sale.price}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
                   <div className="buttons">
@@ -367,7 +427,11 @@ export default function Sales() {
                       type="text"
                       name="date"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.date}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -376,7 +440,11 @@ export default function Sales() {
                       type="text"
                       name="hour"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.hour}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -385,7 +453,11 @@ export default function Sales() {
                       type="text"
                       name="client_name"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.client_name}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -394,7 +466,11 @@ export default function Sales() {
                       type="text"
                       name="phone_number"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.phone_number}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -403,7 +479,11 @@ export default function Sales() {
                       type="text"
                       name="address"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.address}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -412,7 +492,11 @@ export default function Sales() {
                       type="text"
                       name="products"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.products}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -421,7 +505,11 @@ export default function Sales() {
                       type="text"
                       name="client_birthday"
                       className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.client_birthday}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -430,6 +518,7 @@ export default function Sales() {
                       type="text"
                       className="data-div"
                       value={sale.employee_id}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap-price">
@@ -438,25 +527,33 @@ export default function Sales() {
                       type="text"
                       name="price"
                       className="data-div-price"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
                       value={sale.price}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
-                  <div className="buttons">
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => SaleUpdate(e, sale)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e)}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
+                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
+                    <div className="buttons">
+                      <button
+                        type="button"
+                        className="confirm-changes"
+                        onClick={(e) => SaleUpdate(e, sale)}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             })}
