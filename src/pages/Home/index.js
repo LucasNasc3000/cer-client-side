@@ -466,11 +466,11 @@ export default function Home() {
       const priceAndYear = [];
       const priceAndYearRefined = {};
 
-      if (inputsData && inputsData.length > 0) {
-        inputsData.map((input) => {
+      if (inputsHistoryData && inputsHistoryData.length > 0) {
+        inputsHistoryData.map((input) => {
           priceAndYear.push({
             year: input.created_at.slice(0, 4),
-            price: input.price,
+            price: input.totalprice,
           });
         });
 
@@ -503,7 +503,7 @@ export default function Home() {
     }
 
     GetYear();
-  }, [inputsData]);
+  }, [inputsHistoryData]);
 
   useEffect(() => {
     function GetYearSales() {
