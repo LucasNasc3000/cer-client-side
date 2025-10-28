@@ -321,6 +321,7 @@ export default function Home() {
     GetMonthsSales();
   }, [salesData, setCurrentYearSales, setYearSales]);
 
+  // Gráfico dos gastos dos insumos por mês
   useEffect(() => {
     function GetMonths() {
       const priceAndMonthsRefined = [];
@@ -342,20 +343,21 @@ export default function Home() {
         }
       }
 
-      if (inputsData && inputsData.length > 0) {
-        inputsData.map((input) => {
+      if (inputsHistoryData && inputsHistoryData.length > 0) {
+        inputsHistoryData.map((input) => {
           if (setYear !== "") {
             if (input.created_at.slice(0, 4) === setYear) {
               if (input.created_at[5] !== 0) {
                 priceAndMonths.push({
                   month: input.created_at[5] + input.created_at[6],
-                  price: input.price,
+                  price: input.totalprice,
+                });
+              } else {
+                priceAndMonths.push({
+                  month: input.created_at[6],
+                  price: input.totalprice,
                 });
               }
-              priceAndMonths.push({
-                month: input.created_at[6],
-                price: input.price,
-              });
             }
             return;
           }
@@ -364,14 +366,14 @@ export default function Home() {
             if (input.created_at[5] !== 0) {
               priceAndMonths.push({
                 month: input.created_at[5] + input.created_at[6],
-                price: input.price,
+                price: input.totalprice,
+              });
+            } else {
+              priceAndMonths.push({
+                month: input.created_at[6],
+                price: input.totalprice,
               });
             }
-
-            priceAndMonths.push({
-              month: input.created_at[6],
-              price: input.price,
-            });
           }
         });
 
@@ -414,7 +416,7 @@ export default function Home() {
     }
 
     GetMonths();
-  }, [inputsData, setCurrentYear, setYear]);
+  }, [inputsHistoryData, setCurrentYear, setYear]);
 
   useEffect(() => {
     function GetRegisterYearsSales() {
