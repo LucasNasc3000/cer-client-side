@@ -20,7 +20,7 @@ import { PieChartInputsReasons } from "../../components/Charts/PieChartInputsRea
 import { PieChartOutputsNames } from "../../components/Charts/PieChartOutputsNames/PieChartOutputsNames";
 import { PieChartOutputsReasons } from "../../components/Charts/PieChartOutputsReasons/PieChartOutputsReasons";
 import { PieChartProductsCount } from "../../components/Charts/PieChartProductsCount/PieChartProductsCount";
-import Header from "../../components/Header";
+import HeaderHome from "../../components/HeaderHome";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
 import history from "../../services/history";
@@ -870,7 +870,7 @@ export default function Home() {
 
   return (
     <HomeContainer>
-      <Header />
+      <HeaderHome />
       {isLoadingFinal === false ? (
         <PieChart chartData={dataPieChartInputs} />
       ) : (

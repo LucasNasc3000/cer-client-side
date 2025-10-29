@@ -13,7 +13,7 @@ export const HomeContainer = styled.div`
     position: relative;
     height: 90px;
     width: fit-content;
-    bottom: 1460px;
+    bottom: 1420px;
     left: 870px;
     justify-content: center;
     align-items: center;
@@ -77,7 +77,7 @@ export const HomeContainer = styled.div`
     width: fit-content;
     height: fit-content;
     position: relative;
-    bottom: 1400px;
+    bottom: 1360px;
     left: 1065px;
   }
 
