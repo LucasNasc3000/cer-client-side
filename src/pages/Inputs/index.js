@@ -392,6 +392,16 @@ export default function Inputs() {
                       readOnly
                     />
                   </div>
+                  <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.created_at.slice(8, 10)}-${input.created_at.slice(5, 7)}-${input.created_at.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
                   <div className="buttons">
                     <button
                       type="button"
@@ -540,7 +550,7 @@ export default function Inputs() {
                     <button
                       type="button"
                       className="real-time-stock-btn"
-                      onClick={Transfer(input.name)}
+                      onClick={(e) => Transfer(e, input.name)}
                     >
                       Ver estoque em tempo real
                     </button>
