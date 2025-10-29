@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-underscore-dangle */
 import { get } from "lodash";
 import { useEffect, useState } from "react";
@@ -143,6 +144,7 @@ export function Employees() {
 
   useEffect(() => {
     getEmployees();
+    console.log(employees);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boss]);
 
@@ -297,7 +299,13 @@ export function Employees() {
       <EmployeeCards>
         {searchResults.length < 1 &&
         exemployees.length < 1 &&
-        employees.length > 0 ? (
+        employees.length < 1 ? (
+          <p className="for-empty-results">
+            Nenhum funcionário foi cadastrado ainda
+          </p>
+        ) : searchResults.length < 1 &&
+          exemployees.length < 1 &&
+          employees.length > 0 ? (
           employees.map((empData) => {
             return (
               <div key={empData.id} className="main-data-div" id={empData.id}>
@@ -373,149 +381,143 @@ export function Employees() {
               </div>
             );
           })
+        ) : exemployees.length > 0 && searchResults.length < 1 ? (
+          exemployees.map((empData) => {
+            return (
+              <div key={empData.id} className="main-data-div" id={empData.id}>
+                <div className="data-wrap">
+                  <div className="label">Nome: </div>
+                  <input
+                    type="text"
+                    name="name"
+                    className="data-div"
+                    value={empData.name}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">E-mail: </div>
+                  <input
+                    type="text"
+                    name="email"
+                    className="data-div"
+                    value={empData.email}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">Permissão: </div>
+                  <input
+                    type="text"
+                    name="permission"
+                    className="data-div"
+                    value={empData.permission}
+                    onChange={(e) => HandleChangeExemployees(e, empData.id)}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">Id: </div>
+                  <input
+                    type="text"
+                    name="id"
+                    className="data-div"
+                    value={empData.id}
+                  />
+                </div>
+                <div className="buttons">
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => EmployeeUpdate(e, empData)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e, false)}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    className="del-btn"
+                    onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
+                  >
+                    Desligar
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        ) : searchResults.length > 0 && exemployees.length < 1 ? (
+          searchResults.map((empData) => {
+            return (
+              <div key={empData.id} className="main-data-div" id={empData.id}>
+                <div className="data-wrap">
+                  <div className="label">Nome: </div>
+                  <input
+                    type="text"
+                    name="name"
+                    className="data-div"
+                    value={empData.name}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">E-mail: </div>
+                  <input
+                    type="text"
+                    name="email"
+                    className="data-div"
+                    value={empData.email}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">Permissão: </div>
+                  <input
+                    type="text"
+                    name="permission"
+                    className="data-div"
+                    value={empData.permission}
+                    onChange={(e) => HandleChangeSearch(e, empData.id)}
+                  />
+                </div>
+                <div className="data-wrap">
+                  <div className="label">Id: </div>
+                  <input
+                    type="text"
+                    name="id"
+                    className="data-div"
+                    value={empData.id}
+                  />
+                </div>
+                <div className="buttons">
+                  <button
+                    type="button"
+                    className="confirm-changes"
+                    onClick={(e) => EmployeeUpdate(e, empData)}
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-changes"
+                    onClick={(e) => clear(e, false)}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    className="del-btn"
+                    onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
+                  >
+                    Desligar
+                  </button>
+                </div>
+              </div>
+            );
+          })
         ) : (
-          <p className="for-empty-results">
-            Nenhum funcionário foi cadastrado ainda
-          </p>
+          ""
         )}
-
-        {exemployees.length > 0 && searchResults.length < 1
-          ? exemployees.map((empData) => {
-              return (
-                <div key={empData.id} className="main-data-div" id={empData.id}>
-                  <div className="data-wrap">
-                    <div className="label">Nome: </div>
-                    <input
-                      type="text"
-                      name="name"
-                      className="data-div"
-                      value={empData.name}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">E-mail: </div>
-                    <input
-                      type="text"
-                      name="email"
-                      className="data-div"
-                      value={empData.email}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Permissão: </div>
-                    <input
-                      type="text"
-                      name="permission"
-                      className="data-div"
-                      value={empData.permission}
-                      onChange={(e) => HandleChangeExemployees(e, empData.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Id: </div>
-                    <input
-                      type="text"
-                      name="id"
-                      className="data-div"
-                      value={empData.id}
-                    />
-                  </div>
-                  <div className="buttons">
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => EmployeeUpdate(e, empData)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e, false)}
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      className="del-btn"
-                      onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                    >
-                      Desligar
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          : ""}
-
-        {searchResults.length > 0 && exemployees.length < 1
-          ? searchResults.map((empData) => {
-              return (
-                <div key={empData.id} className="main-data-div" id={empData.id}>
-                  <div className="data-wrap">
-                    <div className="label">Nome: </div>
-                    <input
-                      type="text"
-                      name="name"
-                      className="data-div"
-                      value={empData.name}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">E-mail: </div>
-                    <input
-                      type="text"
-                      name="email"
-                      className="data-div"
-                      value={empData.email}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Permissão: </div>
-                    <input
-                      type="text"
-                      name="permission"
-                      className="data-div"
-                      value={empData.permission}
-                      onChange={(e) => HandleChangeSearch(e, empData.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Id: </div>
-                    <input
-                      type="text"
-                      name="id"
-                      className="data-div"
-                      value={empData.id}
-                    />
-                  </div>
-                  <div className="buttons">
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => EmployeeUpdate(e, empData)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e, false)}
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      className="del-btn"
-                      onClick={(e) => DeleteAsk(e, empData.email, empData.id)}
-                    >
-                      Desligar
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          : ""}
       </EmployeeCards>
     </EmployeesListContainer>
   );
