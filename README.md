@@ -11,12 +11,30 @@ O cadastro dos administradores no aplicativo é realizado por mim e o login apó
 - Axios
 
 ## Status
-### Em desenvolvimento 🛠️
+### Finalizado ✔️
 
-## Previa
+## Prints da tela do administrador
 
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
-<p font=12>Página com parte do CRUD dos funcionários</p>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/DashboardHome.png" width=820 heigth=820/>
+<p font=12>Dashboard/home</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Employees062025.png" width=820 heigth=820/>
+<p font=12>Funcionários (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Inputs2062025.png" width=820 heigth=820/>
+<p font=12>Insumos (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/InputsCurrent.png" width=820 heigth=820/>
+<p font=12>Insumos em tempo real</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/outputs062025.png" width=820 heigth=820/>
+<p font=12>Saídas (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Sales062025.png" width=820 heigth=820/>
+<p font=12>Vendas (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Profile062025.png" width=820 heigth=820/>
+<p font=12>Dados pessoais (Perfil)</p><br>
 <br><br>
 
 # Storage Manager System
@@ -32,10 +50,28 @@ Administrators are registered in the application by me, and login after registra
 - Axios
 
 ## Status
-In development 🛠️
+Finished ✔️
 
-## Preview
+## Screenshots from an admin account
 
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/previa.png" width=820 heigth=820/>
-<p font=12>Employees page with part of employees CRUD</p>
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/DashboardHome.png" width=820 heigth=820/>
+<p font=12>Dashboard/home</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Employees062025.png" width=820 heigth=820/>
+<p font=12>Employees (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Inputs2062025.png" width=820 heigth=820/>
+<p font=12>Supplies (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/InputsCurrent.png" width=820 heigth=820/>
+<p font=12>Supplies in realtime</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/outputs062025.png" width=820 heigth=820/>
+<p font=12>Outputs (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Sales062025.png" width=820 heigth=820/>
+<p font=12>Sales (CRUD)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Profile062025.png" width=820 heigth=820/>
+<p font=12>Personal data (Profile)</p><br>
 <br><br>
