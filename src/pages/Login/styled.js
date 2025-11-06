@@ -38,22 +38,6 @@ export const FormContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   overflow: hidden;
-
-  .register-link {
-    display: flex;
-    position: relative;
-    left: 205px;
-    top: 25px;
-    color: black;
-    width: 80px;
-    align-items: center;
-    justify-content: center;
-    border-bottom: solid black 0.5px;
-  }
-
-  .register-link:hover {
-    border-bottom: none;
-  }
 `;
 
 export const Form = styled.form`

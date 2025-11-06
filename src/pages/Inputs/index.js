@@ -1,11 +1,16 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { IoIosSearch } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -13,7 +18,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import Update from "../../services/update";
+import * as actions from "../../store/modules/dataTransferInput/actions";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
@@ -21,22 +26,23 @@ export default function Inputs() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
 
-  const [type, setType] = useState("");
+  const dispatch = useDispatch();
+
+  const [category, setCategory] = useState("");
   const [name, setName] = useState("");
-  const [interquantity, setInterQuantity] = useState("");
-  const [intertotalweight, setInterTotalWeight] = useState("");
-  const [interweightperunit, setInterWeightPerUnit] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [reason, setReason] = useState("");
+  const [weightperunit, setWeightPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
   const [expirationdate, setExpirationDate] = useState("");
-  const [interminimun_quantity, setInterMinimunQuantity] = useState("");
-  const [interrateisnear, setInterRateIsNear] = useState("");
-  // eslint-disable-next-line no-unused-vars
+  const [minimun_quantity, setMinimunQuantity] = useState("");
+  const [rateisnear, setRateIsNear] = useState("");
+  const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
-  const [inputId, setInputId] = useState(0);
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line no-unused-vars
   const [inputsData, setInputsData] = useState([]);
+  const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const searchInput = document.querySelector(".input-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -54,7 +60,7 @@ export default function Inputs() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -90,7 +96,7 @@ export default function Inputs() {
   async function GetInputs() {
     const inputs = await GetData(
       bossId,
-      "inputs",
+      "inputsHistory",
       employee_id,
       permissionlStored
     );
@@ -98,6 +104,7 @@ export default function Inputs() {
     if (typeof inputs === "undefined" || !inputs) return;
 
     setInputsData(inputs);
+    setInputsDataBackup(inputs);
   }
 
   useEffect(() => {
@@ -112,18 +119,19 @@ export default function Inputs() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setInputId(0);
-    setType("");
+    setCategory("");
     setName("");
-    setInterQuantity(0);
-    setInterTotalWeight(0);
-    setInterWeightPerUnit(0);
+    setReason("");
+    setQuantity(null);
+    setWeightPerUnit(null);
     setSupplier("");
     setExpirationDate("");
-    setInterMinimunQuantity(0);
-    setInterRateIsNear(0);
-    searchInput.value = "";
-    setSearchResults([]);
+    setPrice("");
+    setMinimunQuantity(null);
+    setRateIsNear(null);
+    setInputsData(inputsDataBackup);
+
+    if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
 
   const clear = (e) => {
@@ -131,19 +139,14 @@ export default function Inputs() {
     clearDirectExecution();
   };
 
-  const SetInputs = (e, idParam, data) => {
+  const ClearSearch = (e) => {
     e.preventDefault();
+    setSearchParam("");
+    setSearchResults([]);
+    searchInput.value = "";
 
-    setInputId(idParam);
-    setType(data.type);
-    setName(data.name);
-    setInterQuantity(String(data.quantity));
-    setInterTotalWeight(String(data.totalweight));
-    setInterWeightPerUnit(String(data.weightperunit));
-    setSupplier(data.supplier);
-    setExpirationDate(data.expirationdate);
-    setInterMinimunQuantity(String(data.minimun_quantity));
-    setInterRateIsNear(String(data.rateisnear));
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   async function SearchInputs(e) {
@@ -151,76 +154,60 @@ export default function Inputs() {
 
     const inArray = [];
 
-    const search = await DoSearch("inputs", searchParam, searchInput.value);
+    const search = await DoSearch(
+      "inputsHistory",
+      searchParam,
+      searchInput.value
+    );
 
     if (typeof search === "undefined" || !search) return;
 
     if (Array.isArray(search)) {
       setSearchResults(search);
+      setSearchResultsBackup(search);
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
     return;
   }
-
-  const InputUpdate = async () => {
-    const data = {
-      type,
-      name,
-      interquantity,
-      intertotalweight,
-      interweightperunit,
-      supplier,
-      expirationdate,
-      employee_id,
-      interminimun_quantity,
-      interrateisnear,
-    };
-
-    const update = await Update(inputId, data, "inputs");
-    setReRender(update);
-
-    clearDirectExecution();
-  };
 
   const InputRegister = async (e) => {
     e.preventDefault();
 
     const data = {
-      type,
-      name,
-      interquantity,
-      intertotalweight,
-      interweightperunit,
-      supplier,
-      expirationdate,
+      category: document.querySelector("#category").value,
+      name: document.querySelector("#name").value,
+      reason: document.querySelector("#reason").value,
+      quantity: document.querySelector("#quantity").value,
+      weightperunit: document.querySelector("#weightperunit").value,
+      price: document.querySelector("#price").value,
+      supplier: document.querySelector("#supplier").value,
+      expirationdate: document.querySelector("#expirationdate").value,
       employee_id,
-      interminimun_quantity,
-      interrateisnear,
+      minimun_quantity: document.querySelector("#minimunQuantity").value,
+      rateisnear: document.querySelector("#rateisnear").value,
     };
 
-    const register = await Register(data, "inputs");
+    const register = await Register(data, "inputsHistory");
+
     setReRender(register);
 
     clearDirectExecution();
   };
 
-  const IdVerify = (e) => {
+  const Transfer = (e, inputName) => {
     e.preventDefault();
+    dispatch(actions.inputDataTransfer({ inputName }));
 
-    if (inputId !== 0) {
-      InputUpdate();
-    } else {
-      InputRegister(e);
-    }
+    history.push("/inputsCurrent");
   };
 
   return (
     <InputsContainer>
       <Header />
-      <Footer />
       <SearchSpace>
         <div className="search-space">
           <button
@@ -229,159 +216,345 @@ export default function Inputs() {
             className="search-btn"
             onClick={(e) => SearchInputs(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
-            placeholder="Pesquisar insumo..."
+            placeholder="Pesquisar..."
             className="input-search"
           />
         </div>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
-        <div className="checkboxes">
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="type"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Tipo</h3>
+        <FaArrowLeft
+          size={35}
+          className="arrow"
+          onClick={(e) => ClearSearch(e)}
+        />
 
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="name"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Nome</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="quantity"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Quantidade</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="totalweight"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Peso total</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="weightperunit"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Peso unitário</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="supplier"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Fornecedor</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="expirationdate"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data de validade</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="minimunquantity"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Quantidade mínima</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="employeeid"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Registrado por</h3>
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="category">Categoria</option>
+            <option value="name">Nome</option>
+            <option value="reason">Motivo</option>
+            <option value="quantity">Quantidade</option>
+            <option value="totalweightPerRegister">
+              Peso total por registro
+            </option>
+            <option value="weightperunit">Peso unitário</option>
+            <option value="supplier">Fornecedor</option>
+            <option value="expirationdate">Data de validade</option>
+            <option value="minimun_quantity">Quantidade mínima</option>
+            <option value="rateisnear">Próximo ao limite</option>
+            <option value="employee">Funcionário</option>
+            <option value="price">Preço</option>
+            <option value="totalprice">Preço total</option>
+          </select>
         </div>
       </SearchSpace>
       <InputsSpace>
         {searchResults.length < 1
           ? inputsData.map((input) => {
               return (
-                <div key={input.id} className="main-data-div">
-                  <div className="edit">
+                <div key={input.id} className="main-data-div" id={input.id}>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={input.category}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={input.name}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={input.reason}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Quantidade: </div>
+                    <input
+                      type="text"
+                      name="quantity"
+                      className="data-div"
+                      value={input.quantity}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Peso total por registro: </div>
+                    <input
+                      type="text"
+                      name="totalweightPerRegister"
+                      className="data-div"
+                      value={input.totalweight_per_register}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Peso unitário: </div>
+                    <input
+                      type="text"
+                      name="weightperunit"
+                      className="data-div"
+                      value={input.weightperunit}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Fornecedor: </div>
+                    <input
+                      type="text"
+                      name="supplier"
+                      className="data-div"
+                      value={input.supplier}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Data validade: </div>
+                    <input
+                      type="text"
+                      name="expirationdate"
+                      className="data-div"
+                      value={input.expirationdate}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Quantidade mínima: </div>
+                    <input
+                      type="text"
+                      name="minimun_quantity"
+                      className="data-div"
+                      value={input.minimun_quantity}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Próximo ao limite: </div>
+                    <input
+                      type="text"
+                      name="rateisnear"
+                      className="data-div"
+                      value={input.rateisnear}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={input.employee_id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço unitário: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={input.price}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço total: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={input.totalprice}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.created_at.slice(8, 10)}-${input.created_at.slice(5, 7)}-${input.created_at.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="buttons">
                     <button
                       type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id, input)}
+                      className="real-time-stock-btn"
+                      onClick={(e) => Transfer(e, input.name)}
                     >
-                      Editar
+                      Ver estoque em tempo real
                     </button>
                   </div>
-                  <div className="label">Tipo: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Quantidade: </div>
-                  <div className="label">Peso total: </div>
-                  <div className="label">Peso unitário: </div>
-                  <div className="label">Fornecedor: </div>
-                  <div className="label">Data validade: </div>
-                  <div className="label">Quantidade mínima: </div>
-                  <div className="label">Próximo ao limite: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="data-div">{input.type}</div>
-                  <div className="data-div">{input.name}</div>
-                  <div className="data-div">{input.quantity}</div>
-                  <div className="data-div">{input.totalweight}</div>
-                  <div className="data-div">{input.weightperunit}</div>
-                  <div className="data-div">{input.supplier}</div>
-                  <div className="data-div">{input.expirationdate}</div>
-                  <div className="data-div">{input.minimun_quantity}</div>
-                  <div className="data-div">{input.rateisnear}</div>
-                  <div className="data-div">{input.employee_id}</div>
                 </div>
               );
             })
           : searchResults.map((input) => {
               return (
-                <div key={input.id} className="main-data-div">
-                  <div className="edit">
+                <div key={input.id} className="main-data-div" id={input.id}>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={input.category}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={input.name}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={input.reason}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Quantidade: </div>
+                    <input
+                      type="text"
+                      name="quantity"
+                      className="data-div"
+                      value={input.quantity}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Peso total por registro: </div>
+                    <input
+                      type="text"
+                      name="totalweightPerRegister"
+                      className="data-div"
+                      value={input.totalweight_per_register}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Peso unitário: </div>
+                    <input
+                      type="text"
+                      name="weightperunit"
+                      className="data-div"
+                      value={input.weightperunit}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Fornecedor: </div>
+                    <input
+                      type="text"
+                      name="supplier"
+                      className="data-div"
+                      value={input.supplier}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Data validade: </div>
+                    <input
+                      type="text"
+                      name="expirationdate"
+                      className="data-div"
+                      value={input.expirationdate}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Quantidade mínima: </div>
+                    <input
+                      type="text"
+                      name="minimun_quantity"
+                      className="data-div"
+                      value={input.minimun_quantity}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Próximo ao limite: </div>
+                    <input
+                      type="text"
+                      name="rateisnear"
+                      className="data-div"
+                      value={input.rateisnear}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={input.employee_id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div-price"
+                      value={input.price}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço total: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div-price"
+                      value={input.totalprice}
+                      readOnly
+                    />
+                  </div>
+                  <div className="buttons">
                     <button
                       type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetInputs(e, input.id, input)}
+                      className="real-time-stock-btn"
+                      onClick={(e) => Transfer(e, input.name)}
                     >
-                      Editar
+                      Ver estoque em tempo real
                     </button>
                   </div>
-                  <div className="label">Tipo: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Quantidade: </div>
-                  <div className="label">Peso total: </div>
-                  <div className="label">Peso unitário: </div>
-                  <div className="label">Fornecedor: </div>
-                  <div className="label">Data validade: </div>
-                  <div className="label">Quantidade mínima: </div>
-                  <div className="label">Próximo ao limite: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="data-div">{input.type}</div>
-                  <div className="data-div">{input.name}</div>
-                  <div className="data-div">{input.quantity}</div>
-                  <div className="data-div">{input.totalweight}</div>
-                  <div className="data-div">{input.weightperunit}</div>
-                  <div className="data-div">{input.supplier}</div>
-                  <div className="data-div">{input.expirationdate}</div>
-                  <div className="data-div">{input.minimun_quantity}</div>
-                  <div className="data-div">{input.rateisnear}</div>
-                  <div className="data-div">{input.employee_id}</div>
                 </div>
               );
             })}
@@ -389,62 +562,78 @@ export default function Inputs() {
       <NewInput>
         <input
           type="text"
-          placeholder="Tipo ex: cereais"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          id="category"
+          placeholder="Categoria ex: cereais"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
         />
         <input
           type="text"
+          id="name"
           placeholder="Nome ex: arroz branco"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
+          id="reason"
+          placeholder="Motivo ex: entrada, reposição, etc..."
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+        <input
+          type="text"
+          id="quantity"
           placeholder="Quantidade ex: 25"
-          value={interquantity}
-          onChange={(e) => setInterQuantity(e.target.value)}
+          value={quantity || ""}
+          onChange={(e) => setQuantity(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Peso total ex: 10,50 (kg)"
-          value={intertotalweight}
-          onChange={(e) => setInterTotalWeight(e.target.value)}
-        />
-        <input
-          type="text"
+          id="weightperunit"
           placeholder="Peso unitário ex: 1 (kg)"
-          value={interweightperunit}
-          onChange={(e) => setInterWeightPerUnit(e.target.value)}
+          value={weightperunit || ""}
+          onChange={(e) => setWeightPerUnit(e.target.value)}
         />
         <input
           type="text"
+          id="supplier"
           placeholder="Fornecedor ex: shopee"
           value={supplier}
           onChange={(e) => setSupplier(e.target.value)}
         />
         <input
           type="text"
+          id="expirationdate"
           placeholder="Validade ex: 25-03-2027"
           value={expirationdate}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
         <input
           type="text"
+          id="minimunQuantity"
           placeholder="quantidade mínima ex: 5"
-          value={interminimun_quantity}
-          onChange={(e) => setInterMinimunQuantity(e.target.value)}
+          value={minimun_quantity || ""}
+          onChange={(e) => setMinimunQuantity(e.target.value)}
         />
         <input
           type="text"
+          id="rateisnear"
           placeholder="Próximo ao limite ex: 10"
-          value={interrateisnear}
-          onChange={(e) => setInterRateIsNear(e.target.value)}
+          value={rateisnear || ""}
+          onChange={(e) => setRateIsNear(e.target.value)}
+        />
+        <input
+          type="text"
+          id="price"
+          placeholder="Preço unitário ex: 10.90"
+          value={price || ""}
+          onChange={(e) => setPrice(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button type="button" className="btn" onClick={(e) => InputRegister(e)}>
           Adicionar
         </button>
       </NewInput>

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Footer from "../../components/Footer/index";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import * as actions from "../../store/modules/auth/actions";
@@ -56,7 +55,6 @@ export default function Profile() {
   return (
     <UserContainer>
       <Header />
-      <Footer />
       <Form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"

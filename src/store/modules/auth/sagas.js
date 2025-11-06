@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -84,20 +85,20 @@ function* loginRequest({ payload }) {
   }
 }
 
-async function getBossData(bossName) {
-  try {
-    const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
-    const { id } = bossId.data;
-    return id;
-  } catch (e) {
-    toast.error("Erro ao obter os dados do chefe para atualização de admin");
-  }
-}
+// async function getBossData(bossName) {
+//   try {
+//     const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
+//     const { id } = bossId.data;
+//     return id;
+//   } catch (e) {
+//     console.log(e);
+//     toast.error("Erro ao obter os dados do chefe para atualização de admin");
+//   }
+// }
 
 // Esta função atualiza dos dados do usuário
 // eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
-  let boss = "";
   const {
     name,
     email,
@@ -105,11 +106,8 @@ function* registerRequest({ payload }) {
     adminpassword,
     permission,
     address_allowed,
-    bossMid,
+    boss,
   } = payload;
-
-  if (bossMid === "") boss = null;
-  else boss = bossMid;
 
   try {
     yield call(axios.post, "/employees", {
@@ -292,54 +290,52 @@ function* adminUpdateRequest({ payload }) {
       return;
     }
 
-    const bossId = getBossData(boss);
-
     switch (true) {
       case permission.length > 0 &&
-        bossId.length < 1 &&
+        boss.length < 1 &&
         address_allowed.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           permission,
         });
         break;
 
-      case bossId.length > 0 &&
+      case boss.length > 0 &&
         permission.length < 1 &&
         address_allowed.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          bossId,
+          boss,
         });
         break;
 
       case address_allowed.length > 0 &&
-        bossId.length < 1 &&
+        boss.length < 1 &&
         permission.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           address_allowed,
         });
         break;
 
-      case bossId.length > 0 &&
+      case boss.length > 0 &&
         address_allowed.length > 0 &&
         permission.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          bossId,
+          boss,
           address_allowed,
         });
         break;
 
-      case bossId.length > 0 &&
+      case boss.length > 0 &&
         permission.length > 0 &&
         address_allowed.length < 1:
         yield call(axios.put, `/employees/${id}`, {
-          bossId,
+          boss,
           permission,
         });
         break;
 
       case permission.length > 0 &&
         address_allowed.length > 0 &&
-        bossId.length < 1:
+        boss.length < 1:
         yield call(axios.put, `/employees/${id}`, {
           permission,
           address_allowed,
@@ -348,7 +344,7 @@ function* adminUpdateRequest({ payload }) {
 
       default:
         yield call(axios.put, `/employees/${id}`, {
-          bossId,
+          boss,
           permission,
           address_allowed,
         });
@@ -358,7 +354,7 @@ function* adminUpdateRequest({ payload }) {
     toast.success("Dados do funcionário atualizados com sucesso");
 
     yield put(
-      actions.adminUpdatedSuccess({ bossId, permission, address_allowed })
+      actions.adminUpdatedSuccess({ boss, permission, address_allowed })
     );
   } catch (err) {
     const errors = get(err, "response.data.error", []);

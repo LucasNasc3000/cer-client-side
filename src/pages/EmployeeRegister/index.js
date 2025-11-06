@@ -1,15 +1,18 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 import { get } from "lodash";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
+import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { EmployeeRegisterContainer, Form } from "./styled";
 
 export function EmployeeRegister() {
   const dispatch = useDispatch();
+  const permissionlStored = useSelector((state) => state.auth.permission);
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -18,7 +21,16 @@ export function EmployeeRegister() {
   const [permission, setPermission] = useState("");
   const [address_allowed, setAddressAllowed] = useState("");
   const [bossName, setBossName] = useState("");
-  let bossMid = "";
+  let boss = "";
+
+  useEffect(() => {
+    const PermissionCheck = () => {
+      if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE)
+        history.goBack();
+    };
+
+    PermissionCheck();
+  }, [permissionlStored]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +40,7 @@ export function EmployeeRegister() {
         `/employees/search/uniquename/${bossName}`
       );
 
-      bossMid = bossData.data.id;
+      boss = bossData.data.id;
     } catch (err) {
       const errors = get(err, "response.data.error", []);
 
@@ -51,7 +63,7 @@ export function EmployeeRegister() {
         adminpassword,
         permission,
         address_allowed,
-        bossMid,
+        boss,
       })
     );
 
@@ -62,7 +74,7 @@ export function EmployeeRegister() {
     setAddressAllowed("");
     setPermission("");
     setBossName("");
-    bossMid = "";
+    boss = "";
   };
 
   return (

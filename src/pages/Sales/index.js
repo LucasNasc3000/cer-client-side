@@ -1,11 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Footer from "../../components/Footer/index";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -20,6 +21,7 @@ export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
+  // const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
   const [client_name, setClientName] = useState("");
@@ -27,14 +29,16 @@ export default function Sales() {
   const [address, setAddress] = useState("");
   const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
-  // eslint-disable-next-line no-unused-vars
+  const [client_birthday, setClientBirthday] = useState("");
+  const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [bossId, setBossId] = useState("");
-  const [saleId, setSaleId] = useState("");
   const [salesData, setSalesData] = useState([]);
+  const [salesDataBackup, setSalesDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [rerender, setReRender] = useState(false);
-  const searchSale = document.querySelector(".search-bar");
+  const searchSale = document.querySelector(".sale-search");
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -48,7 +52,7 @@ export default function Sales() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -82,14 +86,16 @@ export default function Sales() {
   }, [headerid, emailStored, employee_id]);
 
   const clearDirectExecution = () => {
-    setSaleId("");
     setDate("");
     setClientName("");
     setPhoneNumber("");
     setAddress("");
     setProducts("");
-    searchSale.value = "";
-    setSearchResults([]);
+    setClientBirthday("");
+    setPrice("");
+    setSalesData(salesDataBackup);
+
+    if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
 
   const clear = (e) => {
@@ -97,15 +103,15 @@ export default function Sales() {
     clearDirectExecution();
   };
 
-  const SetSales = (e, idParam, data) => {
+  const ClearSearch = (e) => {
     e.preventDefault();
+    setSearchParam("");
+    setSearchResults([]);
+    setSalesData(salesDataBackup);
+    searchSale.value = "";
 
-    setSaleId(idParam);
-    setDate(data.date);
-    setClientName(data.client_name);
-    setPhoneNumber(data.phone_number);
-    setAddress(data.address);
-    setProducts(data.products);
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   async function GetSales() {
@@ -119,6 +125,7 @@ export default function Sales() {
     if (typeof sales === "undefined" || !sales) return;
 
     setSalesData(sales);
+    setSalesDataBackup(sales);
   }
 
   useEffect(() => {
@@ -132,6 +139,32 @@ export default function Sales() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
 
+  const HandleChange = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+
+    setSalesData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const HandleChangeSearch = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+
+    setSearchResults((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
   async function SearchSales(e) {
     e.preventDefault();
 
@@ -143,33 +176,32 @@ export default function Sales() {
 
     if (Array.isArray(search)) {
       setSearchResults(search);
+      setSearchResultsBackup(search);
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
     return;
   }
 
-  async function SaleUpdate() {
-    const data = {
-      date,
-      client_name,
-      phone_number,
-      address,
-      products,
-      employee_id,
-      client_birthday: null,
-    };
+  const SaleUpdate = async (e, objectData) => {
+    e.preventDefault();
 
-    const update = await Update(saleId, data, "sales");
+    const update = await Update(objectData.id, objectData, "sales");
+
     setReRender(update);
 
     clearDirectExecution();
-  }
+  };
 
-  async function SaleRegister(e) {
+  const SaleRegister = async (e) => {
     e.preventDefault();
+
+    const takeCommaPrice = document
+      .querySelector("#price")
+      .value.replace(",", ".");
 
     const ddate = new Date();
     const hour = ddate.toLocaleTimeString("pt-br", {
@@ -177,168 +209,351 @@ export default function Sales() {
     });
 
     const data = {
-      date,
+      date: document.querySelector("#date").value,
       hour,
-      client_name,
-      phone_number,
-      address,
-      products,
+      client_name: document.querySelector("#clientName").value,
+      phone_number: document.querySelector("#phoneNumber").value,
+      address: document.querySelector("#address").value,
+      products: document.querySelector("#products").value,
       employee_id,
-      client_birthday: null,
+      client_birthday: document.querySelector("#clientBirthday").value,
+      price: takeCommaPrice,
     };
 
     const register = await Register(data, "sales");
+
     setReRender(register);
 
     clearDirectExecution();
-  }
-
-  const IdVerify = (e) => {
-    e.preventDefault();
-
-    if (saleId !== "") {
-      SaleUpdate();
-    } else {
-      SaleRegister(e);
-    }
   };
+
+  // const Transfer = (e, saleData) => {
+  //   e.preventDefault();
+  //   dispatch(actionsDataTransfer.saleDataTransfer(saleData));
+
+  //   history.push("/advices");
+  // };
 
   return (
     <SalesContainer>
       <Header />
-      <Footer />
       <SearchSpace>
-        <div className="sale-search">
+        <div className="search-space">
           <button
             type="button"
-            onClick={(e) => SearchSales(e)}
+            size={30}
             className="search-btn"
+            onClick={(e) => SearchSales(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
-            placeholder="Pesquisar venda..."
-            className="search-bar"
+            placeholder="Pesquisar..."
+            className="sale-search"
           />
         </div>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
-        <div className="checkboxes">
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="date"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data</h3>
+        <FaArrowLeft
+          size={35}
+          className="arrow"
+          onClick={(e) => ClearSearch(e)}
+        />
 
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="hour"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Hora</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="clientname"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Nome cliente</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="phonenumber"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Telefone</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="address"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Endereço</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="products"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Produtos</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="employeeid"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Registrado por</h3>
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="date">Date</option>
+            <option value="hour">Hora</option>
+            <option value="clientName">Nome cliente</option>
+            <option value="phoneNumber">Telefone</option>
+            <option value="address">Endereço</option>
+            <option value="products">Produtos</option>
+            <option value="clientBirthday">Aniversário do cliente</option>
+            <option value="employee">Funcionário</option>
+            <option value="price">Preço</option>
+          </select>
         </div>
       </SearchSpace>
       <SalesSpace>
         {searchResults.length < 1
           ? salesData.map((sale) => {
               return (
-                <div key={sale.id} className="main-data-div">
-                  <div className="edit">
+                <div key={sale.id} className="main-data-div" id={sale.id}>
+                  <div className="data-wrap">
+                    <div className="label">Date: </div>
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={sale.date}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Hora: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={sale.hour}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome cliente: </div>
+                    <input
+                      type="text"
+                      name="client_name"
+                      className="data-div"
+                      value={sale.client_name}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Telefone: </div>
+                    <input
+                      type="text"
+                      name="phone_number"
+                      className="data-div"
+                      value={sale.phone_number}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Endereço: </div>
+                    <input
+                      type="text"
+                      name="address"
+                      className="data-div"
+                      value={sale.address}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Produtos: </div>
+                    <input
+                      type="text"
+                      name="products"
+                      className="data-div"
+                      value={sale.products}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Aniversário do cliente: </div>
+                    <input
+                      type="text"
+                      name="client_birthday"
+                      className="data-div"
+                      value={sale.client_birthday}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={sale.employee_id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div-price"
+                      value={sale.price}
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="buttons">
                     <button
                       type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetSales(e, sale.id, sale)}
+                      className="confirm-changes"
+                      onClick={(e) => SaleUpdate(e, sale)}
                     >
-                      Editar
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => clear(e)}
+                    >
+                      Cancelar
                     </button>
                   </div>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome cliente: </div>
-                  <div className="label">Telefone: </div>
-                  <div className="label">Endereço: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="label">Produtos: </div>
-                  <div className="data-div">{sale.date}</div>
-                  <div className="data-div">{sale.hour}</div>
-                  <div className="data-div">{sale.client_name}</div>
-                  <div className="data-div">{sale.phone_number}</div>
-                  <div className="data-div">{sale.address}</div>
-                  <div className="data-div">{sale.employee_id}</div>
-                  <div className="data-div">{sale.products}</div>
                 </div>
               );
             })
           : searchResults.map((sale) => {
               return (
-                <div key={sale.id} className="main-data-div-search">
-                  <div className="edit-search">
-                    <button
-                      type="button"
-                      className="edit-icon-search"
-                      onClick={(e) => SetSales(e, sale.id, sale)}
-                    >
-                      Editar
-                    </button>
+                <div key={sale.id} className="main-data-div" id={sale.id}>
+                  <div className="data-wrap">
+                    <div className="label">Date: </div>
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.date}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
                   </div>
-                  <div className="label-search">Data: </div>
-                  <div className="label-search">Hora: </div>
-                  <div className="label-search">Nome cliente: </div>
-                  <div className="label-search">Telefone: </div>
-                  <div className="label-search">Endereço: </div>
-                  <div className="label-search">Produtos: </div>
-                  <div className="label-search">Funcionário: </div>
-                  <div className="data-div-search">{sale.date}</div>
-                  <div className="data-div-search">{sale.hour}</div>
-                  <div className="data-div-search">{sale.client_name}</div>
-                  <div className="data-div-search">{sale.phone_number}</div>
-                  <div className="data-div-search">{sale.address}</div>
-                  <div className="data-div-search">{sale.products}</div>
-                  <div className="data-div-search">{sale.employee_id}</div>
+                  <div className="data-wrap">
+                    <div className="label">Hora: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.hour}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome cliente: </div>
+                    <input
+                      type="text"
+                      name="client_name"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.client_name}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Telefone: </div>
+                    <input
+                      type="text"
+                      name="phone_number"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.phone_number}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Endereço: </div>
+                    <input
+                      type="text"
+                      name="address"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.address}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Produtos: </div>
+                    <input
+                      type="text"
+                      name="products"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.products}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Aniversário do cliente: </div>
+                    <input
+                      type="text"
+                      name="client_birthday"
+                      className="data-div"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.client_birthday}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={sale.employee_id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div-price"
+                      readOnly={
+                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                      }
+                      value={sale.price}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
+                    <div className="buttons">
+                      <button
+                        type="button"
+                        className="confirm-changes"
+                        onClick={(e) => SaleUpdate(e, sale)}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             })}
@@ -346,38 +561,57 @@ export default function Sales() {
       <NewSale>
         <input
           type="text"
+          id="date"
           placeholder="Data ex: 02-07-2025"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
         <input
           type="text"
+          id="clientName"
           placeholder="Nome cliente ex: Joao silva"
           value={client_name}
           onChange={(e) => setClientName(e.target.value)}
         />
         <input
           type="text"
+          id="phoneNumber"
           placeholder="Tel ex: 11 11111-2222"
           value={phone_number}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input
           type="text"
+          id="address"
           placeholder="Endereço ex: Rua tal, 123"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
         <input
           type="text"
+          id="products"
           placeholder="Produtos ex: coxinha,suco"
           value={products}
           onChange={(e) => setProducts(e.target.value)}
         />
+        <input
+          type="text"
+          id="clientBirthday"
+          placeholder="Anv. Cliente ex: 15-02"
+          value={client_birthday}
+          onChange={(e) => setClientBirthday(e.target.value)}
+        />
+        <input
+          type="text"
+          id="price"
+          placeholder="Preço ex: 15,99"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button type="button" className="btn" onClick={(e) => SaleRegister(e)}>
           Adicionar
         </button>
       </NewSale>

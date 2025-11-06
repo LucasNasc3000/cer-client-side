@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
 import { get } from "lodash";
@@ -5,26 +6,17 @@ import { toast } from "react-toastify";
 import { toInt } from "validator";
 import axios from "./axios";
 
+let translatedRegisterType = "";
+
 export default async function Register(data, registerType) {
   try {
-    if (registerType === "inputs") {
-      const quantity = toInt(data.interquantity);
-      const totalweight = toInt(data.intertotalweight);
-      const weightperunit = toInt(data.interweightperunit);
-      const minimun_quantity = toInt(data.interminimun_quantity);
-      const rateisnear = toInt(data.interrateisnear);
+    if (registerType === "inputsHistory") {
+      data.quantity = toInt(data.quantity);
+      data.minimun_quantity = toInt(data.minimun_quantity);
+      data.rateisnear = toInt(data.rateisnear);
 
-      const finalData = {
-        quantity,
-        totalweight,
-        weightperunit,
-        minimun_quantity,
-        rateisnear,
+      await axios.post("/inputsHistory", {
         ...data,
-      };
-
-      await axios.post("/inputs", {
-        ...finalData,
       });
     }
 
@@ -51,17 +43,20 @@ export default async function Register(data, registerType) {
 
     // eslint-disable-next-line default-case
     switch (registerType) {
-      case "inputs":
+      case "inputs" || "inputsHistory":
         const inputName = data.name;
+        translatedRegisterType = "insumo";
         toast.success(`${inputName} adicionado`);
         break;
 
       case "sales":
+        translatedRegisterType = "venda";
         toast.success("Venda adicionada");
         break;
 
       case "outputs":
         const outputName = data.name;
+        translatedRegisterType = "saída";
         toast.success(`${outputName} adicionado`);
         break;
     }
@@ -75,7 +70,9 @@ export default async function Register(data, registerType) {
       }
 
       if (err && errors.length < 1) {
-        toast.error(`Erro desconhecido ao tentar cadastrar ${registerType}`);
+        toast.error(
+          `Erro desconhecido ao tentar cadastrar ${translatedRegisterType}`
+        );
       }
       return false;
     }

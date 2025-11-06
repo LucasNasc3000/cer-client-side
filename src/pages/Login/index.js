@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { get } from "lodash";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+
 import * as actions from "../../store/modules/auth/actions";
 import { Btn, Form, FormContainer, Title } from "./styled";
 
@@ -72,9 +72,6 @@ export default function Login(props) {
         <Btn>
           <button type="submit">Entrar</button>
         </Btn>
-        <Link to="/" className="register-link">
-          Cadastrar
-        </Link>
       </Form>
     </FormContainer>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
@@ -12,22 +13,24 @@ export default async function GetData(bossId, path, employee_id, permission) {
   const joinData = [];
 
   try {
-    const getEmployeesByBoss = await axios.post(`/employees/search/boss/`, {
-      boss: bossId,
-    });
+    const getEmployeesByBoss = await axios.get(
+      `/employees/search/boss/${bossId}`
+    );
 
-    const employeesIds = getEmployeesByBoss.data.map((employees) => {
-      return employees.id;
-    });
+    if (getEmployeesByBoss.length < 1) {
+      const employeesIds = getEmployeesByBoss.data.map((employees) => {
+        return employees.id;
+      });
 
-    for (let i = 0; i < employeesIds.length; i++) {
-      const registers = await PathCheck(path, employeesIds[i]);
-      if (registers.data) rawData.push(registers.data);
-    }
+      for (let i = 0; i < employeesIds.length; i++) {
+        const registers = await PathCheck(path, employeesIds[i]);
+        if (registers.data) rawData.push(registers.data);
+      }
 
-    for (let i = 0; i < rawData.length; i++) {
-      const join = allData.concat(rawData[i]);
-      joinData.push(...join);
+      for (let i = 0; i < rawData.length; i++) {
+        const join = allData.concat(rawData[i]);
+        joinData.push(...join);
+      }
     }
 
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
@@ -49,7 +52,7 @@ export default async function GetData(bossId, path, employee_id, permission) {
     if (err && errors.length < 1) {
       // eslint-disable-next-line default-case
       switch (path) {
-        case "inputs":
+        case "inputs" || "inputsHistory":
           toast.error("Erro desconhecido ao tentar exibir insumos");
           break;
 

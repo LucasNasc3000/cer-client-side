@@ -1,11 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { IoIosSearch } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -13,7 +14,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import Update from "../../services/update";
+import * as actions from "../../store/modules/dataTransferInput/actions";
 import {
   NewOutput,
   OutputsContainer,
@@ -26,16 +27,18 @@ export default function Outputs() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissionlStored = useSelector((state) => state.auth.permission);
 
+  const dispatch = useDispatch();
+
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
   const [unities, setUnities] = useState("");
+  const [reason, setReason] = useState("");
   const [searchParam, setSearchParam] = useState("");
-  const [outputId, setOutputId] = useState(0);
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line no-unused-vars
   const [outputsData, setOutputsData] = useState([]);
+  const [outputsDataBackup, setOutputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const searchOutput = document.querySelector(".output-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -54,7 +57,7 @@ export default function Outputs() {
     };
 
     PermissionCheck();
-  }, []);
+  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -98,6 +101,7 @@ export default function Outputs() {
     if (typeof outputs === "undefined" || !outputs) return;
 
     setOutputsData(outputs);
+    setOutputsDataBackup(outputs);
   }
 
   useEffect(() => {
@@ -112,13 +116,14 @@ export default function Outputs() {
   }, [rerender]);
 
   const clearDirectExecution = () => {
-    setOutputId(0);
-    setType("");
+    setCategory("");
     setName("");
     setUnities("");
     setDate("");
-    searchOutput.value = "";
-    setSearchResults([]);
+    setReason("");
+    setOutputsData(outputsDataBackup);
+
+    if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
 
   const clear = (e) => {
@@ -126,14 +131,14 @@ export default function Outputs() {
     clearDirectExecution();
   };
 
-  const SetOutputs = (e, idParam, data) => {
+  const ClearSearch = (e) => {
     e.preventDefault();
+    setSearchParam("");
+    setSearchResults([]);
+    searchOutput.value = "";
 
-    setOutputId(idParam);
-    setDate(data.date);
-    setName(data.name);
-    setType(data.type);
-    setUnities(data.unities);
+    const options = document.querySelector(".options");
+    options.value = "";
   };
 
   async function SearchOutputs(e) {
@@ -147,34 +152,39 @@ export default function Outputs() {
 
     if (Array.isArray(search)) {
       setSearchResults(search);
+      setSearchResultsBackup(search);
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
+    setSearchResultsBackup(inArray);
     return;
   }
 
-  const OutputUpdate = async () => {
-    const ddate = new Date();
-    const hour = ddate.toLocaleTimeString("pt-br", {
-      hourCycle: "h24",
-    });
+  // const OutputUpdate = async (e, objectData) => {
+  //   e.preventDefault();
 
-    const data = {
-      date,
-      hour,
-      name,
-      type,
-      unities,
-      employee_id,
-    };
+  //   const ddate = new Date();
+  //   const hour = ddate.toLocaleTimeString("pt-br", {
+  //     hourCycle: "h24",
+  //   });
 
-    const update = await Update(outputId, data, "outputs");
-    setReRender(update);
+  //   const data = {
+  //     date: objectData.date,
+  //     hour,
+  //     name: objectData.name,
+  //     type: objectData.type,
+  //     unities: objectData.unities,
+  //     employee_id,
+  //   };
 
-    clearDirectExecution();
-  };
+  //   const update = await Update(objectData.id, data, "outputs");
+
+  //   setReRender(update);
+
+  //   clearDirectExecution();
+  // };
 
   const OutputRegister = async (e) => {
     e.preventDefault();
@@ -185,154 +195,229 @@ export default function Outputs() {
     });
 
     const data = {
-      date,
+      date: document.querySelector("#date").value,
       hour,
-      name,
-      type,
-      unities,
+      name: document.querySelector("#name").value,
+      category: document.querySelector("#category").value,
+      reason: document.querySelector("#reason"),
+      unities: document.querySelector("#unities").value,
       employee_id,
     };
 
     const register = await Register(data, "outputs");
+
     setReRender(register);
 
     clearDirectExecution();
   };
 
-  const IdVerify = (e) => {
+  const Transfer = (e, inputName) => {
     e.preventDefault();
+    dispatch(actions.inputDataTransfer({ inputName }));
 
-    if (outputId !== 0) {
-      OutputUpdate();
-    } else {
-      OutputRegister(e);
-    }
+    history.push("/inputsCurrent");
   };
 
   return (
     <OutputsContainer>
       <Header />
-      <Footer />
       <SearchSpace>
         <div className="search-space">
           <button
             type="button"
+            size={30}
             className="search-btn"
             onClick={(e) => SearchOutputs(e)}
           >
-            Pesquisar
+            <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
-            placeholder="Pesquisar saída..."
+            placeholder="Pesquisar..."
             className="output-search"
           />
         </div>
 
-        <FaArrowLeft size={27} className="arrow" onClick={(e) => clear(e)} />
-        <div className="checkboxes">
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="date"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Data</h3>
+        <FaArrowLeft
+          size={35}
+          className="arrow"
+          onClick={(e) => ClearSearch(e)}
+        />
 
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="hour"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Hora</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="name"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Nome</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="type"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Tipo</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="unities"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Unidades</h3>
-
-          <input
-            type="checkbox"
-            className="checkbox"
-            name="employeeid"
-            onChange={(e) => setSearchParam(e.target.name)}
-          />
-          <h3 className="checkbox-label">Registrado por</h3>
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="date">Data</option>
+            <option value="hour">Hora</option>
+            <option value="name">Nome</option>
+            <option value="category">Categoria</option>
+            <option value="unities">Unidades</option>
+            <option value="employee">Funcionário</option>
+            <option value="reason">Motivo</option>
+          </select>
         </div>
       </SearchSpace>
       <OutputsSpace>
         {searchResults.length < 1
           ? outputsData.map((output) => {
               return (
-                <div key={output.id} className="main-data-div">
-                  <div className="edit">
+                <div key={output.id} className="main-data-div" id={output.id}>
+                  <div className="data-wrap">
+                    <div className="label">Data: </div>
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={output.date}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Hora: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={output.hour}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={output.name}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={output.category}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Unidades: </div>
+                    <input
+                      type="text"
+                      name="unities"
+                      className="data-div"
+                      value={output.unities}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={output.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={output.reason}
+                      readOnly
+                    />
+                  </div>
+                  <div className="buttons">
                     <button
                       type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetOutputs(e, output.id, output)}
+                      className="real-time-stock-btn"
+                      onClick={(e) => Transfer(e, output.name)}
                     >
-                      Editar
+                      Ver estoque em tempo real
                     </button>
                   </div>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Tipo: </div>
-                  <div className="label">Unidades: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="data-div">{output.date}</div>
-                  <div className="data-div">{output.hour}</div>
-                  <div className="data-div">{output.name}</div>
-                  <div className="data-div">{output.type}</div>
-                  <div className="data-div">{output.unities}</div>
-                  <div className="data-div">{output.employee_id}</div>
                 </div>
               );
             })
           : searchResults.map((output) => {
               return (
-                <div key={output.id} className="main-data-div">
-                  <div className="edit">
+                <div key={output.id} className="main-data-div" id={output.id}>
+                  <div className="data-wrap">
+                    <div className="label">Data: </div>
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={output.date}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Hora: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={output.hour}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={output.name}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={output.category}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Unidades: </div>
+                    <input
+                      type="text"
+                      name="unities"
+                      className="data-div"
+                      value={output.unities}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={output.employee_id}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Motivo: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={output.reason}
+                      readOnly
+                    />
+                  </div>
+                  <div className="buttons">
                     <button
                       type="button"
-                      className="edit-icon"
-                      onClick={(e) => SetOutputs(e, output.id, output)}
+                      className="real-time-stock-btn"
+                      onClick={(e) => Transfer(e, output.name)}
                     >
-                      Editar
+                      Ver estoque em tempo real
                     </button>
                   </div>
-                  <div className="label">Data: </div>
-                  <div className="label">Hora: </div>
-                  <div className="label">Nome: </div>
-                  <div className="label">Tipo: </div>
-                  <div className="label">Unidades: </div>
-                  <div className="label">Funcionário: </div>
-                  <div className="data-div">{output.date}</div>
-                  <div className="data-div">{output.hour}</div>
-                  <div className="data-div">{output.name}</div>
-                  <div className="data-div">{output.type}</div>
-                  <div className="data-div">{output.unities}</div>
-                  <div className="data-div">{output.employee_id}</div>
                 </div>
               );
             })}
@@ -340,32 +425,47 @@ export default function Outputs() {
       <NewOutput>
         <input
           type="text"
+          id="date"
           placeholder="Data ex: 09-10-2025"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
         <input
           type="text"
+          id="name"
           placeholder="Nome ex: abacaxi"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Tipo ex: fruta"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          id="category"
+          placeholder="Categoria ex: fruta"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
         />
         <input
           type="text"
+          id="unities"
           placeholder="Unidades ex: 15"
           value={unities}
           onChange={(e) => setUnities(e.target.value)}
         />
+        <input
+          type="text"
+          id="reason"
+          placeholder="Motivo ex: venda, vencimento, etc..."
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => IdVerify(e)}>
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => OutputRegister(e)}
+        >
           Adicionar
         </button>
       </NewOutput>
