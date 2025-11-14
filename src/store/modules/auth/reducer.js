@@ -5,10 +5,7 @@ import * as types from "../types";
 const initialState = {
   isLoggedIn: false,
   token: "",
-  adminpassword: "",
   emailHeaders: "",
-  permission: "",
-  name: "",
   headerid: "",
 };
 
@@ -34,9 +31,7 @@ export default function (state = initialState, action) {
       // O estado nunca é alterado e sim copiado e a cópia com as alterações é que retorna
       // garante que o token do usuário deslogado não permaneça ativo
       delete axios.defaults.headers.Authorization;
-      delete axios.defaults.headers.adminpassword;
       delete axios.defaults.headers.email;
-      delete axios.defaults.headers.permission;
       delete axios.defaults.headers.headerid;
       const newState = { ...initialState };
       return newState;
@@ -44,10 +39,17 @@ export default function (state = initialState, action) {
 
     case types.LOGIN_REQUEST: {
       const newState = { ...state };
-      newState.adminpassword = action.payload.adminpassword;
       newState.emailHeaders = action.payload.email;
-      newState.permission = action.payload.permission;
-      newState.name = action.payload.name;
+      return newState;
+    }
+
+    case types.GET_CODE: {
+      const newState = { ...state };
+      return newState;
+    }
+
+    case types.GET_CODE_SUCCESS: {
+      const newState = { ...state };
       return newState;
     }
 
@@ -63,8 +65,6 @@ export default function (state = initialState, action) {
 
     case types.UPDATED_SUCCESS: {
       const newState = { ...state };
-      newState.name = action.payload.name;
-      newState.adminpassword = action.payload.adminpassword;
       return newState;
     }
 

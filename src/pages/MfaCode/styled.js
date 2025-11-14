@@ -7,7 +7,7 @@ export const Title = styled.p`
   font-size: 20px;
   text-align: center;
   margin-left: 120px;
-  margin-top: 45px;
+  margin-top: 25px;
   border-bottom: 0.5px solid black;
   width: 250px;
   padding: 5px;
@@ -31,8 +31,8 @@ export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 490px;
-  height: 515px;
-  margin-top: 100px;
+  height: 315px;
+  margin-top: 180px;
   margin-left: 520px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -43,7 +43,7 @@ export const FormContainer = styled.div`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  margin-top: 35px;
+  margin-top: 15px;
 
   input {
     height: 40px;

@@ -5,12 +5,10 @@ import { useDispatch } from "react-redux";
 import * as actions from "../../store/modules/auth/actions";
 import { Btn, Form, FormContainer, Title } from "./styled";
 
-export default function Login() {
+export default function MfaCode() {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [adminpassword, setAdminPassword] = useState("");
+  const [code, setCode] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,36 +16,23 @@ export default function Login() {
     // Ação disparada que delega a responsabilidade para a função loginRequest (mesmo nome da action) no sagas, que além de
     // enviar o email e a senha, envia o caminho que o usuário estava antes de ser deslogado da aplicação.
     dispatch(
-      actions.getCode({
-        verifyemail: email,
-        password,
-        adminpassword,
+      actions.loginRequest({
+        code,
+        verifyemail: "lucasnascdev@gmail.com",
       })
     );
   };
 
   return (
     <FormContainer>
-      <Title>Login</Title>
+      <Title>Digite o código de acesso</Title>
 
       <Form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
           placeholder="Digite seu e-mail"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Digite sua senha"
-        />
-        <input
-          type="password"
-          value={adminpassword}
-          onChange={(e) => setAdminPassword(e.target.value)}
-          placeholder="Digite sua senha de administrador"
         />
         <Btn>
           <button type="submit">Entrar</button>

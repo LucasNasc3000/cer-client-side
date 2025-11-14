@@ -21,8 +21,6 @@ function persistRehydrate({ payload }) {
   const token = get(payload, "auth.token", "");
   if (!token) return;
   axios.defaults.headers.Authorization = `Bearer ${token}`;
-  axios.defaults.headers.permission = payload.auth.permission;
-  axios.defaults.headers.adminpassword = payload.auth.adminpassword;
   axios.defaults.headers.email = payload.auth.emailHeaders;
 
   if (payload.auth.permission !== process.env.REACT_APP_ADMIN_ROLE) {
@@ -30,22 +28,49 @@ function persistRehydrate({ payload }) {
   }
 }
 
+function* getCode({ payload }) {
+  try {
+    const sendData = yield call(axios.post, "/spuser", payload);
+
+    yield put(actions.getCodeSuccess({ ...payload }));
+
+    console.log(sendData);
+
+    axios.defaults.headers.email = payload.verifyemail;
+
+    toast.success("Código enviado, verifique seu e-mail");
+
+    history.push("/mfaCode");
+  } catch (err) {
+    const errors = get(err, "response.data.error", []);
+
+    if (err) {
+      if (errors.length > 0) {
+        errors.map((error) => toast.error(error));
+      }
+
+      if (err && errors.length < 1) {
+        toast.error("Erro desconhecido ao tentar gerar código de acesso");
+      }
+    }
+  }
+}
+
 function* loginRequest({ payload }) {
   try {
-    const response = yield call(axios.post, "/tokens", payload);
+    const response = yield call(axios.post, "/auth", payload);
     yield put(actions.loginSuccess({ ...response.data }));
 
     toast.success("Logado!");
 
-    // criptografar as informações antes de enviar
     axios.defaults.headers.Authorization = `Bearer ${response.data.token}`;
-    axios.defaults.headers.email = payload.email;
-    axios.defaults.headers.adminpassword = payload.adminpassword;
-    axios.defaults.headers.permission = payload.permission;
+    // axios.defaults.headers.email = payload.verifyemail;
 
     if (payload.permission !== process.env.REACT_APP_ADMIN_ROLE) {
       axios.defaults.headers.headerid = response.data.employee.id;
     }
+
+    console.log(response);
 
     const { permission } = payload;
 
@@ -377,6 +402,7 @@ function* adminUpdateRequest({ payload }) {
 // Quando se usa o takeLatest qualquer action anterior é cancelada para que a função do segundo parâmetro seja executada no lugar
 // O all faz com que o middleware execute vários efeitos em paralelo e espera todos para finalizar o processo
 export default all([
+  takeLatest(types.GET_CODE, getCode),
   takeLatest(types.LOGIN_REQUEST, loginRequest),
   takeLatest(types.PERSIST_REHYDRATE, persistRehydrate),
   takeLatest(types.REGISTER_REQUEST, registerRequest),
