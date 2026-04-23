@@ -1,7 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
 
-export const SalesContainer = styled.div``;
+export const SalesContainer = styled.div`
+  overflow-y: hidden;
+  height: 800px;
+`;
 
 export const SearchSpace = styled.div`
   display: flex;
