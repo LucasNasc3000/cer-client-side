@@ -1,20 +1,6 @@
 import * as types from "../types";
 
 // payload será enviado como um objeto, no qual virão todos os dados do front-end para as validações de login e cadastro
-export function getCode(payload) {
-  return {
-    type: types.GET_CODE,
-    payload,
-  };
-}
-
-export function getCodeSuccess(payload) {
-  return {
-    type: types.GET_CODE_SUCCESS,
-    payload,
-  };
-}
-
 export function loginRequest(payload) {
   return {
     type: types.LOGIN_REQUEST,

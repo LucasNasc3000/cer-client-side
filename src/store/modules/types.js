@@ -1,6 +1,3 @@
-export const GET_CODE = "GET_CODE";
-export const GET_CODE_SUCCESS = "GET_CODE_SUCCESS";
-
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";

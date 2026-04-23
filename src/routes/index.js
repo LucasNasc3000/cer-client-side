@@ -1,14 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Switch } from "react-router-dom";
 
-import Advices from "../pages/Advices";
 import { EmployeeRegister } from "../pages/EmployeeRegister";
 import { Employees } from "../pages/Employees";
 import Home from "../pages/Home";
 import Inputs from "../pages/Inputs";
 import InputsCurrent from "../pages/InputsCurrent";
 import Login from "../pages/Login";
-import MfaCode from "../pages/MfaCode";
 import Outputs from "../pages/Outputs";
 import Profile from "../pages/Perfil";
 import Sales from "../pages/Sales";
@@ -21,20 +19,55 @@ export default function Routes() {
   return (
     <Switch>
       <MyRoute exact path="/" component={Login} isClosed={false} />
-      <MyRoute exact path="/mfaCode" component={MfaCode} isClosed={false} />
-      <MyRoute exact path="/home" component={Home} isClosed />
-      <MyRoute exact path="/inputs" component={Inputs} isClosed />
-      <MyRoute exact path="/inputsCurrent" component={InputsCurrent} isClosed />
-      <MyRoute exact path="/sales" component={Sales} isClosed />
-      <MyRoute exact path="/outputs" component={Outputs} isClosed />
+      <MyRoute
+        exact
+        path="/home"
+        component={Home}
+        isClosed
+        resource="employees"
+      />
+      <MyRoute
+        exact
+        path="/inputs"
+        component={Inputs}
+        isClosed
+        resource="supplies"
+      />
+      <MyRoute
+        exact
+        path="/inputsCurrent"
+        component={InputsCurrent}
+        isClosed
+        resource="supplies"
+      />
+      <MyRoute
+        exact
+        path="/sales"
+        component={Sales}
+        isClosed
+        resource="sales"
+      />
+      <MyRoute
+        exact
+        path="/outputs"
+        component={Outputs}
+        isClosed
+        resource="outflows"
+      />
       <MyRoute exact path="/profile" component={Profile} isClosed />
-      <MyRoute exact path="/employees" component={Employees} isClosed />
-      <MyRoute exact path="/advices" component={Advices} isClosed />
+      <MyRoute
+        exact
+        path="/employees"
+        component={Employees}
+        isClosed
+        resource="employees"
+      />
       <MyRoute
         exact
         path="/newEmployee"
         component={EmployeeRegister}
         isClosed
+        resource="employees"
       />
     </Switch>
   );
