@@ -5,6 +5,7 @@ const initialState = {
   isLoggedIn: false,
   emailHeaders: "",
   permissions: [],
+  isPermissionsLoaded: false,
 };
 
 // O reducer escuta todas as actions, não só as definidas nesta aplicação. Por isso é possível usar a action persist/REHYDRATE para
@@ -15,9 +16,13 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case types.LOGIN_SUCCESS: {
       const newState = { ...state };
+
+      console.log(action);
+
       newState.isLoggedIn = true;
       newState.emailHeaders = action.payload.email;
       newState.permissions = [...action.payload.permissions];
+      newState.isPermissionsLoaded = true;
 
       return newState;
     }

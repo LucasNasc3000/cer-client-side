@@ -12,9 +12,12 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    console.log(originalRequest);
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      error.response.data.message === "Token expirado"
+    ) {
       originalRequest._retry = true;
 
       try {
@@ -25,7 +28,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         // Refresh falhou — redireciona para login
-        window.location.href = "/login";
+        window.location.href = "/";
+        console.log(refreshError);
         return Promise.reject(refreshError);
       }
     }

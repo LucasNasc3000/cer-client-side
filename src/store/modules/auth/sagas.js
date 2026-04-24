@@ -35,30 +35,28 @@ function* loginRequest({ payload }) {
 
     toast.success("Logado");
 
-    console.log(response);
+    const { permissions } = response.data;
 
-    const { permissions } = payload;
+    // eslint-disable-next-line array-callback-return
+    permissions.map((p) => {
+      // eslint-disable-next-line default-case
+      switch (true) {
+        case p.resource === "EMPLOYEES":
+          return history.push("/home");
 
-    // eslint-disable-next-line default-case
-    switch (true) {
-      case permissions.includes("employees"):
-        history.push("/home");
-        break;
+        case p.resource === "supplies":
+          return history.push("/inputs");
 
-      case permissions.includes("supplies"):
-        history.push("/inputs");
-        break;
+        case p.resource === "outflows":
+          return history.push("/outputs");
 
-      case permissions.includes("outflows"):
-        history.push("/outputs");
-        break;
-
-      case permissions.includes("sales"):
-        history.push("/sales");
-        break;
-    }
+        case p.resource === "sales":
+          return history.push("/sales");
+      }
+    });
   } catch (e) {
-    toast.error(e.response.data.error[0]);
+    console.log(e);
+    toast.error(e.response.data.message);
     yield put(actions.loginFailure());
   }
 }

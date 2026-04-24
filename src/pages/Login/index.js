@@ -10,18 +10,14 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [adminpassword, setAdminPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Ação disparada que delega a responsabilidade para a função loginRequest (mesmo nome da action) no sagas, que além de
-    // enviar o email e a senha, envia o caminho que o usuário estava antes de ser deslogado da aplicação.
     dispatch(
-      actions.getCode({
-        verifyemail: email,
+      actions.loginRequest({
+        email,
         password,
-        adminpassword,
       })
     );
   };
@@ -42,12 +38,6 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Digite sua senha"
-        />
-        <input
-          type="password"
-          value={adminpassword}
-          onChange={(e) => setAdminPassword(e.target.value)}
-          placeholder="Digite sua senha de administrador"
         />
         <Btn>
           <button type="submit">Entrar</button>

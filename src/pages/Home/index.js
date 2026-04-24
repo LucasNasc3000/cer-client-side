@@ -23,7 +23,6 @@ import { PieChartProductsCount } from "../../components/Charts/PieChartProductsC
 import HeaderHome from "../../components/HeaderHome";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
-import history from "../../services/history";
 import MakingColors from "./MakingColors";
 import { HomeContainer } from "./styled";
 
@@ -79,14 +78,6 @@ export default function Home() {
   const [isLoadingRegisterYearsSales, setIsLoadingRegisterYearsSales] =
     useState(true);
   const [isLoadingFinal, setIsLoadingFinal] = useState(true);
-
-  useEffect(() => {
-    const PermissionCheck = () => {
-      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
-    };
-
-    PermissionCheck();
-  }, [permission]);
 
   useEffect(() => {
     async function headerIdCheck() {

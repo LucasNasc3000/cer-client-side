@@ -13,8 +13,11 @@ import { MainHeader } from "./styledHeader";
 
 export default function Header() {
 
-  const permissison = useSelector((state) => state.auth.permission);
+  const permissions = useSelector((state) => state.auth.permissions);
+  const onlyPermissions = [];
   const dispatch = useDispatch();
+
+  permissions.map((p) => onlyPermissions.push(p.resource));
 
   const logout = (e) => {
     e.preventDefault();
@@ -32,7 +35,7 @@ export default function Header() {
     return(
         <MainHeader>
           {
-            permissison === process.env.REACT_APP_ADMIN_ROLE ? (
+            onlyPermissions.includes("EMPLOYEES") ? (
               <>
                 <Link to="/home" class="home">
                   <TfiDashboard className="dashboard-icon" />
@@ -71,7 +74,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_OUTPUTS ? (
+            onlyPermissions.includes("OUTFLOWS") ? (
               <>
                 <Link to="/outputs" class="outputs">
                   Saídas
@@ -88,7 +91,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_INPUTS ? (
+            onlyPermissions.includes("SUPPLIES") ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -105,7 +108,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_IOUT ? (
+            onlyPermissions.includes("OUTFLOWS") && onlyPermissions.includes("SUPPLIES") ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -125,7 +128,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_SALES ? (
+            onlyPermissions.includes("SALES") ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -145,7 +148,7 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_SOUT ? (
+            onlyPermissions.includes("SALES") && onlyPermissions.includes("OUTFLOWS") ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -168,7 +171,9 @@ export default function Header() {
             )
           }
           {
-            permissison === process.env.REACT_APP_SIOUT ? (
+            onlyPermissions.includes("SALES") &&
+            onlyPermissions.includes("SUPPLIES") &&
+            onlyPermissions.includes("OUTFLOWS") ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas

@@ -10,11 +10,11 @@ export default function MyRoute({
   ...rest
 }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const permissions = useSelector((state) => state.auth.permissions);
+  const isPermissionsLoaded = useSelector(
+    (state) => state.auth.isPermissionsLoaded
+  );
 
-  // Verifica se o usuário não está logado e se a rota que ele quer acessar é fechada
-  // Caso as duas condições sejam verdadeiras o usuário será redirecionado para a página de login com pathname: "/login"
-  // Depois que o usuário logar, com  state: { prevPath: rest.location.pathname } o usuário será redirecionado para a página que ele tentou acessar. Isso caso
-  // o usuário tenha recebido um erro que o deslogou.
   if (isClosed && !isLoggedIn) {
     return (
       <Redirect
@@ -23,13 +23,29 @@ export default function MyRoute({
     );
   }
 
+  if (isLoggedIn && resource && !isPermissionsLoaded) return null;
+
+  if (resource) {
+    const doesEmployeeHavePermission = permissions.some(
+      (p) => p.resource === resource
+    );
+
+    if (!doesEmployeeHavePermission) {
+      return (
+        <Redirect
+          to={{ pathname: "/", state: { prevPath: rest.location.pathname } }}
+        />
+      );
+    }
+  }
+
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Route {...rest} component={Component} />;
 }
 
 MyRoute.defaultProps = {
   isClosed: false,
-  resource: "none",
+  resource: null,
 };
 
 MyRoute.propTypes = {

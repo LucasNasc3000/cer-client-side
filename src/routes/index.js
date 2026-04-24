@@ -13,9 +13,6 @@ import Profile from "../pages/Perfil";
 import Sales from "../pages/Sales";
 import MyRoute from "./MyRoute";
 
-// O switch faz com que somente uma rota seja chamada por vez
-// <Route path="/" component={Login} /> faz com que o componente Login seja renderizado na raiz da aplicação (a primeira página a ser vista)
-// path="/" verifica se o caminho dentro nas aspas realmente existe nas rotas. O exact detecta qualquer caractere diferente do caminho indicado em path=""
 export default function Routes() {
   return (
     <Switch>
@@ -25,35 +22,35 @@ export default function Routes() {
         path="/home"
         component={Home}
         isClosed
-        resource="employees"
+        resource="EMPLOYEES"
       />
       <MyRoute
         exact
         path="/inputs"
         component={Inputs}
         isClosed
-        resource="supplies"
+        resource="SUPPLIES"
       />
       <MyRoute
         exact
         path="/inputsCurrent"
         component={InputsCurrent}
         isClosed
-        resource="supplies"
+        resource="SUPPLIES"
       />
       <MyRoute
         exact
         path="/sales"
         component={Sales}
         isClosed
-        resource="sales"
+        resource="SALES"
       />
       <MyRoute
         exact
         path="/outputs"
         component={Outputs}
         isClosed
-        resource="outflows"
+        resource="OUTFLOWS"
       />
       <MyRoute exact path="/profile" component={Profile} isClosed />
       <MyRoute
@@ -61,14 +58,14 @@ export default function Routes() {
         path="/employees"
         component={Employees}
         isClosed
-        resource="employees"
+        resource="EMPLOYEES"
       />
       <MyRoute
         exact
         path="/newEmployee"
         component={EmployeeRegister}
         isClosed
-        resource="employees"
+        resource="EMPLOYEES"
       />
     </Switch>
   );
