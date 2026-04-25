@@ -4,6 +4,7 @@ import * as types from "../types";
 const initialState = {
   isLoggedIn: false,
   emailHeaders: "",
+  headerid: "",
   permissions: [],
   isPermissionsLoaded: false,
 };
@@ -17,12 +18,18 @@ export default function (state = initialState, action) {
     case types.LOGIN_SUCCESS: {
       const newState = { ...state };
 
-      console.log(action);
-
       newState.isLoggedIn = true;
       newState.emailHeaders = action.payload.email;
       newState.permissions = [...action.payload.permissions];
       newState.isPermissionsLoaded = true;
+
+      const isAdmin = newState.permissions.some(
+        (p) => p.resource === "EMPLOYEES"
+      );
+
+      if (!isAdmin) {
+        newState.headerid = action.payload.id;
+      }
 
       return newState;
     }
@@ -30,7 +37,6 @@ export default function (state = initialState, action) {
     case types.LOGIN_FAILURE: {
       // O estado nunca é alterado e sim copiado e a cópia com as alterações é que retorna
       // garante que o token do usuário deslogado não permaneça ativo
-
       const newState = { ...initialState };
       return newState;
     }

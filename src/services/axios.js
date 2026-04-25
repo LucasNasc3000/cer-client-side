@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:3333",
   withCredentials: true,
 });
 
@@ -29,7 +29,6 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Refresh falhou — redireciona para login
         window.location.href = "/";
-        console.log(refreshError);
         return Promise.reject(refreshError);
       }
     }

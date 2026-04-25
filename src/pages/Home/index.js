@@ -29,7 +29,7 @@ import { HomeContainer } from "./styled";
 Chart.register(CategoryScale);
 
 export default function Home() {
-  const permission = useSelector((state) => state.auth.permission);
+  const permissions = useSelector((state) => state.auth.permissions);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const headerid = useSelector((state) => state.auth.headerid);
   const [employee_id, setEmployeeId] = useState("");
@@ -103,9 +103,9 @@ export default function Home() {
       try {
         const inputs = await GetData(
           employee_id,
-          "inputs",
+          "supplies",
           employee_id,
-          permission
+          permissions
         );
 
         if (typeof inputs === "undefined" || !inputs) return;
@@ -118,16 +118,16 @@ export default function Home() {
     }
 
     GetInputsData();
-  }, [employee_id, permission]);
+  }, [employee_id, permissions]);
 
   useEffect(() => {
     async function GetInputsHistoryData() {
       try {
         const inputs = await GetData(
           employee_id,
-          "inputsHistory",
+          "suppliesHistory",
           employee_id,
-          permission
+          permissions
         );
 
         if (typeof inputs === "undefined" || !inputs) return;
@@ -140,7 +140,7 @@ export default function Home() {
     }
 
     GetInputsHistoryData();
-  }, [employee_id, permission]);
+  }, [employee_id, permissions]);
 
   useEffect(() => {
     async function GetSalesData() {
@@ -149,7 +149,7 @@ export default function Home() {
           employee_id,
           "sales",
           employee_id,
-          permission
+          permissions
         );
 
         if (typeof sales === "undefined" || !sales) return;
@@ -162,16 +162,16 @@ export default function Home() {
     }
 
     GetSalesData();
-  }, [employee_id, permission]);
+  }, [employee_id, permissions]);
 
   useEffect(() => {
     async function GetOutputsData() {
       try {
         const outputs = await GetData(
           employee_id,
-          "outputs",
+          "outflows",
           employee_id,
-          permission
+          permissions
         );
 
         if (typeof outputs === "undefined" || !outputs) return;
@@ -184,7 +184,7 @@ export default function Home() {
     }
 
     GetOutputsData();
-  }, [employee_id, permission]);
+  }, [employee_id, permissions]);
 
   useEffect(() => {
     const allColors = [];

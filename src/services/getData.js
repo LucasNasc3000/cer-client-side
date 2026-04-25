@@ -34,7 +34,7 @@ export default async function GetData(bossId, path, employee_id, permission) {
     }
 
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
-    if (permission === process.env.REACT_APP_ADMIN_ROLE) {
+    if (permission.some((p) => p.resource === "EMPLOYEES")) {
       const bossOwnRegisters = await PathCheck(path, employee_id);
       joinData.push(...bossOwnRegisters.data);
     } else {
