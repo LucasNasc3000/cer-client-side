@@ -14,10 +14,10 @@ export default async function GetData(bossId, path, employee_id, permission) {
 
   try {
     const getEmployeesByBoss = await axios.get(
-      `/employees/search/boss/${bossId}`
+      `/employees/search/boss?limit=20&offset=0&value=${bossId}`
     );
 
-    if (getEmployeesByBoss.length < 1) {
+    if (getEmployeesByBoss.length > 0) {
       const employeesIds = getEmployeesByBoss.data.map((employees) => {
         return employees.id;
       });

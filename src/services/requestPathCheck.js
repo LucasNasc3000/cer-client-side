@@ -1,50 +1,17 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-plusplus */
+import { toast } from "react-toastify";
 import axios from "./axios";
 
 export default async function PathCheck(path, employeesId) {
   try {
-    if (!employeesId) employeesId = "random";
-
-    if (path === "inputs") {
-      const registersBy = await axios.post(`/${path}/search/employeeid/`, {
-        employeeidBody: employeesId,
-        forListInputs: true,
-      });
-
-      return registersBy;
-    }
-
-    if (path === "inputsHistory") {
-      const registersBy = await axios.post(`/${path}/search/employeeid/`, {
-        employeeidBody: employeesId,
-        forListInputs: true,
-      });
-
-      return registersBy;
-    }
-
-    if (path === "outputs") {
-      const registersBy = await axios.post(`/${path}/search/employeeid/`, {
-        employeeidBody: employeesId,
-        forListOutputs: true,
-      });
-
-      return registersBy;
-    }
-
-    if (path === "sales") {
-      const registersBy = await axios.post(`/${path}/search/employeeid/`, {
-        employeeidBody: employeesId,
-        forListSales: true,
-      });
-
-      return registersBy;
-    }
-  } catch (err) {
-    console.log(
-      "Erro na verificação do caminho. Retirar este consolelog depois"
+    const registersBy = await axios.get(
+      `/${path}/search/employeeid?${employeesId}`
     );
+
+    return registersBy;
+  } catch (err) {
+    toast.error("Falha ao encontrar rota");
   }
 }

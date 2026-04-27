@@ -84,7 +84,7 @@ export default function Home() {
       try {
         if (!headerid || headerid === "") {
           const bossData = await axios.get(
-            `/employees/search/email/${emailStored}`
+            `/employees/search/email?value=${emailStored}`
           );
           setEmployeeId(bossData.data.id);
           return;
@@ -101,6 +101,8 @@ export default function Home() {
   useEffect(() => {
     async function GetInputsData() {
       try {
+        console.log(employee_id);
+
         const inputs = await GetData(
           employee_id,
           "supplies",
