@@ -4,10 +4,35 @@
 import { toast } from "react-toastify";
 import axios from "./axios";
 
-export default async function PathCheck(path, employeesId) {
+export default async function PathCheck(
+  path,
+  employeesId,
+  supplyType,
+  forDisplay
+) {
   try {
-    const registersBy = await axios.get(
-      `/${path}/search/employeeid?${employeesId}`
+    let registersBy = "";
+
+    if (path === "supplies" || path === "suppliesHistory") {
+      registersBy = await axios.get(
+        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}`
+      );
+
+      if (forDisplay) {
+        registersBy = await axios.get(
+          `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}&forDisplay=${forDisplay}`
+        );
+      }
+    }
+
+    if (forDisplay) {
+      registersBy = await axios.get(
+        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&forDisplay=${forDisplay}`
+      );
+    }
+
+    registersBy = await axios.get(
+      `/${path}/search/employee?limit=20&offset=0&value=${employeesId}`
     );
 
     return registersBy;

@@ -101,13 +101,13 @@ export default function Home() {
   useEffect(() => {
     async function GetInputsData() {
       try {
-        console.log(employee_id);
-
         const inputs = await GetData(
           employee_id,
           "supplies",
           employee_id,
-          permissions
+          permissions,
+          "SUPPLY_REAL_TIME",
+          true
         );
 
         if (typeof inputs === "undefined" || !inputs) return;
@@ -129,7 +129,9 @@ export default function Home() {
           employee_id,
           "suppliesHistory",
           employee_id,
-          permissions
+          permissions,
+          "SUPPLY_HISTORY",
+          true
         );
 
         if (typeof inputs === "undefined" || !inputs) return;
@@ -151,7 +153,9 @@ export default function Home() {
           employee_id,
           "sales",
           employee_id,
-          permissions
+          permissions,
+          "none",
+          true
         );
 
         if (typeof sales === "undefined" || !sales) return;
@@ -173,7 +177,9 @@ export default function Home() {
           employee_id,
           "outflows",
           employee_id,
-          permissions
+          permissions,
+          "none",
+          true
         );
 
         if (typeof outputs === "undefined" || !outputs) return;

@@ -7,7 +7,14 @@ import { toast } from "react-toastify";
 import axios from "./axios";
 import PathCheck from "./requestPathCheck";
 
-export default async function GetData(bossId, path, employee_id, permission) {
+export default async function GetData(
+  bossId,
+  path,
+  employee_id,
+  permission,
+  supplyType,
+  forDisplay
+) {
   const rawData = [];
   const allData = [];
   const joinData = [];
@@ -23,7 +30,23 @@ export default async function GetData(bossId, path, employee_id, permission) {
       });
 
       for (let i = 0; i < employeesIds.length; i++) {
-        const registers = await PathCheck(path, employeesIds[i]);
+        console.log({
+          ids: employeesIds,
+          path,
+          supplyType,
+        });
+        let registers = "";
+
+        if (supplyType) {
+          registers = await PathCheck(
+            path,
+            employeesIds[i],
+            supplyType,
+            forDisplay
+          );
+        }
+
+        registers = await PathCheck(path, employeesIds[i], "none", forDisplay);
         if (registers.data) rawData.push(registers.data);
       }
 
@@ -35,10 +58,29 @@ export default async function GetData(bossId, path, employee_id, permission) {
 
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
     if (permission.some((p) => p.resource === "EMPLOYEES")) {
-      const bossOwnRegisters = await PathCheck(path, employee_id);
+      let bossOwnRegisters = "";
+
+      if (supplyType) {
+        bossOwnRegisters = await PathCheck(
+          path,
+          employee_id,
+          supplyType,
+          forDisplay
+        );
+      }
+
+      bossOwnRegisters = await PathCheck(path, employee_id, "none", forDisplay);
+
       joinData.push(...bossOwnRegisters.data);
     } else {
-      const bossRegisters = await PathCheck(path, bossId);
+      let bossRegisters = "";
+
+      if (supplyType) {
+        bossRegisters = await PathCheck(path, bossId, supplyType, forDisplay);
+      }
+
+      bossRegisters = await PathCheck(path, bossId, "none", forDisplay);
+
       joinData.push(...bossRegisters.data);
     }
 
