@@ -13,9 +13,9 @@ export default async function PathCheck(
   try {
     let registersBy = "";
 
-    if (path === "supplies" || path === "suppliesHistory") {
+    if (path === "supplies") {
       registersBy = await axios.get(
-        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}&forDisplay${forDisplay}`
+        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}&forDisplay=${forDisplay}`
       );
 
       return registersBy;

@@ -23,6 +23,7 @@ import { PieChartProductsCount } from "../../components/Charts/PieChartProductsC
 import HeaderHome from "../../components/HeaderHome";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
+import { ReturnDateAndTimeForeignFormat } from "../../utils/get-date-and-time";
 import MakingColors from "./MakingColors";
 import { HomeContainer } from "./styled";
 
@@ -112,7 +113,7 @@ export default function Home() {
 
         if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsData(inputs);
+        setInputsData(...inputs[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados dos insumos");
@@ -127,7 +128,7 @@ export default function Home() {
       try {
         const inputs = await GetData(
           employee_id,
-          "suppliesHistory",
+          "supplies",
           employee_id,
           permissions,
           "SUPPLY_HISTORY",
@@ -136,7 +137,7 @@ export default function Home() {
 
         if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsHistoryData(inputs);
+        setInputsHistoryData(...inputs[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados dos insumos");
@@ -160,7 +161,7 @@ export default function Home() {
 
         if (typeof sales === "undefined" || !sales) return;
 
-        setSalesData(sales);
+        setSalesData(...sales[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das vendas");
@@ -184,7 +185,7 @@ export default function Home() {
 
         if (typeof outputs === "undefined" || !outputs) return;
 
-        setOutputsData(outputs);
+        setOutputsData(...outputs[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das saídas");
@@ -193,6 +194,7 @@ export default function Home() {
 
     GetOutputsData();
   }, [employee_id, permissions]);
+  console.log(outputsData);
 
   useEffect(() => {
     const allColors = [];
@@ -211,9 +213,13 @@ export default function Home() {
       const fullDateReplaceBars = fullDate.replace(/\//g, "-");
       const pricesToday = [];
 
+      const getDate = ReturnDateAndTimeForeignFormat(fullDateReplaceBars);
+
+      console.log(getDate);
+
       salesData.map((sale) => {
-        if (sale.date === fullDateReplaceBars) {
-          const commaReplaced = sale.price.replace(",", ".");
+        if (sale.created_at === getDate) {
+          const commaReplaced = sale.totalPrice.replace(",", ".");
           const decimalPrice = new Decimal(commaReplaced);
           pricesToday.push(decimalPrice.toString());
         }

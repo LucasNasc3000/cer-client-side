@@ -30,13 +30,6 @@ export default async function GetData(
       });
 
       for (let i = 0; i < employeesIds.length; i++) {
-        console.log({
-          ids: employeesIds,
-          path,
-          supplyType,
-          forDisplay,
-        });
-
         const registers = await PathCheck(
           path,
           employeesIds[i],
