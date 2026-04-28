@@ -154,7 +154,7 @@ export default function Home() {
           "sales",
           employee_id,
           permissions,
-          "none",
+          null,
           true
         );
 
@@ -178,7 +178,7 @@ export default function Home() {
           "outflows",
           employee_id,
           permissions,
-          "none",
+          null,
           true
         );
 

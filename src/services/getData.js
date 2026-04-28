@@ -34,19 +34,16 @@ export default async function GetData(
           ids: employeesIds,
           path,
           supplyType,
+          forDisplay,
         });
-        let registers = "";
 
-        if (supplyType) {
-          registers = await PathCheck(
-            path,
-            employeesIds[i],
-            supplyType,
-            forDisplay
-          );
-        }
+        const registers = await PathCheck(
+          path,
+          employeesIds[i],
+          supplyType,
+          forDisplay
+        );
 
-        registers = await PathCheck(path, employeesIds[i], "none", forDisplay);
         if (registers.data) rawData.push(registers.data);
       }
 
@@ -58,28 +55,21 @@ export default async function GetData(
 
     // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
     if (permission.some((p) => p.resource === "EMPLOYEES")) {
-      let bossOwnRegisters = "";
-
-      if (supplyType) {
-        bossOwnRegisters = await PathCheck(
-          path,
-          employee_id,
-          supplyType,
-          forDisplay
-        );
-      }
-
-      bossOwnRegisters = await PathCheck(path, employee_id, "none", forDisplay);
+      const bossOwnRegisters = await PathCheck(
+        path,
+        employee_id,
+        supplyType,
+        forDisplay
+      );
 
       joinData.push(...bossOwnRegisters.data);
     } else {
-      let bossRegisters = "";
-
-      if (supplyType) {
-        bossRegisters = await PathCheck(path, bossId, supplyType, forDisplay);
-      }
-
-      bossRegisters = await PathCheck(path, bossId, "none", forDisplay);
+      const bossRegisters = await PathCheck(
+        path,
+        bossId,
+        supplyType,
+        forDisplay
+      );
 
       joinData.push(...bossRegisters.data);
     }

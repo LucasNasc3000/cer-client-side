@@ -15,24 +15,14 @@ export default async function PathCheck(
 
     if (path === "supplies" || path === "suppliesHistory") {
       registersBy = await axios.get(
-        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}`
+        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}&forDisplay${forDisplay}`
       );
 
-      if (forDisplay) {
-        registersBy = await axios.get(
-          `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&supplyType=${supplyType}&forDisplay=${forDisplay}`
-        );
-      }
-    }
-
-    if (forDisplay) {
-      registersBy = await axios.get(
-        `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&forDisplay=${forDisplay}`
-      );
+      return registersBy;
     }
 
     registersBy = await axios.get(
-      `/${path}/search/employee?limit=20&offset=0&value=${employeesId}`
+      `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&forDisplay=${forDisplay}`
     );
 
     return registersBy;
