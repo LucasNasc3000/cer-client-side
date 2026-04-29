@@ -23,7 +23,7 @@ import { PieChartProductsCount } from "../../components/Charts/PieChartProductsC
 import HeaderHome from "../../components/HeaderHome";
 import axios from "../../services/axios";
 import GetData from "../../services/getData";
-import { ReturnDateAndTimeForeignFormat } from "../../utils/get-date-and-time";
+import { BrDateFormat } from "../../utils/BrFormatDate";
 import MakingColors from "./MakingColors";
 import { HomeContainer } from "./styled";
 
@@ -113,7 +113,7 @@ export default function Home() {
 
         if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsData(...inputs[1]);
+        setInputsData(inputs[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados dos insumos");
@@ -137,7 +137,7 @@ export default function Home() {
 
         if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsHistoryData(...inputs[1]);
+        setInputsHistoryData(inputs[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados dos insumos");
@@ -161,7 +161,14 @@ export default function Home() {
 
         if (typeof sales === "undefined" || !sales) return;
 
-        setSalesData(...sales[1]);
+        const salesArray = [...sales[1]];
+
+        salesArray.forEach((sale) => {
+          const brDateFormat = BrDateFormat(sale.createdAt);
+          sale.createdAt = brDateFormat;
+        });
+
+        setSalesData(salesArray);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das vendas");
@@ -194,7 +201,6 @@ export default function Home() {
 
     GetOutputsData();
   }, [employee_id, permissions]);
-  console.log(outputsData);
 
   useEffect(() => {
     const allColors = [];
@@ -213,12 +219,8 @@ export default function Home() {
       const fullDateReplaceBars = fullDate.replace(/\//g, "-");
       const pricesToday = [];
 
-      const getDate = ReturnDateAndTimeForeignFormat(fullDateReplaceBars);
-
-      console.log(getDate);
-
       salesData.map((sale) => {
-        if (sale.created_at === getDate) {
+        if (sale.createdAt === fullDateReplaceBars) {
           const commaReplaced = sale.totalPrice.replace(",", ".");
           const decimalPrice = new Decimal(commaReplaced);
           pricesToday.push(decimalPrice.toString());
@@ -268,19 +270,19 @@ export default function Home() {
       if (salesData && salesData.length > 0) {
         salesData.map((sale) => {
           if (setYearSales !== "") {
-            if (sale.date.slice(6, 10) === setYearSales) {
+            if (sale.createdAt.slice(6, 10) === setYearSales) {
               priceAndMonths.push({
-                month: sale.date.slice(3, 5),
-                price: sale.price,
+                month: sale.createdAt.slice(3, 5),
+                price: sale.totalPrice,
               });
             }
             return;
           }
 
-          if (sale.date.slice(6, 10) === setCurrentYearSales) {
+          if (sale.createdAt.slice(6, 10) === setCurrentYearSales) {
             priceAndMonths.push({
-              month: sale.date.slice(3, 5),
-              price: sale.price,
+              month: sale.createdAt.slice(3, 5),
+              price: sale.totalPrice,
             });
           }
         });
@@ -351,34 +353,20 @@ export default function Home() {
       if (inputsHistoryData && inputsHistoryData.length > 0) {
         inputsHistoryData.map((input) => {
           if (setYear !== "") {
-            if (input.created_at.slice(0, 4) === setYear) {
-              if (input.created_at[5] !== 0) {
-                priceAndMonths.push({
-                  month: input.created_at[5] + input.created_at[6],
-                  price: input.totalprice,
-                });
-              } else {
-                priceAndMonths.push({
-                  month: input.created_at[6],
-                  price: input.totalprice,
-                });
-              }
+            if (input.createdAt.slice(0, 4) === setYear) {
+              priceAndMonths.push({
+                month: input.createdAt.slice(5, 7),
+                price: input.totalprice,
+              });
             }
             return;
           }
 
-          if (input.created_at.slice(0, 4) === setCurrentYear) {
-            if (input.created_at[5] !== 0) {
-              priceAndMonths.push({
-                month: input.created_at[5] + input.created_at[6],
-                price: input.totalprice,
-              });
-            } else {
-              priceAndMonths.push({
-                month: input.created_at[6],
-                price: input.totalprice,
-              });
-            }
+          if (input.createdAt.slice(0, 4) === setCurrentYear) {
+            priceAndMonths.push({
+              month: input.createdAt.slice(5, 7),
+              price: input.totalPrice,
+            });
           }
         });
 
@@ -429,7 +417,7 @@ export default function Home() {
 
       if (salesData.length > 0) {
         salesData.map((sale) => {
-          allYears.push(sale.date.slice(6, 10));
+          allYears.push(sale.createdAt.slice(6, 10));
         });
 
         const fixingDuplicatedYears = new Set(allYears);
@@ -450,7 +438,7 @@ export default function Home() {
 
       if (inputsData.length > 0) {
         inputsData.map((input) => {
-          allYears.push(input.created_at.slice(0, 4));
+          allYears.push(input.createdAt.slice(0, 4));
         });
 
         const fixingDuplicatedYears = new Set(allYears);
@@ -467,14 +455,13 @@ export default function Home() {
 
   useEffect(() => {
     function GetYear() {
-      // O ano vai ter que ser dinamico, com um select
       const priceAndYear = [];
       const priceAndYearRefined = {};
 
       if (inputsHistoryData && inputsHistoryData.length > 0) {
         inputsHistoryData.map((input) => {
           priceAndYear.push({
-            year: input.created_at.slice(0, 4),
+            year: input.createdAt.slice(0, 4),
             price: input.totalprice,
           });
         });
@@ -519,8 +506,8 @@ export default function Home() {
       if (salesData && salesData.length > 0) {
         salesData.map((sale) => {
           priceAndYear.push({
-            year: sale.date.slice(6, 10),
-            price: sale.price,
+            year: sale.createdAt.slice(6, 10),
+            price: sale.totalPrice,
           });
         });
 
@@ -555,6 +542,7 @@ export default function Home() {
     GetYearSales();
   }, [salesData]);
 
+  // AQUI
   useEffect(() => {
     function GetProducts() {
       const justProducts = [];
@@ -563,8 +551,10 @@ export default function Home() {
       const withoutCommaElements = [];
 
       salesData.map((sale) => {
-        justProducts.push(sale.products);
+        justProducts.push(sale.saleItems.product);
       });
+
+      console.log(justProducts);
 
       justProducts.forEach((element) => {
         if (element.includes(",")) {

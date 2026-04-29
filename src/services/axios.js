@@ -14,9 +14,12 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      error.response.data.message === "Token expirado"
+      (error.response?.status === 401 &&
+        !originalRequest._retry &&
+        error.response.data.message === "Token expirado") ||
+      (error.response?.status === 401 &&
+        !originalRequest._retry &&
+        error.response.data.message === "Não logado")
     ) {
       originalRequest._retry = true;
 
