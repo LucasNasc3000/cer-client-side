@@ -192,7 +192,7 @@ export default function Home() {
 
         if (typeof outputs === "undefined" || !outputs) return;
 
-        setOutputsData(...outputs[1]);
+        setOutputsData(outputs[1]);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das saídas");
@@ -462,7 +462,7 @@ export default function Home() {
         inputsHistoryData.map((input) => {
           priceAndYear.push({
             year: input.createdAt.slice(0, 4),
-            price: input.totalprice,
+            price: input.totalPrice,
           });
         });
 
@@ -551,10 +551,10 @@ export default function Home() {
       const withoutCommaElements = [];
 
       salesData.map((sale) => {
-        justProducts.push(sale.saleItems.product);
+        sale.saleItems.map((item) => {
+          justProducts.push(item.product.name);
+        });
       });
-
-      console.log(justProducts);
 
       justProducts.forEach((element) => {
         if (element.includes(",")) {
@@ -620,6 +620,8 @@ export default function Home() {
   useEffect(() => {
     function GetOutputsReasons() {
       const reasons = [];
+
+      console.log(outputsData);
 
       outputsData.map((output) => {
         reasons.push(output.reason);
