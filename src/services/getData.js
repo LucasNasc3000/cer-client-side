@@ -77,11 +77,11 @@ export default async function GetData(
     if (err && errors.length < 1) {
       // eslint-disable-next-line default-case
       switch (path) {
-        case "inputs" || "inputsHistory":
+        case "supplies":
           toast.error("Erro desconhecido ao tentar exibir insumos");
           break;
 
-        case "outputs":
+        case "outflows":
           toast.error("Erro desconhecido ao tentar exibir saídas");
           break;
 

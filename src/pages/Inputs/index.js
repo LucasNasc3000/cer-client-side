@@ -24,7 +24,7 @@ import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 export default function Inputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
-  const permissionlStored = useSelector((state) => state.auth.permission);
+  const permissions = useSelector((state) => state.auth.permissions);
 
   const dispatch = useDispatch();
 
@@ -32,12 +32,12 @@ export default function Inputs() {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [reason, setReason] = useState("");
-  const [weightperunit, setWeightPerUnit] = useState("");
+  const [weightPerUnit, setWeightPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
-  const [expirationdate, setExpirationDate] = useState("");
-  const [minimun_quantity, setMinimunQuantity] = useState("");
-  const [rateisnear, setRateIsNear] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [lowStock, setLowStock] = useState("");
   const [price, setPrice] = useState("");
+  const [details, setDetails] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
@@ -47,20 +47,6 @@ export default function Inputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
-
-  useEffect(() => {
-    const PermissionCheck = () => {
-      if (
-        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== process.env.REACT_APP_INPUTS &&
-        permissionlStored !== process.env.REACT_APP_IOUT &&
-        permissionlStored !== process.env.REACT_APP_SIOUT
-      )
-        history.goBack();
-    };
-
-    PermissionCheck();
-  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -79,7 +65,7 @@ export default function Inputs() {
       try {
         if (!headerid || headerid === "") {
           const bossData = await axios.get(
-            `/employees/search/email/${emailStored}`
+            `/employees/search/email?value=${emailStored}`
           );
           setEmployeeId(bossData.data.id);
           return;
@@ -96,9 +82,11 @@ export default function Inputs() {
   async function GetInputs() {
     const inputs = await GetData(
       bossId,
-      "inputsHistory",
+      "supplies",
       employee_id,
-      permissionlStored
+      permissions,
+      "SUPPLY_HISTORY",
+      true
     );
 
     if (typeof inputs === "undefined" || !inputs) return;
@@ -127,8 +115,8 @@ export default function Inputs() {
     setSupplier("");
     setExpirationDate("");
     setPrice("");
-    setMinimunQuantity(null);
-    setRateIsNear(null);
+    setDetails("");
+    setLowStock(null);
     setInputsData(inputsDataBackup);
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
@@ -154,11 +142,7 @@ export default function Inputs() {
 
     const inArray = [];
 
-    const search = await DoSearch(
-      "inputsHistory",
-      searchParam,
-      searchInput.value
-    );
+    const search = await DoSearch("supplies", searchParam, searchInput.value);
 
     if (typeof search === "undefined" || !search) return;
 
@@ -181,14 +165,14 @@ export default function Inputs() {
       category: document.querySelector("#category").value,
       name: document.querySelector("#name").value,
       reason: document.querySelector("#reason").value,
+      details: document.querySelector("#details").value,
       quantity: document.querySelector("#quantity").value,
-      weightperunit: document.querySelector("#weightperunit").value,
+      weightPerUnit: document.querySelector("#weightPerUnit").value,
       price: document.querySelector("#price").value,
       supplier: document.querySelector("#supplier").value,
-      expirationdate: document.querySelector("#expirationdate").value,
+      expirationDate: document.querySelector("#expirationDate").value,
       employee_id,
-      minimun_quantity: document.querySelector("#minimunQuantity").value,
-      rateisnear: document.querySelector("#rateisnear").value,
+      lowStock: document.querySelector("#lowStock").value,
     };
 
     const register = await Register(data, "inputsHistory");
@@ -247,11 +231,10 @@ export default function Inputs() {
             <option value="totalweightPerRegister">
               Peso total por registro
             </option>
-            <option value="weightperunit">Peso unitário</option>
+            <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
-            <option value="expirationdate">Data de validade</option>
-            <option value="minimun_quantity">Quantidade mínima</option>
-            <option value="rateisnear">Próximo ao limite</option>
+            <option value="expirationDate">Data de validade</option>
+            <option value="lowStock">Quantidade mínima</option>
             <option value="employee">Funcionário</option>
             <option value="price">Preço</option>
             <option value="totalprice">Preço total</option>
@@ -294,6 +277,16 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Detalhes: </div>
+                    <input
+                      type="text"
+                      name="details"
+                      className="data-div"
+                      value={input.details}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
                     <div className="label">Quantidade: </div>
                     <input
                       type="text"
@@ -317,9 +310,9 @@ export default function Inputs() {
                     <div className="label">Peso unitário: </div>
                     <input
                       type="text"
-                      name="weightperunit"
+                      name="weightPerUnit"
                       className="data-div"
-                      value={input.weightperunit}
+                      value={input.weightPerUnit}
                       readOnly
                     />
                   </div>
@@ -337,9 +330,9 @@ export default function Inputs() {
                     <div className="label">Data validade: </div>
                     <input
                       type="text"
-                      name="expirationdate"
+                      name="expirationDate"
                       className="data-div"
-                      value={input.expirationdate}
+                      value={input.expirationDate}
                       readOnly
                     />
                   </div>
@@ -347,19 +340,9 @@ export default function Inputs() {
                     <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
-                      name="minimun_quantity"
+                      name="lowStock"
                       className="data-div"
-                      value={input.minimun_quantity}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Próximo ao limite: </div>
-                    <input
-                      type="text"
-                      name="rateisnear"
-                      className="data-div"
-                      value={input.rateisnear}
+                      value={input.lowStock}
                       readOnly
                     />
                   </div>
@@ -448,6 +431,16 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Detalhes: </div>
+                    <input
+                      type="text"
+                      name="details"
+                      className="data-div"
+                      value={input.details}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
                     <div className="label">Quantidade: </div>
                     <input
                       type="text"
@@ -471,9 +464,9 @@ export default function Inputs() {
                     <div className="label">Peso unitário: </div>
                     <input
                       type="text"
-                      name="weightperunit"
+                      name="weightPerUnit"
                       className="data-div"
-                      value={input.weightperunit}
+                      value={input.weightPerUnit}
                       readOnly
                     />
                   </div>
@@ -491,9 +484,9 @@ export default function Inputs() {
                     <div className="label">Data validade: </div>
                     <input
                       type="text"
-                      name="expirationdate"
+                      name="expirationDate"
                       className="data-div"
-                      value={input.expirationdate}
+                      value={input.expirationDate}
                       readOnly
                     />
                   </div>
@@ -501,19 +494,9 @@ export default function Inputs() {
                     <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
-                      name="minimun_quantity"
+                      name="lowStock"
                       className="data-div"
-                      value={input.minimun_quantity}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Próximo ao limite: </div>
-                    <input
-                      type="text"
-                      name="rateisnear"
-                      className="data-div"
-                      value={input.rateisnear}
+                      value={input.lowStock}
                       readOnly
                     />
                   </div>
@@ -583,6 +566,13 @@ export default function Inputs() {
         />
         <input
           type="text"
+          id="details"
+          placeholder="Motivo ex: o produto original se perdeu e precisou ser reposto, etc..."
+          value={details}
+          onChange={(e) => setDetails(e.target.value)}
+        />
+        <input
+          type="text"
           id="quantity"
           placeholder="Quantidade ex: 25"
           value={quantity || ""}
@@ -590,9 +580,9 @@ export default function Inputs() {
         />
         <input
           type="text"
-          id="weightperunit"
+          id="weightPerUnit"
           placeholder="Peso unitário ex: 1 (kg)"
-          value={weightperunit || ""}
+          value={weightPerUnit || ""}
           onChange={(e) => setWeightPerUnit(e.target.value)}
         />
         <input
@@ -604,24 +594,17 @@ export default function Inputs() {
         />
         <input
           type="text"
-          id="expirationdate"
+          id="expirationDate"
           placeholder="Validade ex: 25-03-2027"
-          value={expirationdate}
+          value={expirationDate}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
         <input
           type="text"
-          id="minimunQuantity"
+          id="lowStock"
           placeholder="quantidade mínima ex: 5"
-          value={minimun_quantity || ""}
-          onChange={(e) => setMinimunQuantity(e.target.value)}
-        />
-        <input
-          type="text"
-          id="rateisnear"
-          placeholder="Próximo ao limite ex: 10"
-          value={rateisnear || ""}
-          onChange={(e) => setRateIsNear(e.target.value)}
+          value={lowStock || ""}
+          onChange={(e) => setLowStock(e.target.value)}
         />
         <input
           type="text"
