@@ -28,5 +28,6 @@ export default async function PathCheck(
     return registersBy;
   } catch (err) {
     toast.error("Falha ao encontrar rota");
+    return null;
   }
 }

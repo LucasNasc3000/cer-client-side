@@ -100,6 +100,8 @@ export default function Home() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
+    if (!employee_id || !permissions) return;
+
     async function GetInputsData() {
       try {
         const inputs = await GetData(
@@ -113,7 +115,7 @@ export default function Home() {
 
         if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsData(inputs[1]);
+        setInputsData(inputs);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados dos insumos");
@@ -124,6 +126,8 @@ export default function Home() {
   }, [employee_id, permissions]);
 
   useEffect(() => {
+    if (!employee_id || !permissions) return;
+
     async function GetInputsHistoryData() {
       try {
         const inputs = await GetData(
@@ -137,7 +141,7 @@ export default function Home() {
 
         if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsHistoryData(inputs[1]);
+        setInputsHistoryData(inputs);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados dos insumos");
@@ -148,6 +152,8 @@ export default function Home() {
   }, [employee_id, permissions]);
 
   useEffect(() => {
+    if (!employee_id || !permissions) return;
+
     async function GetSalesData() {
       try {
         const sales = await GetData(
@@ -161,16 +167,14 @@ export default function Home() {
 
         if (typeof sales === "undefined" || !sales) return;
 
-        const salesArray = [...sales[1]];
-
-        salesArray.forEach((sale) => {
+        sales.forEach((sale) => {
           const brDateFormat = BrDateFormat(sale.createdAt);
           sale.createdAt = brDateFormat;
         });
 
-        setSalesData(salesArray);
+        setSalesData(sales);
       } catch (err) {
-        if (typeof err.response.data === "string") return;
+        if (err.response && typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das vendas");
       }
     }
@@ -179,6 +183,8 @@ export default function Home() {
   }, [employee_id, permissions]);
 
   useEffect(() => {
+    if (!employee_id || !permissions) return;
+
     async function GetOutputsData() {
       try {
         const outputs = await GetData(
@@ -192,7 +198,7 @@ export default function Home() {
 
         if (typeof outputs === "undefined" || !outputs) return;
 
-        setOutputsData(outputs[1]);
+        setOutputsData(outputs);
       } catch (err) {
         if (typeof err.response.data === "string") return;
         toast.error("Erro ao obter dados das saídas");

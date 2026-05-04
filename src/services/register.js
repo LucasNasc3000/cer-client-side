@@ -10,12 +10,11 @@ let translatedRegisterType = "";
 
 export default async function Register(data, registerType) {
   try {
-    if (registerType === "inputsHistory") {
+    if (registerType === "supplies") {
       data.quantity = toInt(data.quantity);
-      data.minimun_quantity = toInt(data.minimun_quantity);
-      data.rateisnear = toInt(data.rateisnear);
+      data.lowStock = toInt(data.lowStock);
 
-      await axios.post("/inputsHistory", {
+      await axios.post("/supplies", {
         ...data,
       });
     }
@@ -26,7 +25,7 @@ export default async function Register(data, registerType) {
       });
     }
 
-    if (registerType === "outputs") {
+    if (registerType === "outflows") {
       const finalData = {
         date: data.date,
         hour: data.hour,
@@ -36,14 +35,14 @@ export default async function Register(data, registerType) {
         employee_id: data.employee_id,
       };
 
-      await axios.post("/outputs", {
+      await axios.post("/outflows", {
         ...finalData,
       });
     }
 
     // eslint-disable-next-line default-case
     switch (registerType) {
-      case "inputs" || "inputsHistory":
+      case "supplies":
         const inputName = data.name;
         translatedRegisterType = "insumo";
         toast.success(`${inputName} adicionado`);
@@ -54,10 +53,10 @@ export default async function Register(data, registerType) {
         toast.success("Venda adicionada");
         break;
 
-      case "outputs":
-        const outputName = data.name;
+      case "outflows":
+        const outflowName = data.name;
         translatedRegisterType = "saída";
-        toast.success(`${outputName} adicionado`);
+        toast.success(`${outflowName} adicionado`);
         break;
     }
     return true;

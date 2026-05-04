@@ -80,7 +80,9 @@ export default function Inputs() {
   }, [headerid, emailStored, employee_id]);
 
   async function GetInputs() {
-    const inputs = await GetData(
+    if (!employee_id || !permissions) return;
+
+    const inputsReq = await GetData(
       bossId,
       "supplies",
       employee_id,
@@ -89,10 +91,10 @@ export default function Inputs() {
       true
     );
 
-    if (typeof inputs === "undefined" || !inputs) return;
+    if (typeof inputsReq === "undefined" || !inputsReq) return;
 
-    setInputsData(inputs);
-    setInputsDataBackup(inputs);
+    setInputsData(inputsReq);
+    setInputsDataBackup(inputsReq);
   }
 
   useEffect(() => {
@@ -142,7 +144,12 @@ export default function Inputs() {
 
     const inArray = [];
 
-    const search = await DoSearch("supplies", searchParam, searchInput.value);
+    const search = await DoSearch(
+      "supplies",
+      searchParam,
+      searchInput.value,
+      "SUPPLY_HISTORY"
+    );
 
     if (typeof search === "undefined" || !search) return;
 
@@ -175,7 +182,7 @@ export default function Inputs() {
       lowStock: document.querySelector("#lowStock").value,
     };
 
-    const register = await Register(data, "inputsHistory");
+    const register = await Register(data, "supplies");
 
     setReRender(register);
 
@@ -381,7 +388,7 @@ export default function Inputs() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${input.created_at.slice(8, 10)}-${input.created_at.slice(5, 7)}-${input.created_at.slice(0, 4)}`}
+                      value={`${input.createdAt.slice(8, 10)}-${input.createdAt.slice(5, 7)}-${input.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>

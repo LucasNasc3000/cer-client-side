@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable camelcase */
@@ -15,8 +16,6 @@ export default async function GetData(
   supplyType,
   forDisplay
 ) {
-  const rawData = [];
-  const allData = [];
   const joinData = [];
 
   try {
@@ -24,8 +23,8 @@ export default async function GetData(
       `/employees/search/boss?limit=20&offset=0&value=${bossId}`
     );
 
-    if (getEmployeesByBoss.length > 0) {
-      const employeesIds = getEmployeesByBoss.data.map((employees) => {
+    if (getEmployeesByBoss.data[1].length > 0) {
+      const employeesIds = getEmployeesByBoss.data[1].map((employees) => {
         return employees.id;
       });
 
@@ -37,12 +36,7 @@ export default async function GetData(
           forDisplay
         );
 
-        if (registers.data) rawData.push(registers.data);
-      }
-
-      for (let i = 0; i < rawData.length; i++) {
-        const join = allData.concat(rawData[i]);
-        joinData.push(...join);
+        if (registers.data[1]) joinData.push(...registers.data[1]);
       }
     }
 
@@ -55,7 +49,7 @@ export default async function GetData(
         forDisplay
       );
 
-      joinData.push(...bossOwnRegisters.data);
+      if (bossOwnRegisters.data[1]) joinData.push(...bossOwnRegisters.data[1]);
     } else {
       const bossRegisters = await PathCheck(
         path,
@@ -64,13 +58,17 @@ export default async function GetData(
         forDisplay
       );
 
-      joinData.push(...bossRegisters.data);
+      if (bossRegisters.data[1]) joinData.push(...bossRegisters.data[1]);
     }
 
     return joinData;
   } catch (err) {
     // eslint-disable-next-line consistent-return
-    if (typeof err.response.data === "string") return;
+    if (err.response && typeof err.response.data === "string") return;
+    if (err.message) {
+      toast.error("Erro ao carregar dados de registros");
+      return;
+    }
 
     const errors = get(err, "response.data.error", []);
 
@@ -79,15 +77,14 @@ export default async function GetData(
       switch (path) {
         case "supplies":
           toast.error("Erro desconhecido ao tentar exibir insumos");
-          break;
+          return;
 
         case "outflows":
           toast.error("Erro desconhecido ao tentar exibir saídas");
-          break;
+          return;
 
         case "sales":
           toast.error("Erro desconhecido ao tentar exibir vendas");
-          break;
       }
     }
   }

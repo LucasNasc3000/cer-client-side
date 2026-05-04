@@ -4,12 +4,17 @@ import axios from "./axios";
 export default async function GetBossId(headerid, email) {
   try {
     if (!headerid || headerid === "") {
-      const bossData = await axios.get(`/employees/search/email/${email}`);
+      const bossData = await axios.get(
+        `/employees/search/email?value=${email}`
+      );
 
       const { id } = bossData.data;
       return id;
     }
-    const employeeData = await axios.get(`/employees/search/email/${email}`);
+
+    const employeeData = await axios.get(
+      `/employees/search/email?value=${email}`
+    );
 
     const { boss } = employeeData.data;
     return boss;
