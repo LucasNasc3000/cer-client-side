@@ -31,7 +31,15 @@ export default async function DoSearch(
       return results.data[1];
     }
 
-    results = await axios.get(`/${path}/search/${searchParam}/${searchValue}`);
+    if (searchParam === "employee") {
+      results = await axios.get(
+        `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&forDisplay=false`
+      );
+    }
+
+    results = await axios.get(
+      `/${path}/search/${searchParam}?limit=20&offset=20&value=${searchValue}`
+    );
 
     return results.data[1];
   } catch (err) {
