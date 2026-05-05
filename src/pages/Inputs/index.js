@@ -129,8 +129,6 @@ export default function Inputs() {
     clearDirectExecution();
   };
 
-  // Adicionar busca por data (no back o campo é createdAt)
-
   const ClearSearch = (e) => {
     e.preventDefault();
     setSearchParam("");
@@ -187,6 +185,19 @@ export default function Inputs() {
 
   const InputRegister = async (e) => {
     e.preventDefault();
+
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para cadastrar insumos necessária");
+      return;
+    }
 
     const data = {
       category: document.querySelector("#category").value,

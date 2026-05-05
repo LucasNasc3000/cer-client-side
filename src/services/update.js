@@ -6,10 +6,16 @@ import axios from "./axios";
 
 export default async function Update(id, data, registerType) {
   try {
-    if (registerType === "inputs") {
-      const { created_at, updated_at, ...allowedData } = data;
+    if (registerType === "supplies") {
+      const { createdAt, updatedAt, ...allowedData } = data;
 
-      await axios.put(`/inputs/${id}`, {
+      if (data.price) {
+        await axios.patch(`/supplies/update/price/${id}`, {
+          ...allowedData,
+        });
+      }
+
+      await axios.patch(`/supplies/update/${id}`, {
         ...allowedData,
       });
     }

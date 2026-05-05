@@ -15,7 +15,6 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
-import history from "../../services/history";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/dataTransferInput/actions";
@@ -24,7 +23,7 @@ import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
 export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
-  const permissionlStored = useSelector((state) => state.auth.permission);
+  const permissions = useSelector((state) => state.auth.permissions);
   const inputName = useSelector((state) => state.dataTransferInput.inputName);
 
   const dispatch = useDispatch();
@@ -39,20 +38,6 @@ export default function InputsCurrent() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
-
-  useEffect(() => {
-    const PermissionCheck = () => {
-      if (
-        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== process.env.REACT_APP_INPUTS &&
-        permissionlStored !== process.env.REACT_APP_IOUT &&
-        permissionlStored !== process.env.REACT_APP_SIOUT
-      )
-        history.goBack();
-    };
-
-    PermissionCheck();
-  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -71,7 +56,7 @@ export default function InputsCurrent() {
       try {
         if (!headerid || headerid === "") {
           const bossData = await axios.get(
-            `/employees/search/email/${emailStored}`
+            `/employees/search/email?value=${emailStored}`
           );
           setEmployeeId(bossData.data.id);
           return;
@@ -96,7 +81,30 @@ export default function InputsCurrent() {
     async function SearchTheInput() {
       const inArray = [];
 
-      const search = await DoSearch("inputs", searchParam, searchInput.value);
+      let search = "";
+      let formattedDate = "";
+
+      if (searchParam === "date" || searchParam === "expirationDate") {
+        const year = searchInput.value.slice(6, 10);
+        const month = searchInput.value.slice(3, 5);
+        const day = searchInput.value.slice(0, 2);
+
+        formattedDate = `${year}-${month}-${day}`;
+
+        search = await DoSearch(
+          "supplies",
+          searchParam,
+          formattedDate,
+          "SUPPLY_REAL_TIME"
+        );
+      } else {
+        search = await DoSearch(
+          "supplies",
+          searchParam,
+          searchInput.value,
+          "SUPPLY_REAL_TIME"
+        );
+      }
 
       if (typeof search === "undefined" || !search) return;
 
@@ -118,9 +126,11 @@ export default function InputsCurrent() {
   async function GetInputs() {
     const inputs = await GetData(
       bossId,
-      "inputs",
+      "supplies",
       employee_id,
-      permissionlStored
+      permissions,
+      "SUPPLY_REAL_TIME",
+      true
     );
 
     if (typeof inputs === "undefined" || !inputs) return;
@@ -172,7 +182,18 @@ export default function InputsCurrent() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar insumos necessária");
+      return;
+    }
 
     setInputsData((prevData) =>
       prevData.map((item) =>
@@ -185,7 +206,18 @@ export default function InputsCurrent() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar insumos necessária");
+      return;
+    }
 
     setSearchResults((prevData) =>
       prevData.map((item) =>
@@ -199,7 +231,30 @@ export default function InputsCurrent() {
 
     const inArray = [];
 
-    const search = await DoSearch("inputs", searchParam, searchInput.value);
+    let search = "";
+    let formattedDate = "";
+
+    if (searchParam === "date" || searchParam === "expirationDate") {
+      const year = searchInput.value.slice(6, 10);
+      const month = searchInput.value.slice(3, 5);
+      const day = searchInput.value.slice(0, 2);
+
+      formattedDate = `${year}-${month}-${day}`;
+
+      search = await DoSearch(
+        "supplies",
+        searchParam,
+        formattedDate,
+        "SUPPLY_REAL_TIME"
+      );
+    } else {
+      search = await DoSearch(
+        "supplies",
+        searchParam,
+        searchInput.value,
+        "SUPPLY_REAL_TIME"
+      );
+    }
 
     if (typeof search === "undefined" || !search) return;
 
@@ -218,16 +273,39 @@ export default function InputsCurrent() {
   const InputUpdate = async (e, objectData) => {
     e.preventDefault();
 
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar insumos necessária");
+      return;
+    }
+
     const decimalRegex = /^\d+(?:[.,]\d+)$/;
 
     const toNumberFields = [
       "quantity",
       "price",
-      "weightperunit",
-      "totalweight",
-      "minimun_quantity",
-      "rateisnear",
+      "weightPerUnit",
+      "totalWeight",
+      "lowStock",
     ];
+
+    if (objectData.price) {
+      const editPricePermissionVerify = permissions.some(
+        (p) => p.action === "EDIT_PRICES" && p.resource === "SUPPLIES"
+      );
+
+      if (!editPricePermissionVerify) {
+        toast.error("Permissão para editar preços de insumos necessária");
+        return;
+      }
+    }
 
     toNumberFields.forEach((field) => {
       if (decimalRegex.test(objectData[field])) {
@@ -241,7 +319,7 @@ export default function InputsCurrent() {
       }
     });
 
-    const update = await Update(objectData.id, objectData, "inputs");
+    const update = await Update(objectData.id, objectData, "supplies");
 
     setReRender(update);
 
