@@ -25,15 +25,16 @@ import {
 export default function Outputs() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
-  const permissionlStored = useSelector((state) => state.auth.permission);
+  const permissions = useSelector((state) => state.auth.permissions);
 
   const dispatch = useDispatch();
 
-  const [date, setDate] = useState("");
+  const [targetType, setTargetType] = useState("");
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [unities, setUnities] = useState("");
   const [reason, setReason] = useState("");
+  const [notes, setNotes] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [outputsData, setOutputsData] = useState([]);
   const [outputsDataBackup, setOutputsDataBackup] = useState([]);
@@ -43,21 +44,6 @@ export default function Outputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
-
-  useEffect(() => {
-    const PermissionCheck = () => {
-      if (
-        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== process.env.REACT_APP_OUTPUTS &&
-        permissionlStored !== process.env.REACT_APP_IOUT &&
-        permissionlStored !== process.env.REACT_APP_SOUT &&
-        permissionlStored !== process.env.REACT_APP_SIOUT
-      )
-        history.goBack();
-    };
-
-    PermissionCheck();
-  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -76,7 +62,7 @@ export default function Outputs() {
       try {
         if (!headerid || headerid === "") {
           const bossData = await axios.get(
-            `/employees/search/email/${emailStored}`
+            `/employees/search/email?value=${emailStored}`
           );
           setEmployeeId(bossData.data.id);
           return;
@@ -93,9 +79,11 @@ export default function Outputs() {
   async function GetOutputs() {
     const outputs = await GetData(
       bossId,
-      "outputs",
+      "outflows",
       employee_id,
-      permissionlStored
+      permissions,
+      null,
+      true
     );
 
     if (typeof outputs === "undefined" || !outputs) return;
@@ -119,7 +107,8 @@ export default function Outputs() {
     setCategory("");
     setName("");
     setUnities("");
-    setDate("");
+    setNotes("");
+    setTargetType("");
     setReason("");
     setOutputsData(outputsDataBackup);
 
@@ -146,7 +135,25 @@ export default function Outputs() {
 
     const inArray = [];
 
-    const search = await DoSearch("outputs", searchParam, searchOutput.value);
+    let search = "";
+    let formattedDate = "";
+
+    if (searchParam === "date") {
+      const year = searchOutput.value.slice(6, 10);
+      const month = searchOutput.value.slice(3, 5);
+      const day = searchOutput.value.slice(0, 2);
+
+      formattedDate = `${year}-${month}-${day}`;
+
+      search = await DoSearch("outflows", searchParam, formattedDate, null);
+    } else {
+      search = await DoSearch(
+        "outflows",
+        searchParam,
+        searchOutput.value,
+        null
+      );
+    }
 
     if (typeof search === "undefined" || !search) return;
 
@@ -162,49 +169,41 @@ export default function Outputs() {
     return;
   }
 
-  // const OutputUpdate = async (e, objectData) => {
-  //   e.preventDefault();
-
-  //   const ddate = new Date();
-  //   const hour = ddate.toLocaleTimeString("pt-br", {
-  //     hourCycle: "h24",
-  //   });
-
-  //   const data = {
-  //     date: objectData.date,
-  //     hour,
-  //     name: objectData.name,
-  //     type: objectData.type,
-  //     unities: objectData.unities,
-  //     employee_id,
-  //   };
-
-  //   const update = await Update(objectData.id, data, "outputs");
-
-  //   setReRender(update);
-
-  //   clearDirectExecution();
-  // };
-
   const OutputRegister = async (e) => {
     e.preventDefault();
 
-    const ddate = new Date();
-    const hour = ddate.toLocaleTimeString("pt-br", {
-      hourCycle: "h24",
-    });
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "OUTFLOWS"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para cadastrar saídas necessária");
+      return;
+    }
 
     const data = {
-      date: document.querySelector("#date").value,
-      hour,
+      targetType: document.querySelector("#targetType").value,
       name: document.querySelector("#name").value,
       category: document.querySelector("#category").value,
-      reason: document.querySelector("#reason"),
+      reason: document.querySelector("#reason").value,
       unities: document.querySelector("#unities").value,
-      employee_id,
+      notes: document.querySelector("#notes").value,
     };
 
-    const register = await Register(data, "outputs");
+    if (data.targetType === "produto") {
+      data.targetType = "PRODUCT";
+    } else if (data.targetType === "insumo") {
+      data.targetType = "SUPPLY";
+    } else {
+      toast.error("O tipo de saída deve ser 'produto' ou 'insumo'");
+      return;
+    }
+
+    const register = await Register(data, "outflows");
 
     setReRender(register);
 
@@ -253,6 +252,7 @@ export default function Outputs() {
             onChange={(e) => setSearchParam(e.target.value)}
           >
             <option value="">Selecione</option>
+            <option value="targetType">Tipo de saída</option>
             <option value="date">Data</option>
             <option value="hour">Hora</option>
             <option value="name">Nome</option>
@@ -274,7 +274,7 @@ export default function Outputs() {
                       type="text"
                       name="date"
                       className="data-div"
-                      value={output.date}
+                      value={`${output.createdAt.slice(8, 10)}-${output.createdAt.slice(5, 7)}-${output.createdAt.slice(0, 4)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -283,7 +283,7 @@ export default function Outputs() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={output.hour}
+                      value={`${output.createdAt.slice(11, 13)}-${output.createdAt.slice(14, 16)}-${output.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -318,7 +318,7 @@ export default function Outputs() {
                     <input
                       type="text"
                       className="data-div"
-                      value={output.employee_id}
+                      value={output.employee.id}
                     />
                   </div>
                   <div className="data-wrap">
@@ -328,6 +328,16 @@ export default function Outputs() {
                       name="reason"
                       className="data-div"
                       value={output.reason}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Detalhes: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={output.notes}
                       readOnly
                     />
                   </div>
@@ -352,7 +362,7 @@ export default function Outputs() {
                       type="text"
                       name="date"
                       className="data-div"
-                      value={output.date}
+                      value={`${output.createdAt.slice(8, 10)}-${output.createdAt.slice(5, 7)}-${output.createdAt.slice(0, 4)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -361,7 +371,7 @@ export default function Outputs() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={output.hour}
+                      value={`${output.createdAt.slice(11, 13)}-${output.createdAt.slice(14, 16)}-${output.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -396,7 +406,7 @@ export default function Outputs() {
                     <input
                       type="text"
                       className="data-div"
-                      value={output.employee_id}
+                      value={output.employee.id}
                     />
                   </div>
                   <div className="data-wrap">
@@ -406,6 +416,16 @@ export default function Outputs() {
                       name="reason"
                       className="data-div"
                       value={output.reason}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Detalhes: </div>
+                    <input
+                      type="text"
+                      name="reason"
+                      className="data-div"
+                      value={output.notes}
                       readOnly
                     />
                   </div>
@@ -425,10 +445,10 @@ export default function Outputs() {
       <NewOutput>
         <input
           type="text"
-          id="date"
-          placeholder="Data ex: 09-10-2025"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          id="targetType"
+          placeholder="Tipo: produto ou insumo"
+          value={targetType}
+          onChange={(e) => setTargetType(e.target.value)}
         />
         <input
           type="text"
@@ -457,6 +477,13 @@ export default function Outputs() {
           placeholder="Motivo ex: venda, vencimento, etc..."
           value={reason}
           onChange={(e) => setReason(e.target.value)}
+        />
+        <input
+          type="text"
+          id="reason"
+          placeholder="Detalhes ex: produto mal armazenado etc..."
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
         />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
