@@ -146,12 +146,30 @@ export default function Inputs() {
 
     const inArray = [];
 
-    const search = await DoSearch(
-      "supplies",
-      searchParam,
-      searchInput.value,
-      "SUPPLY_HISTORY"
-    );
+    let search = "";
+    let formattedDate = "";
+
+    if (searchParam === "date" || searchParam === "expirationDate") {
+      const year = searchInput.value.slice(6, 10);
+      const month = searchInput.value.slice(3, 5);
+      const day = searchInput.value.slice(0, 2);
+
+      formattedDate = `${year}-${month}-${day}`;
+
+      search = await DoSearch(
+        "supplies",
+        searchParam,
+        formattedDate,
+        "SUPPLY_HISTORY"
+      );
+    } else {
+      search = await DoSearch(
+        "supplies",
+        searchParam,
+        searchInput.value,
+        "SUPPLY_HISTORY"
+      );
+    }
 
     if (typeof search === "undefined" || !search) return;
 
@@ -180,9 +198,15 @@ export default function Inputs() {
       price: document.querySelector("#price").value,
       supplier: document.querySelector("#supplier").value,
       expirationDate: document.querySelector("#expirationDate").value,
-      employee_id,
       lowStock: document.querySelector("#lowStock").value,
     };
+
+    const year = data.expirationDate.slice(6, 10);
+    const month = data.expirationDate.slice(3, 5);
+    const day = data.expirationDate.slice(0, 2);
+
+    data.expirationDate = `${year}-${month}-${day}`;
+    data.price = data.price.replace(",", ".");
 
     const register = await Register(data, "supplies");
 
@@ -243,6 +267,7 @@ export default function Inputs() {
             <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
             <option value="expirationDate">Data de validade</option>
+            <option value="date">Data de cadastro</option>
             <option value="lowStock">Quantidade mínima</option>
             <option value="employee">Funcionário</option>
             <option value="price">Preço</option>
@@ -590,7 +615,7 @@ export default function Inputs() {
         <input
           type="text"
           id="weightPerUnit"
-          placeholder="Peso unitário ex: 1 (kg)"
+          placeholder="Peso unitário ex: 1000 (g)"
           value={weightPerUnit || ""}
           onChange={(e) => setWeightPerUnit(e.target.value)}
         />

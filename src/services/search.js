@@ -11,11 +11,6 @@ export default async function DoSearch(
   try {
     let results = "";
 
-    console.log(path);
-    console.log(searchParam);
-    console.log(searchValue);
-    console.log(supplyType);
-
     if (path === "supplies") {
       if (searchParam === "id") {
         results = await axios.get(
@@ -40,7 +35,7 @@ export default async function DoSearch(
 
     return results.data[1];
   } catch (err) {
-    const errors = get(err, "response.data.error", []);
+    const errors = get(err, "response.data.message", []);
 
     if (err) {
       if (errors.length > 0) {

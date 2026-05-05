@@ -627,8 +627,6 @@ export default function Home() {
     function GetOutputsReasons() {
       const reasons = [];
 
-      console.log(outputsData);
-
       outputsData.map((output) => {
         reasons.push(output.reason);
       });

@@ -65,8 +65,11 @@ export default async function GetData(
   } catch (err) {
     // eslint-disable-next-line consistent-return
     if (err.response && typeof err.response.data === "string") return;
-    if (err.message) {
-      toast.error("Erro ao carregar dados de registros");
+
+    const { message } = err.response.data;
+
+    if (message) {
+      toast.error(message);
       return;
     }
 
