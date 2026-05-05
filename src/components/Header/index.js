@@ -74,7 +74,7 @@ export default function Header() {
             )
           }
           {
-            onlyPermissions.includes("OUTFLOWS") ? (
+            onlyPermissions.includes("OUTFLOWS") && onlyPermissions.length === 1 ? (
               <>
                 <Link to="/outputs" class="outputs">
                   Saídas
@@ -91,7 +91,7 @@ export default function Header() {
             )
           }
           {
-            onlyPermissions.includes("SUPPLIES") ? (
+            onlyPermissions.includes("SUPPLIES") && onlyPermissions.length === 1 ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -108,7 +108,7 @@ export default function Header() {
             )
           }
           {
-            onlyPermissions.includes("OUTFLOWS") && onlyPermissions.includes("SUPPLIES") ? (
+            onlyPermissions.includes("OUTFLOWS") && onlyPermissions.includes("SUPPLIES") && onlyPermissions.length === 2 ? (
               <>
                 <Link to="/inputs" class="inputs">
                   Insumos
@@ -128,7 +128,7 @@ export default function Header() {
             )
           }
           {
-            onlyPermissions.includes("SALES") ? (
+            onlyPermissions.includes("SALES") && onlyPermissions.length === 1 ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -148,7 +148,7 @@ export default function Header() {
             )
           }
           {
-            onlyPermissions.includes("SALES") && onlyPermissions.includes("OUTFLOWS") ? (
+            onlyPermissions.includes("SALES") && onlyPermissions.includes("OUTFLOWS") && onlyPermissions.length === 2 ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas
@@ -173,7 +173,8 @@ export default function Header() {
           {
             onlyPermissions.includes("SALES") &&
             onlyPermissions.includes("SUPPLIES") &&
-            onlyPermissions.includes("OUTFLOWS") ? (
+            onlyPermissions.includes("OUTFLOWS") &&
+            onlyPermissions.length === 3 ? (
               <>
                 <Link to="/sales" class="sales">
                   Vendas

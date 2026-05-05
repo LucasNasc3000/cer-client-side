@@ -129,6 +129,8 @@ export default function Inputs() {
     clearDirectExecution();
   };
 
+  // Adicionar busca por data (no back o campo é createdAt)
+
   const ClearSearch = (e) => {
     e.preventDefault();
     setSearchParam("");
@@ -309,7 +311,7 @@ export default function Inputs() {
                       type="text"
                       name="totalweightPerRegister"
                       className="data-div"
-                      value={input.totalweight_per_register}
+                      value={input.totalWeightPerRegister}
                       readOnly
                     />
                   </div>
@@ -358,7 +360,7 @@ export default function Inputs() {
                     <input
                       type="text"
                       className="data-div"
-                      value={input.employee_id}
+                      value={input.employee.id}
                       readOnly
                     />
                   </div>
@@ -378,7 +380,7 @@ export default function Inputs() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={input.totalprice}
+                      value={input.totalPrice}
                       readOnly
                     />
                   </div>
@@ -574,7 +576,7 @@ export default function Inputs() {
         <input
           type="text"
           id="details"
-          placeholder="Motivo ex: o produto original se perdeu e precisou ser reposto, etc..."
+          placeholder="Detalhes ex: produto se perdeu etc..."
           value={details}
           onChange={(e) => setDetails(e.target.value)}
         />
@@ -609,7 +611,7 @@ export default function Inputs() {
         <input
           type="text"
           id="lowStock"
-          placeholder="quantidade mínima ex: 5"
+          placeholder="quantidade mínima ex: 5 (opcional)"
           value={lowStock || ""}
           onChange={(e) => setLowStock(e.target.value)}
         />

@@ -11,6 +11,11 @@ export default async function DoSearch(
   try {
     let results = "";
 
+    console.log(path);
+    console.log(searchParam);
+    console.log(searchValue);
+    console.log(supplyType);
+
     if (path === "supplies") {
       if (searchParam === "id") {
         results = await axios.get(
@@ -27,17 +32,19 @@ export default async function DoSearch(
       results = await axios.get(
         `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}`
       );
+
+      return results.data[1];
     }
 
     results = await axios.get(`/${path}/search/${searchParam}/${searchValue}`);
 
-    return results.data;
+    return results.data[1];
   } catch (err) {
     const errors = get(err, "response.data.error", []);
 
     if (err) {
       if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
+        toast.error(errors);
       }
 
       if (err && errors.length < 1) {

@@ -306,14 +306,14 @@ export const NewInput = styled.div`
   align-items: center;
   justify-content: center;
   bottom: 1225px;
-  left: 1230px;
+  left: 1220px;
   height: fit-content;
   width: fit-content;
 
   input {
     background-color: #f5f4f4ff;
     height: 30px;
-    width: 170px;
+    width: 250px;
     margin-top: 10px;
     border-top: none;
     border-left: none;
