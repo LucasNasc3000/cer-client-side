@@ -11,37 +11,38 @@ export default async function DoSearch(
   try {
     let results = "";
 
-    if (path === "supplies") {
-      if (searchParam === "id") {
+    switch (true) {
+      case path === "supplies" && searchParam === "id":
         results = await axios.get(
           `/${path}/search/${searchParam}/${supplyType}/${searchValue}`
         );
-      }
+        return results.data[1];
 
-      if (searchParam === "employee") {
+      case path === "supplies" && searchParam === "employee":
         results = await axios.get(
           `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}&forDisplay=false`
         );
-      }
+        return results.data[1];
 
-      results = await axios.get(
-        `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}`
-      );
+      case path === "supplies" &&
+        searchParam !== "id" &&
+        searchParam !== "employee":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}`
+        );
+        return results.data[1];
 
-      return results.data[1];
+      case path !== "supplies":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?limit=20&offset=20&value=${searchValue}`
+        );
+        return results.data[1];
+
+      default:
+        toast.error("Dados de busca não enviados ou incorretos");
+        // eslint-disable-next-line consistent-return, no-useless-return
+        return;
     }
-
-    if (searchParam === "employee") {
-      results = await axios.get(
-        `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&forDisplay=false`
-      );
-    }
-
-    results = await axios.get(
-      `/${path}/search/${searchParam}?limit=20&offset=20&value=${searchValue}`
-    );
-
-    return results.data[1];
   } catch (err) {
     const errors = get(err, "response.data.message", []);
 
