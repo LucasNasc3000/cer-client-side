@@ -77,6 +77,8 @@ export default function Outputs() {
   }, [headerid, emailStored, employee_id]);
 
   async function GetOutputs() {
+    if (!employee_id || !permissions) return;
+
     const outputs = await GetData(
       bossId,
       "outflows",
@@ -337,7 +339,7 @@ export default function Outputs() {
                       type="text"
                       name="reason"
                       className="data-div"
-                      value={output.notes}
+                      value={output.notes || "Sem detalhes"}
                       readOnly
                     />
                   </div>
@@ -425,7 +427,7 @@ export default function Outputs() {
                       type="text"
                       name="reason"
                       className="data-div"
-                      value={output.notes}
+                      value={output.notes || "Sem detalhes"}
                       readOnly
                     />
                   </div>

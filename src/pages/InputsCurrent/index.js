@@ -124,6 +124,8 @@ export default function InputsCurrent() {
   }, [searchInput, searchParam]);
 
   async function GetInputs() {
+    if (!employee_id || !permissions) return;
+
     const inputs = await GetData(
       bossId,
       "supplies",
@@ -343,7 +345,7 @@ export default function InputsCurrent() {
             type="text"
             placeholder="Pesquisar..."
             className="input-search"
-            value={searchValueAutoSearch !== "" ? inputName : ""}
+            value={searchValueAutoSearch !== "" ? inputName : null}
           />
         </div>
 
@@ -365,12 +367,9 @@ export default function InputsCurrent() {
             <option value="category">Categoria</option>
             <option value="name">Nome</option>
             <option value="quantity">Quantidade</option>
-            <option value="totalweight">Peso total</option>
-            <option value="weightperunit">Peso unitário</option>
+            <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
-            <option value="expirationdate">Data de validade</option>
-            <option value="minimun_quantity">Quantidade mínima</option>
-            <option value="rateisnear">Próximo ao limite</option>
+            <option value="expirationDate">Data de validade</option>
             <option value="employee">Funcionário</option>
             <option value="price">Preço</option>
           </select>
@@ -415,9 +414,9 @@ export default function InputsCurrent() {
                     <div className="label">Peso total: </div>
                     <input
                       type="text"
-                      name="totalweight"
+                      name="totalWeight"
                       className="data-div"
-                      value={input.totalweight}
+                      value={input.totalWeight}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -425,9 +424,9 @@ export default function InputsCurrent() {
                     <div className="label">Peso unitário: </div>
                     <input
                       type="text"
-                      name="weightperunit"
+                      name="weightPerUnit"
                       className="data-div"
-                      value={input.weightperunit}
+                      value={input.weightPerUnit}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -445,9 +444,9 @@ export default function InputsCurrent() {
                     <div className="label">Data validade: </div>
                     <input
                       type="text"
-                      name="expirationdate"
+                      name="expirationDate"
                       className="data-div"
-                      value={input.expirationdate}
+                      value={input.expirationDate}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -455,19 +454,9 @@ export default function InputsCurrent() {
                     <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
-                      name="minimun_quantity"
+                      name="lowStock"
                       className="data-div"
-                      value={input.minimun_quantity}
-                      onChange={(e) => HandleChange(e, input.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Próximo ao limite: </div>
-                    <input
-                      type="text"
-                      name="rateisnear"
-                      className="data-div"
-                      value={input.rateisnear}
+                      value={input.lowStock}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -476,7 +465,7 @@ export default function InputsCurrent() {
                     <input
                       type="text"
                       className="data-div"
-                      value={input.employee_id}
+                      value={input.employee.id}
                       readOnly
                     />
                   </div>
@@ -490,7 +479,12 @@ export default function InputsCurrent() {
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
-                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
+                  {permissions.some(
+                    (p) => p.resource === "EMPLOYEES" && p.action === "UPDATE"
+                  ) ||
+                  permissions.some(
+                    (p) => p.resource === "SUPPLIES" && p.action === "UPDATE"
+                  ) ? (
                     <div className="buttons">
                       <button
                         type="button"
@@ -550,9 +544,9 @@ export default function InputsCurrent() {
                     <div className="label">Peso total: </div>
                     <input
                       type="text"
-                      name="totalweight"
+                      name="totalWeight"
                       className="data-div"
-                      value={input.totalweight}
+                      value={input.totalWeight}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -560,9 +554,9 @@ export default function InputsCurrent() {
                     <div className="label">Peso unitário: </div>
                     <input
                       type="text"
-                      name="weightperunit"
+                      name="weightPerUnit"
                       className="data-div"
-                      value={input.weightperunit}
+                      value={input.weightPerUnit}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -580,9 +574,9 @@ export default function InputsCurrent() {
                     <div className="label">Data validade: </div>
                     <input
                       type="text"
-                      name="expirationdate"
+                      name="expirationDate"
                       className="data-div"
-                      value={input.expirationdate}
+                      value={input.expirationDate}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -590,19 +584,9 @@ export default function InputsCurrent() {
                     <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
-                      name="minimun_quantity"
+                      name="lowStock"
                       className="data-div"
-                      value={input.minimun_quantity}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Próximo ao limite: </div>
-                    <input
-                      type="text"
-                      name="rateisnear"
-                      className="data-div"
-                      value={input.rateisnear}
+                      value={input.lowStock}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -611,7 +595,7 @@ export default function InputsCurrent() {
                     <input
                       type="text"
                       className="data-div"
-                      value={input.employee_id}
+                      value={input.employee.id}
                       readOnly
                     />
                   </div>
@@ -625,7 +609,12 @@ export default function InputsCurrent() {
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
-                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
+                  {permissions.some(
+                    (p) => p.resource === "EMPLOYEES" && p.action === "UPDATE"
+                  ) ||
+                  permissions.some(
+                    (p) => p.resource === "SUPPLIES" && p.action === "UPDATE"
+                  ) ? (
                     <div className="buttons">
                       <button
                         type="button"

@@ -11,7 +11,6 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
-import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
@@ -20,12 +19,12 @@ import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
-  const permissionlStored = useSelector((state) => state.auth.permission);
-  // const dispatch = useDispatch();
+  const permissions = useSelector((state) => state.auth.permissions);
 
   const [date, setDate] = useState("");
-  const [client_name, setClientName] = useState("");
-  const [phone_number, setPhoneNumber] = useState("");
+  const [clientName, setClientName] = useState("");
+  // const [clientEmail, setClientEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -39,20 +38,6 @@ export default function Sales() {
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [rerender, setReRender] = useState(false);
   const searchSale = document.querySelector(".sale-search");
-
-  useEffect(() => {
-    const PermissionCheck = () => {
-      if (
-        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE &&
-        permissionlStored !== process.env.REACT_APP_SALES &&
-        permissionlStored !== process.env.REACT_APP_SOUT &&
-        permissionlStored !== process.env.REACT_APP_SIOUT
-      )
-        history.goBack();
-    };
-
-    PermissionCheck();
-  }, [permissionlStored]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -71,7 +56,7 @@ export default function Sales() {
       try {
         if (!headerid || headerid === "") {
           const bossData = await axios.get(
-            `/employees/search/email/${emailStored}`
+            `/employees/search/email?value=${emailStored}`
           );
           setEmployeeId(bossData.data.id);
           return;
@@ -115,12 +100,7 @@ export default function Sales() {
   };
 
   async function GetSales() {
-    const sales = await GetData(
-      bossId,
-      "sales",
-      employee_id,
-      permissionlStored
-    );
+    const sales = await GetData(bossId, "sales", employee_id, permissions);
 
     if (typeof sales === "undefined" || !sales) return;
 
@@ -143,7 +123,7 @@ export default function Sales() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
 
     setSalesData((prevData) =>
       prevData.map((item) =>
@@ -156,7 +136,7 @@ export default function Sales() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permissionlStored !== process.env.REACT_APP_ADMIN_ROLE) return;
+    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
 
     setSearchResults((prevData) =>
       prevData.map((item) =>
@@ -211,8 +191,8 @@ export default function Sales() {
     const data = {
       date: document.querySelector("#date").value,
       hour,
-      client_name: document.querySelector("#clientName").value,
-      phone_number: document.querySelector("#phoneNumber").value,
+      clientName: document.querySelector("#clientName").value,
+      phoneNumber: document.querySelector("#phoneNumber").value,
       address: document.querySelector("#address").value,
       products: document.querySelector("#products").value,
       employee_id,
@@ -294,7 +274,7 @@ export default function Sales() {
                       className="data-div"
                       value={sale.date}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -307,7 +287,7 @@ export default function Sales() {
                       className="data-div"
                       value={sale.hour}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -316,11 +296,11 @@ export default function Sales() {
                     <div className="label">Nome cliente: </div>
                     <input
                       type="text"
-                      name="client_name"
+                      name="clientName"
                       className="data-div"
-                      value={sale.client_name}
+                      value={sale.clientName}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -329,11 +309,11 @@ export default function Sales() {
                     <div className="label">Telefone: </div>
                     <input
                       type="text"
-                      name="phone_number"
+                      name="phoneNumber"
                       className="data-div"
-                      value={sale.phone_number}
+                      value={sale.phoneNumber}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -346,7 +326,7 @@ export default function Sales() {
                       className="data-div"
                       value={sale.address}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -359,7 +339,7 @@ export default function Sales() {
                       className="data-div"
                       value={sale.products}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -372,7 +352,7 @@ export default function Sales() {
                       className="data-div"
                       value={sale.client_birthday}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -394,7 +374,7 @@ export default function Sales() {
                       className="data-div-price"
                       value={sale.price}
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
@@ -428,7 +408,7 @@ export default function Sales() {
                       name="date"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       value={sale.date}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
@@ -441,7 +421,7 @@ export default function Sales() {
                       name="hour"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       value={sale.hour}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
@@ -451,12 +431,12 @@ export default function Sales() {
                     <div className="label">Nome cliente: </div>
                     <input
                       type="text"
-                      name="client_name"
+                      name="clientName"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
-                      value={sale.client_name}
+                      value={sale.clientName}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
@@ -464,12 +444,12 @@ export default function Sales() {
                     <div className="label">Telefone: </div>
                     <input
                       type="text"
-                      name="phone_number"
+                      name="phoneNumber"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
-                      value={sale.phone_number}
+                      value={sale.phoneNumber}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
@@ -480,7 +460,7 @@ export default function Sales() {
                       name="address"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       value={sale.address}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
@@ -493,7 +473,7 @@ export default function Sales() {
                       name="products"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       value={sale.products}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
@@ -506,7 +486,7 @@ export default function Sales() {
                       name="client_birthday"
                       className="data-div"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       value={sale.client_birthday}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
@@ -528,13 +508,13 @@ export default function Sales() {
                       name="price"
                       className="data-div-price"
                       readOnly={
-                        permissionlStored !== process.env.REACT_APP_ADMIN_ROLE
+                        permissions !== process.env.REACT_APP_ADMIN_ROLE
                       }
                       value={sale.price}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
-                  {permissionlStored === process.env.REACT_APP_ADMIN_ROLE ? (
+                  {permissions === process.env.REACT_APP_ADMIN_ROLE ? (
                     <div className="buttons">
                       <button
                         type="button"
@@ -570,14 +550,14 @@ export default function Sales() {
           type="text"
           id="clientName"
           placeholder="Nome cliente ex: Joao silva"
-          value={client_name}
+          value={clientName}
           onChange={(e) => setClientName(e.target.value)}
         />
         <input
           type="text"
           id="phoneNumber"
           placeholder="Tel ex: 11 11111-2222"
-          value={phone_number}
+          value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input

@@ -34,7 +34,7 @@ export default async function DoSearch(
 
       case path !== "supplies":
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=20&value=${searchValue}`
+          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}`
         );
         return results.data[1];
 
