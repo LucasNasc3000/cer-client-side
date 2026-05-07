@@ -10,6 +10,7 @@ import InputsCurrent from "../pages/InputsCurrent";
 import Login from "../pages/Login";
 import Outputs from "../pages/Outputs";
 import Profile from "../pages/Perfil";
+import Products from "../pages/Products";
 import Sales from "../pages/Sales";
 import MyRoute from "./MyRoute";
 
@@ -51,6 +52,13 @@ export default function Routes() {
         component={Outputs}
         isClosed
         resource="OUTFLOWS"
+      />
+      <MyRoute
+        exact
+        path="/products"
+        component={Products}
+        isClosed
+        resource="PRODUCTS"
       />
       <MyRoute exact path="/profile" component={Profile} isClosed />
       <MyRoute
