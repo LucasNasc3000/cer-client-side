@@ -277,7 +277,7 @@ export default function Inputs() {
             </option>
             <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
-            <option value="expirationDate">Data de validade</option>
+            <option value="expirationDate">Validade</option>
             <option value="date">Data de cadastro</option>
             <option value="lowStock">Quantidade mínima</option>
             <option value="employee">Funcionário</option>
@@ -372,7 +372,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Data validade: </div>
+                    <div className="label">Validade: </div>
                     <input
                       type="text"
                       name="expirationDate"
@@ -387,7 +387,7 @@ export default function Inputs() {
                       type="text"
                       name="lowStock"
                       className="data-div"
-                      value={input.lowStock}
+                      value={input.lowStock || "Não definido"}
                       readOnly
                     />
                   </div>
@@ -526,7 +526,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Data validade: </div>
+                    <div className="label">Validade: </div>
                     <input
                       type="text"
                       name="expirationDate"
@@ -541,7 +541,7 @@ export default function Inputs() {
                       type="text"
                       name="lowStock"
                       className="data-div"
-                      value={input.lowStock}
+                      value={input.lowStock || "Não definido"}
                       readOnly
                     />
                   </div>

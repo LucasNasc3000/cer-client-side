@@ -369,7 +369,7 @@ export default function InputsCurrent() {
             <option value="quantity">Quantidade</option>
             <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
-            <option value="expirationDate">Data de validade</option>
+            <option value="expirationDate">Validade</option>
             <option value="employee">Funcionário</option>
             <option value="price">Preço</option>
           </select>
@@ -441,7 +441,7 @@ export default function InputsCurrent() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Data validade: </div>
+                    <div className="label">Validade: </div>
                     <input
                       type="text"
                       name="expirationDate"
@@ -456,7 +456,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="lowStock"
                       className="data-div"
-                      value={input.lowStock}
+                      value={input.lowStock || "Não definido"}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -571,7 +571,7 @@ export default function InputsCurrent() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Data validade: </div>
+                    <div className="label">Validade: </div>
                     <input
                       type="text"
                       name="expirationDate"
@@ -586,7 +586,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="lowStock"
                       className="data-div"
-                      value={input.lowStock}
+                      value={input.lowStock || "Não definido"}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>

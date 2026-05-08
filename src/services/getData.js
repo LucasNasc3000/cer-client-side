@@ -49,6 +49,8 @@ export default async function GetData(
         forDisplay
       );
 
+      console.log(bossOwnRegisters);
+
       if (bossOwnRegisters.data[1]) joinData.push(...bossOwnRegisters.data[1]);
     } else {
       const bossRegisters = await PathCheck(
@@ -66,11 +68,18 @@ export default async function GetData(
     // eslint-disable-next-line consistent-return
     if (err.response && typeof err.response.data === "string") return;
 
-    const { message } = err.response.data;
-
-    if (message) {
-      toast.error(message);
+    if (err instanceof TypeError) {
+      toast.error("Erro de tratamento de dados");
       return;
+    }
+
+    if (err.response.data) {
+      const { message } = err.response.data;
+
+      if (message) {
+        toast.error(message);
+        return;
+      }
     }
 
     const errors = get(err, "response.data.error", []);

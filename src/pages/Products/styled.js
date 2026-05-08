@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ProductsContainer = styled.div`
-  background-color: aqua;
+  overflow: hidden;
 `;
 
 export const SearchSpace = styled.div`
@@ -55,7 +55,7 @@ export const SearchSpace = styled.div`
     position: relative;
     height: 32px;
     width: 32px;
-    right: 180px;
+    right: 95px;
     top: 30px;
     color: #fff;
   }
@@ -295,5 +295,60 @@ export const ProductsSpace = styled.div`
 
   .edit-icon:hover {
     filter: brightness(80%);
+  }
+`;
+
+export const NewProduct = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  bottom: 1225px;
+  left: 1220px;
+  height: fit-content;
+  width: fit-content;
+
+  input {
+    background-color: #f5f4f4ff;
+    height: 30px;
+    width: 250px;
+    margin-top: 10px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 0.5px solid black;
+  }
+
+  .btn {
+    display: flex;
+    position: relative;
+    top: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 120px;
+    margin-top: 15px;
+    box-shadow: 1px 1.5px rgb(102, 96, 96);
+  }
+
+  .add-recipe-btn {
+    display: flex;
+    position: relative;
+    top: 20px;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+    margin-top: 15px;
+    gap: 10px;
+    box-shadow: 1px 1.5px rgb(102, 96, 96);
+  }
+
+  .recipe-icon {
+    display: flex;
+    color: #fff;
+    height: 30px;
+    width: 30px;
   }
 `;

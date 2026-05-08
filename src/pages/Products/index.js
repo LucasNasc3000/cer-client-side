@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
+import { IoIosSearch, IoMdPaper } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -10,7 +10,12 @@ import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import { ProductsContainer, ProductsSpace, SearchSpace } from "./styled";
+import {
+  NewProduct,
+  ProductsContainer,
+  ProductsSpace,
+  SearchSpace,
+} from "./styled";
 
 export default function Products() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -199,6 +204,7 @@ export default function Products() {
 
   return (
     <ProductsContainer>
+      <Header />
       <SearchSpace>
         <div className="search-space">
           <button
@@ -275,12 +281,12 @@ export default function Products() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Data validade: </div>
+                    <div className="label">Validade: </div>
                     <input
                       type="text"
                       name="expirationDate"
                       className="data-div"
-                      value={product.expirationDate}
+                      value={`${product.expirationDate.slice(8, 10)}-${product.expirationDate.slice(5, 7)}-${product.expirationDate.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -290,7 +296,7 @@ export default function Products() {
                       type="text"
                       name="lowStock"
                       className="data-div"
-                      value={product.lowStock}
+                      value={product.lowStock || "Não definido"}
                       readOnly
                     />
                   </div>
@@ -320,6 +326,26 @@ export default function Products() {
                       name="totalprice"
                       className="data-div"
                       value={`${product.createdAt.slice(8, 10)}-${product.createdAt.slice(5, 7)}-${product.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (data): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${product.updatedAt.slice(8, 10)}-${product.updatedAt.slice(5, 7)}-${product.updatedAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (hora): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${product.createdAt.slice(11, 13)}:${product.createdAt.slice(14, 16)}:${product.createdAt.slice(17, 19)}`}
                       readOnly
                     />
                   </div>
@@ -360,12 +386,12 @@ export default function Products() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Data validade: </div>
+                    <div className="label">Validade: </div>
                     <input
                       type="text"
                       name="expirationDate"
                       className="data-div"
-                      value={product.expirationDate}
+                      value={`${product.expirationDate.slice(8, 10)}-${product.expirationDate.slice(5, 7)}-${product.expirationDate.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -375,7 +401,7 @@ export default function Products() {
                       type="text"
                       name="lowStock"
                       className="data-div"
-                      value={product.lowStock}
+                      value={product.lowStock || "Não definido"}
                       readOnly
                     />
                   </div>
@@ -412,7 +438,68 @@ export default function Products() {
               );
             })}
       </ProductsSpace>
-      <Header />
+      <NewProduct>
+        <input
+          type="text"
+          id="category"
+          placeholder="Categoria ex: massas"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
+        <input
+          type="text"
+          id="name"
+          placeholder="Nome ex: pastel de frango"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="text"
+          id="unities"
+          placeholder="Unidades ex: 25"
+          value={unities || ""}
+          onChange={(e) => setUnities(e.target.value)}
+        />
+        <input
+          type="text"
+          id="expirationDate"
+          placeholder="Validade ex: 25-03-2027"
+          value={expirationDate}
+          onChange={(e) => setExpirationDate(e.target.value)}
+        />
+        <input
+          type="text"
+          id="lowStock"
+          placeholder="quantidade mínima ex: 5 (opcional)"
+          value={lowStock || ""}
+          onChange={(e) => setLowStock(e.target.value)}
+        />
+        <input
+          type="text"
+          id="price"
+          placeholder="Preço unitário ex: 10.90"
+          value={price || ""}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+        <button type="button" className="btn" onClick={clear}>
+          Cancelar
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => ProductRegister(e)}
+        >
+          Adicionar
+        </button>
+        <button
+          type="button"
+          className="add-recipe-btn"
+          onClick={(e) => ProductRegister(e)}
+        >
+          <IoMdPaper className="recipe-icon" />
+          Adicionar receita
+        </button>
+      </NewProduct>
     </ProductsContainer>
   );
 }
