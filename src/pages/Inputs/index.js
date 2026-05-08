@@ -185,7 +185,6 @@ export default function Inputs() {
 
   const InputRegister = async (e) => {
     e.preventDefault();
-    console.log("a");
 
     const permissionVerify = permissions.some(
       (p) => p.action === "CREATE" && p.resource === "SUPPLIES"

@@ -10,43 +10,58 @@ let translatedRegisterType = "";
 
 export default async function Register(data, registerType) {
   try {
-    if (registerType === "supplies") {
-      data.quantity = toInt(data.quantity);
-      data.lowStock = toInt(data.lowStock);
-
-      await axios.post("/supplies", {
-        ...data,
-      });
-    }
-
-    if (registerType === "sales") {
-      await axios.post("/sales", {
-        ...data,
-      });
-    }
-
-    if (registerType === "outflows") {
-      const { unities, ...rest } = data;
-
-      await axios.post("/outflows", {
-        ...rest,
-        unities: toInt(unities),
-      });
-    }
-
     // eslint-disable-next-line default-case
     switch (registerType) {
       case "supplies":
+        data.quantity = toInt(data.quantity);
+        data.lowStock = toInt(data.lowStock);
+
+        await axios.post("/supplies", {
+          ...data,
+        });
+
         const inputName = data.name;
         translatedRegisterType = "insumo";
         toast.success(`${inputName} adicionado`);
         break;
 
       case "sales":
+        await axios.post("/sales", {
+          ...data,
+        });
+
         translatedRegisterType = "venda";
         toast.success("Venda adicionada");
         break;
 
+      case "outflows":
+        data.unities = toInt(data.unities);
+
+        await axios.post("/outflows", {
+          ...data,
+        });
+
+        const outflowName = data.name;
+        translatedRegisterType = "saída";
+        toast.success(`${outflowName} adicionado`);
+        break;
+
+      case "products":
+        data.unities = toInt(data.unities);
+        data.lowStock = toInt(data.lowStock);
+
+        await axios.post("/products/create/withoutRecipe", {
+          ...data,
+        });
+
+        const productName = data.name;
+        translatedRegisterType = "produto";
+        toast.success(`${productName} adicionado`);
+        break;
+    }
+
+    // eslint-disable-next-line default-case
+    switch (registerType) {
       case "outflows":
         const outflowName = data.name;
         translatedRegisterType = "saída";
