@@ -527,6 +527,59 @@ export default function Products() {
                       readOnly
                     />
                   </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (data): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${product.updatedAt.slice(8, 10)}-${product.updatedAt.slice(5, 7)}-${product.updatedAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (hora): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${product.createdAt.slice(11, 13)}:${product.createdAt.slice(14, 16)}:${product.createdAt.slice(17, 19)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="footer">
+                    {product.recipe.length > 0 ? (
+                      <div className="with-recipe">
+                        Possui receita
+                        <IoCheckmark className="with-recipe-icon" />
+                        <button type="button" className="edit-recipe">
+                          Editar receita
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="without-recipe">
+                        Não possui receita
+                        <RiProhibited2Line className="without-recipe-icon" />
+                        <button type="button" className="add-recipe">
+                          Adicionar receita
+                        </button>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className="confirm-changes"
+                      onClick={(e) => ProductUpdate(e, product)}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => clear(e)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </div>
               );
             })}
