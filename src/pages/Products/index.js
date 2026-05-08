@@ -1,7 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
+import { IoCheckmark } from "react-icons/io5";
+import { RiProhibited2Line } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -10,6 +13,7 @@ import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
+import Update from "../../services/update";
 import {
   NewProduct,
   ProductsContainer,
@@ -202,6 +206,62 @@ export default function Products() {
     clearDirectExecution();
   };
 
+  const ProductUpdate = async (e, objectData) => {
+    e.preventDefault();
+
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar insumos necessária");
+      return;
+    }
+
+    const decimalRegex = /^\d+(?:[.,]\d+)$/;
+
+    const toNumberFields = [
+      "quantity",
+      "price",
+      "weightPerUnit",
+      "totalWeight",
+      "lowStock",
+    ];
+
+    if (objectData.price) {
+      const editPricePermissionVerify = permissions.some(
+        (p) => p.action === "EDIT_PRICES" && p.resource === "SUPPLIES"
+      );
+
+      if (!editPricePermissionVerify) {
+        toast.error("Permissão para editar preços de insumos necessária");
+        return;
+      }
+    }
+
+    toNumberFields.forEach((field) => {
+      if (decimalRegex.test(objectData[field])) {
+        objectData[field] = objectData[field].replace(",", ".");
+
+        objectData[field] = parseFloat(objectData[field]);
+
+        const parsedValue = parseInt(objectData[field], 10);
+
+        objectData[field] = parsedValue;
+      }
+    });
+
+    const update = await Update(objectData.id, objectData, "supplies");
+
+    setReRender(update);
+
+    clearDirectExecution();
+  };
+
   return (
     <ProductsContainer>
       <Header />
@@ -348,6 +408,39 @@ export default function Products() {
                       value={`${product.createdAt.slice(11, 13)}:${product.createdAt.slice(14, 16)}:${product.createdAt.slice(17, 19)}`}
                       readOnly
                     />
+                  </div>
+                  <div className="footer">
+                    {product.recipe.length > 0 ? (
+                      <div className="with-recipe">
+                        Possui receita
+                        <IoCheckmark className="with-recipe-icon" />
+                        <button type="button" className="edit-recipe">
+                          Editar receita
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="without-recipe">
+                        Não possui receita
+                        <RiProhibited2Line className="without-recipe-icon" />
+                        <button type="button" className="add-recipe">
+                          Adicionar receita
+                        </button>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className="confirm-changes"
+                      onClick={(e) => ProductUpdate(e, product)}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      className="cancel-changes"
+                      onClick={(e) => clear(e)}
+                    >
+                      Cancelar
+                    </button>
                   </div>
                 </div>
               );

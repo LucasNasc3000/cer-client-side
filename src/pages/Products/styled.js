@@ -264,7 +264,7 @@ export const ProductsSpace = styled.div`
     word-break: keep-all;
   }
 
-  .buttons {
+  .footer {
     display: flex;
     margin-top: 40px;
     margin-right: 150px;
@@ -284,7 +284,7 @@ export const ProductsSpace = styled.div`
     font-size: 15px;
   }
 
-  .real-time-stock-btn {
+  .cancel-changes {
     display: flex;
     background-color: #a5a4a4ff;
     width: 180px;
