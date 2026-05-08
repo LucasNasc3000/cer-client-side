@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -8,7 +10,7 @@ import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import { ProductsContainer } from "./styled";
+import { ProductsContainer, ProductsSpace, SearchSpace } from "./styled";
 
 export default function Products() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -197,6 +199,219 @@ export default function Products() {
 
   return (
     <ProductsContainer>
+      <SearchSpace>
+        <div className="search-space">
+          <button
+            type="button"
+            size={30}
+            className="search-btn"
+            onClick={(e) => SearchProducts(e)}
+          >
+            <IoIosSearch size={25} className="search-icon" />
+          </button>
+          <input
+            type="text"
+            placeholder="Pesquisar..."
+            className="product-search"
+          />
+        </div>
+
+        <FaArrowLeft
+          size={35}
+          className="arrow"
+          onClick={(e) => ClearSearch(e)}
+        />
+
+        <div className="filter-space">
+          <p className="filter-select-label">Filtrar por:</p>
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setSearchParam(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="category">Categoria</option>
+            <option value="name">Nome</option>
+            <option value="expirationDate">Data de validade</option>
+            <option value="employee">Funcionário</option>
+            <option value="price">Preço</option>
+          </select>
+        </div>
+      </SearchSpace>
+      <ProductsSpace>
+        {searchResults.length < 1
+          ? productsData.map((product) => {
+              return (
+                <div key={product.id} className="main-data-div" id={product.id}>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={product.category}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={product.name}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Unidades: </div>
+                    <input
+                      type="text"
+                      name="quantity"
+                      className="data-div"
+                      value={product.unities}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Data validade: </div>
+                    <input
+                      type="text"
+                      name="expirationDate"
+                      className="data-div"
+                      value={product.expirationDate}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Quantidade mínima: </div>
+                    <input
+                      type="text"
+                      name="lowStock"
+                      className="data-div"
+                      value={product.lowStock}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={product.employee.id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={product.price}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${product.createdAt.slice(8, 10)}-${product.createdAt.slice(5, 7)}-${product.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              );
+            })
+          : searchResults.map((product) => {
+              return (
+                <div key={product.id} className="main-data-div" id={product.id}>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={product.category}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={product.name}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Unidades: </div>
+                    <input
+                      type="text"
+                      name="quantity"
+                      className="data-div"
+                      value={product.unities}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Data validade: </div>
+                    <input
+                      type="text"
+                      name="expirationDate"
+                      className="data-div"
+                      value={product.expirationDate}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Quantidade mínima: </div>
+                    <input
+                      type="text"
+                      name="lowStock"
+                      className="data-div"
+                      value={product.lowStock}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={product.employee.id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={product.price}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${product.createdAt.slice(8, 10)}-${product.createdAt.slice(5, 7)}-${product.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              );
+            })}
+      </ProductsSpace>
       <Header />
     </ProductsContainer>
   );
