@@ -49,8 +49,6 @@ export default async function GetData(
         forDisplay
       );
 
-      console.log(bossOwnRegisters);
-
       if (bossOwnRegisters.data[1]) joinData.push(...bossOwnRegisters.data[1]);
     } else {
       const bossRegisters = await PathCheck(

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
-import { RiProhibited2Line } from "react-icons/ri";
+import { RiProhibitedLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -421,7 +421,7 @@ export default function Products() {
                     ) : (
                       <div className="without-recipe">
                         Não possui receita
-                        <RiProhibited2Line className="without-recipe-icon" />
+                        <RiProhibitedLine className="without-recipe-icon" />
                         <button type="button" className="add-recipe">
                           Adicionar receita
                         </button>
@@ -559,7 +559,7 @@ export default function Products() {
                     ) : (
                       <div className="without-recipe">
                         Não possui receita
-                        <RiProhibited2Line className="without-recipe-icon" />
+                        <RiProhibitedLine className="without-recipe-icon" />
                         <button type="button" className="add-recipe">
                           Adicionar receita
                         </button>

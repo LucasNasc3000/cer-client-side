@@ -27,7 +27,7 @@ export const SearchSpace = styled.div`
     border-bottom: 1px solid black;
   }
 
-  .input-search {
+  .product-search {
     display: flex;
     height: 39px;
     width: 250px;
@@ -134,6 +134,7 @@ export const ProductsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   bottom: 735px;
   height: 500px;
   width: 820px;
@@ -273,24 +274,48 @@ export const ProductsSpace = styled.div`
     width: fit-content;
     font-weight: 400;
     font-size: 15px;
+    background-color: aqua;
   }
 
   .confirm-changes {
     display: flex;
     background-color: #a5a4a4ff;
     width: 180px;
+    height: fit-content;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
+    margin-top: 19px;
   }
 
   .cancel-changes {
     display: flex;
     background-color: #a5a4a4ff;
     width: 180px;
+    height: fit-content;
     justify-content: center;
     font-weight: 400;
     font-size: 15px;
+    margin-top: 19px;
+  }
+
+  .with-recipe-icon {
+    display: flex;
+    height: 25px;
+    width: 25px;
+    color: aqua;
+    background-color: blue;
+  }
+
+  .without-recipe-icon {
+    display: flex;
+    height: 25px;
+    width: 25px;
+    color: aqua;
+    background-color: blue;
+  }
+
+  .edit-recipe {
   }
 
   .edit-icon:hover {
