@@ -8,6 +8,8 @@ import { RiProhibitedLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
+import { Modal } from "../../components/ModalRecipes";
+import { ModalRecipeChildren } from "../../components/ModalRecipes/addRecipe";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
@@ -41,6 +43,7 @@ export default function Products() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -420,9 +423,18 @@ export default function Products() {
                       </div>
                     ) : (
                       <div className="without-recipe">
-                        Não possui receita
-                        <RiProhibitedLine className="without-recipe-icon" />
-                        <button type="button" className="add-recipe">
+                        <Modal
+                          isOpen={open}
+                          onClose={() => setOpen(false)}
+                          title={`Vincular receita ao produto ${product.name}`}
+                        >
+                          <ModalRecipeChildren />
+                        </Modal>
+                        <button
+                          type="button"
+                          onClick={() => setOpen(true)}
+                          className="add-recipe"
+                        >
                           Adicionar receita
                         </button>
                       </div>
