@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import { get } from "lodash";
 import { useEffect, useState } from "react";
-import DoSearch from "../../services/search";
+import { toast } from "react-toastify";
+import axios from "../../services/axios";
 import { ModalRecipeContainer } from "./addRecipeStyled";
 
 export function ModalRecipeChildren() {
@@ -7,7 +10,7 @@ export function ModalRecipeChildren() {
   // eslint-disable-next-line no-unused-vars
   const [quantity, setQuantity] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [chosenSupply, setChosenSupply] = useState({});
+  const recipeItems = [];
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
   useEffect(() => {
@@ -19,26 +22,38 @@ export function ModalRecipeChildren() {
     async function SearchSupply() {
       const inArray = [];
 
-      const searchSupply = await DoSearch(
-        "supplies",
-        "name",
-        inputSearchValue,
-        "SUPPLY_REAL_TIME"
-      );
+      try {
+        const searchSupply = await axios.get(
+          `/supplies/search/name?limit=20&offset=0&value=${inputSearchValue}&supplyType=SUPPLY_REAL_TIME&forDisplay=true`
+        );
 
-      if (typeof searchSupply === "undefined" || !searchSupply) return;
+        const results = searchSupply.data[1];
 
-      if (Array.isArray(searchSupply)) {
-        setSearchResults(searchSupply);
-        return;
+        if (typeof results === "undefined" || !results) return;
+
+        if (Array.isArray(results)) {
+          setSearchResults(results);
+          return;
+        }
+
+        inArray.push(results);
+        setSearchResults(inArray);
+      } catch (err) {
+        const errors = get(err, "response.data.message", []);
+
+        if (err) {
+          if (errors.length > 0) toast.error(errors);
+        }
       }
-
-      inArray.push(searchSupply);
-      setSearchResults(inArray);
     }
 
     SearchSupply();
   }, [inputSearchValue]);
+
+  const AddToRecipe = (e, supply) => {
+    e.preventDefault();
+    recipeItems.push(supply);
+  };
 
   return (
     <ModalRecipeContainer>
@@ -51,11 +66,8 @@ export function ModalRecipeChildren() {
       {searchResults.length > 0 && (
         <ul className="search-dropdown">
           {searchResults.map((item) => (
-            <li
-              key={item.id}
-              className="search-dropdown-item"
-              onClick={() => setChosenSupply(item)}
-            >
+            <li key={item.id} className="search-dropdown-item">
+              <button type="button" onClick={(e) => AddToRecipe(e, item)} />
               {item.name}
             </li>
           ))}
