@@ -6,3 +6,10 @@ export function recipeData(payload) {
     payload,
   };
 }
+
+export function clearRecipeData(payload) {
+  return {
+    type: types.CLEAR_RECIPE_DATA,
+    payload,
+  };
+}

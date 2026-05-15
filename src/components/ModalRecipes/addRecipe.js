@@ -20,8 +20,8 @@ export function ModalRecipeChildren() {
   const [unitOrWeight, setUnitOrWeight] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [supplyData, setSupplyData] = useState({});
+  const [recipeItemsToShow, setRecipeItemsToShow] = useState([]);
   const recipeItems = [];
-  const recipeItemsToShow = [];
   const searchInput = document.querySelector(".input-search");
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
@@ -66,7 +66,7 @@ export function ModalRecipeChildren() {
     // eslint-disable-next-line no-useless-return
     if (Object.keys(getRecipeDataIfExists).length < 1) return;
 
-    recipeItemsToShow.push({ ...getRecipeDataIfExists });
+    setRecipeItemsToShow({ ...getRecipeDataIfExists });
   }, [getRecipeDataIfExists, recipeItemsToShow]);
 
   const ClerDirectExecution = () => {
@@ -85,7 +85,23 @@ export function ModalRecipeChildren() {
     setSearchResults([]);
   };
 
-  function SaveRecipe(e) {
+  const SaveRecipe = (e) => {
+    e.preventDefault();
+
+    dispatch(actions.recipeData({ recipeItemsToShow }));
+
+    ClerDirectExecution();
+  };
+
+  const ClearRecipe = (e) => {
+    e.preventDefault();
+
+    dispatch(actions.clearRecipeData());
+
+    ClerDirectExecution();
+  };
+
+  function PreSave(e) {
     e.preventDefault();
 
     let formattedQuantity = "";
@@ -117,15 +133,11 @@ export function ModalRecipeChildren() {
       quantity: formattedQuantity,
     });
 
-    recipeItemsToShow.push({
+    setRecipeItemsToShow({
       supplyId: supplyData.id,
       name: supplyData.name,
       quantity: formattedQuantity,
     });
-
-    dispatch(actions.recipeData({ recipeItemsToShow }));
-
-    ClerDirectExecution();
   }
 
   return (
@@ -193,10 +205,14 @@ export function ModalRecipeChildren() {
       </div>
 
       <div className="button-wrapper">
-        <button type="button" className="add">
+        <button type="button" className="add" onClick={(e) => PreSave(e)}>
           Adicionar
         </button>
-        <button type="button" className="cancel">
+        <button
+          type="button"
+          className="cancel"
+          onClick={(e) => ClearRecipe(e)}
+        >
           Cancelar
         </button>
       </div>

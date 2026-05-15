@@ -18,6 +18,11 @@ export default function (state = initialState, action) {
       return newState;
     }
 
+    case types.CLEAR_RECIPE_DATA: {
+      const newState = { ...initialState };
+      return newState;
+    }
+
     default:
       return state;
   }
