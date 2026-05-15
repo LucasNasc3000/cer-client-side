@@ -25,7 +25,7 @@ export function Modal({ isOpen, onClose, title, children }) {
     <Overlay onClick={onClose}>
       <Box onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose}>✕</CloseButton>
-        {title && <h2>{title}</h2>}
+        {title && <h2 className="title">{title}</h2>}
         {children}
       </Box>
     </Overlay>,

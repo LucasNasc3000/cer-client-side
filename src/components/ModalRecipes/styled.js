@@ -22,6 +22,12 @@ export const Box = styled.div`
   min-width: 320px;
   max-width: 90vw;
   animation: ${fadeIn} 0.2s ease;
+  color: black;
+
+  .title {
+    display: flex;
+    width: fit-content;
+  }
 `;
 
 export const CloseButton = styled.button`

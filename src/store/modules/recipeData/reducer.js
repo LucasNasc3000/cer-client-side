@@ -1,15 +1,19 @@
 import * as types from "../types";
 
 const initialState = {
-  inputName: "",
+  supplyId: "",
+  quantity: "",
+  name: "",
 };
 
 // eslint-disable-next-line default-param-last
 export default function (state = initialState, action) {
   switch (action.type) {
-    case types.INPUT_DATA_TRANSFER: {
+    case types.RECIPE_DATA: {
       const newState = { ...state };
-      newState.inputName = action.payload.inputName;
+      newState.quantity = action.payload.quantity;
+      newState.supplyId = action.payload.supplyId;
+      newState.name = action.payload.name;
 
       return newState;
     }

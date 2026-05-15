@@ -1,20 +1,28 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import Decimal from "decimal.js";
 import { get } from "lodash";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../services/axios";
+import * as actions from "../../store/modules/recipeData/actions";
 import { ModalRecipeContainer } from "./addRecipeStyled";
 
 export function ModalRecipeChildren() {
+  const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+
+  const dispatch = useDispatch();
+
   const [inputSearchValue, setInputSearchValue] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [quantity, setQuantity] = useState("");
   const [unitOrWeight, setUnitOrWeight] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [supplyData, setSupplyData] = useState({});
   const recipeItems = [];
   const recipeItemsToShow = [];
+  const searchInput = document.querySelector(".input-search");
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
   useEffect(() => {
@@ -54,7 +62,12 @@ export function ModalRecipeChildren() {
     SearchSupply();
   }, [inputSearchValue]);
 
-  // Converter unidades inteiras (segundo funcionários) para gramas (backend aceita)
+  useEffect(() => {
+    // eslint-disable-next-line no-useless-return
+    if (Object.keys(getRecipeDataIfExists).length < 1) return;
+
+    recipeItemsToShow.push({ ...getRecipeDataIfExists });
+  }, [getRecipeDataIfExists, recipeItemsToShow]);
 
   const ClerDirectExecution = () => {
     setQuantity("");
@@ -63,6 +76,18 @@ export function ModalRecipeChildren() {
   };
 
   const AddToRecipe = (e, supply) => {
+    e.preventDefault();
+
+    setSupplyData(supply);
+    setInputSearchValue(supply.name);
+    setSearchResults([]);
+
+    setSearchResults([]);
+  };
+
+  function SaveRecipe(e) {
+    e.preventDefault();
+
     let formattedQuantity = "";
 
     // eslint-disable-next-line default-case
@@ -73,7 +98,7 @@ export function ModalRecipeChildren() {
 
       case "unit":
         const unities = new Decimal(quantity);
-        const toGrams = unities.mul(supply.weightPerUnit).toString();
+        const toGrams = unities.mul(supplyData.weightPerUnit).toString();
         formattedQuantity = toGrams;
         break;
 
@@ -87,55 +112,48 @@ export function ModalRecipeChildren() {
         formattedQuantity = toGramUnit;
     }
 
-    e.preventDefault();
     recipeItems.push({
-      supplyId: supply.id,
+      supplyId: supplyData.id,
       quantity: formattedQuantity,
     });
 
     recipeItemsToShow.push({
-      supplyId: supply.id,
-      name: supply.name,
+      supplyId: supplyData.id,
+      name: supplyData.name,
       quantity: formattedQuantity,
     });
 
+    dispatch(actions.recipeData({ recipeItemsToShow }));
+
     ClerDirectExecution();
-  };
+  }
 
   return (
     <ModalRecipeContainer>
-      <input
-        type="text"
-        className="input-search"
-        onChange={(e) => setInputSearchValue(e.target.value)}
-      />
+      <div className="search-wrapper">
+        <p className="input-label">Insumo:</p>
+        <input
+          type="text"
+          className="input-search"
+          onChange={(e) => setInputSearchValue(e.target.value)}
+          value={inputSearchValue}
+        />
 
-      {searchResults.length > 0 && (
-        <ul className="search-dropdown">
-          {searchResults.map((item) => (
-            <li key={item.id} className="search-dropdown-item">
-              <button type="button" onClick={(e) => AddToRecipe(e, item)} />
-              {item.name}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="filter-space">
-        <p className="filter-select-label">Selecionar medida:</p>
-        <select
-          name="search-options"
-          className="options"
-          id="filter-select"
-          onChange={(e) => setUnitOrWeight(e.target.value)}
-        >
-          <option value="">Selecione</option>
-          <option value="unit">unidade</option>
-          <option value="g">g</option>
-          <option value="ml">ml</option>
-          <option value="kg">kg</option>
-          <option value="L">L</option>
-        </select>
+        {searchResults.length > 0 && (
+          <ul className="search-dropdown">
+            {searchResults.map((item) => (
+              <li key={item.id} className="search-dropdown-item">
+                <button
+                  type="button"
+                  className="item-button"
+                  onClick={(e) => AddToRecipe(e, item)}
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {recipeItemsToShow.length > 0 &&
@@ -150,10 +168,42 @@ export function ModalRecipeChildren() {
           </div>
         ))}
 
-      <input type="text" onChange={(e) => setQuantity(e.target.value)} />
-      <button type="button">Adicionar</button>
-      <button type="button">Cancelar</button>
-      <button type="button">Salvar</button>
+      <div className="quantity-wrapper">
+        <p className="quantity-label">Quantidade:</p>
+        <div className="filter-space">
+          <select
+            name="search-options"
+            className="options"
+            id="filter-select"
+            onChange={(e) => setUnitOrWeight(e.target.value)}
+          >
+            <option value="">Selecionar medida</option>
+            <option value="unit">unidade</option>
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+            <option value="kg">kg</option>
+            <option value="L">L</option>
+          </select>
+        </div>
+        <input
+          type="text"
+          className="input-quantity"
+          onChange={(e) => setQuantity(e.target.value)}
+        />
+      </div>
+
+      <div className="button-wrapper">
+        <button type="button" className="add">
+          Adicionar
+        </button>
+        <button type="button" className="cancel">
+          Cancelar
+        </button>
+      </div>
+
+      <button type="button" className="save" onClick={(e) => SaveRecipe(e)}>
+        Salvar
+      </button>
     </ModalRecipeContainer>
   );
 }
