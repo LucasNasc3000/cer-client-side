@@ -73,8 +73,42 @@ export const ModalRecipeContainer = styled.div`
 
   .supply-list {
     display: flex;
+    position: relative;
+    left: 180px;
+    bottom: 115px;
+    flex-direction: column;
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: aqua;
+    max-width: 270px;
+  }
+
+  .data-wrap {
+    display: flex;
+    flex-direction: row;
+    background-color: red;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .delete {
+    position: relative;
+    left: 70px;
+  }
+
+  .name {
+    display: flex;
+  }
+
+  .quantity {
+    width: fit-content;
+    margin: auto;
+    background-color: blanchedalmond;
+  }
+
+  .unit-type {
+    display: flex;
+    background-color: cadetblue;
   }
 
   .search-dropdown-item button:hover {

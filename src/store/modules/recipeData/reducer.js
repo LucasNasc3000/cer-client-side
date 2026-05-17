@@ -4,6 +4,7 @@ const initialState = {
   supplyId: "",
   quantity: "",
   name: "",
+  unit: "",
 };
 
 // eslint-disable-next-line default-param-last

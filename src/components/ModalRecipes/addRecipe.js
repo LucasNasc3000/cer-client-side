@@ -21,7 +21,6 @@ export function ModalRecipeChildren() {
   const [searchResults, setSearchResults] = useState([]);
   const [supplyData, setSupplyData] = useState({});
   const [recipeItemsToShow, setRecipeItemsToShow] = useState([]);
-  const recipeItems = [];
   const searchInput = document.querySelector(".input-search");
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
@@ -54,7 +53,7 @@ export function ModalRecipeChildren() {
         const errors = get(err, "response.data.message", []);
 
         if (err) {
-          if (errors.length > 0) toast.error(errors);
+          if (errors.length > 0) console.log(errors);
         }
       }
     }
@@ -63,16 +62,17 @@ export function ModalRecipeChildren() {
   }, [inputSearchValue]);
 
   useEffect(() => {
-    // eslint-disable-next-line no-useless-return
-    if (Object.keys(getRecipeDataIfExists).length < 1) return;
+    if (Object.values(getRecipeDataIfExists).every((v) => !v)) return;
 
-    setRecipeItemsToShow({ ...getRecipeDataIfExists });
-  }, [getRecipeDataIfExists, recipeItemsToShow]);
+    setRecipeItemsToShow([getRecipeDataIfExists]);
+  }, [getRecipeDataIfExists]);
 
   const ClerDirectExecution = () => {
     setQuantity("");
     setInputSearchValue("");
     setSearchResults([]);
+    setUnitOrWeight("");
+    setRecipeItemsToShow([]);
   };
 
   const AddToRecipe = (e, supply) => {
@@ -80,8 +80,6 @@ export function ModalRecipeChildren() {
 
     setSupplyData(supply);
     setInputSearchValue(supply.name);
-    setSearchResults([]);
-
     setSearchResults([]);
   };
 
@@ -112,32 +110,37 @@ export function ModalRecipeChildren() {
         toast.error("Tipo de quantidade não selecionada");
         return;
 
-      case "unit":
+      case "unidades":
         const unities = new Decimal(quantity);
         const toGrams = unities.mul(supplyData.weightPerUnit).toString();
         formattedQuantity = toGrams;
         break;
 
-      case "g" || "ml":
+      case "g":
+      case "ml":
         formattedQuantity = quantity;
+        console.log("aqui");
         break;
 
-      case "kg" || "L":
+      case "kg":
+      case "L":
         const currentFormat = new Decimal(quantity);
         const toGramUnit = currentFormat.mul(1000);
         formattedQuantity = toGramUnit;
     }
 
-    recipeItems.push({
-      supplyId: supplyData.id,
-      quantity: formattedQuantity,
-    });
-
-    setRecipeItemsToShow({
+    const recipeItemsToShowData = {
       supplyId: supplyData.id,
       name: supplyData.name,
       quantity: formattedQuantity,
-    });
+      unit: unitOrWeight,
+    };
+
+    console.log(recipeItemsToShowData);
+    console.log(quantity);
+    console.log(formattedQuantity);
+
+    setRecipeItemsToShow((prev) => [...prev, recipeItemsToShowData]);
   }
 
   return (
@@ -168,18 +171,6 @@ export function ModalRecipeChildren() {
         )}
       </div>
 
-      {recipeItemsToShow.length > 0 &&
-        recipeItemsToShow.map((item) => (
-          <div className="supply-list">
-            <div className="label">insumo:</div>
-            <div className="name">{item.name}</div>
-            <div className="label">quantidade</div>
-            <div className="quantity">
-              {item.quantity + unitOrWeight !== "unit" && unitOrWeight}
-            </div>
-          </div>
-        ))}
-
       <div className="quantity-wrapper">
         <p className="quantity-label">Quantidade:</p>
         <div className="filter-space">
@@ -190,7 +181,7 @@ export function ModalRecipeChildren() {
             onChange={(e) => setUnitOrWeight(e.target.value)}
           >
             <option value="">Selecionar medida</option>
-            <option value="unit">unidade</option>
+            <option value="unidades">unidade</option>
             <option value="g">g</option>
             <option value="ml">ml</option>
             <option value="kg">kg</option>
@@ -201,8 +192,26 @@ export function ModalRecipeChildren() {
           type="text"
           className="input-quantity"
           onChange={(e) => setQuantity(e.target.value)}
+          value={quantity}
         />
       </div>
+
+      {recipeItemsToShow.length > 0 &&
+        recipeItemsToShow.map((item) => {
+          return (
+            <div key={item.id} className="supply-list">
+              <div className="data-wrap">
+                <div className="name">{item.name}</div>
+
+                <div className="quantity">{item.quantity}</div>
+
+                <div className="unit-type">{item.unit}</div>
+
+                <div className="delete">✕</div>
+              </div>
+            </div>
+          );
+        })}
 
       <div className="button-wrapper">
         <button type="button" className="add" onClick={(e) => PreSave(e)}>
