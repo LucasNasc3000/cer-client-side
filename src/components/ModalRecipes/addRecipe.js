@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import Decimal from "decimal.js";
 import { get } from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../services/axios";
@@ -21,10 +21,18 @@ export function ModalRecipeChildren() {
   const [searchResults, setSearchResults] = useState([]);
   const [supplyData, setSupplyData] = useState({});
   const [recipeItemsToShow, setRecipeItemsToShow] = useState([]);
+
+  const isSelecting = useRef(false);
+
   const searchInput = document.querySelector(".input-search");
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
   useEffect(() => {
+    if (isSelecting.current) {
+      isSelecting.current = false; // ← reseta a flag e pula a busca
+      return;
+    }
+
     if (!inputSearchValue.trim()) {
       setSearchResults([]); // ← fecha o dropdown se apagar o texto
       return;
@@ -77,6 +85,7 @@ export function ModalRecipeChildren() {
 
   const AddToRecipe = (e, supply) => {
     e.preventDefault();
+    isSelecting.current = true;
 
     setSupplyData(supply);
     setInputSearchValue(supply.name);
@@ -99,8 +108,27 @@ export function ModalRecipeChildren() {
     ClerDirectExecution();
   };
 
+  const DeleteItem = (e, itemData) => {
+    e.preventDefault();
+
+    const localRITS = [...recipeItemsToShow];
+
+    const findItemIndex = localRITS.findIndex(
+      (i) => i.quantity === itemData.quantity && i.name === itemData.name
+    );
+
+    localRITS.splice(findItemIndex);
+
+    setRecipeItemsToShow([...localRITS]);
+  };
+
   function PreSave(e) {
     e.preventDefault();
+
+    if (!quantity || !unitOrWeight) {
+      toast.error("Quantidade ou unidade não especificados");
+      return;
+    }
 
     let formattedQuantity = "";
 
@@ -119,7 +147,6 @@ export function ModalRecipeChildren() {
       case "g":
       case "ml":
         formattedQuantity = quantity;
-        console.log("aqui");
         break;
 
       case "kg":
@@ -135,10 +162,6 @@ export function ModalRecipeChildren() {
       quantity: formattedQuantity,
       unit: unitOrWeight,
     };
-
-    console.log(recipeItemsToShowData);
-    console.log(quantity);
-    console.log(formattedQuantity);
 
     setRecipeItemsToShow((prev) => [...prev, recipeItemsToShowData]);
   }
@@ -179,6 +202,7 @@ export function ModalRecipeChildren() {
             className="options"
             id="filter-select"
             onChange={(e) => setUnitOrWeight(e.target.value)}
+            value={unitOrWeight}
           >
             <option value="">Selecionar medida</option>
             <option value="unidades">unidade</option>
@@ -196,22 +220,27 @@ export function ModalRecipeChildren() {
         />
       </div>
 
-      {recipeItemsToShow.length > 0 &&
-        recipeItemsToShow.map((item) => {
-          return (
-            <div key={item.id} className="supply-list">
-              <div className="data-wrap">
-                <div className="name">{item.name}</div>
-
-                <div className="quantity">{item.quantity}</div>
-
-                <div className="unit-type">{item.unit}</div>
-
-                <div className="delete">✕</div>
+      <div className="supply-list-wrapper">
+        {recipeItemsToShow.length > 0 &&
+          recipeItemsToShow.map((item) => {
+            return (
+              <div key={item.id} className="supply-list">
+                <div className="data-wrap">
+                  <div className="name">{item.name}</div>
+                  <div className="quantity">{item.quantity}</div>
+                  <div className="unit-type">{item.unit}</div>
+                  <button
+                    type="button"
+                    className="delete"
+                    onClick={(e) => DeleteItem(e, item)}
+                  >
+                    <p className="delete-icon">✕</p>
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
 
       <div className="button-wrapper">
         <button type="button" className="add" onClick={(e) => PreSave(e)}>

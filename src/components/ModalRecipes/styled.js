@@ -19,7 +19,7 @@ export const Box = styled.div`
   background: #fff;
   border-radius: 8px;
   padding: 2rem;
-  min-width: 320px;
+  min-width: 520px;
   max-width: 90vw;
   animation: ${fadeIn} 0.2s ease;
   color: black;

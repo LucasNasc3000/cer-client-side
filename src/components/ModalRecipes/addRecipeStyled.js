@@ -71,47 +71,57 @@ export const ModalRecipeContainer = styled.div`
     justify-content: center;
   }
 
-  .supply-list {
-    display: flex;
-    position: relative;
-    left: 180px;
-    bottom: 115px;
-    flex-direction: column;
-    overflow-y: auto;
+  .supply-list-wrapper {
+    max-height: 220px; /* altura máxima antes do scroll */
+    overflow-y: auto; /* scroll vertical quando ultrapassar */
     overflow-x: hidden;
-    background-color: aqua;
-    max-width: 270px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .supply-list {
+    margin-bottom: 8px;
   }
 
   .data-wrap {
     display: flex;
     flex-direction: row;
-    background-color: red;
+    background-color: #a5a4a4ff;
     align-items: center;
+    height: 35px;
+    border-radius: 8px;
     gap: 15px;
   }
 
   .delete {
-    position: relative;
-    left: 70px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 40px;
+    background: none;
+    text-align: center;
   }
 
   .name {
-    display: flex;
+    flex: 1;
   }
 
   .quantity {
-    width: fit-content;
-    margin: auto;
-    background-color: blanchedalmond;
+    width: 60px;
+    text-align: right;
   }
 
   .unit-type {
-    display: flex;
-    background-color: cadetblue;
+    width: 70px;
+    text-align: center;
   }
 
   .search-dropdown-item button:hover {
     background: #f0f0f0;
+  }
+
+  .delete-icon:hover {
+    filter: brightness(80%);
+    transition: 0.1s ease-in-out;
   }
 `;
