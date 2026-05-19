@@ -18,13 +18,15 @@ export function ModalRecipeChildren() {
   const [inputSearchValue, setInputSearchValue] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unitOrWeight, setUnitOrWeight] = useState("");
+  const [useStockSupplies, setUseStockSupplies] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [supplyData, setSupplyData] = useState({});
   const [recipeItemsToShow, setRecipeItemsToShow] = useState([]);
+  const [recipeItemsToShowFromRedux, setRecipeItemsToShowFromRedux] = useState(
+    []
+  );
 
   const isSelecting = useRef(false);
-
-  const searchInput = document.querySelector(".input-search");
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
   useEffect(() => {
@@ -70,12 +72,21 @@ export function ModalRecipeChildren() {
   }, [inputSearchValue]);
 
   useEffect(() => {
-    if (Object.values(getRecipeDataIfExists).every((v) => !v)) return;
-
-    setRecipeItemsToShow([getRecipeDataIfExists]);
+    if (getRecipeDataIfExists.productIngredient.length < 1) return;
+    setRecipeItemsToShowFromRedux(getRecipeDataIfExists.productIngredient);
   }, [getRecipeDataIfExists]);
 
   const ClerDirectExecution = () => {
+    setQuantity("");
+    setInputSearchValue("");
+    setSearchResults([]);
+    setUnitOrWeight("");
+    setRecipeItemsToShow([]);
+    setRecipeItemsToShowFromRedux([]);
+    setUseStockSupplies(false);
+  };
+
+  const PartialClerDirectExecution = () => {
     setQuantity("");
     setInputSearchValue("");
     setSearchResults([]);
@@ -95,9 +106,9 @@ export function ModalRecipeChildren() {
   const SaveRecipe = (e) => {
     e.preventDefault();
 
-    dispatch(actions.recipeData({ recipeItemsToShow }));
+    dispatch(actions.recipeData({ recipeItemsToShow, useStockSupplies }));
 
-    ClerDirectExecution();
+    PartialClerDirectExecution();
   };
 
   const ClearRecipe = (e) => {
@@ -122,6 +133,13 @@ export function ModalRecipeChildren() {
     setRecipeItemsToShow([...localRITS]);
   };
 
+  const HandleUseStockSupplies = () => {
+    setUseStockSupplies((prev) => {
+      const nextValue = prev === false;
+      return nextValue;
+    });
+  };
+
   function PreSave(e) {
     e.preventDefault();
 
@@ -134,10 +152,6 @@ export function ModalRecipeChildren() {
 
     // eslint-disable-next-line default-case
     switch (unitOrWeight) {
-      case !unitOrWeight:
-        toast.error("Tipo de quantidade não selecionada");
-        return;
-
       case "unidades":
         const unities = new Decimal(quantity);
         const toGrams = unities.mul(supplyData.weightPerUnit).toString();
@@ -221,25 +235,43 @@ export function ModalRecipeChildren() {
       </div>
 
       <div className="supply-list-wrapper">
-        {recipeItemsToShow.length > 0 &&
-          recipeItemsToShow.map((item) => {
-            return (
-              <div key={item.id} className="supply-list">
-                <div className="data-wrap">
-                  <div className="name">{item.name}</div>
-                  <div className="quantity">{item.quantity}</div>
-                  <div className="unit-type">{item.unit}</div>
-                  <button
-                    type="button"
-                    className="delete"
-                    onClick={(e) => DeleteItem(e, item)}
-                  >
-                    <p className="delete-icon">✕</p>
-                  </button>
+        {recipeItemsToShow.length > 0
+          ? recipeItemsToShow.map((item) => {
+              return (
+                <div key={item.id} className="supply-list">
+                  <div className="data-wrap">
+                    <div className="name">{item.name}</div>
+                    <div className="quantity">{item.quantity}</div>
+                    <div className="unit-type">{item.unit}</div>
+                    <button
+                      type="button"
+                      className="delete"
+                      onClick={(e) => DeleteItem(e, item)}
+                    >
+                      <p className="delete-icon">✕</p>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          : recipeItemsToShowFromRedux.map((item) => {
+              return (
+                <div key={item.id} className="supply-list">
+                  <div className="data-wrap">
+                    <div className="name">{item.name}</div>
+                    <div className="quantity">{item.quantity}</div>
+                    <div className="unit-type">{item.unit}</div>
+                    <button
+                      type="button"
+                      className="delete"
+                      onClick={(e) => DeleteItem(e, item)}
+                    >
+                      <p className="delete-icon">✕</p>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
       </div>
 
       <div className="button-wrapper">
@@ -253,6 +285,13 @@ export function ModalRecipeChildren() {
         >
           Cancelar
         </button>
+        <input
+          type="checkbox"
+          className="use-stock-supplies"
+          onChange={HandleUseStockSupplies}
+          value={useStockSupplies}
+        />
+        <p className="use-stock-supplies-label">Usar insumos em estoque</p>
       </div>
 
       <button type="button" className="save" onClick={(e) => SaveRecipe(e)}>

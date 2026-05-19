@@ -50,6 +50,18 @@ export default async function Register(data, registerType) {
         data.unities = toInt(data.unities);
         data.lowStock = toInt(data.lowStock);
 
+        if (data.productIngredient && !data.useStockSupplies) {
+          await axios.post("/products/create/withRecipe", {
+            ...data,
+          });
+        }
+
+        if (data.productIngredient && data.useStockSupplies) {
+          await axios.post("/products/create/withRecipe/registeredSupplies", {
+            ...data,
+          });
+        }
+
         await axios.post("/products/create/withoutRecipe", {
           ...data,
         });

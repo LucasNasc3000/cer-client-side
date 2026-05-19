@@ -274,7 +274,6 @@ export const ProductsSpace = styled.div`
     width: fit-content;
     font-weight: 400;
     font-size: 15px;
-    background-color: aqua;
   }
 
   .confirm-changes {
@@ -304,15 +303,12 @@ export const ProductsSpace = styled.div`
     height: 25px;
     width: 25px;
     color: aqua;
-    background-color: blue;
   }
 
-  .without-recipe-icon {
+  .add-recipe,
+  .edit-recipe {
     display: flex;
-    height: 25px;
-    width: 25px;
-    color: aqua;
-    background-color: blue;
+    margin-top: 5px;
   }
 
   .edit-recipe {

@@ -18,7 +18,7 @@ export const Overlay = styled.div`
 export const Box = styled.div`
   background: #fff;
   border-radius: 8px;
-  padding: 2rem;
+  padding: 1.5rem;
   min-width: 520px;
   max-width: 90vw;
   animation: ${fadeIn} 0.2s ease;

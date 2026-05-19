@@ -1,6 +1,7 @@
 import * as types from "../types";
 
 const initialState = {
+  useStockSupplies: false,
   productIngredient: [],
 };
 
@@ -8,10 +9,12 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case types.RECIPE_DATA: {
-      return {
-        ...state,
-        productIngredient: [...state.productIngredient, action.payload],
-      };
+      const newState = { ...state };
+
+      newState.useStockSupplies = action.payload.useStockSupplies;
+      newState.productIngredient = [...action.payload.recipeItemsToShow];
+
+      return newState;
     }
 
     case types.CLEAR_RECIPE_DATA: {

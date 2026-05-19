@@ -116,6 +116,22 @@ export const ModalRecipeContainer = styled.div`
     text-align: center;
   }
 
+  .use-stock-supplies {
+    display: flex;
+    background-color: aqua;
+    height: 20px;
+    width: 20px;
+    margin-left: 40px;
+    margin-top: 8px;
+  }
+
+  .use-stock-supplies-label {
+    display: flex;
+    width: 180px;
+    height: fit-content;
+    margin-top: 8px;
+  }
+
   .search-dropdown-item button:hover {
     background: #f0f0f0;
   }

@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
-import { RiProhibitedLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
-import { Modal } from "../../components/ModalRecipes";
+import { Modal } from "../../components/Modal";
 import { ModalRecipeChildren } from "../../components/ModalRecipes/addRecipe";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -27,6 +26,7 @@ export default function Products() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
+  const getRecipeDataIfExists = useSelector((state) => state.recipeData);
 
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
@@ -43,7 +43,7 @@ export default function Products() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openProductId, setOpenProductId] = useState("");
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -193,7 +193,17 @@ export default function Products() {
       unities: document.querySelector("#unities").value,
       expirationDate: document.querySelector("#expirationDate").value,
       lowStock: document.querySelector("#lowStock").value,
+      productIngredient: getRecipeDataIfExists.productIngredient || null,
+      useStockSupplies: getRecipeDataIfExists.useStockSupplies,
     };
+
+    if (
+      getRecipeDataIfExists.productIngredient &&
+      getRecipeDataIfExists.productIngredient.length < 1
+    ) {
+      toast.error("Erro ao salvar ingredientes");
+      return;
+    }
 
     const year = data.expirationDate.slice(6, 10);
     const month = data.expirationDate.slice(3, 5);
@@ -415,8 +425,6 @@ export default function Products() {
                   <div className="footer">
                     {product.recipe.length > 0 ? (
                       <div className="with-recipe">
-                        Possui receita
-                        <IoCheckmark className="with-recipe-icon" />
                         <button type="button" className="edit-recipe">
                           Editar receita
                         </button>
@@ -424,15 +432,15 @@ export default function Products() {
                     ) : (
                       <div className="without-recipe">
                         <Modal
-                          isOpen={open}
-                          onClose={() => setOpen(false)}
+                          isOpen={openProductId === product.id}
+                          onClose={() => setOpenProductId(null)}
                           title={`Vincular receita ao produto ${product.name}`}
                         >
                           <ModalRecipeChildren />
                         </Modal>
                         <button
                           type="button"
-                          onClick={() => setOpen(true)}
+                          onClick={() => setOpenProductId(product.id)}
                           className="add-recipe"
                         >
                           Adicionar receita
@@ -570,9 +578,18 @@ export default function Products() {
                       </div>
                     ) : (
                       <div className="without-recipe">
-                        Não possui receita
-                        <RiProhibitedLine className="without-recipe-icon" />
-                        <button type="button" className="add-recipe">
+                        <Modal
+                          isOpen={openProductId === product.id}
+                          onClose={() => setOpenProductId(null)}
+                          title={`Vincular receita ao produto ${product.name}`}
+                        >
+                          <ModalRecipeChildren />
+                        </Modal>
+                        <button
+                          type="button"
+                          onClick={() => setOpenProductId(product.id)}
+                          className="add-recipe"
+                        >
                           Adicionar receita
                         </button>
                       </div>
