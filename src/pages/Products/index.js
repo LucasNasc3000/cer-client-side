@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import { Modal } from "../../components/Modal";
@@ -15,6 +15,7 @@ import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
+import * as actions from "../../store/modules/recipeData/actions";
 import {
   NewProduct,
   ProductsContainer,
@@ -27,6 +28,8 @@ export default function Products() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+
+  const dispatch = useDispatch();
 
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
@@ -43,6 +46,8 @@ export default function Products() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [openAddRecipe, setOpenAddRecipe] = useState(false);
+  const [openEditUnities, setOpenEditUnities] = useState(false);
   const [openProductId, setOpenProductId] = useState("");
 
   useEffect(() => {
@@ -132,6 +137,54 @@ export default function Products() {
     options.value = "";
   };
 
+  const HandleChange = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    const permissionVerify = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar produtos necessária");
+      return;
+    }
+
+    setProductsData((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const HandleChangeSearch = (e, itemId) => {
+    // eslint-disable-next-line no-shadow
+    const { name, value } = e.target;
+
+    const permissionVerify = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "SUPPLIES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar produtos necessária");
+      return;
+    }
+
+    setSearchResults((prevData) =>
+      prevData.map((item) =>
+        item.id === itemId ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
   async function SearchProducts(e) {
     e.preventDefault();
 
@@ -216,6 +269,8 @@ export default function Products() {
 
     setReRender(register);
 
+    dispatch(actions.clearRecipeData());
+
     clearDirectExecution();
   };
 
@@ -231,7 +286,7 @@ export default function Products() {
     );
 
     if (!permissionVerify && !permissionVerifyAdmin) {
-      toast.error("Permissão para editar insumos necessária");
+      toast.error("Permissão para editar produtos necessária");
       return;
     }
 
@@ -330,7 +385,7 @@ export default function Products() {
                       name="category"
                       className="data-div"
                       value={product.category}
-                      readOnly
+                      onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -340,7 +395,7 @@ export default function Products() {
                       name="name"
                       className="data-div"
                       value={product.name}
-                      readOnly
+                      onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -350,7 +405,7 @@ export default function Products() {
                       name="quantity"
                       className="data-div"
                       value={product.unities}
-                      readOnly
+                      onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -360,7 +415,7 @@ export default function Products() {
                       name="expirationDate"
                       className="data-div"
                       value={`${product.expirationDate.slice(8, 10)}-${product.expirationDate.slice(5, 7)}-${product.expirationDate.slice(0, 4)}`}
-                      readOnly
+                      onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -370,7 +425,7 @@ export default function Products() {
                       name="lowStock"
                       className="data-div"
                       value={product.lowStock || "Não definido"}
-                      readOnly
+                      onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -389,7 +444,7 @@ export default function Products() {
                       name="price"
                       className="data-div"
                       value={product.price}
-                      readOnly
+                      onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -422,46 +477,64 @@ export default function Products() {
                       readOnly
                     />
                   </div>
-                  <div className="footer">
-                    {product.recipe.length > 0 ? (
-                      <div className="with-recipe">
-                        <button type="button" className="edit-recipe">
-                          Editar receita
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="without-recipe">
-                        <Modal
-                          isOpen={openProductId === product.id}
-                          onClose={() => setOpenProductId(null)}
-                          title={`Vincular receita ao produto ${product.name}`}
-                        >
-                          <ModalRecipeChildren />
-                        </Modal>
-                        <button
-                          type="button"
-                          onClick={() => setOpenProductId(product.id)}
-                          className="add-recipe"
-                        >
-                          Adicionar receita
-                        </button>
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => ProductUpdate(e, product)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e)}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
+                  ) && (
+                    <div className="footer">
+                      {product.recipe.length > 0 ? (
+                        <div className="with-recipe">
+                          <button type="button" className="edit-recipe">
+                            Editar receita
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="without-recipe">
+                          <Modal
+                            isOpen={openProductId === product.id}
+                            onClose={() => setOpenProductId(null)}
+                            title={`Vincular receita ao produto ${product.name}`}
+                          >
+                            <ModalRecipeChildren />
+                          </Modal>
+                          <button
+                            type="button"
+                            onClick={() => setOpenProductId(product.id)}
+                            className="add-recipe"
+                          >
+                            Adicionar receita
+                          </button>
+                        </div>
+                      )}
+                      <Modal
+                        isOpen={openEditUnities}
+                        onClose={() => setOpenEditUnities(false)}
+                        title={`Editar unidades do produto ${product.name}`}
+                      >
+                        <ModalRecipeChildren />
+                      </Modal>
+                      <button
+                        type="button"
+                        onClick={() => setOpenEditUnities(true)}
+                        className="add-recipe"
+                      >
+                        Editar unidades
+                      </button>
+                      <button
+                        type="button"
+                        className="confirm-changes"
+                        onClick={(e) => ProductUpdate(e, product)}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })
@@ -475,7 +548,7 @@ export default function Products() {
                       name="category"
                       className="data-div"
                       value={product.category}
-                      readOnly
+                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -485,7 +558,7 @@ export default function Products() {
                       name="name"
                       className="data-div"
                       value={product.name}
-                      readOnly
+                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -495,7 +568,7 @@ export default function Products() {
                       name="quantity"
                       className="data-div"
                       value={product.unities}
-                      readOnly
+                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -505,7 +578,7 @@ export default function Products() {
                       name="expirationDate"
                       className="data-div"
                       value={`${product.expirationDate.slice(8, 10)}-${product.expirationDate.slice(5, 7)}-${product.expirationDate.slice(0, 4)}`}
-                      readOnly
+                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -515,7 +588,7 @@ export default function Products() {
                       name="lowStock"
                       className="data-div"
                       value={product.lowStock || "Não definido"}
-                      readOnly
+                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -534,7 +607,7 @@ export default function Products() {
                       name="price"
                       className="data-div"
                       value={product.price}
-                      readOnly
+                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">
@@ -666,10 +739,17 @@ export default function Products() {
         >
           Adicionar
         </button>
+        <Modal
+          isOpen={openAddRecipe}
+          onClose={() => setOpenAddRecipe(false)}
+          title={`Vincular receita ao produto ${name}`}
+        >
+          <ModalRecipeChildren />
+        </Modal>
         <button
           type="button"
           className="add-recipe-btn"
-          onClick={(e) => ProductRegister(e)}
+          onClick={() => setOpenAddRecipe(true)}
         >
           <IoMdPaper className="recipe-icon" />
           Adicionar receita

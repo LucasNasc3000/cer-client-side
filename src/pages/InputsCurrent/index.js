@@ -185,7 +185,7 @@ export default function InputsCurrent() {
     const { name, value } = e.target;
 
     const permissionVerify = permissions.some(
-      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+      (p) => p.action === "UPDATE" && p.resource === "SUPPLIES"
     );
 
     const permissionVerifyAdmin = permissions.some(
@@ -209,7 +209,7 @@ export default function InputsCurrent() {
     const { name, value } = e.target;
 
     const permissionVerify = permissions.some(
-      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+      (p) => p.action === "UPDATE" && p.resource === "SUPPLIES"
     );
 
     const permissionVerifyAdmin = permissions.some(
