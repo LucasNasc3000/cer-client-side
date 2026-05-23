@@ -50,31 +50,32 @@ export default async function Register(data, registerType) {
         data.unities = toInt(data.unities);
         data.lowStock = toInt(data.lowStock);
 
-        let dataWithoutLowStock = {};
+        const hasIngredients =
+          Array.isArray(data.productIngredient) &&
+          data.productIngredient.length > 0;
 
-        if (data.productIngredient.length > 0 && !data.useStockSupplies) {
+        if (hasIngredients && !data.useStockSupplies) {
           await axios.post("/products/create/withRecipe", {
             ...data,
           });
-        }
-
-        if (data.productIngredient.length > 0 && data.useStockSupplies) {
+        } else if (hasIngredients && data.useStockSupplies) {
           await axios.post("/products/create/withRecipe/registeredSupplies", {
             ...data,
+          });
+        } else {
+          const { useStockSupplies, productIngredient, ...restOfTheData } =
+            data;
+
+          const payload = data.lowStock
+            ? restOfTheData
+            : (({ lowStock, ...rest }) => rest)(restOfTheData);
+
+          await axios.post("/products/create/withoutRecipe", {
+            ...payload,
           });
         }
 
         // olhar claude
-        const { useStockSupplies, productIngredient, ...restOfTheData } = data;
-
-        if (!data.lowStock) {
-          const { lowStock, ...withoutLowStock } = restOfTheData;
-          dataWithoutLowStock = { ...withoutLowStock };
-        }
-
-        await axios.post("/products/create/withoutRecipe", {
-          ...dataWithoutLowStock,
-        });
 
         const productName = data.name;
         translatedRegisterType = "produto";
@@ -82,29 +83,27 @@ export default async function Register(data, registerType) {
         break;
     }
 
-    // eslint-disable-next-line default-case
-    switch (registerType) {
-      case "outflows":
-        const outflowName = data.name;
-        translatedRegisterType = "saída";
-        toast.success(`${outflowName} adicionado`);
-        break;
-    }
     return true;
   } catch (err) {
     const errors = get(err, "response.data.message", []);
 
     if (err) {
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      }
+      // eslint-disable-next-line default-case
+      switch (true) {
+        case err instanceof TypeError:
+          toast.error("Erro de tratamento de dados");
+          return false;
 
-      if (err && errors.length < 1) {
-        toast.error(
-          `Erro desconhecido ao tentar cadastrar ${translatedRegisterType}`
-        );
+        case errors.length > 0:
+          errors.map((error) => toast.error(error));
+          return false;
+
+        case err && errors.length < 1:
+          toast.error(
+            `Erro desconhecido ao tentar cadastrar ${translatedRegisterType}`
+          );
+          return false;
       }
-      return false;
     }
   }
 }
