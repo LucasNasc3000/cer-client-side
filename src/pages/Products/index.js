@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
-import { IoCheckmark } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import { Modal } from "../../components/Modal";
+import { ModalEditUnitiesChildren } from "../../components/ModalEditUnities/editUnities";
 import { ModalRecipeChildren } from "../../components/ModalRecipes/addRecipe";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -245,18 +245,10 @@ export default function Products() {
       price: document.querySelector("#price").value,
       unities: document.querySelector("#unities").value,
       expirationDate: document.querySelector("#expirationDate").value,
-      lowStock: document.querySelector("#lowStock").value,
+      lowStock: document.querySelector("#lowStock").value || null,
       productIngredient: getRecipeDataIfExists.productIngredient || null,
       useStockSupplies: getRecipeDataIfExists.useStockSupplies,
     };
-
-    if (
-      getRecipeDataIfExists.productIngredient &&
-      getRecipeDataIfExists.productIngredient.length < 1
-    ) {
-      toast.error("Erro ao salvar ingredientes");
-      return;
-    }
 
     const year = data.expirationDate.slice(6, 10);
     const month = data.expirationDate.slice(3, 5);
@@ -265,7 +257,8 @@ export default function Products() {
     data.expirationDate = `${year}-${month}-${day}`;
     data.price = data.price.replace(",", ".");
 
-    const register = await Register(data, "supplies");
+    const register = await Register(data, "products");
+    console.log(register);
 
     setReRender(register);
 
@@ -510,7 +503,7 @@ export default function Products() {
                         onClose={() => setOpenEditUnities(false)}
                         title={`Editar unidades do produto ${product.name}`}
                       >
-                        <ModalRecipeChildren />
+                        <ModalEditUnitiesChildren />
                       </Modal>
                       <button
                         type="button"
@@ -640,48 +633,64 @@ export default function Products() {
                       readOnly
                     />
                   </div>
-                  <div className="footer">
-                    {product.recipe.length > 0 ? (
-                      <div className="with-recipe">
-                        Possui receita
-                        <IoCheckmark className="with-recipe-icon" />
-                        <button type="button" className="edit-recipe">
-                          Editar receita
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="without-recipe">
-                        <Modal
-                          isOpen={openProductId === product.id}
-                          onClose={() => setOpenProductId(null)}
-                          title={`Vincular receita ao produto ${product.name}`}
-                        >
-                          <ModalRecipeChildren />
-                        </Modal>
-                        <button
-                          type="button"
-                          onClick={() => setOpenProductId(product.id)}
-                          className="add-recipe"
-                        >
-                          Adicionar receita
-                        </button>
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => ProductUpdate(e, product)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e)}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
+                  ) && (
+                    <div className="footer">
+                      {product.recipe.length > 0 ? (
+                        <div className="with-recipe">
+                          <button type="button" className="edit-recipe">
+                            Editar receita
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="without-recipe">
+                          <Modal
+                            isOpen={openProductId === product.id}
+                            onClose={() => setOpenProductId(null)}
+                            title={`Vincular receita ao produto ${product.name}`}
+                          >
+                            <ModalRecipeChildren />
+                          </Modal>
+                          <button
+                            type="button"
+                            onClick={() => setOpenProductId(product.id)}
+                            className="add-recipe"
+                          >
+                            Adicionar receita
+                          </button>
+                        </div>
+                      )}
+                      <Modal
+                        isOpen={openEditUnities}
+                        onClose={() => setOpenEditUnities(false)}
+                        title={`Editar unidades do produto ${product.name}`}
+                      >
+                        <ModalEditUnitiesChildren />
+                      </Modal>
+                      <button
+                        type="button"
+                        onClick={() => setOpenEditUnities(true)}
+                        className="add-recipe"
+                      >
+                        Editar unidades
+                      </button>
+                      <button
+                        type="button"
+                        className="confirm-changes"
+                        onClick={(e) => ProductUpdate(e, product)}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}

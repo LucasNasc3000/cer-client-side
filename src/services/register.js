@@ -50,20 +50,30 @@ export default async function Register(data, registerType) {
         data.unities = toInt(data.unities);
         data.lowStock = toInt(data.lowStock);
 
-        if (data.productIngredient && !data.useStockSupplies) {
+        let dataWithoutLowStock = {};
+
+        if (data.productIngredient.length > 0 && !data.useStockSupplies) {
           await axios.post("/products/create/withRecipe", {
             ...data,
           });
         }
 
-        if (data.productIngredient && data.useStockSupplies) {
+        if (data.productIngredient.length > 0 && data.useStockSupplies) {
           await axios.post("/products/create/withRecipe/registeredSupplies", {
             ...data,
           });
         }
 
+        // olhar claude
+        const { useStockSupplies, productIngredient, ...restOfTheData } = data;
+
+        if (!data.lowStock) {
+          const { lowStock, ...withoutLowStock } = restOfTheData;
+          dataWithoutLowStock = { ...withoutLowStock };
+        }
+
         await axios.post("/products/create/withoutRecipe", {
-          ...data,
+          ...dataWithoutLowStock,
         });
 
         const productName = data.name;
@@ -82,7 +92,7 @@ export default async function Register(data, registerType) {
     }
     return true;
   } catch (err) {
-    const errors = get(err, "response.data.error", []);
+    const errors = get(err, "response.data.message", []);
 
     if (err) {
       if (errors.length > 0) {

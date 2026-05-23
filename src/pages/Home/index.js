@@ -103,23 +103,18 @@ export default function Home() {
     if (!employee_id || !permissions) return;
 
     async function GetInputsData() {
-      try {
-        const inputs = await GetData(
-          employee_id,
-          "supplies",
-          employee_id,
-          permissions,
-          "SUPPLY_REAL_TIME",
-          true
-        );
+      const inputs = await GetData(
+        employee_id,
+        "supplies",
+        employee_id,
+        permissions,
+        "SUPPLY_REAL_TIME",
+        true
+      );
 
-        if (typeof inputs === "undefined" || !inputs) return;
+      if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsData(inputs);
-      } catch (err) {
-        if (typeof err.response.data === "string") return;
-        toast.error("Erro ao obter dados dos insumos");
-      }
+      setInputsData(inputs);
     }
 
     GetInputsData();
@@ -129,23 +124,18 @@ export default function Home() {
     if (!employee_id || !permissions) return;
 
     async function GetInputsHistoryData() {
-      try {
-        const inputs = await GetData(
-          employee_id,
-          "supplies",
-          employee_id,
-          permissions,
-          "SUPPLY_HISTORY",
-          true
-        );
+      const inputs = await GetData(
+        employee_id,
+        "supplies",
+        employee_id,
+        permissions,
+        "SUPPLY_HISTORY",
+        true
+      );
 
-        if (typeof inputs === "undefined" || !inputs) return;
+      if (typeof inputs === "undefined" || !inputs) return;
 
-        setInputsHistoryData(inputs);
-      } catch (err) {
-        if (typeof err.response.data === "string") return;
-        toast.error("Erro ao obter dados dos insumos");
-      }
+      setInputsHistoryData(inputs);
     }
 
     GetInputsHistoryData();
@@ -155,28 +145,23 @@ export default function Home() {
     if (!employee_id || !permissions) return;
 
     async function GetSalesData() {
-      try {
-        const sales = await GetData(
-          employee_id,
-          "sales",
-          employee_id,
-          permissions,
-          null,
-          true
-        );
+      const sales = await GetData(
+        employee_id,
+        "sales",
+        employee_id,
+        permissions,
+        null,
+        true
+      );
 
-        if (typeof sales === "undefined" || !sales) return;
+      if (typeof sales === "undefined" || !sales) return;
 
-        sales.forEach((sale) => {
-          const brDateFormat = BrDateFormat(sale.createdAt);
-          sale.createdAt = brDateFormat;
-        });
+      sales.forEach((sale) => {
+        const brDateFormat = BrDateFormat(sale.createdAt);
+        sale.createdAt = brDateFormat;
+      });
 
-        setSalesData(sales);
-      } catch (err) {
-        if (err.response && typeof err.response.data === "string") return;
-        toast.error("Erro ao obter dados das vendas");
-      }
+      setSalesData(sales);
     }
 
     GetSalesData();
@@ -186,23 +171,18 @@ export default function Home() {
     if (!employee_id || !permissions) return;
 
     async function GetOutputsData() {
-      try {
-        const outputs = await GetData(
-          employee_id,
-          "outflows",
-          employee_id,
-          permissions,
-          null,
-          true
-        );
+      const outputs = await GetData(
+        employee_id,
+        "outflows",
+        employee_id,
+        permissions,
+        null,
+        true
+      );
 
-        if (typeof outputs === "undefined" || !outputs) return;
+      if (typeof outputs === "undefined" || !outputs) return;
 
-        setOutputsData(outputs);
-      } catch (err) {
-        if (typeof err.response.data === "string") return;
-        toast.error("Erro ao obter dados das saídas");
-      }
+      setOutputsData(outputs);
     }
 
     GetOutputsData();
