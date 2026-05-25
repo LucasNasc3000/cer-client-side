@@ -3,7 +3,6 @@
 /* eslint-disable camelcase */
 import { get } from "lodash";
 import { toast } from "react-toastify";
-import { toInt } from "validator";
 import axios from "./axios";
 
 let translatedRegisterType = "";
@@ -13,9 +12,6 @@ export default async function Register(data, registerType) {
     // eslint-disable-next-line default-case
     switch (registerType) {
       case "supplies":
-        data.quantity = toInt(data.quantity);
-        data.lowStock = toInt(data.lowStock);
-
         await axios.post("/supplies", {
           ...data,
         });
@@ -35,8 +31,6 @@ export default async function Register(data, registerType) {
         break;
 
       case "outflows":
-        data.unities = toInt(data.unities);
-
         await axios.post("/outflows", {
           ...data,
         });
@@ -47,9 +41,6 @@ export default async function Register(data, registerType) {
         break;
 
       case "products":
-        data.unities = toInt(data.unities);
-        data.lowStock = toInt(data.lowStock);
-
         const hasIngredients =
           Array.isArray(data.productIngredient) &&
           data.productIngredient.length > 0;
@@ -74,8 +65,6 @@ export default async function Register(data, registerType) {
             ...payload,
           });
         }
-
-        // olhar claude
 
         const productName = data.name;
         translatedRegisterType = "produto";

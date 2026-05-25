@@ -149,12 +149,12 @@ export const ProductsSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 555px;
+    height: auto;
     margin-top: 25px;
-    padding: 15px;
+    padding: 15px 15px 0 15px;
     border-radius: 10px;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
@@ -267,54 +267,62 @@ export const ProductsSpace = styled.div`
 
   .footer {
     display: flex;
-    margin-top: 40px;
-    margin-right: 150px;
-    margin-left: 120px;
-    gap: 20px;
-    width: fit-content;
-    font-weight: 400;
-    font-size: 15px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 16px;
+    border-top: 1px solid #e0e0e0;
+    background-color: transparent;
+  }
+
+  .footer-actions {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .footer-confirm {
+    display: flex;
+    gap: 10px;
+  }
+
+  .footer button {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
   }
 
   .confirm-changes {
-    display: flex;
-    background-color: #a5a4a4ff;
-    width: 180px;
-    height: fit-content;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 15px;
-    margin-top: 19px;
+    background-color: #2563eb;
+    color: white;
   }
 
   .cancel-changes {
-    display: flex;
-    background-color: #a5a4a4ff;
-    width: 180px;
-    height: fit-content;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 15px;
-    margin-top: 19px;
-  }
-
-  .with-recipe-icon {
-    display: flex;
-    height: 25px;
-    width: 25px;
-    color: aqua;
+    background-color: #a5a4a4;
+    color: white;
   }
 
   .add-recipe,
   .edit-recipe {
-    display: flex;
-    margin-top: 5px;
+    background-color: #06b6d4;
+    color: white;
   }
 
-  .edit-recipe {
+  .edit-unities {
+    background-color: #3b82f6;
+    color: white;
   }
 
-  .edit-icon:hover {
+  .footer button:hover {
     filter: brightness(80%);
   }
 `;

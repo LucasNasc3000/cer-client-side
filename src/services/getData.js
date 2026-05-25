@@ -40,7 +40,7 @@ export default async function GetData(
       }
     }
 
-    // Adiciona à joinData os registros do chefe, se houverem. Acontecerá independentemente da permissão do funcionário
+    // Adiciona à joinData os registros do admin, se houverem. Acontecerá independentemente da permissão do funcionário
     if (permission.some((p) => p.resource === "EMPLOYEES")) {
       const bossOwnRegisters = await PathCheck(
         path,
