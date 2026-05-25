@@ -13,13 +13,15 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
 
   return (
     <ModalEditUnitiesContainer>
-      <p className="current-unities-label">Unidades: </p>
-      <input
-        type="number"
-        className="current-unities"
-        onChange={(e) => setUnities(e.target.value)}
-        value={unities}
-      />
+      <div className="unities-wrapper">
+        <p className="current-unities-label">Unidades: </p>
+        <input
+          type="number"
+          className="current-unities"
+          onChange={(e) => setUnities(e.target.value)}
+          value={unities}
+        />
+      </div>
 
       <div className="reason-wrapper">
         <p className="reason-label">Motivo: </p>
@@ -58,24 +60,28 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
           </select>
         )}
 
-        <p className="notes-label">Notas: </p>
-
-        <textarea
-          type=""
-          className="notes"
-          rows={50}
-          cols={120}
-          onChange={(e) => setNotes(e.target.value)}
-          value={notes}
-          readOnly={reason === "other"}
-        />
+        <div className="notes-wrapper">
+          <p className="notes-label">Notas: </p>
+          <textarea
+            type=""
+            className="notes"
+            rows={50}
+            cols={120}
+            onChange={(e) => setNotes(e.target.value)}
+            value={notes}
+            readOnly={reason === "other"}
+          />
+        </div>
       </div>
-      <button type="button" className="save-btn">
-        Salvar
-      </button>
-      <button type="button" className="cancel-btn">
-        Cancelar
-      </button>
+
+      <div className="buttons-wrapper">
+        <button type="button" className="save-btn">
+          Salvar
+        </button>
+        <button type="button" className="cancel-btn">
+          Cancelar
+        </button>
+      </div>
     </ModalEditUnitiesContainer>
   );
 }
