@@ -19,6 +19,9 @@ export const INPUT_DATA_TRANSFER = "INPUT_DATA_TRANSFER";
 export const RECIPE_DATA = "RECIPE_DATA";
 export const CLEAR_RECIPE_DATA = "CLEAR_RECIPE_DATA";
 
+export const UPDATE_UNITIES = "UPDATE_UNITIES";
+export const CLEAR_UPDATE_UNITIES_DATA = "CLEAR_UPDATE_UNITIES_DATA";
+
 /* Esta action vai manter os dados do login no local storage depois que este for feito. Sem ele
   esses dados desaparecerão quando a página for atualizada */
 export const PERSIST_REHYDRATE = "persist/REHYDRATE";
