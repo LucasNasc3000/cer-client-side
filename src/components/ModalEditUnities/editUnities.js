@@ -1,8 +1,16 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../store/modules/editUnitiesData/actions";
 import { ModalEditUnitiesContainer } from "./editUnitiesStyled";
 
 export function ModalEditUnitiesChildren({ currentUnities }) {
+  const getEditedUnitiesIfExists = useSelector(
+    (state) => state.editUnitiesData
+  );
+
+  const dispatch = useDispatch();
+
   const [unities, setUnities] = useState(currentUnities);
   const [reason, setReason] = useState("");
   const [notes, setNotes] = useState("");
@@ -10,6 +18,55 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
   const originalUnities = currentUnities;
 
   if (originalUnities < unities) setDifference("MoreThan");
+
+  useEffect(() => {
+    if (Object.values(getEditedUnitiesIfExists).every((value) => !value))
+      // eslint-disable-next-line no-useless-return
+      return;
+
+    function SetValues() {
+      if (getEditedUnitiesIfExists.addUnities > 0) {
+        setUnities((prev) => prev + getEditedUnitiesIfExists.addUnities);
+        setReason(getEditedUnitiesIfExists.addUnitiesReason);
+      }
+
+      if (getEditedUnitiesIfExists.takeUnities > 0) {
+        setUnities((prev) => prev + getEditedUnitiesIfExists.takeUnities);
+        setReason(getEditedUnitiesIfExists.takeUnitiesReason);
+      }
+
+      if (getEditedUnitiesIfExists.notes) {
+        setNotes(getEditedUnitiesIfExists.notes);
+      }
+    }
+
+    SetValues();
+  }, [getEditedUnitiesIfExists]);
+
+  const Cancel = (e) => {
+    e.preventDefault();
+
+    setUnities(originalUnities);
+    setNotes("");
+    setReason("");
+    setDifference("LessThan");
+
+    dispatch(actions.clearUpdateUnitiesData());
+  };
+
+  const SaveUnitiesEdit = (e) => {
+    e.preventDefault();
+
+    dispatch(
+      actions.editUnities({
+        addUnities: unities || 0,
+        takeUnities: unities || 0,
+        addUnitiesReason: reason || "",
+        takeUnitiesReason: reason || "",
+        notes: notes || "",
+      })
+    );
+  };
 
   return (
     <ModalEditUnitiesContainer>
@@ -75,10 +132,14 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
       </div>
 
       <div className="buttons-wrapper">
-        <button type="button" className="save-btn">
+        <button
+          type="button"
+          className="save-btn"
+          onClick={(e) => SaveUnitiesEdit(e)}
+        >
           Salvar
         </button>
-        <button type="button" className="cancel-btn">
+        <button type="button" className="cancel-btn" onClick={(e) => Cancel(e)}>
           Cancelar
         </button>
       </div>

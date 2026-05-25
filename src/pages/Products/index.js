@@ -399,6 +399,7 @@ export default function Products() {
                       className="data-div"
                       value={product.unities}
                       onChange={(e) => HandleChange(e, product.id)}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -564,6 +565,7 @@ export default function Products() {
                       className="data-div"
                       value={product.unities}
                       onChange={(e) => HandleChangeSearch(e, product.id)}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
