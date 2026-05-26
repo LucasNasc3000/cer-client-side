@@ -17,7 +17,9 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
   const [difference, setDifference] = useState("LessThan");
   const originalUnities = currentUnities;
 
-  if (originalUnities < unities) setDifference("MoreThan");
+  useEffect(() => {
+    if (originalUnities < unities) setDifference("MoreThan");
+  }, [unities, originalUnities]);
 
   useEffect(() => {
     if (Object.values(getEditedUnitiesIfExists).every((value) => !value))

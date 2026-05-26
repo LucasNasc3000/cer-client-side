@@ -6,46 +6,45 @@ import axios from "./axios";
 
 export default async function Update(id, data, registerType) {
   try {
-    if (registerType === "supplies") {
-      const { createdAt, updatedAt, ...allowedData } = data;
-
-      if (data.price) {
-        await axios.patch(`/supplies/update/price/${id}`, {
-          ...allowedData,
-        });
-      }
-
-      await axios.patch(`/supplies/update/${id}`, {
-        ...allowedData,
-      });
-    }
-
-    if (registerType === "sales") {
-      await axios.patch(`/sales/${id}`, {
-        ...data,
-      });
-    }
-
-    if (registerType === "outputs") {
-      await axios.put(`/outputs/${id}`, {
-        ...data,
-      });
-    }
-
+    const { createdAt, updatedAt, ...allowedData } = data;
     // eslint-disable-next-line default-case
     switch (registerType) {
-      case "inputs":
-        const inputName = data.name;
-        toast.success(`${inputName} atualizado`);
+      case "supplies":
+        if (data.price) {
+          await axios.patch(`/supplies/update/price/${id}`, {
+            price: allowedData.price,
+          });
+        } else {
+          await axios.patch(`/supplies/update/${id}`, {
+            ...allowedData,
+          });
+        }
+
+        const supplyName = data.name;
+        toast.success(`${supplyName} atualizado`);
+        break;
+
+      case "products":
+        if (allowedData.price) {
+          await axios.patch(`/products/update/price/${id}`, {
+            ...allowedData,
+          });
+        } else {
+          await axios.patch(`/products/update/general/${id}`, {
+            ...allowedData,
+          });
+        }
+
+        const productName = data.name;
+        toast.success(`${productName} atualizado`);
         break;
 
       case "sales":
-        toast.success("Venda atualizada");
-        break;
+        await axios.patch(`/sales/${id}`, {
+          ...data,
+        });
 
-      case "outputs":
-        const outputName = data.name;
-        toast.success(`${outputName} atualizado`);
+        toast.success("Venda atualizada");
         break;
     }
 

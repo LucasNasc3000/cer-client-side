@@ -28,6 +28,9 @@ export default function Products() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+  const getEditedUnitiesIfExists = useSelector(
+    (state) => state.editUnitiesData
+  );
 
   const dispatch = useDispatch();
 
@@ -46,9 +49,8 @@ export default function Products() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [openModalId, setOpenModalId] = useState("");
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
-  const [openEditUnities, setOpenEditUnities] = useState(false);
-  const [openProductId, setOpenProductId] = useState("");
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -258,7 +260,6 @@ export default function Products() {
     data.price = data.price.replace(",", ".");
 
     const register = await Register(data, "products");
-    console.log(register);
 
     setReRender(register);
 
@@ -316,7 +317,12 @@ export default function Products() {
       }
     });
 
-    const update = await Update(objectData.id, objectData, "supplies");
+    const allData = {
+      ...objectData,
+      ...getEditedUnitiesIfExists,
+    };
+
+    const update = await Update(objectData.id, allData, "products");
 
     setReRender(update);
 
@@ -483,15 +489,17 @@ export default function Products() {
                         ) : (
                           <>
                             <Modal
-                              isOpen={openProductId === product.id}
-                              onClose={() => setOpenProductId(null)}
+                              isOpen={openModalId === `recipe-${product.id}`}
+                              onClose={() => setOpenModalId(null)}
                               title={`Vincular receita ao produto ${product.name}`}
                             >
                               <ModalRecipeChildren />
                             </Modal>
                             <button
                               type="button"
-                              onClick={() => setOpenProductId(product.id)}
+                              onClick={() =>
+                                setOpenModalId(`recipe-${product.id}`)
+                              }
                               className="add-recipe"
                             >
                               Adicionar receita
@@ -499,15 +507,19 @@ export default function Products() {
                           </>
                         )}
                         <Modal
-                          isOpen={openEditUnities}
-                          onClose={() => setOpenEditUnities(false)}
+                          isOpen={openModalId === `unities-${product.id}`}
+                          onClose={() => setOpenModalId(null)}
                           title={`Editar unidades do produto ${product.name}`}
                         >
-                          <ModalEditUnitiesChildren />
+                          <ModalEditUnitiesChildren
+                            currentUnities={product.unities}
+                          />
                         </Modal>
                         <button
                           type="button"
-                          onClick={() => setOpenEditUnities(true)}
+                          onClick={() =>
+                            setOpenModalId(`unities-${product.id}`)
+                          }
                           className="edit-unities"
                         >
                           Editar unidades
@@ -650,15 +662,17 @@ export default function Products() {
                       ) : (
                         <div className="without-recipe">
                           <Modal
-                            isOpen={openProductId === product.id}
-                            onClose={() => setOpenProductId(null)}
+                            isOpen={openModalId === `recipe-${product.id}`}
+                            onClose={() => setOpenModalId(null)}
                             title={`Vincular receita ao produto ${product.name}`}
                           >
                             <ModalRecipeChildren />
                           </Modal>
                           <button
                             type="button"
-                            onClick={() => setOpenProductId(product.id)}
+                            onClick={() =>
+                              setOpenModalId(`recipe-${product.id}`)
+                            }
                             className="add-recipe"
                           >
                             Adicionar receita
@@ -666,15 +680,17 @@ export default function Products() {
                         </div>
                       )}
                       <Modal
-                        isOpen={openEditUnities}
-                        onClose={() => setOpenEditUnities(false)}
+                        isOpen={openModalId === `unities-${product.id}`}
+                        onClose={() => setOpenModalId(null)}
                         title={`Editar unidades do produto ${product.name}`}
                       >
-                        <ModalEditUnitiesChildren />
+                        <ModalEditUnitiesChildren
+                          currentUnities={product.unities}
+                        />
                       </Modal>
                       <button
                         type="button"
-                        onClick={() => setOpenEditUnities(true)}
+                        onClick={() => setOpenModalId(`unities-${product.id}`)}
                         className="add-recipe"
                       >
                         Editar unidades

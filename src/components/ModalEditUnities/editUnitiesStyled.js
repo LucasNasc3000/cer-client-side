@@ -7,7 +7,6 @@ export const ModalEditUnitiesContainer = styled.div`
   margin-top: 10px;
 
   .reason-wrapper {
-    background-color: aqua;
     margin-top: 10px;
     margin-bottom: 10px;
   }
@@ -18,5 +17,10 @@ export const ModalEditUnitiesContainer = styled.div`
     height: 150px;
     width: 300px;
     margin-top: 15px;
+  }
+
+  .buttons-wrapper {
+    display: flex;
+    gap: 10px;
   }
 `;
