@@ -15,6 +15,7 @@ import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
+import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
 import {
   NewProduct,
@@ -120,6 +121,9 @@ export default function Products() {
     setPrice("");
     setLowStock(null);
     setProductsData(productsDataBackup);
+
+    dispatch(actions.clearRecipeData());
+    dispatch(actionsEditUnities.clearUpdateUnitiesData());
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
@@ -513,6 +517,7 @@ export default function Products() {
                         >
                           <ModalEditUnitiesChildren
                             currentUnities={product.unities}
+                            savedData={getEditedUnitiesIfExists}
                           />
                         </Modal>
                         <button

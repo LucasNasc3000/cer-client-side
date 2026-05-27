@@ -14,6 +14,7 @@ export default function (state = initialState, action) {
     case types.UPDATE_UNITIES: {
       return {
         ...state,
+        ...action.payload,
       };
     }
 

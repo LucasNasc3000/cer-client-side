@@ -50,17 +50,24 @@ export default async function Update(id, data, registerType) {
 
     return true;
   } catch (err) {
-    const errors = get(err, "response.data.error", []);
+    console.log(err);
+    const errors = get(err, "response.data.message", []);
 
     if (err) {
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      }
+      // eslint-disable-next-line default-case
+      switch (true) {
+        case err instanceof TypeError:
+          toast.error("Erro de tratamento de dados");
+          return false;
 
-      if (err && errors.length < 1) {
-        toast.error(`Erro desconhecido ao tentar atualizar ${registerType}`);
+        case errors.length > 0:
+          errors.map((error) => toast.error(error));
+          return false;
+
+        case err && errors.length < 1:
+          toast.error(`Erro desconhecido ao tentar atualizar ${registerType}`);
+          return false;
       }
-      return false;
     }
   }
 }

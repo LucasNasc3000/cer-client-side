@@ -1,49 +1,48 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import * as actions from "../../store/modules/editUnitiesData/actions";
 import { ModalEditUnitiesContainer } from "./editUnitiesStyled";
 
-export function ModalEditUnitiesChildren({ currentUnities }) {
-  const getEditedUnitiesIfExists = useSelector(
-    (state) => state.editUnitiesData
-  );
-
+// adicionar as props do objeto inteiro
+export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
   const dispatch = useDispatch();
 
-  const [unities, setUnities] = useState(currentUnities);
-  const [reason, setReason] = useState("");
-  const [notes, setNotes] = useState("");
+  const [unities, setUnities] = useState(
+    savedData?.addUnities > 0
+      ? currentUnities + savedData.addUnities
+      : currentUnities - (savedData?.takeUnities || 0)
+  );
+  const [reason, setReason] = useState(
+    savedData?.addUnitiesReason || savedData?.takeUnitiesReason || ""
+  );
+  const [notes, setNotes] = useState(savedData?.notes || "");
   const [difference, setDifference] = useState("LessThan");
+
   const originalUnities = currentUnities;
 
   useEffect(() => {
-    if (originalUnities < unities) setDifference("MoreThan");
+    if (Number(originalUnities) < Number(unities)) {
+      setDifference("MoreThan");
+    } else {
+      setDifference("LessThan");
+    }
   }, [unities, originalUnities]);
 
   useEffect(() => {
-    if (Object.values(getEditedUnitiesIfExists).every((value) => !value))
-      // eslint-disable-next-line no-useless-return
-      return;
+    if (!savedData || Object.values(savedData).every((v) => !v)) return;
 
-    function SetValues() {
-      if (getEditedUnitiesIfExists.addUnities > 0) {
-        setUnities((prev) => prev + getEditedUnitiesIfExists.addUnities);
-        setReason(getEditedUnitiesIfExists.addUnitiesReason);
-      }
-
-      if (getEditedUnitiesIfExists.takeUnities > 0) {
-        setUnities((prev) => prev + getEditedUnitiesIfExists.takeUnities);
-        setReason(getEditedUnitiesIfExists.takeUnitiesReason);
-      }
-
-      if (getEditedUnitiesIfExists.notes) {
-        setNotes(getEditedUnitiesIfExists.notes);
-      }
+    if (savedData.addUnities > 0) {
+      setUnities(currentUnities + savedData.addUnities);
+      setReason(savedData.addUnitiesReason);
+    } else if (savedData.takeUnities > 0) {
+      setUnities(currentUnities - savedData.takeUnities);
+      setReason(savedData.takeUnitiesReason);
     }
 
-    SetValues();
-  }, [getEditedUnitiesIfExists]);
+    if (savedData.notes) setNotes(savedData.notes);
+  }, [savedData, currentUnities]);
 
   const Cancel = (e) => {
     e.preventDefault();
@@ -59,15 +58,41 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
   const SaveUnitiesEdit = (e) => {
     e.preventDefault();
 
+    if (!reason) {
+      toast.error("Motivo não especificado");
+      return;
+    }
+
+    if (unities === originalUnities) {
+      toast.error("Unidades não editadas");
+      return;
+    }
+
+    const editUnitiesData = {
+      addUnities: 0,
+      takeUnities: 0,
+      addUnitiesReason: "",
+      takeUnitiesReason: "",
+      notes: notes || "",
+    };
+
+    if (difference === "MoreThan") {
+      editUnitiesData.addUnities = unities - originalUnities;
+      editUnitiesData.addUnitiesReason = reason;
+    }
+
+    if (difference === "LessThan") {
+      editUnitiesData.takeUnities = originalUnities - unities;
+      editUnitiesData.takeUnitiesReason = reason;
+    }
+
     dispatch(
       actions.editUnities({
-        addUnities: unities || 0,
-        takeUnities: unities || 0,
-        addUnitiesReason: reason || "",
-        takeUnitiesReason: reason || "",
-        notes: notes || "",
+        ...editUnitiesData,
       })
     );
+
+    toast.success("Edição de unidades salva");
   };
 
   return (
@@ -149,6 +174,11 @@ export function ModalEditUnitiesChildren({ currentUnities }) {
   );
 }
 
+ModalEditUnitiesChildren.defaultProps = {
+  savedData: {},
+};
+
 ModalEditUnitiesChildren.propTypes = {
   currentUnities: PropTypes.number.isRequired,
+  savedData: PropTypes.objectOf(PropTypes.string || PropTypes.number),
 };
