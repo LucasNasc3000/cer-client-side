@@ -1,7 +1,7 @@
 /* eslint-disable default-case */
 /* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import axios from "./axios";
 
@@ -20,8 +20,7 @@ export default async function Update(id, data, registerType) {
           await axios.patch(`/supplies/update/${id}`, allowedDataPriceFields);
         }
 
-        const supplyName = data.name;
-        toast.success(`${supplyName} atualizado`);
+        toast.success("Insumo atualizado");
         break;
 
       case "products":
@@ -37,8 +36,7 @@ export default async function Update(id, data, registerType) {
           });
         }
 
-        const productName = data.name;
-        toast.success(`${productName} atualizado`);
+        toast.success("Produto atualizado");
         break;
 
       case "sales":
@@ -52,7 +50,6 @@ export default async function Update(id, data, registerType) {
 
     return true;
   } catch (err) {
-    console.log(err);
     const errors = get(err, "response.data.message", []);
 
     if (err) {
@@ -63,6 +60,11 @@ export default async function Update(id, data, registerType) {
           return false;
 
         case errors.length > 0:
+          if (!isArray(errors)) {
+            toast.error(errors);
+            return false;
+          }
+
           errors.map((error) => toast.error(error));
           return false;
 

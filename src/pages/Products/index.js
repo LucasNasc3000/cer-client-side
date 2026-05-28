@@ -293,16 +293,6 @@ export default function Products() {
       return;
     }
 
-    const decimalRegex = /^\d+(?:[.,]\d+)$/;
-
-    const toNumberFields = [
-      "quantity",
-      "price",
-      "weightPerUnit",
-      "totalWeight",
-      "lowStock",
-    ];
-
     if (objectData.price) {
       const editPricePermissionVerify = permissions.some(
         (p) => p.action === "EDIT_PRICES" && p.resource === "SUPPLIES"
@@ -314,43 +304,48 @@ export default function Products() {
       }
     }
 
-    toNumberFields.forEach((field) => {
-      if (decimalRegex.test(objectData[field])) {
-        objectData[field] = objectData[field].replace(",", ".");
-
-        objectData[field] = parseFloat(objectData[field]);
-
-        const parsedValue = parseInt(objectData[field], 10);
-
-        objectData[field] = parsedValue;
-      }
-    });
-
     const current = productsData.find((p) => p.id === objectData.id);
     const original = originalProductsData[objectData.id];
 
     const changedFields = GetChangedFields(original, current);
 
-    if (Object.keys(changedFields).length === 0) {
+    const truthyFields = Object.fromEntries(
+      // eslint-disable-next-line array-callback-return
+      Object.entries(getEditedUnitiesIfExists).filter(
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) =>
+          getEditedUnitiesIfExists[key] !== 0 &&
+          getEditedUnitiesIfExists[key] !== ""
+      )
+    );
+
+    const ALWAYS_PRESENT_FIELDS = 2;
+
+    if (
+      Object.keys(changedFields).length === 0 &&
+      Object.keys(truthyFields).length < ALWAYS_PRESENT_FIELDS
+    ) {
       toast.info("Nenhuma alteração detectada");
       return;
     }
 
     const allData = {
       ...changedFields,
-      ...getEditedUnitiesIfExists,
+      ...truthyFields,
     };
 
     const update = await Update(objectData.id, allData, "products");
 
-    setOriginalProductsData((prev) => ({
-      ...prev,
-      [objectData.id]: { ...current },
-    }));
+    if (update) {
+      setOriginalProductsData((prev) => ({
+        ...prev,
+        [objectData.id]: { ...current },
+      }));
 
-    setReRender(update);
+      setReRender(update);
 
-    clearDirectExecution();
+      clearDirectExecution();
+    }
   };
 
   return (

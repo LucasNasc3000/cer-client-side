@@ -23,4 +23,20 @@ export const ModalEditUnitiesContainer = styled.div`
     display: flex;
     gap: 10px;
   }
+
+  .use-stock-supplies {
+    display: flex;
+    background-color: aqua;
+    height: 20px;
+    width: 20px;
+    margin-left: 40px;
+    margin-top: 8px;
+  }
+
+  .use-stock-supplies-label {
+    display: flex;
+    width: 180px;
+    height: fit-content;
+    margin-top: 8px;
+  }
 `;

@@ -6,6 +6,7 @@ const initialState = {
   addUnitiesReason: "",
   takeUnitiesReason: "",
   notes: "",
+  useStockSupplies: false,
 };
 
 // eslint-disable-next-line default-param-last

@@ -19,6 +19,7 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
   );
   const [notes, setNotes] = useState(savedData?.notes || "");
   const [difference, setDifference] = useState("LessThan");
+  const [useStockSupplies, setUseStockSupplies] = useState(false);
 
   const originalUnities = currentUnities;
 
@@ -55,6 +56,13 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
     dispatch(actions.clearUpdateUnitiesData());
   };
 
+  const HandleUseStockSupplies = () => {
+    setUseStockSupplies((prev) => {
+      const nextValue = prev === false;
+      return nextValue;
+    });
+  };
+
   const SaveUnitiesEdit = (e) => {
     e.preventDefault();
 
@@ -74,6 +82,7 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
       addUnitiesReason: "",
       takeUnitiesReason: "",
       notes: notes || "",
+      useStockSupplies,
     };
 
     if (difference === "MoreThan") {
@@ -169,6 +178,13 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
         <button type="button" className="cancel-btn" onClick={(e) => Cancel(e)}>
           Cancelar
         </button>
+        <input
+          type="checkbox"
+          className="use-stock-supplies"
+          onChange={HandleUseStockSupplies}
+          value={useStockSupplies}
+        />
+        <p className="use-stock-supplies-label">Usar insumos em estoque</p>
       </div>
     </ModalEditUnitiesContainer>
   );

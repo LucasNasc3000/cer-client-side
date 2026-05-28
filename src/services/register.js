@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import axios from "./axios";
 
@@ -84,6 +84,11 @@ export default async function Register(data, registerType) {
           return false;
 
         case errors.length > 0:
+          if (!isArray(errors)) {
+            toast.error(errors);
+            return false;
+          }
+
           errors.map((error) => toast.error(error));
           return false;
 
