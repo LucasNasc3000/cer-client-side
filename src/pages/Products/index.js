@@ -658,62 +658,67 @@ export default function Products() {
                     (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
                   ) && (
                     <div className="footer">
-                      {product.recipe.length > 0 ? (
-                        <div className="with-recipe">
+                      <div className="footer-actions">
+                        {product.recipe.length > 0 ? (
                           <button type="button" className="edit-recipe">
                             Editar receita
                           </button>
-                        </div>
-                      ) : (
-                        <div className="without-recipe">
-                          <Modal
-                            isOpen={openModalId === `recipe-${product.id}`}
-                            onClose={() => setOpenModalId(null)}
-                            title={`Vincular receita ao produto ${product.name}`}
-                          >
-                            <ModalRecipeChildren />
-                          </Modal>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setOpenModalId(`recipe-${product.id}`)
-                            }
-                            className="add-recipe"
-                          >
-                            Adicionar receita
-                          </button>
-                        </div>
-                      )}
-                      <Modal
-                        isOpen={openModalId === `unities-${product.id}`}
-                        onClose={() => setOpenModalId(null)}
-                        title={`Editar unidades do produto ${product.name}`}
-                      >
-                        <ModalEditUnitiesChildren
-                          currentUnities={product.unities}
-                        />
-                      </Modal>
-                      <button
-                        type="button"
-                        onClick={() => setOpenModalId(`unities-${product.id}`)}
-                        className="add-recipe"
-                      >
-                        Editar unidades
-                      </button>
-                      <button
-                        type="button"
-                        className="confirm-changes"
-                        onClick={(e) => ProductUpdate(e, product)}
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
-                        Cancelar
-                      </button>
+                        ) : (
+                          <>
+                            <Modal
+                              isOpen={openModalId === `recipe-${product.id}`}
+                              onClose={() => setOpenModalId(null)}
+                              title={`Vincular receita ao produto ${product.name}`}
+                            >
+                              <ModalRecipeChildren />
+                            </Modal>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setOpenModalId(`recipe-${product.id}`)
+                              }
+                              className="add-recipe"
+                            >
+                              Adicionar receita
+                            </button>
+                          </>
+                        )}
+                        <Modal
+                          isOpen={openModalId === `unities-${product.id}`}
+                          onClose={() => setOpenModalId(null)}
+                          title={`Editar unidades do produto ${product.name}`}
+                        >
+                          <ModalEditUnitiesChildren
+                            currentUnities={product.unities}
+                            savedData={getEditedUnitiesIfExists}
+                          />
+                        </Modal>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setOpenModalId(`unities-${product.id}`)
+                          }
+                          className="edit-unities"
+                        >
+                          Editar unidades
+                        </button>
+                      </div>
+                      <div className="footer-confirm">
+                        <button
+                          type="button"
+                          className="confirm-changes"
+                          onClick={(e) => ProductUpdate(e, product)}
+                        >
+                          Salvar
+                        </button>
+                        <button
+                          type="button"
+                          className="cancel-changes"
+                          onClick={(e) => clear(e)}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
