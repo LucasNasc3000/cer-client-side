@@ -17,6 +17,7 @@ import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
+import { GetChangedFields } from "../../utils/GetChangedFields";
 import {
   NewProduct,
   ProductsContainer,
@@ -43,6 +44,7 @@ export default function Products() {
   const [unities, setUnities] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [productsData, setProductsData] = useState([]);
+  const [originalProductsData, setOriginalProductsData] = useState({});
   const [productsDataBackup, setProductsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
@@ -100,6 +102,9 @@ export default function Products() {
 
     setProductsData(productsReq);
     setProductsDataBackup(productsReq);
+    setOriginalProductsData(
+      Object.fromEntries(productsReq.map((item) => [item.id, { ...item }]))
+    );
   }
 
   useEffect(() => {
@@ -321,12 +326,27 @@ export default function Products() {
       }
     });
 
+    const current = productsData.find((p) => p.id === objectData.id);
+    const original = originalProductsData[objectData.id];
+
+    const changedFields = GetChangedFields(original, current);
+
+    if (Object.keys(changedFields).length === 0) {
+      toast.info("Nenhuma alteração detectada");
+      return;
+    }
+
     const allData = {
-      ...objectData,
+      ...changedFields,
       ...getEditedUnitiesIfExists,
     };
 
     const update = await Update(objectData.id, allData, "products");
+
+    setOriginalProductsData((prev) => ({
+      ...prev,
+      [objectData.id]: { ...current },
+    }));
 
     setReRender(update);
 

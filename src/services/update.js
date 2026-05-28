@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 /* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
 import { get } from "lodash";
@@ -7,17 +8,16 @@ import axios from "./axios";
 export default async function Update(id, data, registerType) {
   try {
     const { createdAt, updatedAt, ...allowedData } = data;
-    // eslint-disable-next-line default-case
+    const { price, ...allowedDataPriceFields } = data;
+
     switch (registerType) {
       case "supplies":
-        if (data.price) {
-          await axios.patch(`/supplies/update/price/${id}`, {
-            price: allowedData.price,
-          });
-        } else {
-          await axios.patch(`/supplies/update/${id}`, {
-            ...allowedData,
-          });
+        if (price !== undefined) {
+          await axios.patch(`/supplies/update/price/${id}`, { price });
+        }
+
+        if (Object.keys(allowedDataPriceFields).length > 0) {
+          await axios.patch(`/supplies/update/${id}`, allowedDataPriceFields);
         }
 
         const supplyName = data.name;
@@ -25,13 +25,15 @@ export default async function Update(id, data, registerType) {
         break;
 
       case "products":
-        if (allowedData.price) {
+        if (price !== undefined) {
           await axios.patch(`/products/update/price/${id}`, {
-            ...allowedData,
+            price,
           });
-        } else {
+        }
+
+        if (Object.keys(allowedDataPriceFields).length > 0) {
           await axios.patch(`/products/update/general/${id}`, {
-            ...allowedData,
+            ...allowedDataPriceFields,
           });
         }
 
@@ -41,7 +43,7 @@ export default async function Update(id, data, registerType) {
 
       case "sales":
         await axios.patch(`/sales/${id}`, {
-          ...data,
+          ...allowedData,
         });
 
         toast.success("Venda atualizada");
