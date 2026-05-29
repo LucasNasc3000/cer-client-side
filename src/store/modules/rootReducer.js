@@ -4,7 +4,6 @@ import auth from "./auth/reducer";
 import dataTransfer from "./dataTransfer/reducer";
 import dataTransferInput from "./dataTransferInput/reducer";
 import editUnitiesData from "./editUnitiesData/reducer";
-import productInflows from "./productInflows/reducer";
 import recipeData from "./recipeData/reducer";
 
 export default combineReducers({
@@ -13,7 +12,6 @@ export default combineReducers({
   dataTransferInput,
   recipeData,
   editUnitiesData,
-  productInflows,
 });
 
 // Todos os reducers da aplicação serão importados e combinados aqui

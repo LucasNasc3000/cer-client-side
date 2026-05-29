@@ -21,6 +21,14 @@ export default async function PathCheck(
       return registersBy;
     }
 
+    if (path === "inflows") {
+      registersBy = await axios.get(
+        `/${path}/search/employee/inflows?limit=20&offset=0&value=${employeesId}&forDisplay=${forDisplay}`
+      );
+
+      return registersBy;
+    }
+
     registersBy = await axios.get(
       `/${path}/search/employee?limit=20&offset=0&value=${employeesId}&forDisplay=${forDisplay}`
     );

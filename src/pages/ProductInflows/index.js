@@ -9,41 +9,24 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
-import history from "../../services/history";
-import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import * as actions from "../../store/modules/dataTransferInput/actions";
-import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
+import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
 
 export default function ProductInflows() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
 
-  const dispatch = useDispatch();
-
-  const [category, setCategory] = useState("");
-  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [reason, setReason] = useState("");
-  const [weightPerUnit, setWeightPerUnit] = useState("");
-  const [supplier, setSupplier] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-  const [lowStock, setLowStock] = useState("");
-  const [price, setPrice] = useState("");
-  const [details, setDetails] = useState("");
   const [searchParam, setSearchParam] = useState("");
-  const [inputsData, setInputsData] = useState([]);
-  const [inputsDataBackup, setInputsDataBackup] = useState([]);
+  const [inflowsData, setInflowsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [searchResultsBackup, setSearchResultsBackup] = useState([]);
-  const searchInput = document.querySelector(".input-search");
+  const searchInput = document.querySelector(".inflow-search");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
@@ -79,55 +62,34 @@ export default function ProductInflows() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
-  async function GetInputs() {
+  async function GetInflows() {
     if (!employee_id || !permissions) return;
 
-    const inputsReq = await GetData(
+    const inflows = await GetData(
       bossId,
-      "supplies",
+      "inflows",
       employee_id,
       permissions,
-      "SUPPLY_HISTORY",
+      null,
       true
     );
 
-    if (typeof inputsReq === "undefined" || !inputsReq) return;
+    if (typeof inflows === "undefined" || !inflows) return;
 
-    setInputsData(inputsReq);
-    setInputsDataBackup(inputsReq);
+    setInflowsData(inflows);
+    setInflowsDataBackup(inflows);
   }
 
   useEffect(() => {
-    GetInputs();
+    GetInflows();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
   useEffect(() => {
-    if (rerender === true) GetInputs();
+    if (rerender === true) GetInflows();
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
-
-  const clearDirectExecution = () => {
-    setCategory("");
-    setName("");
-    setReason("");
-    setQuantity(null);
-    setWeightPerUnit(null);
-    setSupplier("");
-    setExpirationDate("");
-    setPrice("");
-    setDetails("");
-    setLowStock(null);
-    setInputsData(inputsDataBackup);
-
-    if (searchResults.length > 0) setSearchResults(searchResultsBackup);
-  };
-
-  const clear = (e) => {
-    e.preventDefault();
-    clearDirectExecution();
-  };
 
   const ClearSearch = (e) => {
     e.preventDefault();
@@ -139,7 +101,7 @@ export default function ProductInflows() {
     options.value = "";
   };
 
-  async function SearchInputs(e) {
+  async function SearchInflows(e) {
     e.preventDefault();
 
     const inArray = [];
@@ -147,26 +109,16 @@ export default function ProductInflows() {
     let search = "";
     let formattedDate = "";
 
-    if (searchParam === "date" || searchParam === "expirationDate") {
+    if (searchParam === "date") {
       const year = searchInput.value.slice(6, 10);
       const month = searchInput.value.slice(3, 5);
       const day = searchInput.value.slice(0, 2);
 
       formattedDate = `${year}-${month}-${day}`;
 
-      search = await DoSearch(
-        "supplies",
-        searchParam,
-        formattedDate,
-        "SUPPLY_HISTORY"
-      );
+      search = await DoSearch("inflows", searchParam, formattedDate, null);
     } else {
-      search = await DoSearch(
-        "supplies",
-        searchParam,
-        searchInput.value,
-        "SUPPLY_HISTORY"
-      );
+      search = await DoSearch("inflows", searchParam, searchInput.value, null);
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -183,56 +135,6 @@ export default function ProductInflows() {
     return;
   }
 
-  const InputRegister = async (e) => {
-    e.preventDefault();
-
-    const permissionVerify = permissions.some(
-      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
-    );
-
-    const permissionVerifyAdmin = permissions.some(
-      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
-    );
-
-    if (!permissionVerify && !permissionVerifyAdmin) {
-      toast.error("Permissão para cadastrar insumos necessária");
-      return;
-    }
-
-    const data = {
-      category: document.querySelector("#category").value,
-      name: document.querySelector("#name").value,
-      reason: document.querySelector("#reason").value,
-      details: document.querySelector("#details").value,
-      quantity: document.querySelector("#quantity").value,
-      weightPerUnit: document.querySelector("#weightPerUnit").value,
-      price: document.querySelector("#price").value,
-      supplier: document.querySelector("#supplier").value,
-      expirationDate: document.querySelector("#expirationDate").value,
-      lowStock: document.querySelector("#lowStock").value,
-    };
-
-    const year = data.expirationDate.slice(6, 10);
-    const month = data.expirationDate.slice(3, 5);
-    const day = data.expirationDate.slice(0, 2);
-
-    data.expirationDate = `${year}-${month}-${day}`;
-    data.price = data.price.replace(",", ".");
-
-    const register = await Register(data, "supplies");
-
-    setReRender(register);
-
-    clearDirectExecution();
-  };
-
-  const Transfer = (e, inputName) => {
-    e.preventDefault();
-    dispatch(actions.inputDataTransfer({ inputName }));
-
-    history.push("/inputsCurrent");
-  };
-
   return (
     <InputsContainer>
       <Header />
@@ -242,14 +144,14 @@ export default function ProductInflows() {
             type="button"
             size={30}
             className="search-btn"
-            onClick={(e) => SearchInputs(e)}
+            onClick={(e) => SearchInflows(e)}
           >
             <IoIosSearch size={25} className="search-icon" />
           </button>
           <input
             type="text"
             placeholder="Pesquisar..."
-            className="input-search"
+            className="inflow-search"
           />
         </div>
 
@@ -268,27 +170,15 @@ export default function ProductInflows() {
             onChange={(e) => setSearchParam(e.target.value)}
           >
             <option value="">Selecione</option>
-            <option value="category">Categoria</option>
-            <option value="name">Nome</option>
-            <option value="reason">Motivo</option>
-            <option value="quantity">Quantidade</option>
-            <option value="totalweightPerRegister">
-              Peso total por registro
-            </option>
-            <option value="weightPerUnit">Peso unitário</option>
-            <option value="supplier">Fornecedor</option>
-            <option value="expirationDate">Validade</option>
-            <option value="date">Data de cadastro</option>
-            <option value="lowStock">Quantidade mínima</option>
+            <option value="product">Produto</option>
             <option value="employee">Funcionário</option>
-            <option value="price">Preço</option>
-            <option value="totalprice">Preço total</option>
+            <option value="date">Data de registro</option>
           </select>
         </div>
       </SearchSpace>
       <InputsSpace>
         {searchResults.length < 1
-          ? inputsData.map((input) => {
+          ? inflowsData.map((input) => {
               return (
                 <div key={input.id} className="main-data-div" id={input.id}>
                   <div className="data-wrap">
@@ -587,84 +477,6 @@ export default function ProductInflows() {
               );
             })}
       </InputsSpace>
-      <NewInput>
-        <input
-          type="text"
-          id="category"
-          placeholder="Categoria ex: cereais"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-        <input
-          type="text"
-          id="name"
-          placeholder="Nome ex: arroz branco"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          id="reason"
-          placeholder="Motivo ex: entrada, reposição, etc..."
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
-        <input
-          type="text"
-          id="details"
-          placeholder="Detalhes ex: produto se perdeu etc..."
-          value={details}
-          onChange={(e) => setDetails(e.target.value)}
-        />
-        <input
-          type="text"
-          id="quantity"
-          placeholder="Quantidade ex: 25"
-          value={quantity || ""}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <input
-          type="text"
-          id="weightPerUnit"
-          placeholder="Peso unitário ex: 1000 (g)"
-          value={weightPerUnit || ""}
-          onChange={(e) => setWeightPerUnit(e.target.value)}
-        />
-        <input
-          type="text"
-          id="supplier"
-          placeholder="Fornecedor ex: shopee"
-          value={supplier}
-          onChange={(e) => setSupplier(e.target.value)}
-        />
-        <input
-          type="text"
-          id="expirationDate"
-          placeholder="Validade ex: 25-03-2027"
-          value={expirationDate}
-          onChange={(e) => setExpirationDate(e.target.value)}
-        />
-        <input
-          type="text"
-          id="lowStock"
-          placeholder="quantidade mínima ex: 5 (opcional)"
-          value={lowStock || ""}
-          onChange={(e) => setLowStock(e.target.value)}
-        />
-        <input
-          type="text"
-          id="price"
-          placeholder="Preço unitário ex: 10.90"
-          value={price || ""}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-        <button type="button" className="btn" onClick={clear}>
-          Cancelar
-        </button>
-        <button type="button" className="btn" onClick={(e) => InputRegister(e)}>
-          Adicionar
-        </button>
-      </NewInput>
     </InputsContainer>
   );
 }

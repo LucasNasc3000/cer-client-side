@@ -95,6 +95,18 @@ export default async function GetData(
 
         case "sales":
           toast.error("Erro desconhecido ao tentar exibir vendas");
+          return;
+
+        case "products":
+          toast.error("Erro desconhecido ao tentar exibir produtos");
+          return;
+
+        case "inflows":
+          toast.error(
+            "Erro desconhecido ao tentar exibir atualizações de produtos"
+          );
+          // eslint-disable-next-line no-useless-return
+          return;
       }
     }
   }

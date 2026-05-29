@@ -5,6 +5,7 @@ import axios from "./axios";
 export default async function DoSearch(
   path,
   searchParam,
+  secondarySearchParam,
   searchValue,
   supplyType
 ) {
@@ -32,12 +33,18 @@ export default async function DoSearch(
         );
         return results.data[1];
 
-      case path !== "supplies":
+      case searchParam.includes("inflows") && searchParam.includes("employee"):
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}`
+          `/${path}/search/employee/inflows?limit=20&offset=0&value=${searchValue}&forDisplay=false`
         );
         return results.data[1];
 
+      case searchParam === "inflows":
+        results = await axios.get(
+          `/${path}/search/${searchParam}/${secondarySearchParam}?limit=20&offset=0&value=${searchValue}`
+        );
+
+        return results.data[1];
       default:
         toast.error("Dados de busca não enviados ou incorretos");
         // eslint-disable-next-line consistent-return, no-useless-return
