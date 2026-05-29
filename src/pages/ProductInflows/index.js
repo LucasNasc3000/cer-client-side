@@ -23,7 +23,7 @@ export default function ProductInflows() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
 
-  const [searchParam, setSearchParam] = useState("");
+  const [searchSecondaryParam, setSearchSecondaryParam] = useState("");
   const [inflowsData, setInflowsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const searchInput = document.querySelector(".inflow-search");
@@ -93,7 +93,7 @@ export default function ProductInflows() {
 
   const ClearSearch = (e) => {
     e.preventDefault();
-    setSearchParam("");
+    setSearchSecondaryParam("");
     setSearchResults([]);
     searchInput.value = "";
 
@@ -109,16 +109,36 @@ export default function ProductInflows() {
     let search = "";
     let formattedDate = "";
 
-    if (searchParam === "date") {
+    if (searchSecondaryParam === "date") {
       const year = searchInput.value.slice(6, 10);
       const month = searchInput.value.slice(3, 5);
       const day = searchInput.value.slice(0, 2);
 
       formattedDate = `${year}-${month}-${day}`;
 
-      search = await DoSearch("inflows", searchParam, formattedDate, null);
+      search = await DoSearch(
+        "products",
+        "inflows",
+        formattedDate,
+        null,
+        searchSecondaryParam
+      );
+    } else if (searchSecondaryParam === "employees") {
+      search = await DoSearch(
+        "products",
+        "inflows",
+        formattedDate,
+        null,
+        searchSecondaryParam
+      );
     } else {
-      search = await DoSearch("inflows", searchParam, searchInput.value, null);
+      search = await DoSearch(
+        "products",
+        "inflows",
+        searchInput.value,
+        null,
+        searchSecondaryParam
+      );
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -167,7 +187,7 @@ export default function ProductInflows() {
             name="search-options"
             className="options"
             id="filter-select"
-            onChange={(e) => setSearchParam(e.target.value)}
+            onChange={(e) => setSearchSecondaryParam(e.target.value)}
           >
             <option value="">Selecione</option>
             <option value="product">Produto</option>

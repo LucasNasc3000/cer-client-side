@@ -5,9 +5,9 @@ import axios from "./axios";
 export default async function DoSearch(
   path,
   searchParam,
-  secondarySearchParam,
   searchValue,
-  supplyType
+  supplyType,
+  secondarySearchParam
 ) {
   try {
     let results = "";
@@ -33,7 +33,7 @@ export default async function DoSearch(
         );
         return results.data[1];
 
-      case searchParam.includes("inflows") && searchParam.includes("employee"):
+      case searchParam === "inflows" && secondarySearchParam === "employees":
         results = await axios.get(
           `/${path}/search/employee/inflows?limit=20&offset=0&value=${searchValue}&forDisplay=false`
         );
