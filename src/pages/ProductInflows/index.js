@@ -15,7 +15,6 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
-import history from "../../services/history";
 import DoSearch from "../../services/search";
 import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
 
@@ -155,13 +154,6 @@ export default function ProductInflows() {
     return;
   }
 
-  const Transfer = (e, inputName) => {
-    e.preventDefault();
-    dispatch(actions.inputDataTransfer({ inputName }));
-
-    history.push("/products");
-  };
-
   return (
     <InflowsContainer>
       <Header />
@@ -179,6 +171,8 @@ export default function ProductInflows() {
             type="text"
             placeholder="Pesquisar..."
             className="inflow-search"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
 

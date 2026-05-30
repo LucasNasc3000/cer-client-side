@@ -120,7 +120,7 @@ export default function InputsCurrent() {
       return;
     }
 
-    if (searchParam && searchInput) SearchTheInput();
+    if (searchParam && searchInputValue) SearchTheInput();
   }, [searchInputValue, searchParam]);
 
   async function GetInputs() {

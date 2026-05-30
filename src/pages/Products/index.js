@@ -100,25 +100,12 @@ export default function Products() {
     async function SearchTheProduct() {
       const inArray = [];
 
-      let search = "";
-      let formattedDate = "";
-
-      if (searchParam === "date" || searchParam === "expirationDate") {
-        const year = searchInputValue.slice(6, 10);
-        const month = searchInputValue.slice(3, 5);
-        const day = searchInputValue.slice(0, 2);
-
-        formattedDate = `${year}-${month}-${day}`;
-
-        search = await DoSearch("products", searchParam, formattedDate, null);
-      } else {
-        search = await DoSearch(
-          "products",
-          searchParam,
-          searchInputValue,
-          null
-        );
-      }
+      const search = await DoSearch(
+        "products",
+        searchParam,
+        searchInputValue,
+        null
+      );
 
       if (typeof search === "undefined" || !search) return;
 
@@ -410,7 +397,9 @@ export default function Products() {
             placeholder="Pesquisar..."
             className="product-search"
             onChange={(e) => setSearchInputValue(e.target.value)}
-            value={searchInputValue || searchValueAutoSearch}
+            value={
+              searchValueAutoSearch !== "" ? productName : searchInputValue
+            }
           />
         </div>
 
