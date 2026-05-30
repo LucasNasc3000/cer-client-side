@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
 
-export const InputsContainer = styled.div`
+export const InflowsContainer = styled.div`
   height: 900px;
 `;
 
@@ -28,7 +28,7 @@ export const SearchSpace = styled.div`
     border-bottom: 1px solid black;
   }
 
-  .input-search {
+  .inflow-search {
     display: flex;
     height: 39px;
     width: 250px;
@@ -130,7 +130,7 @@ export const SearchSpace = styled.div`
   }
 `;
 
-export const InputsSpace = styled.div`
+export const InflowsSpace = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -296,40 +296,5 @@ export const InputsSpace = styled.div`
 
   .edit-icon:hover {
     filter: brightness(80%);
-  }
-`;
-
-export const NewInput = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  bottom: 1225px;
-  left: 1220px;
-  height: fit-content;
-  width: fit-content;
-
-  input {
-    background-color: #f5f4f4ff;
-    height: 30px;
-    width: 250px;
-    margin-top: 10px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 0.5px solid black;
-  }
-
-  .btn {
-    display: flex;
-    position: relative;
-    top: 20px;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    width: 120px;
-    margin-top: 15px;
-    box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
 `;

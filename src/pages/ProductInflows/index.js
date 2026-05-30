@@ -16,7 +16,7 @@ import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
-import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
+import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
 
 export default function ProductInflows() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -156,7 +156,7 @@ export default function ProductInflows() {
   }
 
   return (
-    <InputsContainer>
+    <InflowsContainer>
       <Header />
       <SearchSpace>
         <div className="search-space">
@@ -196,28 +196,18 @@ export default function ProductInflows() {
           </select>
         </div>
       </SearchSpace>
-      <InputsSpace>
+      <InflowsSpace>
         {searchResults.length < 1
-          ? inflowsData.map((input) => {
+          ? inflowsData.map((inflow) => {
               return (
-                <div key={input.id} className="main-data-div" id={input.id}>
+                <div key={inflow.id} className="main-data-div" id={inflow.id}>
                   <div className="data-wrap">
-                    <div className="label">Categoria: </div>
+                    <div className="label">Unidades: </div>
                     <input
                       type="text"
-                      name="category"
+                      name="unities"
                       className="data-div"
-                      value={input.category}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Nome: </div>
-                    <input
-                      type="text"
-                      name="name"
-                      className="data-div"
-                      value={input.name}
+                      value={inflow.unities}
                       readOnly
                     />
                   </div>
@@ -225,9 +215,9 @@ export default function ProductInflows() {
                     <div className="label">Motivo: </div>
                     <input
                       type="text"
-                      name="reason"
+                      name="inflowReason"
                       className="data-div"
-                      value={input.reason}
+                      value={inflow.inflowReason}
                       readOnly
                     />
                   </div>
@@ -235,69 +225,9 @@ export default function ProductInflows() {
                     <div className="label">Detalhes: </div>
                     <input
                       type="text"
-                      name="details"
+                      name="notes"
                       className="data-div"
-                      value={input.details}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Quantidade: </div>
-                    <input
-                      type="text"
-                      name="quantity"
-                      className="data-div"
-                      value={input.quantity}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Peso total por registro: </div>
-                    <input
-                      type="text"
-                      name="totalweightPerRegister"
-                      className="data-div"
-                      value={input.totalWeightPerRegister}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Peso unitário: </div>
-                    <input
-                      type="text"
-                      name="weightPerUnit"
-                      className="data-div"
-                      value={input.weightPerUnit}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Fornecedor: </div>
-                    <input
-                      type="text"
-                      name="supplier"
-                      className="data-div"
-                      value={input.supplier}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Validade: </div>
-                    <input
-                      type="text"
-                      name="expirationDate"
-                      className="data-div"
-                      value={input.expirationDate}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Quantidade mínima: </div>
-                    <input
-                      type="text"
-                      name="lowStock"
-                      className="data-div"
-                      value={input.lowStock || "Não definido"}
+                      value={inflow.notes || "Sem detalhes"}
                       readOnly
                     />
                   </div>
@@ -306,27 +236,16 @@ export default function ProductInflows() {
                     <input
                       type="text"
                       className="data-div"
-                      value={input.employee.id}
+                      value={inflow.employee.id}
                       readOnly
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Preço unitário: </div>
+                    <div className="label">Produto: </div>
                     <input
                       type="text"
-                      name="price"
                       className="data-div"
-                      value={input.price}
-                      readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Preço total: </div>
-                    <input
-                      type="text"
-                      name="totalprice"
-                      className="data-div"
-                      value={input.totalPrice}
+                      value={inflow.product.name}
                       readOnly
                     />
                   </div>
@@ -336,7 +255,7 @@ export default function ProductInflows() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${input.createdAt.slice(8, 10)}-${input.createdAt.slice(5, 7)}-${input.createdAt.slice(0, 4)}`}
+                      value={`${inflow.createdAt.slice(8, 10)}-${inflow.createdAt.slice(5, 7)}-${inflow.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -344,9 +263,9 @@ export default function ProductInflows() {
                     <button
                       type="button"
                       className="real-time-stock-btn"
-                      onClick={(e) => Transfer(e, input.name)}
+                      onClick={(e) => Transfer(e, inflow.name)}
                     >
-                      Ver estoque em tempo real
+                      Ver Produto
                     </button>
                   </div>
                 </div>
@@ -496,7 +415,7 @@ export default function ProductInflows() {
                 </div>
               );
             })}
-      </InputsSpace>
-    </InputsContainer>
+      </InflowsSpace>
+    </InflowsContainer>
   );
 }
