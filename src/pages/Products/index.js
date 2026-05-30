@@ -12,6 +12,7 @@ import { ModalRecipeChildren } from "../../components/ModalRecipes/addRecipe";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
+import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
@@ -379,6 +380,17 @@ export default function Products() {
     }
   };
 
+  const Transfer = (e, productNameParam) => {
+    e.preventDefault();
+    dispatch(
+      actionsProductDataTransfer.productDataTransfer({
+        productName: productNameParam,
+      })
+    );
+
+    history.push("/product/inflows");
+  };
+
   return (
     <ProductsContainer>
       <Header />
@@ -558,6 +570,13 @@ export default function Products() {
                             >
                               Adicionar receita
                             </button>
+                            <button
+                              type="button"
+                              className="product-inflows"
+                              onClick={(e) => Transfer(e)}
+                            >
+                              Ver histórico de atualizações
+                            </button>
                           </>
                         )}
                         <Modal
@@ -730,6 +749,13 @@ export default function Products() {
                               className="add-recipe"
                             >
                               Adicionar receita
+                            </button>
+                            <button
+                              type="button"
+                              className="product-inflows"
+                              onClick={(e) => Transfer(e)}
+                            >
+                              Ver histórico de atualizações
                             </button>
                           </>
                         )}

@@ -39,7 +39,7 @@ export const MainHeader = styled.nav`
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  .inputsCurrent {
+  .inputs-current {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -224,7 +224,7 @@ export const MainHeader = styled.nav`
     filter: brightness(10%);
   }
 
-  .inputsCurrent:hover {
+  .inputs-current:hover {
     filter: brightness(10%);
   }
 

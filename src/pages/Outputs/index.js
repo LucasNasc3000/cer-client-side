@@ -208,7 +208,7 @@ export default function Outputs() {
     e.preventDefault();
     dispatch(actions.inputDataTransfer({ inputName }));
 
-    history.push("/inputsCurrent");
+    history.push("/inputs/current");
   };
 
   return (

@@ -28,14 +28,14 @@ export default function Routes() {
       />
       <MyRoute
         exact
-        path="/inputs"
+        path="/inputs/history"
         component={Inputs}
         isClosed
         resource="SUPPLIES"
       />
       <MyRoute
         exact
-        path="/inputsCurrent"
+        path="/inputs/current"
         component={InputsCurrent}
         isClosed
         resource="SUPPLIES"

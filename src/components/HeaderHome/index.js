@@ -38,7 +38,7 @@ export default function HeaderHome() {
           <TbBaguette className="input-icon" />
           Insumos
         </Link>
-        <Link to="/inputsCurrent" class="inputsCurrent">
+        <Link to="/inputs/current" class="inputs-current">
           <MdOutlineUpdate className="inpusCurrent-icon" />
           Insumos em tempo real
         </Link>
