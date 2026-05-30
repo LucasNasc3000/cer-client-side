@@ -23,23 +23,14 @@ vendas e funcionários com sistema de permissões por perfil de usuário.
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/DashboardHome.png" width=820 heigth=820/>
 <p font=12>Dashboard/home</p><br>
 
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Employees062025.png" width=820 heigth=820/>
-<p font=12>Funcionários (CRUD)</p><br>
-
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Inputs2062025.png" width=820 heigth=820/>
-<p font=12>Insumos (CRUD)</p><br>
+<p font=12>Insumos (Histórico, apenas leitura)</p><br>
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/InputsCurrent.png" width=820 heigth=820/>
 <p font=12>Insumos em tempo real</p><br>
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/outputs062025.png" width=820 heigth=820/>
-<p font=12>Saídas (CRUD)</p><br>
-
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Sales062025.png" width=820 heigth=820/>
-<p font=12>Vendas (CRUD)</p><br>
-
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Profile062025.png" width=820 heigth=820/>
-<p font=12>Dados pessoais (Perfil)</p><br>
+<p font=12>Saídas (Histórico, apenas leitura)</p><br>
 <br><br>
 
 ## Funcionalidades
@@ -68,28 +59,19 @@ Web application for inventory and sales management aimed at small and medium-siz
 ## Status
 🟢 Stable & Active maintened
 
-## Screenshots from an admin account
+## Screenshots from admin account
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/DashboardHome.png" width=820 heigth=820/>
-<p font=12>Dashboard/home</p><br>
-
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Employees062025.png" width=820 heigth=820/>
-<p font=12>Employees (CRUD)</p><br>
+<p font=12>Dashboard</p><br>
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Inputs2062025.png" width=820 heigth=820/>
-<p font=12>Supplies (CRUD)</p><br>
+<p font=12>Supplies (History, read only)</p><br>
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/InputsCurrent.png" width=820 heigth=820/>
-<p font=12>Supplies in realtime</p><br>
+<p font=12>Supplies in real time</p><br>
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/outputs062025.png" width=820 heigth=820/>
-<p font=12>Outputs (CRUD)</p><br>
-
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Sales062025.png" width=820 heigth=820/>
-<p font=12>Sales (CRUD)</p><br>
-
-<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/Profile062025.png" width=820 heigth=820/>
-<p font=12>Personal data (Profile)</p><br>
+<p font=12>Outflows (History, read only)</p><br>
 <br><br>
 
 ## Features
