@@ -6,7 +6,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
@@ -15,6 +15,7 @@ import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
+import history from "../../services/history";
 import DoSearch from "../../services/search";
 import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
 
@@ -26,10 +27,12 @@ export default function ProductInflows() {
   const [searchSecondaryParam, setSearchSecondaryParam] = useState("");
   const [inflowsData, setInflowsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const searchInput = document.querySelector(".inflow-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+
+  const extractFromPermissions = useRef(permissions.map((p) => [p.resource]));
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -95,10 +98,7 @@ export default function ProductInflows() {
     e.preventDefault();
     setSearchSecondaryParam("");
     setSearchResults([]);
-    searchInput.value = "";
-
-    const options = document.querySelector(".options");
-    options.value = "";
+    searchInputValue("");
   };
 
   async function SearchInflows(e) {
@@ -154,6 +154,13 @@ export default function ProductInflows() {
     setSearchResultsBackup(inArray);
     return;
   }
+
+  const Transfer = (e, inputName) => {
+    e.preventDefault();
+    dispatch(actions.inputDataTransfer({ inputName }));
+
+    history.push("/products");
+  };
 
   return (
     <InflowsContainer>
@@ -231,15 +238,17 @@ export default function ProductInflows() {
                       readOnly
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={inflow.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {extractFromPermissions.includes("PRODUCTS") && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={inflow.employee.email}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Produto: </div>
                     <input
@@ -262,7 +271,7 @@ export default function ProductInflows() {
                   <div className="buttons">
                     <button
                       type="button"
-                      className="real-time-stock-btn"
+                      className="product-stock-btn"
                       onClick={(e) => Transfer(e, inflow.name)}
                     >
                       Ver Produto

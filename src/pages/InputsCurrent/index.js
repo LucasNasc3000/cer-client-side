@@ -17,14 +17,14 @@ import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
-import * as actions from "../../store/modules/dataTransferInput/actions";
+import * as actions from "../../store/modules/dataTransfer/actions";
 import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
 
 export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
-  const inputName = useSelector((state) => state.dataTransferInput.inputName);
+  const inputName = useSelector((state) => state.dataTransfer.inputName);
 
   const dispatch = useDispatch();
 
@@ -34,7 +34,7 @@ export default function InputsCurrent() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
-  const searchInput = document.querySelector(".input-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
@@ -120,8 +120,8 @@ export default function InputsCurrent() {
       return;
     }
 
-    if (searchParam) SearchTheInput();
-  }, [searchInput, searchParam]);
+    if (searchParam && searchInput) SearchTheInput();
+  }, [searchInputValue, searchParam]);
 
   async function GetInputs() {
     if (!employee_id || !permissions) return;
@@ -172,12 +172,9 @@ export default function InputsCurrent() {
     e.preventDefault();
     setSearchParam("");
     setSearchResults([]);
-    searchInput.value = "";
+    setSearchInputValue("");
 
-    dispatch(actions.inputDataTransfer({}));
-
-    const options = document.querySelector(".options");
-    options.value = "";
+    dispatch(actions.clearDataTransfer());
   };
 
   const HandleChange = (e, itemId) => {
@@ -345,7 +342,8 @@ export default function InputsCurrent() {
             type="text"
             placeholder="Pesquisar..."
             className="input-search"
-            value={searchValueAutoSearch !== "" ? inputName : null}
+            value={searchValueAutoSearch !== "" ? inputName : searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
 

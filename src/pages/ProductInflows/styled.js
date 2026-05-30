@@ -285,7 +285,7 @@ export const InflowsSpace = styled.div`
     font-size: 15px;
   }
 
-  .real-time-stock-btn {
+  .product-stock-btn {
     display: flex;
     background-color: #a5a4a4ff;
     width: 180px;

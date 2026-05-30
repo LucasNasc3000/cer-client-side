@@ -14,7 +14,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import * as actions from "../../store/modules/dataTransferInput/actions";
+import * as actions from "../../store/modules/dataTransfer/actions";
 import {
   NewOutput,
   OutputsContainer,
@@ -40,7 +40,7 @@ export default function Outputs() {
   const [outputsDataBackup, setOutputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
-  const searchOutput = document.querySelector(".output-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
@@ -126,10 +126,7 @@ export default function Outputs() {
     e.preventDefault();
     setSearchParam("");
     setSearchResults([]);
-    searchOutput.value = "";
-
-    const options = document.querySelector(".options");
-    options.value = "";
+    setSearchInputValue("");
   };
 
   async function SearchOutputs(e) {
@@ -141,20 +138,15 @@ export default function Outputs() {
     let formattedDate = "";
 
     if (searchParam === "date") {
-      const year = searchOutput.value.slice(6, 10);
-      const month = searchOutput.value.slice(3, 5);
-      const day = searchOutput.value.slice(0, 2);
+      const year = searchInputValue.slice(6, 10);
+      const month = searchInputValue.slice(3, 5);
+      const day = searchInputValue.slice(0, 2);
 
       formattedDate = `${year}-${month}-${day}`;
 
       search = await DoSearch("outflows", searchParam, formattedDate, null);
     } else {
-      search = await DoSearch(
-        "outflows",
-        searchParam,
-        searchOutput.value,
-        null
-      );
+      search = await DoSearch("outflows", searchParam, searchInputValue, null);
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -236,6 +228,8 @@ export default function Outputs() {
             type="text"
             placeholder="Pesquisar..."
             className="output-search"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
 

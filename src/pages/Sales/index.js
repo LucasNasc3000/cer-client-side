@@ -37,7 +37,7 @@ export default function Sales() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [rerender, setReRender] = useState(false);
-  const searchSale = document.querySelector(".sale-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -93,10 +93,7 @@ export default function Sales() {
     setSearchParam("");
     setSearchResults([]);
     setSalesData(salesDataBackup);
-    searchSale.value = "";
-
-    const options = document.querySelector(".options");
-    options.value = "";
+    setSearchInputValue("");
   };
 
   async function GetSales() {
@@ -150,7 +147,7 @@ export default function Sales() {
 
     const inArray = [];
 
-    const search = await DoSearch("sales", searchParam, searchSale.value);
+    const search = await DoSearch("sales", searchParam, searchInputValue);
 
     if (typeof search === "undefined" || !search) return;
 
@@ -207,13 +204,6 @@ export default function Sales() {
     clearDirectExecution();
   };
 
-  // const Transfer = (e, saleData) => {
-  //   e.preventDefault();
-  //   dispatch(actionsDataTransfer.saleDataTransfer(saleData));
-
-  //   history.push("/advices");
-  // };
-
   return (
     <SalesContainer>
       <Header />
@@ -231,6 +221,8 @@ export default function Sales() {
             type="text"
             placeholder="Pesquisar..."
             className="sale-search"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
 

@@ -18,7 +18,7 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import * as actions from "../../store/modules/dataTransferInput/actions";
+import * as actions from "../../store/modules/dataTransfer/actions";
 import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
 
 export default function Inputs() {
@@ -43,7 +43,7 @@ export default function Inputs() {
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
-  const searchInput = document.querySelector(".input-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
@@ -133,10 +133,7 @@ export default function Inputs() {
     e.preventDefault();
     setSearchParam("");
     setSearchResults([]);
-    searchInput.value = "";
-
-    const options = document.querySelector(".options");
-    options.value = "";
+    setSearchInputValue("");
   };
 
   async function SearchInputs(e) {
@@ -250,6 +247,8 @@ export default function Inputs() {
             type="text"
             placeholder="Pesquisar..."
             className="input-search"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
 

@@ -29,7 +29,7 @@ export function Employees() {
   const [exemployeesBackup, setExemployeesBackup] = useState([]);
   const [boss, setBoss] = useState("");
   const [rerender, setReRender] = useState(false);
-  const searchInput = document.querySelector(".input-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   useEffect(() => {
     const PermissionCheck = () => {
@@ -56,10 +56,7 @@ export function Employees() {
     setSearchParam("");
     setSearchResults([]);
     setExemployees([]);
-    searchInput.value = "";
-
-    const options = document.querySelector(".options");
-    options.value = "";
+    setSearchInputValue("");
   };
 
   function clearDirectExecution(isExemployees) {
@@ -105,7 +102,7 @@ export function Employees() {
 
     const inArray = [];
 
-    const search = await DoSearch("employees", searchParam, searchInput.value);
+    const search = await DoSearch("employees", searchParam, searchInputValue);
 
     if (typeof search === "undefined" || !search) return;
 
@@ -144,7 +141,6 @@ export function Employees() {
 
   useEffect(() => {
     getEmployees();
-    console.log(employees);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boss]);
 
@@ -259,6 +255,7 @@ export function Employees() {
             type="text"
             placeholder="Pesquisar funcionário..."
             className="input-search"
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
 

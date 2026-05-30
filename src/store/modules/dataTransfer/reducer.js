@@ -1,21 +1,33 @@
 import * as types from "../types";
 
 const initialState = {
-  clientName: "",
-  phoneNumber: "",
-  clientBirthday: "",
+  inputName: "",
+  productName: "",
 };
 
 // eslint-disable-next-line default-param-last
 export default function (state = initialState, action) {
   switch (action.type) {
-    case types.SALE_DATA_TRANSFER: {
+    case types.INPUT_DATA_TRANSFER: {
       const newState = { ...state };
-      newState.clientName = action.payload.client_name;
-      newState.phoneNumber = action.payload.phone_number;
-      newState.clientBirthday = action.payload.client_birthday;
+
+      newState.inputName = action.payload.inputName;
 
       return newState;
+    }
+
+    case types.PRODUCT_DATA_TRANSFER: {
+      const newState = { ...state };
+
+      newState.productName = action.payload.productName;
+
+      return newState;
+    }
+
+    case types.CLEAR_DATA_TRANSFER: {
+      return {
+        ...initialState,
+      };
     }
 
     default:

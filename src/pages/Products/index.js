@@ -15,6 +15,7 @@ import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
+import * as actionsProductDataTransfer from "../../store/modules/dataTransfer/actions";
 import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
 import { GetChangedFields } from "../../utils/GetChangedFields";
@@ -30,6 +31,7 @@ export default function Products() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+  const productName = useSelector((state) => state.dataTransfer.productName);
   const getEditedUnitiesIfExists = useSelector(
     (state) => state.editUnitiesData
   );
@@ -48,12 +50,13 @@ export default function Products() {
   const [productsDataBackup, setProductsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
-  const searchProduct = document.querySelector(".product-search");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
   const [openModalId, setOpenModalId] = useState("");
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
+  const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -85,6 +88,53 @@ export default function Products() {
 
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
+
+  useEffect(() => {
+    if (productName) {
+      setSearchValueAutoSearch(productName);
+      setSearchParam("name");
+    }
+  }, [productName]);
+
+  useEffect(() => {
+    async function SearchTheProduct() {
+      const inArray = [];
+
+      let search = "";
+      let formattedDate = "";
+
+      if (searchParam === "date" || searchParam === "expirationDate") {
+        const year = searchInputValue.slice(6, 10);
+        const month = searchInputValue.slice(3, 5);
+        const day = searchInputValue.slice(0, 2);
+
+        formattedDate = `${year}-${month}-${day}`;
+
+        search = await DoSearch("products", searchParam, formattedDate, null);
+      } else {
+        search = await DoSearch(
+          "products",
+          searchParam,
+          searchInputValue,
+          null
+        );
+      }
+
+      if (typeof search === "undefined" || !search) return;
+
+      if (Array.isArray(search)) {
+        setSearchResults(search);
+        setSearchResultsBackup(search);
+        return;
+      }
+
+      inArray.push(search);
+      setSearchResults(inArray);
+      setSearchResultsBackup(inArray);
+    }
+
+    if (searchParam && searchInputValue) SearchTheProduct();
+  }, [searchInputValue, searchParam]);
 
   async function GetProducts() {
     if (!employee_id || !permissions) return;
@@ -142,10 +192,9 @@ export default function Products() {
     e.preventDefault();
     setSearchParam("");
     setSearchResults([]);
-    searchProduct.value = "";
+    setSearchInputValue("");
 
-    const options = document.querySelector(".options");
-    options.value = "";
+    dispatch(actionsProductDataTransfer.clearDataTransfer());
   };
 
   const HandleChange = (e, itemId) => {
@@ -205,20 +254,15 @@ export default function Products() {
     let formattedDate = "";
 
     if (searchParam === "date" || searchParam === "expirationDate") {
-      const year = searchProduct.value.slice(6, 10);
-      const month = searchProduct.value.slice(3, 5);
-      const day = searchProduct.value.slice(0, 2);
+      const year = searchInputValue.slice(6, 10);
+      const month = searchInputValue.slice(3, 5);
+      const day = searchInputValue.slice(0, 2);
 
       formattedDate = `${year}-${month}-${day}`;
 
       search = await DoSearch("products", searchParam, formattedDate, null);
     } else {
-      search = await DoSearch(
-        "products",
-        searchParam,
-        searchProduct.value,
-        null
-      );
+      search = await DoSearch("products", searchParam, searchInputValue, null);
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -365,6 +409,8 @@ export default function Products() {
             type="text"
             placeholder="Pesquisar..."
             className="product-search"
+            onChange={(e) => setSearchInputValue(e.target.value)}
+            value={searchInputValue || searchValueAutoSearch}
           />
         </div>
 
