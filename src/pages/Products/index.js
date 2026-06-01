@@ -32,7 +32,6 @@ export default function Products() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
-  const productName = useSelector((state) => state.dataTransfer.productName);
   const getEditedUnitiesIfExists = useSelector(
     (state) => state.editUnitiesData
   );
@@ -57,7 +56,6 @@ export default function Products() {
   const [rerender, setReRender] = useState(false);
   const [openModalId, setOpenModalId] = useState("");
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
-  const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -89,40 +87,6 @@ export default function Products() {
 
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
-
-  useEffect(() => {
-    if (productName) {
-      setSearchValueAutoSearch(productName);
-      setSearchParam("name");
-    }
-  }, [productName]);
-
-  useEffect(() => {
-    async function SearchTheProduct() {
-      const inArray = [];
-
-      const search = await DoSearch(
-        "products",
-        searchParam,
-        searchInputValue,
-        null
-      );
-
-      if (typeof search === "undefined" || !search) return;
-
-      if (Array.isArray(search)) {
-        setSearchResults(search);
-        setSearchResultsBackup(search);
-        return;
-      }
-
-      inArray.push(search);
-      setSearchResults(inArray);
-      setSearchResultsBackup(inArray);
-    }
-
-    if (searchParam && searchInputValue) SearchTheProduct();
-  }, [searchInputValue, searchParam]);
 
   async function GetProducts() {
     if (!employee_id || !permissions) return;
@@ -408,10 +372,8 @@ export default function Products() {
             type="text"
             placeholder="Pesquisar..."
             className="product-search"
+            value={searchInputValue}
             onChange={(e) => setSearchInputValue(e.target.value)}
-            value={
-              searchValueAutoSearch !== "" ? productName : searchInputValue
-            }
           />
         </div>
 

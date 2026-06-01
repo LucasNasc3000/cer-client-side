@@ -22,11 +22,14 @@ export default function ProductInflows() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
+  const productName = useSelector((state) => state.dataTransfer.productName);
 
   const [searchSecondaryParam, setSearchSecondaryParam] = useState("");
   const [inflowsData, setInflowsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [searchProductParam, setSearchProductParam] = useState("");
+  const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
@@ -64,6 +67,39 @@ export default function ProductInflows() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
+  useEffect(() => {
+    if (productName) {
+      setSearchValueAutoSearch(productName);
+      setSearchInputValue(productName);
+    }
+  }, [productName]);
+
+  useEffect(() => {
+    async function SearchTheProductInflows() {
+      const inArray = [];
+
+      const search = await DoSearch(
+        "products",
+        "inflows",
+        searchValueAutoSearch,
+        null,
+        "products"
+      );
+
+      if (typeof search === "undefined" || !search) return;
+
+      if (Array.isArray(search)) {
+        setSearchResults(search);
+        return;
+      }
+
+      inArray.push(search);
+      setSearchResults(inArray);
+    }
+
+    if (searchValueAutoSearch) SearchTheProductInflows();
+  }, [searchInputValue, searchProductParam, searchValueAutoSearch]);
+
   async function GetInflows() {
     if (!employee_id || !permissions) return;
 
@@ -98,6 +134,7 @@ export default function ProductInflows() {
     setSearchSecondaryParam("");
     setSearchResults([]);
     setSearchInputValue("");
+    setSearchProductParam("");
   };
 
   async function SearchInflows(e) {
@@ -171,7 +208,9 @@ export default function ProductInflows() {
             type="text"
             placeholder="Pesquisar..."
             className="inflow-search"
-            value={searchInputValue}
+            value={
+              searchValueAutoSearch !== "" ? productName : searchInputValue
+            }
             onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
