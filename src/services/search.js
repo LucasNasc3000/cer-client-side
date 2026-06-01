@@ -35,7 +35,7 @@ export default async function DoSearch(
 
       case searchParam === "inflows" && secondarySearchParam === "employees":
         results = await axios.get(
-          `/${path}/search/employee/inflows?limit=20&offset=0&value=${searchValue}&forDisplay=false`
+          `/${path}/search/employee/inflows?limit=20&offset=0&email=${searchValue}&forDisplay=false`
         );
         return results.data[1];
 
