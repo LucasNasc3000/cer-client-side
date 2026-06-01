@@ -63,7 +63,7 @@ export default function Routes() {
       />
       <MyRoute
         exact
-        path="/product/inflows"
+        path="/products/inflows"
         component={ProductInflows}
         isClosed
         resource="PRODUCTS"

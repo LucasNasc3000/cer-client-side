@@ -388,7 +388,7 @@ export default function Products() {
       })
     );
 
-    history.push("/product/inflows");
+    history.push("/products/inflows");
   };
 
   return (

@@ -14,7 +14,8 @@ export default async function GetData(
   employee_id,
   permission,
   supplyType,
-  forDisplay
+  forDisplay,
+  secondaryPath
 ) {
   const joinData = [];
 
@@ -33,7 +34,8 @@ export default async function GetData(
           path,
           employeesIds[i],
           supplyType,
-          forDisplay
+          forDisplay,
+          secondaryPath
         );
 
         if (registers.data[1]) joinData.push(...registers.data[1]);
@@ -46,7 +48,8 @@ export default async function GetData(
         path,
         employee_id,
         supplyType,
-        forDisplay
+        forDisplay,
+        secondaryPath
       );
 
       if (bossOwnRegisters.data[1]) joinData.push(...bossOwnRegisters.data[1]);
@@ -55,7 +58,8 @@ export default async function GetData(
         path,
         bossId,
         supplyType,
-        forDisplay
+        forDisplay,
+        secondaryPath
       );
 
       if (bossRegisters.data[1]) joinData.push(...bossRegisters.data[1]);

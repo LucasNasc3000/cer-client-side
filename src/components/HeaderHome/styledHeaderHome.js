@@ -101,6 +101,21 @@ export const MainHeader = styled.nav`
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
+  .products-inflows {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    color: #666565ff;
+    height: 50px;
+    width: 230px;
+    align-items: center;
+    justify-content: center;
+    left: 50px;
+    top: 65px;
+    font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
   .profile {
     position: relative;
     display: flex;
@@ -111,7 +126,7 @@ export const MainHeader = styled.nav`
     align-items: center;
     justify-content: center;
     left: 5px;
-    top: 52px;
+    top: 77px;
     font-size: 18px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
@@ -126,7 +141,7 @@ export const MainHeader = styled.nav`
     align-items: center;
     justify-content: center;
     left: 38px;
-    top: 56px;
+    top: 81px;
     font-size: 18px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
@@ -150,7 +165,7 @@ export const MainHeader = styled.nav`
     background-color: #a5a4a4ff;
     display: flex;
     position: relative;
-    top: 120px;
+    top: 145px;
     left: 63px;
     height: 45px;
     width: 105px;
@@ -176,7 +191,7 @@ export const MainHeader = styled.nav`
     margin-right: 15px;
   }
 
-  .inpusCurrent-icon {
+  .input-current-icon {
     display: flex;
     height: 25px;
     width: 25px;
@@ -197,7 +212,14 @@ export const MainHeader = styled.nav`
     margin-right: 15px;
   }
 
-  .product-icon {
+  .products-icon {
+    display: flex;
+    height: 25px;
+    width: 25px;
+    margin-right: 15px;
+  }
+
+  .products-inflows-icon {
     display: flex;
     height: 25px;
     width: 25px;
@@ -240,6 +262,10 @@ export const MainHeader = styled.nav`
 
 
   .products:hover {
+    filter: brightness(10%);
+  }
+
+  .products-inflows:hover {
     filter: brightness(10%);
   }
 

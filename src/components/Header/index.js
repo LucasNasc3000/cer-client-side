@@ -3,7 +3,7 @@
 import { BsGrid } from "react-icons/bs";
 import { CiCircleCheck, CiUser } from "react-icons/ci";
 import { GoPackageDependents } from "react-icons/go";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { HiOutlineInboxArrowDown, HiOutlineShoppingBag } from "react-icons/hi2";
 import { MdOutlineBadge, MdOutlineUpdate } from "react-icons/md";
 import { TbBaguette } from "react-icons/tb";
 import { TfiDashboard } from "react-icons/tfi";
@@ -43,12 +43,12 @@ export default function Header() {
                   <TfiDashboard className="dashboard-icon" />
                   Dashboard
                 </Link>
-                <Link to="/inputs" class="inputs">
+                <Link to="/inputs/history" class="inputs">
                   <TbBaguette className="input-icon" />
                   Insumos
                 </Link>
                 <Link to="/inputs/current" class="inputs-current">
-                  <MdOutlineUpdate className="inpusCurrent-icon" />
+                  <MdOutlineUpdate className="inputs-current-icon" />
                   Insumos em tempo real
                 </Link>
                 <Link to="/sales" class="sales">
@@ -60,8 +60,12 @@ export default function Header() {
                   Saídas
                 </Link>
                 <Link to="/products" class="products">
-                  <BsGrid className="product-icon" />
+                  <BsGrid className="products-icon" />
                   Produtos
+                </Link>
+                <Link to="/products/inflows" class="products-inflows">
+                  <HiOutlineInboxArrowDown className="products-inflows-icon" />
+                  Atualizações de produtos
                 </Link>
                 <Link to="/profile" class="profile">
                   <CiUser className="profile-icon" />
@@ -86,12 +90,12 @@ export default function Header() {
                   <>
                     {p === "SUPPLIES" ? (
                       <>
-                        <Link to="/inputs" class="inputs">
+                        <Link to="/inputs/history" class="inputs">
                           <TbBaguette className="input-icon" />
                           Insumos
                         </Link>
                         <Link to="/inputs/current" class="inputs-current">
-                          <MdOutlineUpdate className="inpusCurrent-icon" />
+                          <MdOutlineUpdate className="inputs-current-icon" />
                           Insumos em tempo real
                         </Link>
                       </>
@@ -109,10 +113,17 @@ export default function Header() {
                       </Link>
                     ) : ("")}
                     {p === "PRODUCTS" ? (
-                      <Link to="/products" class="products">
-                        <HiOutlineShoppingBag className="product-icon" />
-                        Produtos
-                      </Link>
+                      <>
+                        <Link to="/products" class="products">
+                          <HiOutlineShoppingBag className="product-icon" />
+                          Produtos
+                        </Link>
+                        <Link to="/products/inflows" class="products-inflows">
+                          <HiOutlineInboxArrowDown className="products-inflows-icon" />
+                          Atualizações de produtos
+                        </Link>
+                      </>
+
                     ) : ("")}
                     <Link to="/profile" class="profile">
                       <CiUser className="profile-icon" />

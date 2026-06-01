@@ -31,7 +31,7 @@ export default function ProductInflows() {
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
 
-  const extractFromPermissions = useRef(permissions.map((p) => [p.resource]));
+  const extractFromPermissions = useRef(permissions.map((p) => p.resource));
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -69,17 +69,17 @@ export default function ProductInflows() {
 
     const inflows = await GetData(
       bossId,
-      "inflows",
+      "products",
       employee_id,
       permissions,
       null,
-      true
+      true,
+      "inflows"
     );
 
     if (typeof inflows === "undefined" || !inflows) return;
 
     setInflowsData(inflows);
-    setInflowsDataBackup(inflows);
   }
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function ProductInflows() {
     e.preventDefault();
     setSearchSecondaryParam("");
     setSearchResults([]);
-    searchInputValue("");
+    setSearchInputValue("");
   };
 
   async function SearchInflows(e) {
@@ -232,7 +232,7 @@ export default function ProductInflows() {
                       readOnly
                     />
                   </div>
-                  {extractFromPermissions.includes("PRODUCTS") && (
+                  {extractFromPermissions.current.includes("PRODUCTS") && (
                     <div className="data-wrap">
                       <div className="label">Funcionário: </div>
                       <input
@@ -298,7 +298,7 @@ export default function ProductInflows() {
                       readOnly
                     />
                   </div>
-                  {extractFromPermissions.includes("PRODUCTS") && (
+                  {extractFromPermissions.current.includes("PRODUCTS") && (
                     <div className="data-wrap">
                       <div className="label">Funcionário: </div>
                       <input
