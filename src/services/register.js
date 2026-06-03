@@ -45,22 +45,23 @@ export default async function Register(data, registerType) {
           Array.isArray(data.productIngredient) &&
           data.productIngredient.length > 0;
 
-        if (hasIngredients && !data.useStockSupplies) {
+        const { useStockSupplies, productIngredient, ...restOfTheData } = data;
+
+        const payload = data.lowStock
+          ? restOfTheData
+          : (({ lowStock, ...rest }) => rest)(restOfTheData);
+
+        if (hasIngredients && !useStockSupplies) {
           await axios.post("/products/create/withRecipe", {
-            ...data,
+            ...payload,
+            productIngredient,
           });
-        } else if (hasIngredients && data.useStockSupplies) {
+        } else if (hasIngredients && useStockSupplies) {
           await axios.post("/products/create/withRecipe/registeredSupplies", {
-            ...data,
+            ...payload,
+            productIngredient,
           });
         } else {
-          const { useStockSupplies, productIngredient, ...restOfTheData } =
-            data;
-
-          const payload = data.lowStock
-            ? restOfTheData
-            : (({ lowStock, ...rest }) => rest)(restOfTheData);
-
           await axios.post("/products/create/withoutRecipe", {
             ...payload,
           });

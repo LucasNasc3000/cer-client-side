@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
@@ -56,6 +57,8 @@ export default function Products() {
   const [rerender, setReRender] = useState(false);
   const [openModalId, setOpenModalId] = useState("");
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
+  const [useStockSuppliesRedux, setUseStockSuppliesRedux] = useState(false);
+  const [productIngredientRedux, setproductIngredientRedux] = useState([]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -87,6 +90,17 @@ export default function Products() {
 
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-useless-return
+    if (
+      getRecipeDataIfExists.productIngredient.length < 1 ||
+      getRecipeDataIfExists.useStockSupplies === undefined
+    )
+      return;
+    setproductIngredientRedux(getRecipeDataIfExists.productIngredient);
+    setUseStockSuppliesRedux(getRecipeDataIfExists.useStockSupplies);
+  }, [getRecipeDataIfExists]);
 
   async function GetProducts() {
     if (!employee_id || !permissions) return;
@@ -247,14 +261,14 @@ export default function Products() {
     }
 
     const data = {
-      category: document.querySelector("#category").value,
-      name: document.querySelector("#name").value,
-      price: document.querySelector("#price").value,
-      unities: document.querySelector("#unities").value,
-      expirationDate: document.querySelector("#expirationDate").value,
-      lowStock: document.querySelector("#lowStock").value || null,
-      productIngredient: getRecipeDataIfExists.productIngredient || null,
-      useStockSupplies: getRecipeDataIfExists.useStockSupplies,
+      category,
+      name,
+      price,
+      unities,
+      expirationDate,
+      lowStock: lowStock || null,
+      productIngredient: productIngredientRedux || null,
+      useStockSupplies: useStockSuppliesRedux,
     };
 
     const year = data.expirationDate.slice(6, 10);
@@ -437,16 +451,6 @@ export default function Products() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Validade: </div>
-                    <input
-                      type="text"
-                      name="expirationDate"
-                      className="data-div"
-                      value={`${product.expirationDate.slice(8, 10)}-${product.expirationDate.slice(5, 7)}-${product.expirationDate.slice(0, 4)}`}
-                      onChange={(e) => HandleChange(e, product.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
                     <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
@@ -614,16 +618,6 @@ export default function Products() {
                       value={product.unities}
                       onChange={(e) => HandleChangeSearch(e, product.id)}
                       readOnly
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Validade: </div>
-                    <input
-                      type="text"
-                      name="expirationDate"
-                      className="data-div"
-                      value={`${product.expirationDate.slice(8, 10)}-${product.expirationDate.slice(5, 7)}-${product.expirationDate.slice(0, 4)}`}
-                      onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
                   <div className="data-wrap">

@@ -278,7 +278,7 @@ export const InputsSpace = styled.div`
 
   .confirm-changes {
     display: flex;
-    background-color: #a5a4a4ff;
+
     width: 180px;
     justify-content: center;
     font-weight: 400;
@@ -287,7 +287,7 @@ export const InputsSpace = styled.div`
 
   .cancel-changes {
     display: flex;
-    background-color: #a5a4a4ff;
+
     width: 180px;
     justify-content: center;
     font-weight: 400;

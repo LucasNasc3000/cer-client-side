@@ -287,7 +287,6 @@ export const InputsSpace = styled.div`
 
   .real-time-stock-btn {
     display: flex;
-    background-color: #a5a4a4ff;
     width: 180px;
     justify-content: center;
     font-weight: 400;
@@ -305,7 +304,7 @@ export const NewInput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1225px;
+  bottom: 1235px;
   left: 1220px;
   height: fit-content;
   width: fit-content;
@@ -319,6 +318,37 @@ export const NewInput = styled.div`
     border-left: none;
     border-right: none;
     border-bottom: 0.5px solid black;
+  }
+
+  .reasons-supply {
+    display: flex;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .options-new-supply {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 30px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
   }
 
   .btn {

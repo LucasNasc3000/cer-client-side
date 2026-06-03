@@ -73,7 +73,9 @@ export function ModalRecipeChildren() {
 
   useEffect(() => {
     if (getRecipeDataIfExists.productIngredient.length < 1) return;
-    setRecipeItemsToShowFromRedux(getRecipeDataIfExists.productIngredient);
+    setRecipeItemsToShowFromRedux(
+      getRecipeDataIfExists.productIngredientToShow
+    );
   }, [getRecipeDataIfExists]);
 
   const ClerDirectExecution = () => {
@@ -106,9 +108,23 @@ export function ModalRecipeChildren() {
   const SaveRecipe = (e) => {
     e.preventDefault();
 
-    dispatch(actions.recipeData({ recipeItemsToShow, useStockSupplies }));
+    const formattedData = [];
+
+    // eslint-disable-next-line array-callback-return
+    recipeItemsToShow.map((i) => {
+      formattedData.push({
+        supplyId: i.supplyId,
+        quantity: i.quantity,
+      });
+    });
+
+    dispatch(
+      actions.recipeData({ formattedData, recipeItemsToShow, useStockSupplies })
+    );
 
     PartialClerDirectExecution();
+
+    toast.success("Receita salva");
   };
 
   const ClearRecipe = (e) => {
@@ -238,7 +254,7 @@ export function ModalRecipeChildren() {
         {recipeItemsToShow.length > 0
           ? recipeItemsToShow.map((item) => {
               return (
-                <div key={item.id} className="supply-list">
+                <div key={item.supplyId} className="supply-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
                     <div className="quantity">{item.quantity}</div>
@@ -256,7 +272,7 @@ export function ModalRecipeChildren() {
             })
           : recipeItemsToShowFromRedux.map((item) => {
               return (
-                <div key={item.id} className="supply-list">
+                <div key={item.supplyId} className="supply-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
                     <div className="quantity">{item.quantity}</div>

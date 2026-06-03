@@ -197,16 +197,16 @@ export default function Inputs() {
     }
 
     const data = {
-      category: document.querySelector("#category").value,
-      name: document.querySelector("#name").value,
-      reason: document.querySelector("#reason").value,
-      details: document.querySelector("#details").value,
-      quantity: document.querySelector("#quantity").value,
-      weightPerUnit: document.querySelector("#weightPerUnit").value,
-      price: document.querySelector("#price").value,
-      supplier: document.querySelector("#supplier").value,
-      expirationDate: document.querySelector("#expirationDate").value,
-      lowStock: document.querySelector("#lowStock").value,
+      category,
+      name,
+      reason,
+      details,
+      quantity,
+      weightPerUnit,
+      price,
+      supplier,
+      expirationDate,
+      lowStock,
     };
 
     const year = data.expirationDate.slice(6, 10);
@@ -326,7 +326,7 @@ export default function Inputs() {
                       type="text"
                       name="details"
                       className="data-div"
-                      value={input.details}
+                      value={input.details || "Sem detalhes"}
                       readOnly
                     />
                   </div>
@@ -587,6 +587,22 @@ export default function Inputs() {
             })}
       </InputsSpace>
       <NewInput>
+        <div className="reasons-supply">
+          <select
+            className="options-new-supply"
+            onChange={(e) => setReason(e.target.value)}
+            value={reason}
+          >
+            <option value="">Motivo</option>
+            <option value="entrada">Entrada</option>
+            <option value="reposicao">Reposição</option>
+            <option value="ajuste">Ajuste</option>
+            <option value="doacao">Doação</option>
+            <option value="transferencia">Transferência</option>
+            <option value="correcao de perda">Correção de perda</option>
+            <option value="correcao de escrita">Correção de escrita</option>
+          </select>
+        </div>
         <input
           type="text"
           id="category"
@@ -601,13 +617,7 @@ export default function Inputs() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <input
-          type="text"
-          id="reason"
-          placeholder="Motivo ex: entrada, reposição, etc..."
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
+
         <input
           type="text"
           id="details"

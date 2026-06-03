@@ -183,8 +183,17 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
           className="use-stock-supplies"
           onChange={HandleUseStockSupplies}
           value={useStockSupplies}
+          disabled={difference !== "MoreThan"}
         />
-        <p className="use-stock-supplies-label">Usar insumos em estoque</p>
+        <p
+          className={
+            difference === "MoreThan"
+              ? "use-stock-supplies-label"
+              : "use-stock-supplies-label-disabled"
+          }
+        >
+          Usar insumos em estoque
+        </p>
       </div>
     </ModalEditUnitiesContainer>
   );

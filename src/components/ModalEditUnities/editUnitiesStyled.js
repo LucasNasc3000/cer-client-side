@@ -39,4 +39,12 @@ export const ModalEditUnitiesContainer = styled.div`
     height: fit-content;
     margin-top: 8px;
   }
+
+  .use-stock-supplies-label-disabled {
+    color: lightgrey;
+    display: flex;
+    width: 180px;
+    height: fit-content;
+    margin-top: 8px;
+  }
 `;

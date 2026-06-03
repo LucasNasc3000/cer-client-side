@@ -439,16 +439,6 @@ export default function InputsCurrent() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Validade: </div>
-                    <input
-                      type="text"
-                      name="expirationDate"
-                      className="data-div"
-                      value={input.expirationDate}
-                      onChange={(e) => HandleChange(e, input.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
                     <div className="label">Quantidade mínima: </div>
                     <input
                       type="text"
@@ -565,16 +555,6 @@ export default function InputsCurrent() {
                       name="supplier"
                       className="data-div"
                       value={input.supplier}
-                      onChange={(e) => HandleChangeSearch(e, input.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Validade: </div>
-                    <input
-                      type="text"
-                      name="expirationDate"
-                      className="data-div"
-                      value={input.expirationDate}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
