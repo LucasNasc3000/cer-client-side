@@ -12,6 +12,14 @@ export default async function DoSearch(
 ) {
   try {
     let results = "";
+    console.log({
+      path,
+      searchParam,
+      searchValue,
+      supplyType,
+      secondarySearchParam,
+      productType,
+    });
 
     switch (true) {
       case path === "supplies" && searchParam === "id":
@@ -77,6 +85,8 @@ export default async function DoSearch(
     }
   } catch (err) {
     const errors = get(err, "response.data.message", []);
+
+    console.log(err);
 
     if (err) {
       if (errors.length > 0) {

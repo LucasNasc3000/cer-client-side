@@ -6,6 +6,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
+import { get } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
@@ -39,11 +40,11 @@ export default function ProductInflows() {
 
   useEffect(() => {
     async function ExecuteGetBossId() {
-      const get = await GetBossId(headerid, emailStored);
+      const getBossId = await GetBossId(headerid, emailStored);
 
-      if (typeof get === "undefined" || !get) return;
+      if (typeof getBossId === "undefined" || !getBossId) return;
 
-      setBossId(get);
+      setBossId(getBossId);
     }
 
     ExecuteGetBossId();
@@ -151,64 +152,57 @@ export default function ProductInflows() {
   }
 
   async function SearchInflows(e) {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const inArray = [];
+      const inArray = [];
 
-    let search = "";
-    let formattedDate = "";
+      let search = "";
+      let formattedDate = "";
 
-    if (searchSecondaryParam) {
-      search = await DoSearch(
-        "products",
-        "inflows",
-        searchInputValue,
-        null,
-        searchSecondaryParam,
-        "PRODUCT_INFLOW"
-      );
-    }
-
-    if (searchParam) {
-      if (searchParam === "date" || searchParam === "expirationDate") {
+      if (searchParam === "date" || searchSecondaryParam === "expirationDate") {
         const year = searchInputValue.slice(6, 10);
         const month = searchInputValue.slice(3, 5);
         const day = searchInputValue.slice(0, 2);
 
-        formattedDate = `${year}/${month}/${day}`;
+        formattedDate = `${year}-${month}-${day}`;
+      }
 
-        search = await DoSearch(
-          "products",
-          searchParam,
-          formattedDate,
-          null,
-          null,
-          "PRODUCT"
-        );
-      } else {
-        search = await DoSearch(
-          "products",
-          searchParam,
-          searchInputValue,
-          null,
-          null,
-          "PRODUCT"
-        );
+      search = await DoSearch(
+        "products",
+        searchParam === "" ? "inflows" : searchParam,
+        formattedDate === "" ? searchInputValue : formattedDate,
+        null,
+        searchSecondaryParam === "" ? null : searchSecondaryParam,
+        searchParam === "" ? "PRODUCT_INFLOW" : "PRODUCT"
+      );
+
+      if (typeof search === "undefined" || !search) return;
+
+      if (Array.isArray(search)) {
+        setSearchResults(search);
+        return;
+      }
+
+      inArray.push(search);
+      setSearchResults(inArray);
+      return;
+    } catch (err) {
+      const errors = get(err, "response.data.message", []);
+
+      if (err) {
+        if (errors.length > 0) {
+          toast.error(errors);
+        }
+
+        if (err && errors.length < 1) {
+          toast.error(
+            "Erro desconhecido ao tentar pesquisar por registro de produto"
+          );
+          return;
+        }
       }
     }
-
-    if (typeof search === "undefined" || !search) return;
-
-    if (Array.isArray(search)) {
-      setSearchResults(search);
-      setSearchResultsBackup(search);
-      return;
-    }
-
-    inArray.push(search);
-    setSearchResults(inArray);
-    setSearchResultsBackup(inArray);
-    return;
   }
 
   return (
@@ -254,7 +248,7 @@ export default function ProductInflows() {
             <option value="date-P">Data de registro</option>
             <option value="category-P">Categoria</option>
             <option value="name-P">Nome</option>
-            <option value="expirationDate-P">Data de validade</option>
+            <option value="expirationDate-I">Data de validade</option>
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
             ) && <option value="employee-I">Funcionário</option>}
@@ -298,7 +292,7 @@ export default function ProductInflows() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Nome: </div>
+                    <div className="label">Produto: </div>
                     <input
                       type="text"
                       name="name"
@@ -358,15 +352,6 @@ export default function ProductInflows() {
                       />
                     </div>
                   )}
-                  <div className="data-wrap">
-                    <div className="label">Produto: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={inflow.product.name}
-                      readOnly
-                    />
-                  </div>
                   <div className="data-wrap">
                     <div className="label">Registrado em: </div>
                     <input
@@ -434,7 +419,7 @@ export default function ProductInflows() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Nome: </div>
+                    <div className="label">Produto: </div>
                     <input
                       type="text"
                       name="name"
@@ -494,15 +479,6 @@ export default function ProductInflows() {
                       />
                     </div>
                   )}
-                  <div className="data-wrap">
-                    <div className="label">Produto: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={inflow.product.name}
-                      readOnly
-                    />
-                  </div>
                   <div className="data-wrap">
                     <div className="label">Registrado em: </div>
                     <input
