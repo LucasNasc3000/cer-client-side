@@ -7,7 +7,8 @@ export default async function DoSearch(
   searchParam,
   searchValue,
   supplyType,
-  secondarySearchParam
+  secondarySearchParam,
+  productType
 ) {
   try {
     let results = "";
@@ -46,8 +47,22 @@ export default async function DoSearch(
 
         return results.data[1];
 
+      case path === "products":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}`
+        );
+
+        return results.data[1];
+
+      case path === "products" && searchParam === "employee":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
+        );
+        return results.data[1];
+
       case searchParam &&
         searchParam !== "supplies" &&
+        searchParam !== "products" &&
         searchParam !== "inflows":
         results = await axios.get(
           `/${path}/search/${searchParam}/?limit=20&offset=0&value=${searchValue}`

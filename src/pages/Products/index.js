@@ -409,7 +409,9 @@ export default function Products() {
             <option value="category">Categoria</option>
             <option value="name">Nome</option>
             <option value="expirationDate">Data de validade</option>
-            <option value="employee">Funcionário</option>
+            {permissions.some(
+              (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+            ) && <option value="employee">Funcionário</option>}
             <option value="price">Preço</option>
           </select>
         </div>

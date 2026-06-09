@@ -28,6 +28,7 @@ export default function ProductInflows() {
   const [inflowsData, setInflowsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [searchParam, setSearchParam] = useState("");
   const [searchProductParam, setSearchProductParam] = useState("");
   const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
   const [bossId, setBossId] = useState("");
@@ -135,7 +136,19 @@ export default function ProductInflows() {
     setSearchResults([]);
     setSearchInputValue("");
     setSearchProductParam("");
+    setSearchParam("");
   };
+
+  function HandleOptionsValue(e) {
+    const searchType = e.slice(-1);
+    const formattedParam = e.slice(0, -2);
+
+    if (searchType === "P") {
+      setSearchParam(formattedParam);
+    } else {
+      setSearchSecondaryParam(formattedParam);
+    }
+  }
 
   async function SearchInflows(e) {
     e.preventDefault();
@@ -145,36 +158,43 @@ export default function ProductInflows() {
     let search = "";
     let formattedDate = "";
 
-    if (searchSecondaryParam === "date") {
-      const year = searchInput.value.slice(6, 10);
-      const month = searchInput.value.slice(3, 5);
-      const day = searchInput.value.slice(0, 2);
+    if (searchSecondaryParam) {
+      search = await DoSearch(
+        "products",
+        "inflows",
+        searchInputValue,
+        null,
+        searchSecondaryParam,
+        "PRODUCT_INFLOW"
+      );
+    }
 
-      formattedDate = `${year}-${month}-${day}`;
+    if (searchParam) {
+      if (searchParam === "date" || searchParam === "expirationDate") {
+        const year = searchInputValue.slice(6, 10);
+        const month = searchInputValue.slice(3, 5);
+        const day = searchInputValue.slice(0, 2);
 
-      search = await DoSearch(
-        "products",
-        "inflows",
-        formattedDate,
-        null,
-        searchSecondaryParam
-      );
-    } else if (searchSecondaryParam === "employees") {
-      search = await DoSearch(
-        "products",
-        "inflows",
-        formattedDate,
-        null,
-        searchSecondaryParam
-      );
-    } else {
-      search = await DoSearch(
-        "products",
-        "inflows",
-        searchInput.value,
-        null,
-        searchSecondaryParam
-      );
+        formattedDate = `${year}/${month}/${day}`;
+
+        search = await DoSearch(
+          "products",
+          searchParam,
+          formattedDate,
+          null,
+          null,
+          "PRODUCT"
+        );
+      } else {
+        search = await DoSearch(
+          "products",
+          searchParam,
+          searchInputValue,
+          null,
+          null,
+          "PRODUCT"
+        );
+      }
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -227,12 +247,18 @@ export default function ProductInflows() {
             name="search-options"
             className="options"
             id="filter-select"
-            onChange={(e) => setSearchSecondaryParam(e.target.value)}
+            onChange={(e) => HandleOptionsValue(e.target.value)}
           >
             <option value="">Selecione</option>
-            <option value="product">Produto</option>
-            <option value="employee">Funcionário</option>
-            <option value="date">Data de registro</option>
+            <option value="product-I">Produto</option>
+            <option value="date-P">Data de registro</option>
+            <option value="category-P">Categoria</option>
+            <option value="name-P">Nome</option>
+            <option value="expirationDate-P">Data de validade</option>
+            {permissions.some(
+              (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+            ) && <option value="employee-I">Funcionário</option>}
+            <option value="price-P">Preço</option>
           </select>
         </div>
       </SearchSpace>
@@ -271,7 +297,57 @@ export default function ProductInflows() {
                       readOnly
                     />
                   </div>
-                  {extractFromPermissions.current.includes("PRODUCTS") && (
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={inflow.name}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={inflow.category}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={inflow.price}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Validade: </div>
+                    <input
+                      type="text"
+                      name="expirationDate"
+                      className="data-div"
+                      value={`${inflow.expirationDate.slice(8, 10)}/${inflow.expirationDate.slice(5, 7)}/${inflow.expirationDate.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Usou insumos em estoque: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={inflow.useStockSupplies === true ? "Sim" : "Não"}
+                      readOnly
+                    />
+                  </div>
+                  {extractFromPermissions.current.includes("EMPLOYEES") && (
                     <div className="data-wrap">
                       <div className="label">Funcionário: </div>
                       <input
@@ -297,7 +373,27 @@ export default function ProductInflows() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${inflow.createdAt.slice(8, 10)}-${inflow.createdAt.slice(5, 7)}-${inflow.createdAt.slice(0, 4)}`}
+                      value={`${inflow.createdAt.slice(8, 10)}/${inflow.createdAt.slice(5, 7)}/${inflow.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (data): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${inflow.updatedAt.slice(8, 10)}/${inflow.updatedAt.slice(5, 7)}/${inflow.updatedAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (hora): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${inflow.createdAt.slice(11, 13)}:${inflow.createdAt.slice(14, 16)}:${inflow.createdAt.slice(17, 19)}`}
                       readOnly
                     />
                   </div>
@@ -337,7 +433,57 @@ export default function ProductInflows() {
                       readOnly
                     />
                   </div>
-                  {extractFromPermissions.current.includes("PRODUCTS") && (
+                  <div className="data-wrap">
+                    <div className="label">Nome: </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="data-div"
+                      value={inflow.name}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Categoria: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={inflow.category}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={inflow.price}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Validade: </div>
+                    <input
+                      type="text"
+                      name="expirationDate"
+                      className="data-div"
+                      value={inflow.expirationDate}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Usou insumos em estoque: </div>
+                    <input
+                      type="text"
+                      name="category"
+                      className="data-div"
+                      value={inflow.useStockSupplies === true ? "Sim" : "Não"}
+                      readOnly
+                    />
+                  </div>
+                  {extractFromPermissions.current.includes("EMPLOYEES") && (
                     <div className="data-wrap">
                       <div className="label">Funcionário: </div>
                       <input
@@ -363,7 +509,27 @@ export default function ProductInflows() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${inflow.createdAt.slice(8, 10)}-${inflow.createdAt.slice(5, 7)}-${inflow.createdAt.slice(0, 4)}`}
+                      value={`${inflow.createdAt.slice(8, 10)}/${inflow.createdAt.slice(5, 7)}/${inflow.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (data): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${inflow.updatedAt.slice(8, 10)}/${inflow.updatedAt.slice(5, 7)}/${inflow.updatedAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (hora): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${inflow.createdAt.slice(11, 13)}:${inflow.createdAt.slice(14, 16)}:${inflow.createdAt.slice(17, 19)}`}
                       readOnly
                     />
                   </div>
