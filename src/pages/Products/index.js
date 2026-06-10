@@ -677,7 +677,7 @@ export default function Products() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${product.createdAt.slice(11, 13)}:${product.createdAt.slice(14, 16)}:${product.createdAt.slice(17, 19)}`}
+                      value={`${product.updatedAt.slice(11, 13)}:${product.updatedAt.slice(14, 16)}:${product.updatedAt.slice(17, 19)}`}
                       readOnly
                     />
                   </div>

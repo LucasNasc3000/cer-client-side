@@ -333,16 +333,13 @@ export default function Sales() {
               return (
                 <div key={sale.id} className="main-data-div" id={sale.id}>
                   <div className="data-wrap">
-                    <div className="label">Date: </div>
+                    <div className="label">Data: </div>
                     <input
                       type="text"
                       name="date"
                       className="data-div"
-                      value={sale.date}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      value={`${sale.createdAt.slice(8, 10)}-${sale.createdAt.slice(5, 7)}-${sale.createdAt.slice(0, 4)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -351,23 +348,27 @@ export default function Sales() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={sale.hour}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      onChange={(e) => HandleChange(e, sale.id)}
+                      value={`${sale.createdAt.slice(11, 13)}:${sale.createdAt.slice(14, 16)}:${sale.createdAt.slice(17, 19)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Nome cliente: </div>
+                    <div className="label">Nome do cliente: </div>
                     <input
                       type="text"
                       name="clientName"
                       className="data-div"
                       value={sale.clientName}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
+                      onChange={(e) => HandleChange(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">E-mail do cliente: </div>
+                    <input
+                      type="text"
+                      name="clientEmail"
+                      className="data-div"
+                      value={sale.clientEmail}
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
@@ -378,9 +379,6 @@ export default function Sales() {
                       name="phoneNumber"
                       className="data-div"
                       value={sale.phoneNumber}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
@@ -391,35 +389,6 @@ export default function Sales() {
                       name="address"
                       className="data-div"
                       value={sale.address}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      onChange={(e) => HandleChange(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Produtos: </div>
-                    <input
-                      type="text"
-                      name="products"
-                      className="data-div"
-                      value={sale.products}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      onChange={(e) => HandleChange(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Aniversário do cliente: </div>
-                    <input
-                      type="text"
-                      name="client_birthday"
-                      className="data-div"
-                      value={sale.client_birthday}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
@@ -428,7 +397,7 @@ export default function Sales() {
                     <input
                       type="text"
                       className="data-div"
-                      value={sale.employee_id}
+                      value={sale.employee.id}
                       readOnly
                     />
                   </div>
@@ -439,148 +408,12 @@ export default function Sales() {
                       name="price"
                       className="data-div-price"
                       value={sale.price}
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      onChange={(e) => HandleChange(e, sale.id)}
-                    />
-                  </div>
-                  <div className="buttons">
-                    <button
-                      type="button"
-                      className="confirm-changes"
-                      onClick={(e) => SaleUpdate(e, sale)}
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-changes"
-                      onClick={(e) => clear(e)}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          : searchResults.map((sale) => {
-              return (
-                <div key={sale.id} className="main-data-div" id={sale.id}>
-                  <div className="data-wrap">
-                    <div className="label">Date: </div>
-                    <input
-                      type="text"
-                      name="date"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.date}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Hora: </div>
-                    <input
-                      type="text"
-                      name="hour"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.hour}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Nome cliente: </div>
-                    <input
-                      type="text"
-                      name="clientName"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.clientName}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Telefone: </div>
-                    <input
-                      type="text"
-                      name="phoneNumber"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.phoneNumber}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Endereço: </div>
-                    <input
-                      type="text"
-                      name="address"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.address}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Produtos: </div>
-                    <input
-                      type="text"
-                      name="products"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.products}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Aniversário do cliente: </div>
-                    <input
-                      type="text"
-                      name="client_birthday"
-                      className="data-div"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.client_birthday}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={sale.employee_id}
                       readOnly
                     />
                   </div>
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
-                    <input
-                      type="text"
-                      name="price"
-                      className="data-div-price"
-                      readOnly={
-                        permissions !== process.env.REACT_APP_ADMIN_ROLE
-                      }
-                      value={sale.price}
-                      onChange={(e) => HandleChangeSearch(e, sale.id)}
-                    />
-                  </div>
-                  {permissions === process.env.REACT_APP_ADMIN_ROLE ? (
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "SALES"
+                  ) && (
                     <div className="buttons">
                       <button
                         type="button"
@@ -597,8 +430,111 @@ export default function Sales() {
                         Cancelar
                       </button>
                     </div>
-                  ) : (
-                    ""
+                  )}
+                </div>
+              );
+            })
+          : searchResults.map((sale) => {
+              return (
+                <div key={sale.id} className="main-data-div" id={sale.id}>
+                  <div className="data-wrap">
+                    <div className="label">Data: </div>
+                    <input
+                      type="text"
+                      name="date"
+                      className="data-div"
+                      value={`${sale.createdAt.slice(8, 10)}-${sale.createdAt.slice(5, 7)}-${sale.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Hora: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={`${sale.createdAt.slice(11, 13)}:${sale.createdAt.slice(14, 16)}:${sale.createdAt.slice(17, 19)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Nome do cliente: </div>
+                    <input
+                      type="text"
+                      name="clientName"
+                      className="data-div"
+                      value={sale.clientName}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">E-mail do cliente: </div>
+                    <input
+                      type="text"
+                      name="clientEmail"
+                      className="data-div"
+                      value={sale.clientEmail}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Telefone: </div>
+                    <input
+                      type="text"
+                      name="phoneNumber"
+                      className="data-div"
+                      value={sale.phoneNumber}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Endereço: </div>
+                    <input
+                      type="text"
+                      name="address"
+                      className="data-div"
+                      value={sale.address}
+                      onChange={(e) => HandleChangeSearch(e, sale.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Funcionário: </div>
+                    <input
+                      type="text"
+                      className="data-div"
+                      value={sale.employee.id}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap-price">
+                    <div className="label-price">Preço: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div-price"
+                      value={sale.price}
+                      readOnly
+                    />
+                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "SALES"
+                  ) && (
+                    <div className="buttons">
+                      <button
+                        type="button"
+                        className="confirm-changes"
+                        onClick={(e) => SaleUpdate(e, sale)}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-changes"
+                        onClick={(e) => clear(e)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
                   )}
                 </div>
               );
