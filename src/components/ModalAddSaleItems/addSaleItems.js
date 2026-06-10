@@ -1,30 +1,25 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import Decimal from "decimal.js";
 import { get } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../services/axios";
-import * as actions from "../../store/modules/recipeData/actions";
-import { ModalRecipeContainer } from "./addRecipeStyled";
+import * as actions from "../../store/modules/saleItems/actions";
+import { ModalAddSaleItemsContainer } from "./addSaleItemsStyled";
 
-export function ModalRecipeChildren() {
-  const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+export function ModalAddSaleItemsChildren() {
+  const getSaleItemsIfExists = useSelector((state) => state.saleItems);
 
   const dispatch = useDispatch();
 
   const [inputSearchValue, setInputSearchValue] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [unitOrWeight, setUnitOrWeight] = useState("");
-  const [useStockSupplies, setUseStockSupplies] = useState(false);
+  const [quantity, setQuantity] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
-  const [supplyData, setSupplyData] = useState({});
-  const [recipeItemsToShow, setRecipeItemsToShow] = useState([]);
-  const [recipeItemsToShowFromRedux, setRecipeItemsToShowFromRedux] = useState(
-    []
-  );
+  const [productData, setProductData] = useState({});
+  const [saleItemsToShow, setSaleItemsToShow] = useState([]);
+  const [saleItemsToShowFromRedux, setSaleItemsToShowFromRedux] = useState([]);
 
   const isSelecting = useRef(false);
 
@@ -40,15 +35,15 @@ export function ModalRecipeChildren() {
       return;
     }
 
-    async function SearchSupply() {
+    async function SearchProduct() {
       const inArray = [];
 
       try {
-        const searchSupply = await axios.get(
-          `/supplies/search/name?limit=20&offset=0&value=${inputSearchValue}&supplyType=SUPPLY_REAL_TIME&forDisplay=true`
+        const searchProduct = await axios.get(
+          `/products/search/name?limit=20&offset=0&value=${inputSearchValue}&productType=PRODUCT&forDisplay=true`
         );
 
-        const results = searchSupply.data[1];
+        const results = searchProduct.data[1];
 
         if (typeof results === "undefined" || !results) return;
 
@@ -68,69 +63,62 @@ export function ModalRecipeChildren() {
       }
     }
 
-    SearchSupply();
+    SearchProduct();
   }, [inputSearchValue]);
 
   useEffect(() => {
-    if (getRecipeDataIfExists.productIngredient.length < 1) return;
-    setRecipeItemsToShowFromRedux(
-      getRecipeDataIfExists.productIngredientToShow
-    );
-  }, [getRecipeDataIfExists]);
+    if (getSaleItemsIfExists.productIngredient.length < 1) return;
+    setSaleItemsToShowFromRedux(getSaleItemsIfExists.saleItemsToShow);
+  }, [getSaleItemsIfExists]);
 
   const ClerDirectExecution = () => {
     setQuantity("");
     setInputSearchValue("");
     setSearchResults([]);
-    setUnitOrWeight("");
-    setRecipeItemsToShow([]);
-    setRecipeItemsToShowFromRedux([]);
-    setUseStockSupplies(false);
+    setSaleItemsToShow([]);
+    setSaleItemsToShowFromRedux([]);
   };
 
   const PartialClerDirectExecution = () => {
     setQuantity("");
     setInputSearchValue("");
     setSearchResults([]);
-    setUnitOrWeight("");
-    setRecipeItemsToShow([]);
+    setSaleItemsToShow([]);
   };
 
-  const AddToRecipe = (e, supply) => {
+  const AddItem = (e, product) => {
     e.preventDefault();
     isSelecting.current = true;
 
-    setSupplyData(supply);
-    setInputSearchValue(supply.name);
+    setProductData(product);
+    setInputSearchValue(product.name);
     setSearchResults([]);
   };
 
-  const SaveRecipe = (e) => {
+  const SaveItems = (e) => {
     e.preventDefault();
 
     const formattedData = [];
 
     // eslint-disable-next-line array-callback-return
-    recipeItemsToShow.map((i) => {
+    saleItemsToShow.map((i) => {
       formattedData.push({
-        supplyId: i.supplyId,
+        product: i.product,
         quantity: i.quantity,
       });
     });
 
-    dispatch(
-      actions.recipeData({ formattedData, recipeItemsToShow, useStockSupplies })
-    );
+    dispatch(actions.saleItems({ formattedData, saleItemsToShow }));
 
     PartialClerDirectExecution();
 
-    toast.success("Receita salva");
+    toast.success("Itens salvos");
   };
 
-  const ClearRecipe = (e) => {
+  const Clear = (e) => {
     e.preventDefault();
 
-    dispatch(actions.clearRecipeData());
+    dispatch(actions.clearSaleItems());
 
     ClerDirectExecution();
   };
@@ -138,74 +126,40 @@ export function ModalRecipeChildren() {
   const DeleteItem = (e, itemData) => {
     e.preventDefault();
 
-    const localRITS = [...recipeItemsToShow];
+    const localSITS = [...saleItemsToShow];
 
-    const findItemIndex = localRITS.findIndex(
+    const findItemIndex = localSITS.findIndex(
       (i) => i.quantity === itemData.quantity && i.name === itemData.name
     );
 
-    localRITS.splice(findItemIndex);
+    localSITS.splice(findItemIndex);
 
-    setRecipeItemsToShow([...localRITS]);
-  };
-
-  const HandleUseStockSupplies = () => {
-    setUseStockSupplies((prev) => {
-      const nextValue = prev === false;
-      return nextValue;
-    });
+    setSaleItemsToShow([...localSITS]);
   };
 
   function PreSave(e) {
     e.preventDefault();
 
-    if (
-      !quantity ||
-      !unitOrWeight ||
-      Object.values(supplyData).every((value) => !value)
-    ) {
-      toast.error(
-        "Quantidade ou unidade não especificados ou insumos não escolhidos"
-      );
+    if (!quantity || Object.values(productData).every((value) => !value)) {
+      toast.error("Quantidade não especificada ou produto não escolhido");
       return;
     }
 
-    let formattedQuantity = "";
+    const formattedQuantity = "";
 
-    // eslint-disable-next-line default-case
-    switch (unitOrWeight) {
-      case "unidades":
-        const unities = new Decimal(quantity);
-        const toGrams = unities.mul(supplyData.weightPerUnit).toString();
-        formattedQuantity = toGrams;
-        break;
-
-      case "g":
-      case "ml":
-        formattedQuantity = quantity;
-        break;
-
-      case "kg":
-      case "L":
-        const currentFormat = new Decimal(quantity);
-        const toGramUnit = currentFormat.mul(1000);
-        formattedQuantity = toGramUnit;
-    }
-
-    const recipeItemsToShowData = {
-      supplyId: supplyData.id,
-      name: supplyData.name,
+    const saleItemsToShowData = {
+      product: productData.id,
+      name: productData.name,
       quantity: formattedQuantity,
-      unit: unitOrWeight,
     };
 
-    setRecipeItemsToShow((prev) => [...prev, recipeItemsToShowData]);
+    setSaleItemsToShow((prev) => [...prev, saleItemsToShowData]);
   }
 
   return (
-    <ModalRecipeContainer>
+    <ModalAddSaleItemsContainer>
       <div className="search-wrapper">
-        <p className="input-label">Insumo:</p>
+        <p className="input-label">Produto:</p>
         <input
           type="text"
           className="input-search"
@@ -220,7 +174,7 @@ export function ModalRecipeChildren() {
                 <button
                   type="button"
                   className="item-button"
-                  onClick={(e) => AddToRecipe(e, item)}
+                  onClick={(e) => AddItem(e, item)}
                 >
                   {item.name}
                 </button>
@@ -231,36 +185,19 @@ export function ModalRecipeChildren() {
       </div>
 
       <div className="quantity-wrapper">
-        <p className="quantity-label">Quantidade:</p>
-        <div className="filter-space">
-          <select
-            name="search-options"
-            className="options"
-            id="filter-select"
-            onChange={(e) => setUnitOrWeight(e.target.value)}
-            value={unitOrWeight}
-          >
-            <option value="">Selecionar medida</option>
-            <option value="unidades">unidade</option>
-            <option value="g">g</option>
-            <option value="ml">ml</option>
-            <option value="kg">kg</option>
-            <option value="L">L</option>
-          </select>
-        </div>
         <input
-          type="text"
+          type="number"
           className="input-quantity"
           onChange={(e) => setQuantity(e.target.value)}
           value={quantity}
         />
       </div>
 
-      <div className="supply-list-wrapper">
-        {recipeItemsToShow.length > 0
-          ? recipeItemsToShow.map((item) => {
+      <div className="product-list-wrapper">
+        {saleItemsToShow.length > 0
+          ? saleItemsToShow.map((item) => {
               return (
-                <div key={item.supplyId} className="supply-list">
+                <div key={item.productId} className="product-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
                     <div className="quantity">{item.quantity}</div>
@@ -276,9 +213,9 @@ export function ModalRecipeChildren() {
                 </div>
               );
             })
-          : recipeItemsToShowFromRedux.map((item) => {
+          : saleItemsToShowFromRedux.map((item) => {
               return (
-                <div key={item.supplyId} className="supply-list">
+                <div key={item.productId} className="product-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
                     <div className="quantity">{item.quantity}</div>
@@ -300,25 +237,14 @@ export function ModalRecipeChildren() {
         <button type="button" className="add" onClick={(e) => PreSave(e)}>
           Adicionar
         </button>
-        <button
-          type="button"
-          className="cancel"
-          onClick={(e) => ClearRecipe(e)}
-        >
+        <button type="button" className="cancel" onClick={(e) => Clear(e)}>
           Cancelar
         </button>
-        <input
-          type="checkbox"
-          className="use-stock-supplies"
-          onChange={HandleUseStockSupplies}
-          value={useStockSupplies}
-        />
-        <p className="use-stock-supplies-label">Usar insumos em estoque</p>
       </div>
 
-      <button type="button" className="save" onClick={(e) => SaveRecipe(e)}>
+      <button type="button" className="save" onClick={(e) => SaveItems(e)}>
         Salvar
       </button>
-    </ModalRecipeContainer>
+    </ModalAddSaleItemsContainer>
   );
 }

@@ -4,31 +4,36 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { IoIosSearch, IoMdPaper } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
+import { Modal } from "../../components/Modal";
+import { ModalAddSaleItemsChildren } from "../../components/ModalAddSaleItems/addSaleItems";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
+import * as actionsItems from "../../store/modules/saleItems/actions";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
+  const getSaleItems = useSelector((state) => state.auth.saleItems);
+
+  const dispatch = useDispatch();
 
   const [date, setDate] = useState("");
   const [clientName, setClientName] = useState("");
-  // const [clientEmail, setClientEmail] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
-  const [client_birthday, setClientBirthday] = useState("");
   const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [bossId, setBossId] = useState("");
@@ -38,6 +43,8 @@ export default function Sales() {
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [rerender, setReRender] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [openAddItems, setOpenAddItems] = useState(false);
+  const [itemsRedux, setItemsRedux] = useState([]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -70,15 +77,21 @@ export default function Sales() {
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
 
+  useEffect(() => {
+    // eslint-disable-next-line no-useless-return
+    if (getSaleItems.saleItems.length < 1) return;
+    setItemsRedux(getSaleItems.saleItems);
+  }, [getSaleItems]);
+
   const clearDirectExecution = () => {
     setDate("");
     setClientName("");
     setPhoneNumber("");
     setAddress("");
     setProducts("");
-    setClientBirthday("");
     setPrice("");
     setSalesData(salesDataBackup);
+    dispatch(actionsItems.clearSaleItems());
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
@@ -97,7 +110,15 @@ export default function Sales() {
   };
 
   async function GetSales() {
-    const sales = await GetData(bossId, "sales", employee_id, permissions);
+    const sales = await GetData(
+      bossId,
+      "sales",
+      employee_id,
+      permissions,
+      null,
+      true,
+      null
+    );
 
     if (typeof sales === "undefined" || !sales) return;
 
@@ -120,7 +141,18 @@ export default function Sales() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
+    const permissionVerify = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "SALES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar vendas necessária");
+      return;
+    }
 
     setSalesData((prevData) =>
       prevData.map((item) =>
@@ -133,7 +165,18 @@ export default function Sales() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
+    const permissionVerify = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "SALES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar vendas necessária");
+      return;
+    }
 
     setSearchResults((prevData) =>
       prevData.map((item) =>
@@ -147,7 +190,34 @@ export default function Sales() {
 
     const inArray = [];
 
-    const search = await DoSearch("sales", searchParam, searchInputValue);
+    let search = "";
+    let formattedDate = "";
+
+    if (searchParam === "date") {
+      const year = searchInputValue.slice(6, 10);
+      const month = searchInputValue.slice(3, 5);
+      const day = searchInputValue.slice(0, 2);
+
+      formattedDate = `${year}-${month}-${day}`;
+
+      search = await DoSearch(
+        "sales",
+        searchParam,
+        formattedDate,
+        null,
+        null,
+        null
+      );
+    } else {
+      search = await DoSearch(
+        "sales",
+        searchParam,
+        searchInputValue,
+        null,
+        null,
+        null
+      );
+    }
 
     if (typeof search === "undefined" || !search) return;
 
@@ -166,6 +236,19 @@ export default function Sales() {
   const SaleUpdate = async (e, objectData) => {
     e.preventDefault();
 
+    const permissionVerify = permissions.some(
+      (p) => p.action === "CREATE" && p.resource === "SALES"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) {
+      toast.error("Permissão para editar vendas necessária");
+      return;
+    }
+
     const update = await Update(objectData.id, objectData, "sales");
 
     setReRender(update);
@@ -176,24 +259,15 @@ export default function Sales() {
   const SaleRegister = async (e) => {
     e.preventDefault();
 
-    const takeCommaPrice = document
-      .querySelector("#price")
-      .value.replace(",", ".");
+    const takeCommaPrice = price.replace(",", ".");
 
-    const ddate = new Date();
-    const hour = ddate.toLocaleTimeString("pt-br", {
-      hourCycle: "h24",
-    });
-
+    // Adicionar status a partir do objeto no redux
     const data = {
-      date: document.querySelector("#date").value,
-      hour,
-      clientName: document.querySelector("#clientName").value,
-      phoneNumber: document.querySelector("#phoneNumber").value,
-      address: document.querySelector("#address").value,
-      products: document.querySelector("#products").value,
+      clientName,
+      clientEmail,
+      phoneNumber,
+      address,
       employee_id,
-      client_birthday: document.querySelector("#clientBirthday").value,
       price: takeCommaPrice,
     };
 
@@ -547,6 +621,13 @@ export default function Sales() {
         />
         <input
           type="text"
+          id="clientEmail"
+          placeholder="Email cliente ex: joao@gmail.com"
+          value={clientEmail}
+          onChange={(e) => setClientEmail(e.target.value)}
+        />
+        <input
+          type="text"
           id="phoneNumber"
           placeholder="Tel ex: 11 11111-2222"
           value={phoneNumber}
@@ -568,13 +649,6 @@ export default function Sales() {
         />
         <input
           type="text"
-          id="clientBirthday"
-          placeholder="Anv. Cliente ex: 15-02"
-          value={client_birthday}
-          onChange={(e) => setClientBirthday(e.target.value)}
-        />
-        <input
-          type="text"
           id="price"
           placeholder="Preço ex: 15,99"
           value={price}
@@ -585,6 +659,21 @@ export default function Sales() {
         </button>
         <button type="button" className="btn" onClick={(e) => SaleRegister(e)}>
           Adicionar
+        </button>
+        <Modal
+          isOpen={openAddItems}
+          onClose={() => setOpenAddItems(false)}
+          title="Adicionar produtos"
+        >
+          <ModalAddSaleItemsChildren />
+        </Modal>
+        <button
+          type="button"
+          className="add-recipe-btn"
+          onClick={() => setOpenAddItems(true)}
+        >
+          <IoMdPaper className="recipe-icon" />
+          Adicionar Produtos
         </button>
       </NewSale>
     </SalesContainer>
