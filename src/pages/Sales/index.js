@@ -17,6 +17,7 @@ import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actionsItems from "../../store/modules/saleItems/actions";
+import { GetChangedFields } from "../../utils/GetChangedFields";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
@@ -36,6 +37,7 @@ export default function Sales() {
   const [employee_id, setEmployeeId] = useState("");
   const [price, setPrice] = useState("");
   const [searchParam, setSearchParam] = useState("");
+  const [originalSalesData, setOriginalSalesData] = useState({});
   const [bossId, setBossId] = useState("");
   const [salesData, setSalesData] = useState([]);
   const [salesDataBackup, setSalesDataBackup] = useState([]);
@@ -124,6 +126,9 @@ export default function Sales() {
 
     setSalesData(sales);
     setSalesDataBackup(sales);
+    setOriginalSalesData(
+      Object.fromEntries(sales.map((item) => [item.id, { ...item }]))
+    );
   }
 
   useEffect(() => {
@@ -249,11 +254,28 @@ export default function Sales() {
       return;
     }
 
-    const update = await Update(objectData.id, objectData, "sales");
+    const current = salesData.find((p) => p.id === objectData.id);
+    const original = originalSalesData[objectData.id];
 
-    setReRender(update);
+    const changedFields = GetChangedFields(original, current);
 
-    clearDirectExecution();
+    if (Object.keys(changedFields).length === 0) {
+      toast.info("Nenhuma alteração detectada");
+      return;
+    }
+
+    const update = await Update(objectData.id, changedFields, "sales");
+
+    if (update) {
+      setOriginalSalesData((prev) => ({
+        ...prev,
+        [objectData.id]: { ...current },
+      }));
+
+      setReRender(update);
+
+      clearDirectExecution();
+    }
   };
 
   const SaleRegister = async (e) => {

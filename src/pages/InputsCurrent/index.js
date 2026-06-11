@@ -29,6 +29,7 @@ export default function InputsCurrent() {
   const dispatch = useDispatch();
 
   const [searchParam, setSearchParam] = useState("");
+  const [originalSuppliesData, setOriginalSuppliesData] = useState({});
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -138,7 +139,11 @@ export default function InputsCurrent() {
     if (typeof inputs === "undefined" || !inputs) return;
 
     setInputsData(inputs);
+    setProductsData(inputs);
     setInputsDataBackup(inputs);
+    setSuppliesProductsData(
+      Object.fromEntries(inputs.map((item) => [item.id, { ...item }]))
+    );
   }
 
   useEffect(() => {
@@ -285,16 +290,6 @@ export default function InputsCurrent() {
       return;
     }
 
-    const decimalRegex = /^\d+(?:[.,]\d+)$/;
-
-    const toNumberFields = [
-      "quantity",
-      "price",
-      "weightPerUnit",
-      "totalWeight",
-      "lowStock",
-    ];
-
     if (objectData.price) {
       const editPricePermissionVerify = permissions.some(
         (p) => p.action === "EDIT_PRICES" && p.resource === "SUPPLIES"
@@ -306,23 +301,28 @@ export default function InputsCurrent() {
       }
     }
 
-    toNumberFields.forEach((field) => {
-      if (decimalRegex.test(objectData[field])) {
-        objectData[field] = objectData[field].replace(",", ".");
+    const current = inputsData.find((p) => p.id === objectData.id);
+    const original = originalSuppliesData[objectData.id];
 
-        objectData[field] = parseFloat(objectData[field]);
+    const changedFields = GetChangedFields(original, current);
 
-        const parsedValue = parseInt(objectData[field], 10);
+    if (Object.keys(changedFields).length === 0) {
+      toast.info("Nenhuma alteração detectada");
+      return;
+    }
 
-        objectData[field] = parsedValue;
-      }
-    });
+    const update = await Update(objectData.id, changedFields, "supplies");
 
-    const update = await Update(objectData.id, objectData, "supplies");
+    if (update) {
+      setOriginalSuppliesData((prev) => ({
+        ...prev,
+        [objectData.id]: { ...current },
+      }));
 
-    setReRender(update);
+      setReRender(update);
 
-    clearDirectExecution();
+      clearDirectExecution();
+    }
   };
 
   return (
