@@ -139,9 +139,8 @@ export default function InputsCurrent() {
     if (typeof inputs === "undefined" || !inputs) return;
 
     setInputsData(inputs);
-    setProductsData(inputs);
     setInputsDataBackup(inputs);
-    setSuppliesProductsData(
+    setOriginalSuppliesData(
       Object.fromEntries(inputs.map((item) => [item.id, { ...item }]))
     );
   }

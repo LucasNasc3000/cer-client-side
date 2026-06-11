@@ -67,7 +67,7 @@ export function ModalAddSaleItemsChildren() {
   }, [inputSearchValue]);
 
   useEffect(() => {
-    if (getSaleItemsIfExists.productIngredient.length < 1) return;
+    if (getSaleItemsIfExists.saleItems.length < 1) return;
     setSaleItemsToShowFromRedux(getSaleItemsIfExists.saleItemsToShow);
   }, [getSaleItemsIfExists]);
 
@@ -145,12 +145,10 @@ export function ModalAddSaleItemsChildren() {
       return;
     }
 
-    const formattedQuantity = "";
-
     const saleItemsToShowData = {
       product: productData.id,
       name: productData.name,
-      quantity: formattedQuantity,
+      quantity,
     };
 
     setSaleItemsToShow((prev) => [...prev, saleItemsToShowData]);
@@ -201,7 +199,6 @@ export function ModalAddSaleItemsChildren() {
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
                     <div className="quantity">{item.quantity}</div>
-                    <div className="unit-type">{item.unit}</div>
                     <button
                       type="button"
                       className="delete"
@@ -219,7 +216,6 @@ export function ModalAddSaleItemsChildren() {
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
                     <div className="quantity">{item.quantity}</div>
-                    <div className="unit-type">{item.unit}</div>
                     <button
                       type="button"
                       className="delete"

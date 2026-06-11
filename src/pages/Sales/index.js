@@ -17,6 +17,7 @@ import GetData from "../../services/getData";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
+import * as actionsEditSalesStatus from "../../store/modules/editSalesStatus/actions";
 import * as actionsItems from "../../store/modules/saleItems/actions";
 import { GetChangedFields } from "../../utils/GetChangedFields";
 import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
@@ -25,9 +26,9 @@ export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
-  const getSaleItems = useSelector((state) => state.auth.saleItems);
+  const getSaleItems = useSelector((state) => state.saleItems);
   const getUpdateSaleStatusDataIfExists = useSelector(
-    (state) => state.auth.editSalesStatus
+    (state) => state.editSalesStatus
   );
 
   const dispatch = useDispatch();
@@ -37,7 +38,6 @@ export default function Sales() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [employee_id, setEmployeeId] = useState("");
-  const [price, setPrice] = useState("");
   const [status, setStatus] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [originalSalesData, setOriginalSalesData] = useState({});
@@ -84,6 +84,7 @@ export default function Sales() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
+    console.log(getSaleItems);
     // eslint-disable-next-line no-useless-return
     if (getSaleItems.saleItems.length < 1) return;
     setItemsRedux(getSaleItems.saleItems);
@@ -91,11 +92,13 @@ export default function Sales() {
 
   const clearDirectExecution = () => {
     setClientName("");
+    setClientEmail("");
     setPhoneNumber("");
     setAddress("");
-    setPrice("");
     setSalesData(salesDataBackup);
+    setStatus("");
     dispatch(actionsItems.clearSaleItems());
+    dispatch(actionsEditSalesStatus.clearUpdateSalesStatusData());
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
@@ -114,6 +117,8 @@ export default function Sales() {
   };
 
   async function GetSales() {
+    if (!employee_id || !permissions) return;
+
     const sales = await GetData(
       bossId,
       "sales",
@@ -300,15 +305,12 @@ export default function Sales() {
   const SaleRegister = async (e) => {
     e.preventDefault();
 
-    const takeCommaPrice = price.replace(",", ".");
-
     // Adicionar status a partir do objeto no redux
     const data = {
       clientName,
       clientEmail: clientEmail || null,
       phoneNumber: phoneNumber || null,
       address: address || null,
-      price: takeCommaPrice,
       status,
       saleItems: itemsRedux,
     };
@@ -444,12 +446,12 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
+                    <div className="label-price">Preço total: </div>
                     <input
                       type="text"
                       name="price"
                       className="data-div-price"
-                      value={sale.price}
+                      value={sale.totalPrice.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -574,7 +576,7 @@ export default function Sales() {
                       type="text"
                       name="price"
                       className="data-div-price"
-                      value={sale.price}
+                      value={sale.totalPrice.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -663,13 +665,6 @@ export default function Sales() {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
-        <input
-          type="text"
-          id="price"
-          placeholder="Preço ex: 15,99"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>
@@ -685,10 +680,10 @@ export default function Sales() {
         </Modal>
         <button
           type="button"
-          className="add-recipe-btn"
+          className="add-items-btn"
           onClick={() => setOpenAddItems(true)}
         >
-          <IoMdPaper className="recipe-icon" />
+          <IoMdPaper className="items-icon" />
           Adicionar Produtos
         </button>
       </NewSale>

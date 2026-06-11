@@ -371,4 +371,24 @@ export const NewSale = styled.div`
     margin-top: 15px;
     box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
+
+  .add-items-btn {
+    display: flex;
+    position: relative;
+    top: 20px;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+    margin-top: 15px;
+    gap: 10px;
+    box-shadow: 1px 1.5px rgb(102, 96, 96);
+  }
+
+  .items-icon {
+    display: flex;
+    color: #fff;
+    height: 30px;
+    width: 30px;
+  }
 `;

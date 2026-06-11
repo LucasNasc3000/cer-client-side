@@ -90,7 +90,7 @@ export const ModalAddSaleItemsContainer = styled.div`
     align-items: center;
     height: 35px;
     border-radius: 8px;
-    gap: 15px;
+    gap: 60px;
   }
 
   .delete {
