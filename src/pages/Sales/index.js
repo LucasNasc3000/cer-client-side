@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import { Modal } from "../../components/Modal";
 import { ModalAddSaleItemsChildren } from "../../components/ModalAddSaleItems/addSaleItems";
+import { ModalShowSaleItemsChildren } from "../../components/ModalShowSaleItems/showSaleItems";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
@@ -28,14 +29,13 @@ export default function Sales() {
 
   const dispatch = useDispatch();
 
-  const [date, setDate] = useState("");
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [products, setProducts] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [price, setPrice] = useState("");
+  const [status, setStatus] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [originalSalesData, setOriginalSalesData] = useState({});
   const [bossId, setBossId] = useState("");
@@ -46,6 +46,7 @@ export default function Sales() {
   const [rerender, setReRender] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [openAddItems, setOpenAddItems] = useState(false);
+  const [openModalId, setOpenModalId] = useState("");
   const [itemsRedux, setItemsRedux] = useState([]);
 
   useEffect(() => {
@@ -86,11 +87,9 @@ export default function Sales() {
   }, [getSaleItems]);
 
   const clearDirectExecution = () => {
-    setDate("");
     setClientName("");
     setPhoneNumber("");
     setAddress("");
-    setProducts("");
     setPrice("");
     setSalesData(salesDataBackup);
     dispatch(actionsItems.clearSaleItems());
@@ -290,6 +289,7 @@ export default function Sales() {
       phoneNumber: phoneNumber || null,
       address: address || null,
       price: takeCommaPrice,
+      status,
       saleItems: itemsRedux,
     };
 
@@ -433,26 +433,46 @@ export default function Sales() {
                       readOnly
                     />
                   </div>
-                  {permissions.some(
-                    (p) => p.action === "UPDATE" && p.resource === "SALES"
-                  ) && (
-                    <div className="buttons">
+                  <div className="footer">
+                    <div className="footer-actions">
+                      <Modal
+                        isOpen={openModalId === `items-${sale.id}`}
+                        onClose={() => setOpenModalId(null)}
+                        title="Produtos vendidos"
+                      >
+                        <ModalShowSaleItemsChildren saleItems={sale} />
+                      </Modal>
                       <button
                         type="button"
-                        className="confirm-changes"
-                        onClick={(e) => SaleUpdate(e, sale)}
+                        onClick={() => setOpenModalId(`items-${sale.id}`)}
+                        className="add-recipe"
                       >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
-                        Cancelar
+                        Ver produtos
                       </button>
                     </div>
-                  )}
+                    {permissions.some(
+                      (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
+                    ) && (
+                      <div className="footer-confirm">
+                        <div className="buttons">
+                          <button
+                            type="button"
+                            className="confirm-changes"
+                            onClick={(e) => SaleUpdate(e, sale)}
+                          >
+                            Salvar
+                          </button>
+                          <button
+                            type="button"
+                            className="cancel-changes"
+                            onClick={(e) => clear(e)}
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })
@@ -538,38 +558,63 @@ export default function Sales() {
                       readOnly
                     />
                   </div>
-                  {permissions.some(
-                    (p) => p.action === "UPDATE" && p.resource === "SALES"
-                  ) && (
-                    <div className="buttons">
+                  <div className="footer">
+                    <div className="footer-actions">
+                      <Modal
+                        isOpen={openModalId === `items-${sale.id}`}
+                        onClose={() => setOpenModalId(null)}
+                        title="Produtos vendidos"
+                      >
+                        <ModalShowSaleItemsChildren saleItems={sale} />
+                      </Modal>
                       <button
                         type="button"
-                        className="confirm-changes"
-                        onClick={(e) => SaleUpdate(e, sale)}
+                        onClick={() => setOpenModalId(`items-${sale.id}`)}
+                        className="add-recipe"
                       >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
-                        Cancelar
+                        Ver produtos
                       </button>
                     </div>
-                  )}
+                    {permissions.some(
+                      (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
+                    ) && (
+                      <div className="footer-confirm">
+                        <div className="buttons">
+                          <button
+                            type="button"
+                            className="confirm-changes"
+                            onClick={(e) => SaleUpdate(e, sale)}
+                          >
+                            Salvar
+                          </button>
+                          <button
+                            type="button"
+                            className="cancel-changes"
+                            onClick={(e) => clear(e)}
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })}
       </SalesSpace>
       <NewSale>
-        <input
-          type="text"
-          id="date"
-          placeholder="Data ex: 02-07-2025"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+        <div className="status">
+          <select
+            className="options-status"
+            onChange={(e) => setStatus(e.target.value)}
+            value={status}
+          >
+            <option value="">Status</option>
+            <option value="finalizada">Finalizada</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="pendente">Pendente</option>
+          </select>
+        </div>
         <input
           type="text"
           id="clientName"
@@ -597,13 +642,6 @@ export default function Sales() {
           placeholder="Endereço ex: Rua tal, 123"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-        />
-        <input
-          type="text"
-          id="products"
-          placeholder="Produtos ex: coxinha,suco"
-          value={products}
-          onChange={(e) => setProducts(e.target.value)}
         />
         <input
           type="text"

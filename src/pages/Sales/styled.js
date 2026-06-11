@@ -329,6 +329,37 @@ export const NewSale = styled.div`
     border-bottom: 0.5px solid black;
   }
 
+  .status {
+    display: flex;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .options-status {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 30px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+
   .btn {
     display: flex;
     position: relative;
