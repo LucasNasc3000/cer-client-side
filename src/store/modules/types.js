@@ -25,6 +25,9 @@ export const CLEAR_SALE_ITEMS = "CLEAR_SALE_ITEMS";
 export const UPDATE_UNITIES = "UPDATE_UNITIES";
 export const CLEAR_UPDATE_UNITIES_DATA = "CLEAR_UPDATE_UNITIES_DATA";
 
+export const UPDATE_SALES_STATUS = "UPDATE_SALES_STATUS";
+export const CLEAR_UPDATE_SALES_STATUS_DATA = "CLEAR_UPDATE_SALES_STATUS_DATA";
+
 /* Esta action vai manter os dados do login no local storage depois que este for feito. Sem ele
   esses dados desaparecerão quando a página for atualizada */
 export const PERSIST_REHYDRATE = "persist/REHYDRATE";

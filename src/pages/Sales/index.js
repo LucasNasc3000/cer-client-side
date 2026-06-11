@@ -26,6 +26,9 @@ export default function Sales() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getSaleItems = useSelector((state) => state.auth.saleItems);
+  const getUpdateSaleStatusDataIfExists = useSelector(
+    (state) => state.auth.editSalesStatus
+  );
 
   const dispatch = useDispatch();
 
@@ -258,7 +261,24 @@ export default function Sales() {
 
     const changedFields = GetChangedFields(original, current);
 
-    if (Object.keys(changedFields).length === 0) {
+    const truthyFields = Object.fromEntries(
+      // eslint-disable-next-line array-callback-return
+      Object.entries(getUpdateSaleStatusDataIfExists).filter(
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) =>
+          getUpdateSaleStatusDataIfExists[key] !== 0 &&
+          getUpdateSaleStatusDataIfExists[key] !== ""
+      )
+    );
+
+    console.log(truthyFields);
+
+    const ALWAYS_PRESENT_FIELDS = 2;
+
+    if (
+      Object.keys(changedFields).length === 0 &&
+      Object.keys(truthyFields).length < ALWAYS_PRESENT_FIELDS
+    ) {
       toast.info("Nenhuma alteração detectada");
       return;
     }
