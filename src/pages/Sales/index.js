@@ -264,11 +264,11 @@ export default function Sales() {
     // Adicionar status a partir do objeto no redux
     const data = {
       clientName,
-      clientEmail,
-      phoneNumber,
-      address,
-      employee_id,
+      clientEmail: clientEmail || null,
+      phoneNumber: phoneNumber || null,
+      address: address || null,
       price: takeCommaPrice,
+      saleItems: itemsRedux,
     };
 
     const register = await Register(data, "sales");

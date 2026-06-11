@@ -9,11 +9,19 @@ let translatedRegisterType = "";
 
 export default async function Register(data, registerType) {
   try {
+    const truthyFields = Object.fromEntries(
+      // eslint-disable-next-line array-callback-return
+      Object.entries(data).filter(
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) => data[key] !== null
+      )
+    );
+
     // eslint-disable-next-line default-case
     switch (registerType) {
       case "supplies":
         await axios.post("/supplies", {
-          ...data,
+          ...truthyFields,
         });
 
         const inputName = data.name;
@@ -23,7 +31,7 @@ export default async function Register(data, registerType) {
 
       case "sales":
         await axios.post("/sales", {
-          ...data,
+          ...truthyFields,
         });
 
         translatedRegisterType = "venda";
@@ -32,7 +40,7 @@ export default async function Register(data, registerType) {
 
       case "outflows":
         await axios.post("/outflows", {
-          ...data,
+          ...truthyFields,
         });
 
         const outflowName = data.name;

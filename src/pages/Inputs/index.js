@@ -200,13 +200,13 @@ export default function Inputs() {
       category,
       name,
       reason,
-      details,
+      details: details || null,
       quantity,
       weightPerUnit,
       price,
       supplier,
       expirationDate,
-      lowStock,
+      lowStock: lowStock || null,
     };
 
     const year = data.expirationDate.slice(6, 10);

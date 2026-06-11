@@ -180,12 +180,12 @@ export default function Outputs() {
     }
 
     const data = {
-      targetType: document.querySelector("#targetType").value,
-      name: document.querySelector("#name").value,
-      category: document.querySelector("#category").value,
-      reason: document.querySelector("#reason").value,
-      unities: document.querySelector("#unities").value,
-      notes: document.querySelector("#notes").value,
+      targetType,
+      name,
+      category,
+      reason,
+      unities,
+      notes: notes || null,
     };
 
     if (data.targetType === "produto") {
