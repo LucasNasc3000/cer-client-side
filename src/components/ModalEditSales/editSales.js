@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import * as actions from "../../store/modules/editSalesStatus/actions";
+import { ModalEditSalesStatusContainer } from "./editSalesStyled";
 
 export function ModalEditSalesStatusChildren({ status }) {
   const getUpdateSalesStatusDataIfExists = useSelector(
@@ -86,15 +87,21 @@ export function ModalEditSalesStatusChildren({ status }) {
   };
 
   return (
-    <ModalEditSalesStatusChildren>
+    <ModalEditSalesStatusContainer>
       <div className="status-wrapper">
         <p className="status-label">Status: </p>
-        <input
-          type="number"
-          className="status"
+        <select
+          name="search-options"
+          className="options-status"
+          id="filter-select"
           onChange={(e) => setStatusState(e.target.value)}
           value={statusState}
-        />
+        >
+          <option value="">Selecionar status</option>
+          <option value="finalizada">Finalizada</option>
+          <option value="cancelada">Cancelada</option>
+          <option value="pendente">Pendente</option>
+        </select>
       </div>
 
       <div className="reason-wrapper">
@@ -156,7 +163,7 @@ export function ModalEditSalesStatusChildren({ status }) {
         />
         <p className="return-to-stock-label">Devolver produtos ao estoque</p>
       </div>
-    </ModalEditSalesStatusChildren>
+    </ModalEditSalesStatusContainer>
   );
 }
 

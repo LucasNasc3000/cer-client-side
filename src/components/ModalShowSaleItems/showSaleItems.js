@@ -10,7 +10,7 @@ export function ModalShowSaleItemsChildren({ saleItems }) {
       <div className="items-list-wrapper">
         {saleItems.map((item) => {
           return (
-            <div key={item.id} className="items-list">
+            <div key={item.id} className="data-wrap">
               <div className="name">{item.product.name}</div>
               <div className="quantity">{item.quantity}</div>
               <div className="price-at-sale">{item.priceAtSale}</div>

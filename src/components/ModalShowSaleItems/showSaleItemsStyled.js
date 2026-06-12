@@ -13,8 +13,15 @@ export const ModalShowSaleItemsContainer = styled.div`
     margin-top: 10px;
   }
 
-  .items-list {
-    margin-bottom: 8px;
+  .data-wrap {
+    display: flex;
+    flex-direction: row;
+    background-color: #a5a4a4ff;
+    align-items: center;
+    height: 35px;
+    border-radius: 8px;
+    gap: 15px;
+    margin-bottom: 10px;
   }
 
   .name {

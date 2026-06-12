@@ -276,8 +276,6 @@ export default function Sales() {
       )
     );
 
-    console.log(truthyFields);
-
     const ALWAYS_PRESENT_FIELDS = 2;
 
     if (
@@ -288,7 +286,12 @@ export default function Sales() {
       return;
     }
 
-    const update = await Update(objectData.id, changedFields, "sales");
+    const allData = {
+      ...changedFields,
+      ...truthyFields,
+    };
+
+    const update = await Update(objectData.id, allData, "sales");
 
     if (update) {
       setOriginalSalesData((prev) => ({
@@ -476,7 +479,7 @@ export default function Sales() {
                       <Modal
                         isOpen={openModalId === `status-${sale.id}`}
                         onClose={() => setOpenModalId(null)}
-                        title="Produtos vendidos"
+                        title="Editar status de venda"
                       >
                         <ModalEditSalesStatusChildren status={sale.status} />
                       </Modal>
