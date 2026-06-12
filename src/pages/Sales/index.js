@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import { Modal } from "../../components/Modal";
 import { ModalAddSaleItemsChildren } from "../../components/ModalAddSaleItems/addSaleItems";
+import { ModalEditSalesStatusChildren } from "../../components/ModalEditSales/editSales";
 import { ModalShowSaleItemsChildren } from "../../components/ModalShowSaleItems/showSaleItems";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -49,7 +50,7 @@ export default function Sales() {
   const [rerender, setReRender] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [openAddItems, setOpenAddItems] = useState(false);
-  const [openModalId, setOpenModalId] = useState("");
+  const [openModalId, setOpenModalId] = useState(null);
   const [itemsRedux, setItemsRedux] = useState([]);
 
   useEffect(() => {
@@ -84,7 +85,6 @@ export default function Sales() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
-    console.log(getSaleItems);
     // eslint-disable-next-line no-useless-return
     if (getSaleItems.saleItems.length < 1) return;
     setItemsRedux(getSaleItems.saleItems);
@@ -397,7 +397,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Nome do cliente: </div>
+                    <div className="label">Nome: </div>
                     <input
                       type="text"
                       name="clientName"
@@ -407,7 +407,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">E-mail do cliente: </div>
+                    <div className="label">E-mail: </div>
                     <input
                       type="text"
                       name="clientEmail"
@@ -445,12 +445,12 @@ export default function Sales() {
                       readOnly
                     />
                   </div>
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço total: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço total: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div-price"
+                      className="data-div"
                       value={sale.totalPrice.replace(".", ",")}
                       readOnly
                     />
@@ -462,14 +462,30 @@ export default function Sales() {
                         onClose={() => setOpenModalId(null)}
                         title="Produtos vendidos"
                       >
-                        <ModalShowSaleItemsChildren saleItems={sale} />
+                        <ModalShowSaleItemsChildren
+                          saleItems={sale.saleItems}
+                        />
                       </Modal>
                       <button
                         type="button"
                         onClick={() => setOpenModalId(`items-${sale.id}`)}
-                        className="add-recipe"
+                        className="show-items"
                       >
                         Ver produtos
+                      </button>
+                      <Modal
+                        isOpen={openModalId === `status-${sale.id}`}
+                        onClose={() => setOpenModalId(null)}
+                        title="Produtos vendidos"
+                      >
+                        <ModalEditSalesStatusChildren status={sale.status} />
+                      </Modal>
+                      <button
+                        type="button"
+                        onClick={() => setOpenModalId(`status-${sale.id}`)}
+                        className="status-edit"
+                      >
+                        Editar status da venda
                       </button>
                     </div>
                     {permissions.some(
@@ -592,9 +608,23 @@ export default function Sales() {
                       <button
                         type="button"
                         onClick={() => setOpenModalId(`items-${sale.id}`)}
-                        className="add-recipe"
+                        className="show-items"
                       >
                         Ver produtos
+                      </button>
+                      <Modal
+                        isOpen={openModalId === `items-${sale.id}`}
+                        onClose={() => setOpenModalId(null)}
+                        title="Produtos vendidos"
+                      >
+                        <ModalEditSalesStatusChildren status={sale.status} />
+                      </Modal>
+                      <button
+                        type="button"
+                        onClick={() => setOpenModalId(`status-${sale.id}`)}
+                        className="status-edit"
+                      >
+                        Editar status da venda
                       </button>
                     </div>
                     {permissions.some(

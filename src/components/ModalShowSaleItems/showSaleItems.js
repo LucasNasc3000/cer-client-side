@@ -23,5 +23,6 @@ export function ModalShowSaleItemsChildren({ saleItems }) {
 }
 
 ModalShowSaleItemsChildren.propTypes = {
-  saleItems: PropTypes.arrayOf(PropTypes.string || PropTypes.number).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  saleItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

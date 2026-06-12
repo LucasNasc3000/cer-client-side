@@ -140,7 +140,8 @@ export const SalesSpace = styled.div`
   height: 500px;
   width: 820px;
   left: 320px;
-  padding: 20px;
+  margin-bottom: 20px; /* espaço embaixo do último card */
+  padding-bottom: 20px;
   align-items: center;
 
   .main-data-div {
@@ -150,12 +151,12 @@ export const SalesSpace = styled.div`
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 555px;
-    margin-top: 20px;
-    padding: 10px;
+    height: auto;
+    margin-top: 25px;
+    padding: 15px 15px 0 15px;
     border-radius: 10px;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     box-shadow: 1px 1px 3px rgba(48, 48, 48, 0.5);
   }
 
@@ -207,36 +208,6 @@ export const SalesSpace = styled.div`
     text-align: center;
   }
 
-  .data-wrap-price {
-    display: flex;
-    margin-left: 50px;
-    margin-top: 10px;
-    height: fit-content;
-    margin-right: 20px;
-    width: fit-content;
-  }
-
-  .label-price {
-    display: flex;
-    color: black;
-    right: 50px;
-    width: 100px;
-    font-size: 17px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-    word-break: keep-all;
-  }
-
   .data-wrap {
     display: flex;
     height: fit-content;
@@ -277,32 +248,62 @@ export const SalesSpace = styled.div`
     font-size: 15px;
   }
 
-  .confirm-changes {
+  .footer {
     display: flex;
-    background-color: #a5a4a4ff;
-    width: 180px;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 15px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 16px;
+    border-top: 1px solid #e0e0e0;
+    background-color: transparent;
+  }
+
+  .footer-actions {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .footer-confirm {
+    display: flex;
+    gap: 10px;
+  }
+
+  .footer button {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .confirm-changes {
+    background-color: #2563eb;
+    color: white;
   }
 
   .cancel-changes {
-    display: flex;
-    background-color: #a5a4a4ff;
-    width: 180px;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 15px;
+    background-color: #a5a4a4;
+    color: white;
   }
 
-  .btd-button {
-    display: flex;
-    position: relative;
-    top: 465px;
-    left: 50px;
+  .status-edit {
+    background-color: #2563eb;
+    color: white;
+  }
+  .show-items {
+    background-color: #06b6d4;
+    color: white;
   }
 
-  .edit-icon:hover {
+  .footer button:hover {
     filter: brightness(80%);
   }
 `;
