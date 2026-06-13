@@ -300,9 +300,9 @@ export default function Sales() {
       }));
 
       setReRender(update);
-
-      clearDirectExecution();
     }
+
+    clearDirectExecution();
   };
 
   const SaleRegister = async (e) => {
@@ -415,7 +415,7 @@ export default function Sales() {
                       type="text"
                       name="clientEmail"
                       className="data-div"
-                      value={sale.clientEmail}
+                      value={sale.clientEmail || "E-mail não fornecido"}
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
@@ -425,7 +425,7 @@ export default function Sales() {
                       type="text"
                       name="phoneNumber"
                       className="data-div"
-                      value={sale.phoneNumber}
+                      value={sale.phoneNumber || "Telefone não fornecido"}
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
@@ -435,7 +435,7 @@ export default function Sales() {
                       type="text"
                       name="address"
                       className="data-div"
-                      value={sale.address}
+                      value={sale.address || "Endereço não fornecido"}
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
@@ -556,7 +556,7 @@ export default function Sales() {
                       type="text"
                       name="clientEmail"
                       className="data-div"
-                      value={sale.clientEmail}
+                      value={sale.clientEmail || "E-mail não fornecido"}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
@@ -566,7 +566,7 @@ export default function Sales() {
                       type="text"
                       name="phoneNumber"
                       className="data-div"
-                      value={sale.phoneNumber}
+                      value={sale.phoneNumber || "Telefone não fornecido"}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
@@ -576,7 +576,7 @@ export default function Sales() {
                       type="text"
                       name="address"
                       className="data-div"
-                      value={sale.address}
+                      value={sale.address || "Endereço não fornecido"}
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>

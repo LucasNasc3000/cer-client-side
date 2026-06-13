@@ -77,6 +77,8 @@ export function ModalEditSalesStatusChildren({ status }) {
       returnToStock,
     };
 
+    console.log(editSalesStatusData);
+
     dispatch(
       actions.editSalesStatus({
         ...editSalesStatusData,
