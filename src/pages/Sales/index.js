@@ -495,22 +495,20 @@ export default function Sales() {
                       (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
                     ) && (
                       <div className="footer-confirm">
-                        <div className="buttons">
-                          <button
-                            type="button"
-                            className="confirm-changes"
-                            onClick={(e) => SaleUpdate(e, sale)}
-                          >
-                            Salvar
-                          </button>
-                          <button
-                            type="button"
-                            className="cancel-changes"
-                            onClick={(e) => clear(e)}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          className="confirm-changes"
+                          onClick={(e) => SaleUpdate(e, sale)}
+                        >
+                          Salvar
+                        </button>
+                        <button
+                          type="button"
+                          className="cancel-changes"
+                          onClick={(e) => clear(e)}
+                        >
+                          Cancelar
+                        </button>
                       </div>
                     )}
                   </div>

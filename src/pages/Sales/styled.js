@@ -237,17 +237,6 @@ export const SalesSpace = styled.div`
     word-break: keep-all;
   }
 
-  .buttons {
-    display: flex;
-    margin-top: 40px;
-    margin-right: 150px;
-    margin-left: 120px;
-    gap: 20px;
-    width: fit-content;
-    font-weight: 400;
-    font-size: 15px;
-  }
-
   .footer {
     display: flex;
     flex-direction: row;

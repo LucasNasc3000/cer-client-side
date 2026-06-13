@@ -11,8 +11,6 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case types.UPDATE_SALES_STATUS: {
-      console.log(state);
-      console.log(action);
       return {
         ...state,
         ...action.payload,

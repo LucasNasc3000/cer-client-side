@@ -22,26 +22,13 @@ export function ModalEditSalesStatusChildren({ status }) {
       !getUpdateSalesStatusDataIfExists ||
       Object.values(getUpdateSalesStatusDataIfExists).every((v) => !v)
     )
+      // eslint-disable-next-line no-useless-return
       return;
 
-    // eslint-disable-next-line default-case
-    switch (true) {
-      case getUpdateSalesStatusDataIfExists.status:
-        setStatusState(getUpdateSalesStatusDataIfExists.status);
-        break;
-
-      case getUpdateSalesStatusDataIfExists.reason:
-        setReason(getUpdateSalesStatusDataIfExists.reason);
-        break;
-
-      case getUpdateSalesStatusDataIfExists.notes:
-        setNotes(getUpdateSalesStatusDataIfExists.notes);
-        break;
-
-      case getUpdateSalesStatusDataIfExists.returnToStock:
-        setReturnToStock(getUpdateSalesStatusDataIfExists.returnToStock);
-        break;
-    }
+    setStatusState(getUpdateSalesStatusDataIfExists.status || "");
+    setReason(getUpdateSalesStatusDataIfExists || "");
+    setNotes(getUpdateSalesStatusDataIfExists.notes || "");
+    setReturnToStock(getUpdateSalesStatusDataIfExists.returnToStock || false);
   }, [getUpdateSalesStatusDataIfExists]);
 
   const Cancel = (e) => {

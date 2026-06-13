@@ -215,36 +215,6 @@ export const ProductsSpace = styled.div`
     width: fit-content;
   }
 
-  .data-wrap-price {
-    display: flex;
-    margin-left: 50px;
-    margin-top: 10px;
-    height: fit-content;
-    margin-right: 20px;
-    width: fit-content;
-  }
-
-  .label-price {
-    display: flex;
-    color: black;
-    right: 50px;
-    width: 100px;
-    font-size: 17px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
-    word-break: keep-all;
-  }
-
   .label {
     display: flex;
     color: black;
