@@ -9,9 +9,9 @@ import Inputs from "../pages/Inputs";
 import InputsCurrent from "../pages/InputsCurrent";
 import Login from "../pages/Login";
 import Outputs from "../pages/Outputs";
-import Profile from "../pages/Perfil";
 import ProductInflows from "../pages/ProductInflows";
 import Products from "../pages/Products";
+import Profile from "../pages/Profile";
 import Sales from "../pages/Sales";
 import MyRoute from "./MyRoute";
 

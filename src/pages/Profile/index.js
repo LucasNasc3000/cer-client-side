@@ -1,9 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
-import axios from "../../services/axios";
 import * as actions from "../../store/modules/auth/actions";
 import { Form, UserContainer } from "./styled";
 
@@ -15,37 +14,22 @@ export default function Profile() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [adminpassword, setAdminPassword] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [id, setId] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
-  useEffect(() => {
-    async function employeeSearch() {
-      try {
-        const employee = await axios.get(
-          `/employees/search/email/${emailStored}`
-        );
-
-        setId(employee.data.id);
-        setEmail(emailStored);
-      } catch (e) {
-        toast.error("Erro ao tentar obter dados do funcionário");
-      }
-    }
-
-    employeeSearch();
-  }, []);
-
-  async function handleSubmit(e) {
+  async function HandleSubmit(e) {
     e.preventDefault();
+
+    if (!password) {
+      toast.error("A senha atual é obrigatória para atualizar dados");
+      return;
+    }
 
     dispatch(
       actions.updateRequest({
-        id,
         name,
         email,
-        password,
-        adminpassword,
+        currentPassword: password,
+        newPassword,
       })
     );
 
@@ -55,11 +39,12 @@ export default function Profile() {
   return (
     <UserContainer>
       <Header />
-      <Form onSubmit={(e) => handleSubmit(e)}>
+      <Form onSubmit={(e) => HandleSubmit(e)}>
         <input
           type="text"
           onChange={(e) => setName(e.target.value)}
           placeholder={nameStored}
+          value={name}
         />
 
         <input
@@ -67,20 +52,17 @@ export default function Profile() {
           id="emailInput"
           onChange={(e) => setEmail(e.target.value)}
           placeholder={emailStored}
+          value={email}
         />
+
+        <p className="minitext">Mudar senha:</p>
 
         <input
           type="password"
           className="pass"
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Digite sua senha ou escolha uma nova"
-        />
-
-        <input
-          type="password"
-          className="pass"
-          onChange={(e) => setAdminPassword(e.target.value)}
-          placeholder="Digite sua senha de admin ou escolha uma nova"
+          onChange={(e) => setNewPassword(e.target.value)}
+          placeholder="Digite sua nova senha"
+          value={newPassword}
         />
 
         <p className="minitext">
@@ -88,15 +70,19 @@ export default function Profile() {
           deslogado automáticamente e terá que fazer login denovo
         </p>
 
-        <p className="minitext">
-          Mude as senhas ou digite a atual para confirmar as alterações de seus
-          dados.
-        </p>
+        <p className="minitext">Digite sua senha atual:</p>
+
+        <input
+          type="password"
+          className="pass"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
 
         <button
           type="button"
           className="saveBtn"
-          onClick={(e) => handleSubmit(e)}
+          onClick={(e) => HandleSubmit(e)}
         >
           Salvar
         </button>

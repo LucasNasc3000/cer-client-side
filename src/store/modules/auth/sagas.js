@@ -2,7 +2,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import axios from "../../../services/axios";
@@ -55,8 +55,6 @@ function* loginRequest({ payload }) {
       }
     });
   } catch (e) {
-    console.log(e);
-    toast.error(e.response.data.message);
     yield put(actions.loginFailure());
   }
 }
@@ -127,104 +125,19 @@ function* registerRequest({ payload }) {
 
 function* updateRequest({ payload }) {
   try {
-    const { id, name, email, password, adminpassword } = payload;
+    const { name, email, password } = payload;
 
-    if (!id) {
-      toast.error("Erro ao tentar atualizar os dados, id necessário");
-      return;
-    }
+    const truthyFields = Object.fromEntries(
+      // eslint-disable-next-line array-callback-return
+      Object.entries(payload).filter(
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) => payload[key] !== ""
+      )
+    );
 
-    switch (true) {
-      case name.length > 0 &&
-        email.length < 1 &&
-        password.length < 1 &&
-        adminpassword < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          name,
-        });
-        break;
-
-      case email.length > 0 &&
-        name.length < 1 &&
-        password.length < 1 &&
-        adminpassword < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          email,
-        });
-        break;
-
-      case password.length > 0 &&
-        email.length < 1 &&
-        name.length < 1 &&
-        adminpassword.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          password,
-        });
-        break;
-
-      case adminpassword.length > 0 &&
-        email.length < 1 &&
-        password.length < 1 &&
-        name.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          adminpassword,
-        });
-        axios.defaults.headers.adminpassword = adminpassword;
-        break;
-
-      case adminpassword.length > 0 &&
-        email.length < 1 &&
-        password.length > 0 &&
-        name.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          adminpassword,
-          password,
-        });
-        axios.defaults.headers.adminpassword = adminpassword;
-        break;
-
-      case adminpassword.length > 0 &&
-        email.length < 1 &&
-        password.length > 0 &&
-        name.length > 0:
-        yield call(axios.put, `/employees/${id}`, {
-          adminpassword,
-          password,
-          name,
-        });
-        axios.defaults.headers.adminpassword = adminpassword;
-        break;
-
-      case adminpassword.length > 0 &&
-        email.length < 1 &&
-        password.length < 1 &&
-        name.length > 0:
-        yield call(axios.put, `/employees/${id}`, {
-          adminpassword,
-          name,
-        });
-        axios.defaults.headers.adminpassword = adminpassword;
-        break;
-
-      case adminpassword.length < 1 &&
-        email.length < 1 &&
-        password.length > 0 &&
-        name.length > 0:
-        yield call(axios.put, `/employees/${id}`, {
-          password,
-          name,
-        });
-        break;
-
-      default:
-        yield call(axios.put, `/employees/${id}`, {
-          name,
-          email,
-          password,
-          adminpassword,
-        });
-        break;
-    }
+    yield call(axios.patch, "/employees/update/self", {
+      ...truthyFields,
+    });
 
     if (email.length > 0) {
       toast.success("Dados atualizados com sucesso. Faça login novamente");
@@ -233,22 +146,35 @@ function* updateRequest({ payload }) {
 
     toast.success("Dados atualizados com sucesso");
 
-    yield put(actions.updatedSuccess({ name, password, adminpassword }));
+    yield put(actions.updatedSuccess({ name, password }));
   } catch (err) {
-    const errors = get(err, "response.data.error", []);
+    const errors = get(err, "response.data.message", []);
     const status = get(err, "response.status", 0);
 
     if (status === 401) {
       toast.error("Você precisa fazer login novamente");
+      return;
     }
 
     if (err) {
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      }
+      // eslint-disable-next-line default-case
+      switch (true) {
+        case err instanceof TypeError:
+          toast.error("Erro de tratamento de dados");
+          break;
 
-      if (err && errors.length < 1) {
-        toast.error("Erro desconhecido ao tentar atualizar dados");
+        case errors.length > 0:
+          if (!isArray(errors)) {
+            toast.error(errors);
+            return;
+          }
+
+          errors.map((error) => toast.error(error));
+          break;
+
+        case err && errors.length < 1:
+          toast.error("Erro desconhecido ao tentar atualizar dados");
+          break;
       }
     }
   }
