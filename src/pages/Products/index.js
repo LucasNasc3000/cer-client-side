@@ -33,6 +33,9 @@ export default function Products() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+  const getAddIngredientsIfExists = useSelector(
+    (state) => state.addIngredientsData
+  );
   const getEditedUnitiesIfExists = useSelector(
     (state) => state.editUnitiesData
   );
@@ -58,7 +61,7 @@ export default function Products() {
   const [openModalId, setOpenModalId] = useState("");
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
   const [useStockSuppliesRedux, setUseStockSuppliesRedux] = useState(false);
-  const [productIngredientRedux, setproductIngredientRedux] = useState([]);
+  const [productIngredientRedux, setProductIngredientRedux] = useState([]);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -98,7 +101,7 @@ export default function Products() {
       getRecipeDataIfExists.useStockSupplies === undefined
     )
       return;
-    setproductIngredientRedux(getRecipeDataIfExists.productIngredient);
+    setProductIngredientRedux(getRecipeDataIfExists.productIngredient);
     setUseStockSuppliesRedux(getRecipeDataIfExists.useStockSupplies);
   }, [getRecipeDataIfExists]);
 
@@ -329,10 +332,21 @@ export default function Products() {
       )
     );
 
+    const truthyFieldsAddIngredients = Object.fromEntries(
+      // eslint-disable-next-line array-callback-return
+      Object.entries(getAddIngredientsIfExists).filter(
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) =>
+          getAddIngredientsIfExists[key] !== 0 &&
+          getAddIngredientsIfExists[key] !== ""
+      )
+    );
+
     const ALWAYS_PRESENT_FIELDS = 2;
 
     if (
       Object.keys(changedFields).length === 0 &&
+      Object.keys(truthyFieldsAddIngredients).length === 0 &&
       Object.keys(truthyFields).length < ALWAYS_PRESENT_FIELDS
     ) {
       toast.info("Nenhuma alteração detectada");
@@ -342,6 +356,7 @@ export default function Products() {
     const allData = {
       ...changedFields,
       ...truthyFields,
+      ...truthyFieldsAddIngredients,
     };
 
     const update = await Update(objectData.id, allData, "products");

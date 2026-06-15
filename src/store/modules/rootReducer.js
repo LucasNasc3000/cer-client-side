@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 
+import addIngredientsData from "./addIngredientsData/reducer";
 import auth from "./auth/reducer";
 import dataTransfer from "./dataTransfer/reducer";
 import editSalesStatus from "./editSalesStatus/reducer";
@@ -14,6 +15,7 @@ export default combineReducers({
   editUnitiesData,
   saleItems,
   editSalesStatus,
+  addIngredientsData,
 });
 
 // Todos os reducers da aplicação serão importados e combinados aqui
