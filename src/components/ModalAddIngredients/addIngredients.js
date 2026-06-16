@@ -2,7 +2,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import Decimal from "decimal.js";
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -66,7 +66,25 @@ export function ModalAddIngredientsChildren({ productData }) {
         const errors = get(err, "response.data.message", []);
 
         if (err) {
-          if (errors.length > 0) console.log(errors);
+          // eslint-disable-next-line default-case
+          switch (true) {
+            case err instanceof TypeError:
+              toast.error("Erro de tratamento de dados");
+              break;
+
+            case errors.length > 0:
+              if (!isArray(errors)) {
+                toast.error(errors);
+                break;
+              }
+
+              errors.map((error) => toast.error(error));
+              break;
+
+            case err && errors.length < 1:
+              toast.error("Erro desconhecido ao tentar buscar produto");
+              break;
+          }
         }
       }
     }

@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import { Modal } from "../../components/Modal";
+import { ModalAddIngredientsChildren } from "../../components/ModalAddIngredients/addIngredients";
+import { ModalEditRecipeChildren } from "../../components/ModalEditRecipe/editRecipe";
 import { ModalEditUnitiesChildren } from "../../components/ModalEditUnities/editUnities";
 import { ModalRecipeChildren } from "../../components/ModalRecipes/addRecipe";
 import axios from "../../services/axios";
@@ -532,9 +534,30 @@ export default function Products() {
                     <div className="footer">
                       <div className="footer-actions">
                         {product.recipe.length > 0 ? (
-                          <button type="button" className="edit-recipe">
-                            Editar receita
-                          </button>
+                          <>
+                            <Modal
+                              isOpen={openModalId === `recipe-${product.id}`}
+                              onClose={() => setOpenModalId(null)}
+                              title={`Editar receita do produto ${product.name}`}
+                            >
+                              <ModalEditRecipeChildren productId={product.id} />
+                            </Modal>
+                            <button type="button" className="edit-recipe">
+                              Editar receita
+                            </button>
+                            <Modal
+                              isOpen={openModalId === `recipe-${product.id}`}
+                              onClose={() => setOpenModalId(null)}
+                              title={`Adicionar ingredientes na receita ${product.name}`}
+                            >
+                              <ModalAddIngredientsChildren
+                                productData={product}
+                              />
+                            </Modal>
+                            <button type="button" className="edit-recipe">
+                              Adicionar ingredientes
+                            </button>
+                          </>
                         ) : (
                           <>
                             <Modal
@@ -702,9 +725,30 @@ export default function Products() {
                     <div className="footer">
                       <div className="footer-actions">
                         {product.recipe.length > 0 ? (
-                          <button type="button" className="edit-recipe">
-                            Editar receita
-                          </button>
+                          <>
+                            <Modal
+                              isOpen={openModalId === `recipe-${product.id}`}
+                              onClose={() => setOpenModalId(null)}
+                              title={`Editar receita do produto ${product.name}`}
+                            >
+                              <ModalEditRecipeChildren productId={product.id} />
+                            </Modal>
+                            <button type="button" className="edit-recipe">
+                              Editar receita
+                            </button>
+                            <Modal
+                              isOpen={openModalId === `recipe-${product.id}`}
+                              onClose={() => setOpenModalId(null)}
+                              title={`Adicionar ingredientes na receita ${product.name}`}
+                            >
+                              <ModalAddIngredientsChildren
+                                productData={product}
+                              />
+                            </Modal>
+                            <button type="button" className="edit-recipe">
+                              Adicionar ingredientes
+                            </button>
+                          </>
                         ) : (
                           <>
                             <Modal
