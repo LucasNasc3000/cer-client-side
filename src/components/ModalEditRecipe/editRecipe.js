@@ -1,19 +1,37 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-plusplus */
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { get, isArray } from "lodash";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { LuSave } from "react-icons/lu";
+import { MdOutlineDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../services/axios";
-import { GetChangedFields } from "../../utils/GetChangedFields";
+import * as actions from "../../store/modules/recipeEdit/actions";
 import { ModalEditRecipeContainer } from "./editRecipeStyled";
 
 export function ModalEditRecipeChildren({ productId }) {
+  const getRecipeEditedDataIfExists = useSelector((state) => state.recipeEdit);
+
+  const dispatch = useDispatch();
+
   const [recipeData, setRecipeData] = useState([]);
   const [recipeDataBackup, setRecipeDataBackup] = useState([]);
+  const [preSavedIngredients, setPreSavedIngredients] = useState([]);
   const [originalRecipeData, setOriginalRecipeData] = useState({});
 
+  const hasFetched = useRef(false);
+
   useEffect(() => {
+    if (hasFetched.current) return;
+
+    hasFetched.current = true;
+
     async function SearchIngredient() {
       try {
         const searchIngredient = await axios.get(
@@ -24,13 +42,17 @@ export function ModalEditRecipeChildren({ productId }) {
 
         if (typeof results === "undefined" || !results) return;
 
-        setRecipeData(results);
+        if (
+          getRecipeEditedDataIfExists.updateProductIngredientToShow.length > 0
+        ) {
+          setRecipeData(
+            getRecipeEditedDataIfExists.updateProductIngredientToShow
+          );
+        } else {
+          setRecipeData(results);
+        }
+
         setRecipeDataBackup(results);
-        setOriginalRecipeData(
-          Object.fromEntries(
-            results.map((ingredient) => [ingredient.id, { ...ingredient }])
-          )
-        );
       } catch (err) {
         const errors = get(err, "response.data.message", []);
 
@@ -59,35 +81,43 @@ export function ModalEditRecipeChildren({ productId }) {
     }
 
     SearchIngredient();
-  }, [recipeData, productId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const DeleteItem = (e, ingredient) => {
     e.preventDefault();
 
-    const localRecipeData = [...recipeData];
+    setRecipeData((prevData) => {
+      prevData.map((data) =>
+        data.id === ingredient.id ? { ...data, isActive: false } : data
+      );
 
-    const findItemIndex = localRecipeData.findIndex(
-      (i) => i.id === ingredient.id
-    );
-
-    localRecipeData.splice(findItemIndex);
-
-    setRecipeData([...localRecipeData]);
+      return prevData;
+    });
   };
 
   const ClearDirectExecution = () => {
     setRecipeData(recipeDataBackup);
+    dispatch(actions.clearRecipeEdit());
   };
 
-  const Save = (e, objectData) => {
+  const Save = (e) => {
     e.preventDefault();
 
-    const current = recipeData.find((p) => p.id === objectData.id);
-    const original = originalRecipeData[objectData.id];
+    const formattedData = [];
 
-    const changedFields = GetChangedFields(original, current);
+    recipeData.map((i) => {
+      formattedData.push({
+        id: i.id,
+        supplyId: i.supplyRealTime.id,
+        quantity: i.quantity,
+        disableIngredient: i.isActive,
+      });
+    });
 
-    // Colocar o changed fields no reduces com dispatch aqui
+    dispatch(actions.recipeEdit({ formattedData }));
+
+    toast.success("Alterações salvas");
   };
 
   const Clear = (e) => {
@@ -106,6 +136,28 @@ export function ModalEditRecipeChildren({ productId }) {
     );
   };
 
+  const PreSave = (e, ingredientData) => {
+    e.preventDefault();
+    dispatch(actions.recipeEditPreSave({ preSavedData: recipeData }));
+  };
+
+  // Caso se queira cancelar antes ou depois de salvar
+  const Cancel = (e, ingredientId) => {
+    e.preventDefault();
+
+    const findElementBackup = recipeDataBackup.find(
+      (i) => i.id === ingredientId
+    );
+
+    if (!findElementBackup) return;
+
+    setRecipeData((prevData) =>
+      prevData.map((data) =>
+        data.id === ingredientId ? { ...findElementBackup } : data
+      )
+    );
+  };
+
   return (
     <ModalEditRecipeContainer>
       <div className="ingredient-list-wrapper">
@@ -114,17 +166,32 @@ export function ModalEditRecipeChildren({ productId }) {
             <div key={ingredient.id} className="data-wrap">
               <div className="name">{ingredient.supplyRealTime.name}</div>
               <input
-                type="text"
+                type="number"
                 className="quantity"
+                name="quantity"
                 value={ingredient.quantity}
                 onChange={(e) => HandleChange(e, ingredient.id)}
               />
               <button
                 type="button"
                 className="delete"
-                onClick={(e) => DeleteItem(e, ingredient.id)}
+                onClick={(e) => DeleteItem(e, ingredient)}
               >
-                <p className="delete-icon">✕</p>
+                <MdOutlineDelete className="delete-icon" />
+              </button>
+              <button
+                type="button"
+                className="save"
+                onClick={(e) => PreSave(e, ingredient)}
+              >
+                <LuSave className="save-icon" />
+              </button>
+              <button
+                type="button"
+                className="cancel"
+                onClick={(e) => Cancel(e, ingredient.id)}
+              >
+                ✕
               </button>
             </div>
           );

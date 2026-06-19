@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 /* eslint-disable camelcase */
@@ -18,7 +19,6 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
-import Update from "../../services/update";
 import * as actionsProductDataTransfer from "../../store/modules/dataTransfer/actions";
 import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
@@ -35,6 +35,7 @@ export default function Products() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
+  const getEditedRecipeIfExists = useSelector((state) => state.recipeEdit);
   const getAddIngredientsIfExists = useSelector(
     (state) => state.addIngredientsData
   );
@@ -344,12 +345,49 @@ export default function Products() {
       )
     );
 
-    const ALWAYS_PRESENT_FIELDS = 2;
+    const truthyFieldsAddIngredientsRefined = {};
+    const truthyFieldsRefined = {};
+    const updateRecipeFieldsRefined = [];
+
+    if (truthyFieldsAddIngredients.addProductIngredient.length < 1) {
+      const { addProductIngredient, addProductIngredientToShow, ...rest } =
+        truthyFieldsAddIngredients;
+
+      Object.assign(truthyFieldsAddIngredientsRefined, rest);
+    } else {
+      Object.assign(
+        truthyFieldsAddIngredientsRefined,
+        truthyFields.addProductIngredient
+      );
+    }
+
+    if (!truthyFields.useStockSupplies) {
+      const { useStockSupplies, ...rest } = truthyFields;
+
+      Object.assign(truthyFieldsRefined, rest);
+    }
+
+    if (getEditedRecipeIfExists.updateProductIngredient.length < 1) {
+      const {
+        updateProductIngredient,
+        updateProductIngredientToShow,
+        ...rest
+      } = getEditedRecipeIfExists;
+
+      Object.assign(updateRecipeFieldsRefined, rest);
+    } else if (
+      getEditedRecipeIfExists.updateProductIngredientToShow.length > 0
+    ) {
+      updateRecipeFieldsRefined.push(
+        ...getEditedRecipeIfExists.updateProductIngredient
+      );
+    }
 
     if (
       Object.keys(changedFields).length === 0 &&
-      Object.keys(truthyFieldsAddIngredients).length === 0 &&
-      Object.keys(truthyFields).length < ALWAYS_PRESENT_FIELDS
+      Object.keys(truthyFieldsAddIngredientsRefined).length === 0 &&
+      getEditedRecipeIfExists.updateProductIngredient.length === 0 &&
+      Object.keys(truthyFieldsRefined).length === 0
     ) {
       toast.info("Nenhuma alteração detectada");
       return;
@@ -357,22 +395,25 @@ export default function Products() {
 
     const allData = {
       ...changedFields,
-      ...truthyFields,
-      ...truthyFieldsAddIngredients,
+      ...truthyFieldsRefined,
+      ...truthyFieldsAddIngredientsRefined,
+      updateProductIngredient: updateRecipeFieldsRefined,
     };
 
-    const update = await Update(objectData.id, allData, "products");
+    console.log(allData);
 
-    if (update) {
-      setOriginalProductsData((prev) => ({
-        ...prev,
-        [objectData.id]: { ...current },
-      }));
+    // const update = await Update(objectData.id, allData, "products");
 
-      setReRender(update);
+    // if (update) {
+    //   setOriginalProductsData((prev) => ({
+    //     ...prev,
+    //     [objectData.id]: { ...current },
+    //   }));
 
-      clearDirectExecution();
-    }
+    //   setReRender(update);
+
+    //   clearDirectExecution();
+    // }
   };
 
   const Transfer = (e, productNameParam) => {
@@ -536,17 +577,27 @@ export default function Products() {
                         {product.recipe.length > 0 ? (
                           <>
                             <Modal
-                              isOpen={openModalId === `recipe-${product.id}`}
+                              isOpen={
+                                openModalId === `edit-recipe-${product.id}`
+                              }
                               onClose={() => setOpenModalId(null)}
                               title={`Editar receita do produto ${product.name}`}
                             >
                               <ModalEditRecipeChildren productId={product.id} />
                             </Modal>
-                            <button type="button" className="edit-recipe">
+                            <button
+                              type="button"
+                              className="edit-recipe"
+                              onClick={() =>
+                                setOpenModalId(`edit-recipe-${product.id}`)
+                              }
+                            >
                               Editar receita
                             </button>
                             <Modal
-                              isOpen={openModalId === `recipe-${product.id}`}
+                              isOpen={
+                                openModalId === `add-ingredients-${product.id}`
+                              }
                               onClose={() => setOpenModalId(null)}
                               title={`Adicionar ingredientes na receita ${product.name}`}
                             >
@@ -554,7 +605,13 @@ export default function Products() {
                                 productData={product}
                               />
                             </Modal>
-                            <button type="button" className="edit-recipe">
+                            <button
+                              type="button"
+                              className="edit-recipe"
+                              onClick={() =>
+                                setOpenModalId(`add-ingredients-${product.id}`)
+                              }
+                            >
                               Adicionar ingredientes
                             </button>
                           </>
@@ -727,17 +784,27 @@ export default function Products() {
                         {product.recipe.length > 0 ? (
                           <>
                             <Modal
-                              isOpen={openModalId === `recipe-${product.id}`}
+                              isOpen={
+                                openModalId === `edit-recipe-${product.id}`
+                              }
                               onClose={() => setOpenModalId(null)}
                               title={`Editar receita do produto ${product.name}`}
                             >
                               <ModalEditRecipeChildren productId={product.id} />
                             </Modal>
-                            <button type="button" className="edit-recipe">
+                            <button
+                              type="button"
+                              className="edit-recipe"
+                              onClick={() =>
+                                setOpenModalId(`edit-recipe-${product.id}`)
+                              }
+                            >
                               Editar receita
                             </button>
                             <Modal
-                              isOpen={openModalId === `recipe-${product.id}`}
+                              isOpen={
+                                openModalId === `add-ingredients-${product.id}`
+                              }
                               onClose={() => setOpenModalId(null)}
                               title={`Adicionar ingredientes na receita ${product.name}`}
                             >
@@ -745,7 +812,13 @@ export default function Products() {
                                 productData={product}
                               />
                             </Modal>
-                            <button type="button" className="edit-recipe">
+                            <button
+                              type="button"
+                              className="edit-recipe"
+                              onClick={() =>
+                                setOpenModalId(`add-ingredients-${product.id}`)
+                              }
+                            >
                               Adicionar ingredientes
                             </button>
                           </>

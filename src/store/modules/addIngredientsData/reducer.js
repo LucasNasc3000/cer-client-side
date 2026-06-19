@@ -8,7 +8,7 @@ const initialState = {
 // eslint-disable-next-line default-param-last
 export default function (state = initialState, action) {
   switch (action.type) {
-    case types.RECIPE_DATA: {
+    case types.ADD_INGREDIENTS: {
       const newState = { ...state };
 
       newState.addProductIngredient = [...action.payload.addProductIngredient];
@@ -19,7 +19,7 @@ export default function (state = initialState, action) {
       return newState;
     }
 
-    case types.CLEAR_RECIPE_DATA: {
+    case types.CLEAR_ADD_INGREDIENTS: {
       return {
         ...initialState,
       };

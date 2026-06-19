@@ -13,7 +13,7 @@ import { ModalAddIngredientsContainer } from "./addIngredientsStyled";
 
 export function ModalAddIngredientsChildren({ productData }) {
   const getIngredientsDataIfExists = useSelector(
-    (state) => state.addIngredients
+    (state) => state.addIngredientsData
   );
 
   const dispatch = useDispatch();
@@ -93,6 +93,7 @@ export function ModalAddIngredientsChildren({ productData }) {
   }, [inputSearchValue]);
 
   useEffect(() => {
+    console.log(getIngredientsDataIfExists);
     if (getIngredientsDataIfExists.addProductIngredient.length < 1) return;
     setIngredientsToShowFromRedux(
       getIngredientsDataIfExists.addProductIngredientToShow
@@ -146,8 +147,6 @@ export function ModalAddIngredientsChildren({ productData }) {
         addProductIngredientToShow: ingredientsToShow,
       })
     );
-
-    PartialClerDirectExecution();
 
     toast.success("Receita salva");
   };
