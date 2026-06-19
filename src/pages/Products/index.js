@@ -19,9 +19,12 @@ import GetData from "../../services/getData";
 import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
+import Update from "../../services/update";
+import * as actionsAddIngredients from "../../store/modules/addIngredientsData/actions";
 import * as actionsProductDataTransfer from "../../store/modules/dataTransfer/actions";
 import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
+import * as actionsEditRecipe from "../../store/modules/recipeEdit/actions";
 import { GetChangedFields } from "../../utils/GetChangedFields";
 import {
   NewProduct,
@@ -151,6 +154,8 @@ export default function Products() {
 
     dispatch(actions.clearRecipeData());
     dispatch(actionsEditUnities.clearUpdateUnitiesData());
+    dispatch(actionsAddIngredients.clearAddIngredients());
+    dispatch(actionsEditRecipe.clearRecipeEdit());
 
     if (searchResults.length > 0) setSearchResults(searchResultsBackup);
   };
@@ -353,19 +358,6 @@ export default function Products() {
       )
     );
 
-    console.log(Object.keys(truthyFieldsAddIngredients).length);
-    console.log(truthyFieldsEditUnities);
-
-    if (
-      Object.keys(changedFields).length === 0 &&
-      Object.keys(truthyFieldsAddIngredients).length === 0 &&
-      Object.keys(truthyFieldsEditUnities).length === 0 &&
-      Object.keys(truthyFieldsUpdateRecipe).length === 0
-    ) {
-      toast.info("Nenhuma alteração detectada");
-      return;
-    }
-
     const { updateProductIngredientToShow, ...restUpdateRecipe } =
       truthyFieldsUpdateRecipe;
 
@@ -381,26 +373,35 @@ export default function Products() {
       Object.assign(restEditUnities, rest);
     }
 
+    if (
+      Object.keys(changedFields).length === 0 &&
+      Object.keys(restAddProductIngredient).length === 0 &&
+      Object.keys(restUpdateRecipe).length === 0 &&
+      Object.keys(restEditUnities).length === 0
+    ) {
+      toast.info("Nenhuma alteração detectada");
+      return;
+    }
+
     const allData = {
       ...changedFields,
       ...restUpdateRecipe,
       ...restAddProductIngredient,
+      ...restEditUnities,
     };
 
-    console.log(allData);
+    const update = await Update(objectData.id, allData, "products");
 
-    // const update = await Update(objectData.id, allData, "products");
+    if (update) {
+      setOriginalProductsData((prev) => ({
+        ...prev,
+        [objectData.id]: { ...current },
+      }));
 
-    // if (update) {
-    //   setOriginalProductsData((prev) => ({
-    //     ...prev,
-    //     [objectData.id]: { ...current },
-    //   }));
+      setReRender(update);
 
-    //   setReRender(update);
-
-    //   clearDirectExecution();
-    // }
+      clearDirectExecution();
+    }
   };
 
   const Transfer = (e, productNameParam) => {
