@@ -325,79 +325,66 @@ export default function Products() {
 
     const changedFields = GetChangedFields(original, current);
 
-    const truthyFields = Object.fromEntries(
-      // eslint-disable-next-line array-callback-return
-      Object.entries(getEditedUnitiesIfExists).filter(
-        // eslint-disable-next-line no-unused-vars
-        ([key, value]) =>
-          getEditedUnitiesIfExists[key] !== 0 &&
-          getEditedUnitiesIfExists[key] !== ""
-      )
-    );
+    const IsEmptyValue = (value) => {
+      if (Array.isArray(value)) return value.length === 0;
+      if (typeof value === "object" && value !== null) {
+        return Object.keys(value).length === 0;
+      }
+      return (
+        value === 0 || value === "" || value === null || value === undefined
+      );
+    };
 
     const truthyFieldsAddIngredients = Object.fromEntries(
-      // eslint-disable-next-line array-callback-return
       Object.entries(getAddIngredientsIfExists).filter(
-        // eslint-disable-next-line no-unused-vars
-        ([key, value]) =>
-          getAddIngredientsIfExists[key] !== 0 &&
-          getAddIngredientsIfExists[key] !== ""
+        ([, value]) => !IsEmptyValue(value)
       )
     );
 
-    const truthyFieldsAddIngredientsRefined = {};
-    const truthyFieldsRefined = {};
-    const updateRecipeFieldsRefined = [];
+    const truthyFieldsEditUnities = Object.fromEntries(
+      Object.entries(getEditedUnitiesIfExists).filter(
+        ([, value]) => !IsEmptyValue(value)
+      )
+    );
 
-    if (truthyFieldsAddIngredients.addProductIngredient.length < 1) {
-      const { addProductIngredient, addProductIngredientToShow, ...rest } =
-        truthyFieldsAddIngredients;
+    const truthyFieldsUpdateRecipe = Object.fromEntries(
+      Object.entries(getEditedRecipeIfExists).filter(
+        ([, value]) => !IsEmptyValue(value)
+      )
+    );
 
-      Object.assign(truthyFieldsAddIngredientsRefined, rest);
-    } else {
-      Object.assign(
-        truthyFieldsAddIngredientsRefined,
-        truthyFields.addProductIngredient
-      );
-    }
-
-    if (!truthyFields.useStockSupplies) {
-      const { useStockSupplies, ...rest } = truthyFields;
-
-      Object.assign(truthyFieldsRefined, rest);
-    }
-
-    if (getEditedRecipeIfExists.updateProductIngredient.length < 1) {
-      const {
-        updateProductIngredient,
-        updateProductIngredientToShow,
-        ...rest
-      } = getEditedRecipeIfExists;
-
-      Object.assign(updateRecipeFieldsRefined, rest);
-    } else if (
-      getEditedRecipeIfExists.updateProductIngredientToShow.length > 0
-    ) {
-      updateRecipeFieldsRefined.push(
-        ...getEditedRecipeIfExists.updateProductIngredient
-      );
-    }
+    console.log(Object.keys(truthyFieldsAddIngredients).length);
+    console.log(truthyFieldsEditUnities);
 
     if (
       Object.keys(changedFields).length === 0 &&
-      Object.keys(truthyFieldsAddIngredientsRefined).length === 0 &&
-      getEditedRecipeIfExists.updateProductIngredient.length === 0 &&
-      Object.keys(truthyFieldsRefined).length === 0
+      Object.keys(truthyFieldsAddIngredients).length === 0 &&
+      Object.keys(truthyFieldsEditUnities).length === 0 &&
+      Object.keys(truthyFieldsUpdateRecipe).length === 0
     ) {
       toast.info("Nenhuma alteração detectada");
       return;
     }
 
+    const { updateProductIngredientToShow, ...restUpdateRecipe } =
+      truthyFieldsUpdateRecipe;
+
+    const { addProductIngredientToShow, ...restAddProductIngredient } =
+      truthyFieldsAddIngredients;
+
+    const restEditUnities = {};
+
+    if (truthyFieldsEditUnities.addUnities > 0) {
+      Object.assign(restEditUnities, truthyFieldsEditUnities);
+    } else {
+      const { useStockSupplies, ...rest } = truthyFieldsEditUnities;
+      Object.assign(restEditUnities, rest);
+    }
+
     const allData = {
       ...changedFields,
-      ...truthyFieldsRefined,
-      ...truthyFieldsAddIngredientsRefined,
-      updateProductIngredient: updateRecipeFieldsRefined,
+      ...restUpdateRecipe,
+      ...restAddProductIngredient,
     };
 
     console.log(allData);
