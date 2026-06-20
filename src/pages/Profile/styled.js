@@ -40,7 +40,7 @@ export const Form = styled.form`
     display: flex;
     position: relative;
     color: black;
-    top: 120px;
+    top: 190px;
     margin-top: 10px;
   }
 `;

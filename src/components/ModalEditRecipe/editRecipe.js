@@ -26,6 +26,7 @@ export function ModalEditRecipeChildren({ productId }) {
   const [originalRecipeData, setOriginalRecipeData] = useState({});
 
   const hasFetched = useRef(false);
+  const deletedIngredients = useRef([]);
 
   useEffect(() => {
     if (hasFetched.current) return;
@@ -87,13 +88,26 @@ export function ModalEditRecipeChildren({ productId }) {
   const DeleteItem = (e, ingredient) => {
     e.preventDefault();
 
-    setRecipeData((prevData) => {
-      prevData.map((data) =>
-        data.id === ingredient.id ? { ...data, isActive: false } : data
-      );
+    setRecipeData((prevData) =>
+      prevData.map((data) => {
+        if (data.id === ingredient.id) {
+          data.isActive = false;
+        }
+        return data;
+      })
+    );
 
-      return prevData;
-    });
+    const localRecipeData = [...recipeData];
+
+    const findItemIndex = localRecipeData.findIndex(
+      (i) => i.id === ingredient.id
+    );
+
+    const deleted = localRecipeData.splice(findItemIndex, 1);
+
+    deletedIngredients.current.push(...deleted);
+
+    setRecipeData(localRecipeData);
   };
 
   const ClearDirectExecution = () => {
@@ -105,15 +119,27 @@ export function ModalEditRecipeChildren({ productId }) {
     e.preventDefault();
 
     const formattedData = [];
+    const formattedDataDeletedIngredients = [];
 
     recipeData.map((i) => {
       formattedData.push({
         id: i.id,
         supplyId: i.supplyRealTime.id,
         quantity: i.quantity,
-        disableIngredient: i.isActive,
+        disableIngredient: !i.isActive,
       });
     });
+
+    deletedIngredients.current.map((i) => {
+      formattedDataDeletedIngredients.push({
+        id: i.id,
+        supplyId: i.supplyRealTime.id,
+        quantity: i.quantity,
+        disableIngredient: !i.isActive,
+      });
+    });
+
+    formattedData.push(...formattedDataDeletedIngredients);
 
     dispatch(actions.recipeEdit({ formattedData }));
 
@@ -122,7 +148,6 @@ export function ModalEditRecipeChildren({ productId }) {
 
   const Clear = (e) => {
     e.preventDefault();
-
     ClearDirectExecution();
   };
 
