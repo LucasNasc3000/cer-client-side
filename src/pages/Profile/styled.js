@@ -16,15 +16,27 @@ export const Form = styled.form`
   width: 450px;
 
   input {
-    background-color: #dcdcdc;
+    background-color: transparent;
     display: flex;
     position: relative;
     height: 40px;
     top: 50px;
-    margin-top: 10px;
+    margin-top: 20px;
     border-top: none;
     border-left: none;
     border-right: none;
+  }
+
+  .new-pass {
+    top: 50px;
+  }
+
+  .minitext-change-pass {
+    top: 70px;
+  }
+
+  .minitext-current-pass {
+    top: 75px;
   }
 
   .saveBtn {
@@ -36,7 +48,7 @@ export const Form = styled.form`
     left: 140px;
   }
 
-  .minitext {
+  p {
     display: flex;
     position: relative;
     color: black;

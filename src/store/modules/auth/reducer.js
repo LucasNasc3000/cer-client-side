@@ -4,7 +4,7 @@ import * as types from "../types";
 const initialState = {
   isLoggedIn: false,
   emailHeaders: "",
-  headerid: "",
+  name: "",
   permissions: [],
   isPermissionsLoaded: false,
 };
@@ -20,16 +20,9 @@ export default function (state = initialState, action) {
 
       newState.isLoggedIn = true;
       newState.emailHeaders = action.payload.email;
+      newState.name = action.payload.name;
       newState.permissions = [...action.payload.permissions];
       newState.isPermissionsLoaded = true;
-
-      const isAdmin = newState.permissions.some(
-        (p) => p.resource === "EMPLOYEES"
-      );
-
-      if (!isAdmin) {
-        newState.headerid = action.payload.id;
-      }
 
       return newState;
     }

@@ -18,10 +18,30 @@ export const ModalEditRecipeContainer = styled.div`
     flex-direction: row;
     background-color: #a5a4a4ff;
     align-items: center;
-    height: 35px;
+    height: 40px;
     border-radius: 8px;
     gap: 15px;
     margin-bottom: 10px;
+  }
+
+  .delete,
+  .save {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 40px;
+    background: none;
+    text-align: center;
+  }
+
+  .cancel {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 40px;
+    background: none;
+    text-align: center;
+    margin-right: 10px;
   }
 
   .name {
@@ -36,5 +56,17 @@ export const ModalEditRecipeContainer = styled.div`
   .price-at-sale {
     width: 70px;
     text-align: center;
+  }
+
+  .delete:hover {
+    color: red;
+  }
+
+  .save:hover {
+    color: blue;
+  }
+
+  .cancel:hover {
+    color: gray;
   }
 `;

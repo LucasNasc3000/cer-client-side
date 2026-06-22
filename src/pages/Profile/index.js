@@ -42,6 +42,7 @@ export default function Profile() {
       <Form onSubmit={(e) => HandleSubmit(e)}>
         <input
           type="text"
+          className="name-input"
           onChange={(e) => setName(e.target.value)}
           placeholder={nameStored}
           value={name}
@@ -49,28 +50,27 @@ export default function Profile() {
 
         <input
           type="email"
-          id="emailInput"
+          className="email-input"
           onChange={(e) => setEmail(e.target.value)}
           placeholder={emailStored}
           value={email}
         />
 
-        <p className="minitext">Mudar senha:</p>
+        <p className="minitext-change-pass">Mudar senha:</p>
 
         <input
           type="password"
-          className="pass"
+          className="new-pass"
           onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="Digite sua nova senha"
           value={newPassword}
         />
 
-        <p className="minitext">
+        <p className="minitext-warn">
           Caso você deseje mudar seu email, por razões de segurança, será
           deslogado automáticamente e terá que fazer login denovo
         </p>
 
-        <p className="minitext">Digite sua senha atual:</p>
+        <p className="minitext-current-pass">Digite sua senha atual:</p>
 
         <input
           type="password"
