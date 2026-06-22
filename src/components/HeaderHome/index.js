@@ -6,23 +6,29 @@ import { HiOutlineInboxArrowDown, HiOutlineShoppingBag } from "react-icons/hi2";
 import { MdOutlineBadge, MdOutlineUpdate } from "react-icons/md";
 import { TbBaguette } from "react-icons/tb";
 import { TfiDashboard } from "react-icons/tfi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { MainHeader } from "./styledHeaderHome";
 
 export default function HeaderHome() {
+  const emailStored = useSelector((state) => state.auth.emailHeaders);
+
   const dispatch = useDispatch();
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault();
 
     // eslint-disable-next-line no-restricted-globals
     const logoutClick = confirm("Deseja mesmo sair?");
 
     if (logoutClick === true) {
+      await axios.post("/auth/logout", { email: emailStored });
+
       dispatch(actions.loginFailure());
+
       history.push("/");
     }
   };

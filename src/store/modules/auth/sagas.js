@@ -141,6 +141,7 @@ function* updateRequest({ payload }) {
 
     if (email.length > 0) {
       toast.success("Dados atualizados com sucesso. Faça login novamente");
+      yield put(actions.loginFailure());
       return;
     }
 
@@ -149,12 +150,6 @@ function* updateRequest({ payload }) {
     yield put(actions.updatedSuccess({ name, password }));
   } catch (err) {
     const errors = get(err, "response.data.message", []);
-    const status = get(err, "response.status", 0);
-
-    if (status === 401) {
-      toast.error("Você precisa fazer login novamente");
-      return;
-    }
 
     if (err) {
       // eslint-disable-next-line default-case

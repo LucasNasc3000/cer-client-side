@@ -9,26 +9,30 @@ import { TbBaguette } from "react-icons/tb";
 import { TfiDashboard } from "react-icons/tfi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "../../services/axios";
 import history from "../../services/history";
 import * as actions from "../../store/modules/auth/actions";
 import { MainHeader } from "./styledHeader";
 
 export default function Header() {
-
   const permissions = useSelector((state) => state.auth.permissions);
+  const emailStored = useSelector((state) => state.auth.emailHeaders);
   const onlyPermissions = [];
   const dispatch = useDispatch();
 
   permissions.map((p) => onlyPermissions.push(p.resource));
 
-  const logout = (e) => {
+  const logout = async(e) => {
     e.preventDefault();
 
     // eslint-disable-next-line no-restricted-globals
     const logoutClick = confirm("Deseja mesmo sair?")
 
     if (logoutClick === true) {
+      await axios.post("/auth/logout", { email: emailStored })
+
       dispatch(actions.loginFailure());
+
       history.push("/");
     }
 

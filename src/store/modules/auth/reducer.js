@@ -52,6 +52,12 @@ export default function (state = initialState, action) {
 
     case types.UPDATED_SUCCESS: {
       const newState = { ...state };
+
+      const { email, name } = action.payload;
+
+      if (email) newState.emailHeaders = email;
+      if (name) newState.name = name;
+
       return newState;
     }
 

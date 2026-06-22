@@ -16,12 +16,23 @@ export default function Profile() {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+  const clearDirectExecution = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setNewPassword("");
+  };
+
   async function HandleSubmit(e) {
     e.preventDefault();
 
     if (!password) {
       toast.error("A senha atual é obrigatória para atualizar dados");
       return;
+    }
+
+    if (!name && !email && !newPassword) {
+      toast.info("Nenhuma alteração detectada");
     }
 
     dispatch(
@@ -33,7 +44,7 @@ export default function Profile() {
       })
     );
 
-    if (email !== "" && email !== emailStored) dispatch(actions.loginFailure());
+    clearDirectExecution();
   }
 
   return (
