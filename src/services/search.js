@@ -12,19 +12,17 @@ export default async function DoSearch(
 ) {
   try {
     let results = "";
-    console.log({
-      path,
-      searchParam,
-      searchValue,
-      supplyType,
-      secondarySearchParam,
-      productType,
-    });
 
     switch (true) {
       case path === "supplies" && searchParam === "id":
         results = await axios.get(
           `/${path}/search/${searchParam}/${supplyType}/${searchValue}`
+        );
+        return results.data[1];
+
+      case path === "supplies" && searchParam === "name":
+        results = await axios.get(
+          `/${path}/search/${searchParam}/?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}&forDisplay=false`
         );
         return results.data[1];
 
@@ -62,6 +60,13 @@ export default async function DoSearch(
 
         return results.data[1];
 
+      case path === "products" && searchParam === "name":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
+        );
+
+        return results.data[1];
+
       case path === "products" && searchParam === "employee":
         results = await axios.get(
           `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
@@ -85,8 +90,6 @@ export default async function DoSearch(
     }
   } catch (err) {
     const errors = get(err, "response.data.message", []);
-
-    console.log(err);
 
     if (err) {
       if (errors.length > 0) {

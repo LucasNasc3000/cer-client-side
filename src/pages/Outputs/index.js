@@ -136,6 +136,7 @@ export default function Outputs() {
 
     let search = "";
     let formattedDate = "";
+    let outflowType = "";
 
     if (searchParam === "date") {
       const year = searchInputValue.slice(6, 10);
@@ -144,9 +145,17 @@ export default function Outputs() {
 
       formattedDate = `${year}-${month}-${day}`;
 
-      search = await DoSearch("outflows", searchParam, formattedDate, null);
+      search = await DoSearch("outflows", searchParam, formattedDate);
+    } else if (searchParam === "type") {
+      outflowType = "SUPPLY";
+
+      if (searchInputValue.includes("p") || searchInputValue.includes("P")) {
+        outflowType = "PRODUCT";
+      }
+
+      search = await DoSearch("outflows", searchParam, outflowType);
     } else {
-      search = await DoSearch("outflows", searchParam, searchInputValue, null);
+      search = await DoSearch("outflows", searchParam, searchInputValue);
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -204,11 +213,16 @@ export default function Outputs() {
     clearDirectExecution();
   };
 
-  const Transfer = (e, inputName) => {
+  const Transfer = (e, outflow) => {
     e.preventDefault();
-    dispatch(actions.inputDataTransfer({ inputName }));
 
-    history.push("/inputs/current");
+    if (outflow.targetType === "SUPPLY") {
+      dispatch(actions.inputDataTransfer({ inputName: outflow.name }));
+      history.push("/inputs/current");
+    } else {
+      dispatch(actions.productDataTransfer({ productName: outflow.name }));
+      history.push("/products");
+    }
   };
 
   return (
@@ -246,9 +260,10 @@ export default function Outputs() {
             className="options"
             id="filter-select"
             onChange={(e) => setSearchParam(e.target.value)}
+            value={searchParam}
           >
             <option value="">Selecione</option>
-            <option value="targetType">Tipo de saída</option>
+            <option value="type">Tipo de saída</option>
             <option value="date">Data</option>
             <option value="hour">Hora</option>
             <option value="name">Nome</option>
@@ -341,7 +356,7 @@ export default function Outputs() {
                     <button
                       type="button"
                       className="real-time-stock-btn"
-                      onClick={(e) => Transfer(e, output.name)}
+                      onClick={(e) => Transfer(e, output)}
                     >
                       Ver estoque em tempo real
                     </button>
@@ -429,7 +444,7 @@ export default function Outputs() {
                     <button
                       type="button"
                       className="real-time-stock-btn"
-                      onClick={(e) => Transfer(e, output.name)}
+                      onClick={(e) => Transfer(e, output)}
                     >
                       Ver estoque em tempo real
                     </button>

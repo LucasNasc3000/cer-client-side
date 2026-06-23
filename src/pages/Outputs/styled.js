@@ -2,9 +2,7 @@
 import styled from "styled-components";
 // import * as colors from "../../config/colors";
 
-export const OutputsContainer = styled.div`
-  overflow: hidden;
-`;
+export const OutputsContainer = styled.div``;
 
 export const SearchSpace = styled.div`
   display: flex;

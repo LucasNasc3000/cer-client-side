@@ -102,7 +102,16 @@ export default function InputsCurrent() {
         search = await DoSearch(
           "supplies",
           searchParam,
-          searchInput.value,
+          searchInputValue,
+          "SUPPLY_REAL_TIME"
+        );
+      }
+
+      if (searchValueAutoSearch) {
+        search = await DoSearch(
+          "supplies",
+          searchParam,
+          searchValueAutoSearch,
           "SUPPLY_REAL_TIME"
         );
       }
@@ -121,8 +130,9 @@ export default function InputsCurrent() {
       return;
     }
 
-    if (searchParam && searchInputValue) SearchTheInput();
-  }, [searchInputValue, searchParam]);
+    if (searchValueAutoSearch) SearchTheInput();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValueAutoSearch]);
 
   async function GetInputs() {
     if (!employee_id || !permissions) return;

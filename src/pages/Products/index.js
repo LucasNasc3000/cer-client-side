@@ -37,6 +37,7 @@ export default function Products() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
+  const productName = useSelector((state) => state.dataTransfer.productName);
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
   const getEditedRecipeIfExists = useSelector((state) => state.recipeEdit);
   const getAddIngredientsIfExists = useSelector(
@@ -58,6 +59,7 @@ export default function Products() {
   const [productsData, setProductsData] = useState([]);
   const [originalProductsData, setOriginalProductsData] = useState({});
   const [productsDataBackup, setProductsDataBackup] = useState([]);
+  const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -99,6 +101,43 @@ export default function Products() {
 
     headerIdCheck();
   }, [headerid, emailStored, employee_id]);
+
+  useEffect(() => {
+    if (productName) {
+      setSearchValueAutoSearch(productName);
+      setSearchParam("name");
+    }
+  }, [productName]);
+
+  useEffect(() => {
+    async function SearchTheProduct() {
+      const inArray = [];
+
+      const search = await DoSearch(
+        "products",
+        searchParam,
+        searchValueAutoSearch,
+        null,
+        null,
+        "PRODUCT"
+      );
+
+      if (typeof search === "undefined" || !search) return;
+
+      if (Array.isArray(search)) {
+        setSearchResults(search);
+        setSearchResultsBackup(search);
+        return;
+      }
+
+      inArray.push(search);
+      setSearchResults(inArray);
+      setSearchResultsBackup(inArray);
+    }
+
+    if (searchValueAutoSearch) SearchTheProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValueAutoSearch]);
 
   useEffect(() => {
     // eslint-disable-next-line no-useless-return
