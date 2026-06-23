@@ -377,7 +377,11 @@ export default function InputsCurrent() {
             <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
             <option value="expirationDate">Validade</option>
-            <option value="employee">Funcionário</option>
+
+            {permissions.some(
+              (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+            ) && <option value="employee">Funcionário</option>}
+
             <option value="price">Preço</option>
           </select>
         </div>
@@ -457,15 +461,19 @@ export default function InputsCurrent() {
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={input.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={input.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap-price">
                     <div className="label-price">Preço: </div>
                     <input
@@ -577,15 +585,19 @@ export default function InputsCurrent() {
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={input.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={input.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap-price">
                     <div className="label-price">Preço: </div>
                     <input

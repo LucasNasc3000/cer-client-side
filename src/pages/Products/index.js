@@ -494,9 +494,11 @@ export default function Products() {
             <option value="category">Categoria</option>
             <option value="name">Nome</option>
             <option value="expirationDate">Data de validade</option>
+
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
             ) && <option value="employee">Funcionário</option>}
+
             <option value="price">Preço</option>
           </select>
         </div>
@@ -547,15 +549,19 @@ export default function Products() {
                       onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={product.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={product.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Preço: </div>
                     <input
@@ -572,7 +578,7 @@ export default function Products() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${product.createdAt.slice(8, 10)}-${product.createdAt.slice(5, 7)}-${product.createdAt.slice(0, 4)}`}
+                      value={`${product.createdAt.slice(8, 10)}/${product.createdAt.slice(5, 7)}/${product.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -582,7 +588,7 @@ export default function Products() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${product.updatedAt.slice(8, 10)}-${product.updatedAt.slice(5, 7)}-${product.updatedAt.slice(0, 4)}`}
+                      value={`${product.updatedAt.slice(8, 10)}/${product.updatedAt.slice(5, 7)}/${product.updatedAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -754,15 +760,19 @@ export default function Products() {
                       onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={product.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={product.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Preço: </div>
                     <input
@@ -779,7 +789,7 @@ export default function Products() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${product.createdAt.slice(8, 10)}-${product.createdAt.slice(5, 7)}-${product.createdAt.slice(0, 4)}`}
+                      value={`${product.createdAt.slice(8, 10)}/${product.createdAt.slice(5, 7)}/${product.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -789,7 +799,7 @@ export default function Products() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${product.updatedAt.slice(8, 10)}-${product.updatedAt.slice(5, 7)}-${product.updatedAt.slice(0, 4)}`}
+                      value={`${product.updatedAt.slice(8, 10)}/${product.updatedAt.slice(5, 7)}/${product.updatedAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>

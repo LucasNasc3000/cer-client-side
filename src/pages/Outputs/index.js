@@ -269,7 +269,11 @@ export default function Outputs() {
             <option value="name">Nome</option>
             <option value="category">Categoria</option>
             <option value="unities">Unidades</option>
-            <option value="employee">Funcionário</option>
+
+            {permissions.some(
+              (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+            ) && <option value="employee">Funcionário</option>}
+
             <option value="reason">Motivo</option>
           </select>
         </div>
@@ -285,7 +289,7 @@ export default function Outputs() {
                       type="text"
                       name="date"
                       className="data-div"
-                      value={`${output.createdAt.slice(8, 10)}-${output.createdAt.slice(5, 7)}-${output.createdAt.slice(0, 4)}`}
+                      value={`${output.createdAt.slice(8, 10)}/${output.createdAt.slice(5, 7)}/${output.createdAt.slice(0, 4)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -294,7 +298,7 @@ export default function Outputs() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={`${output.createdAt.slice(11, 13)}-${output.createdAt.slice(14, 16)}-${output.createdAt.slice(17, 19)}`}
+                      value={`${output.createdAt.slice(11, 13)}/${output.createdAt.slice(14, 16)}/${output.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -324,14 +328,18 @@ export default function Outputs() {
                       value={output.unities}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={output.employee.id}
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={output.employee.id}
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Motivo: </div>
                     <input
@@ -373,7 +381,7 @@ export default function Outputs() {
                       type="text"
                       name="date"
                       className="data-div"
-                      value={`${output.createdAt.slice(8, 10)}-${output.createdAt.slice(5, 7)}-${output.createdAt.slice(0, 4)}`}
+                      value={`${output.createdAt.slice(8, 10)}/${output.createdAt.slice(5, 7)}/${output.createdAt.slice(0, 4)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -382,7 +390,7 @@ export default function Outputs() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={`${output.createdAt.slice(11, 13)}-${output.createdAt.slice(14, 16)}-${output.createdAt.slice(17, 19)}`}
+                      value={`${output.createdAt.slice(11, 13)}/${output.createdAt.slice(14, 16)}/${output.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -412,14 +420,18 @@ export default function Outputs() {
                       value={output.unities}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={output.employee.id}
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={output.employee.id}
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Motivo: </div>
                     <input

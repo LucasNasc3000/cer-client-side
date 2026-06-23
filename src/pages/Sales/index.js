@@ -365,11 +365,15 @@ export default function Sales() {
             <option value="date">Date</option>
             <option value="hour">Hora</option>
             <option value="clientName">Nome cliente</option>
+            <option value="clientEmail">E-mail cliente</option>
             <option value="phoneNumber">Telefone</option>
             <option value="address">Endereço</option>
             <option value="products">Produtos</option>
-            <option value="clientBirthday">Aniversário do cliente</option>
-            <option value="employee">Funcionário</option>
+
+            {permissions.some(
+              (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+            ) && <option value="employee">Funcionário</option>}
+
             <option value="price">Preço</option>
           </select>
         </div>
@@ -385,7 +389,7 @@ export default function Sales() {
                       type="text"
                       name="date"
                       className="data-div"
-                      value={`${sale.createdAt.slice(8, 10)}-${sale.createdAt.slice(5, 7)}-${sale.createdAt.slice(0, 4)}`}
+                      value={`${sale.createdAt.slice(8, 10)}/${sale.createdAt.slice(5, 7)}/${sale.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -439,15 +443,19 @@ export default function Sales() {
                       onChange={(e) => HandleChange(e, sale.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={sale.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={sale.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Preço total: </div>
                     <input
@@ -524,7 +532,7 @@ export default function Sales() {
                       type="text"
                       name="date"
                       className="data-div"
-                      value={`${sale.createdAt.slice(8, 10)}-${sale.createdAt.slice(5, 7)}-${sale.createdAt.slice(0, 4)}`}
+                      value={`${sale.createdAt.slice(8, 10)}/${sale.createdAt.slice(5, 7)}/${sale.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -578,15 +586,19 @@ export default function Sales() {
                       onChange={(e) => HandleChangeSearch(e, sale.id)}
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={sale.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={sale.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap-price">
                     <div className="label-price">Preço: </div>
                     <input

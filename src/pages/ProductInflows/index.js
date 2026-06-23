@@ -249,9 +249,11 @@ export default function ProductInflows() {
             <option value="category-P">Categoria</option>
             <option value="name-P">Nome</option>
             <option value="expirationDate-I">Data de validade</option>
+
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
             ) && <option value="employee-I">Funcionário</option>}
+
             <option value="price-P">Preço</option>
           </select>
         </div>

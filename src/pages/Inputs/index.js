@@ -279,7 +279,11 @@ export default function Inputs() {
             <option value="expirationDate">Validade</option>
             <option value="date">Data de cadastro</option>
             <option value="lowStock">Quantidade mínima</option>
-            <option value="employee">Funcionário</option>
+
+            {permissions.some(
+              (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+            ) && <option value="employee">Funcionário</option>}
+
             <option value="price">Preço</option>
             <option value="totalprice">Preço total</option>
           </select>
@@ -390,15 +394,19 @@ export default function Inputs() {
                       readOnly
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={input.employee.id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={input.employee.id}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Preço unitário: </div>
                     <input
@@ -425,7 +433,7 @@ export default function Inputs() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={`${input.createdAt.slice(8, 10)}-${input.createdAt.slice(5, 7)}-${input.createdAt.slice(0, 4)}`}
+                      value={`${input.createdAt.slice(8, 10)}/${input.createdAt.slice(5, 7)}/${input.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -544,15 +552,20 @@ export default function Inputs() {
                       readOnly
                     />
                   </div>
-                  <div className="data-wrap">
-                    <div className="label">Funcionário: </div>
-                    <input
-                      type="text"
-                      className="data-div"
-                      value={input.employee_id}
-                      readOnly
-                    />
-                  </div>
+                  {permissions.some(
+                    (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+                  ) && (
+                    <div className="data-wrap">
+                      <div className="label">Funcionário: </div>
+                      <input
+                        type="text"
+                        className="data-div"
+                        value={input.employee_id}
+                        readOnly
+                      />
+                    </div>
+                  )}
+
                   <div className="data-wrap-price">
                     <div className="label-price">Preço: </div>
                     <input
