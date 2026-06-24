@@ -107,7 +107,7 @@ export default async function GetData(
 
         case "inflows":
           toast.error(
-            "Erro desconhecido ao tentar exibir atualizações de produtos"
+            "Erro desconhecido ao tentar exibir entradas de produtos"
           );
           // eslint-disable-next-line no-useless-return
           return;

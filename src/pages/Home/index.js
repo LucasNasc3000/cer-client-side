@@ -528,7 +528,6 @@ export default function Home() {
     GetYearSales();
   }, [salesData]);
 
-  // AQUI
   useEffect(() => {
     function GetProducts() {
       const justProducts = [];
@@ -658,13 +657,15 @@ export default function Home() {
   }, [outputsData]);
 
   useEffect(() => {
+    const colors = MakingColors(inputsData);
+
     setDataPieChartInputs({
       labels: inputsData.map((inputData) => inputData.name),
       datasets: [
         {
           label: "Insumo",
           data: inputsData.map((inputData) => inputData.quantity),
-          backgroundColor: colorsCollection[0],
+          backgroundColor: colors,
           hoverOffset: 6,
         },
       ],
@@ -674,13 +675,17 @@ export default function Home() {
   }, [colorsCollection, inputsData]);
 
   useEffect(() => {
+    const arrayFromReason = reasonsCount.map((r) => r.reason);
+
+    const colors = MakingColors(arrayFromReason);
+
     setDataPieChartInputsRs({
       labels: reasonsCount.map((reason) => reason.reason),
       datasets: [
         {
           label: "Vezes que um insumo foi registrado por este motivo",
           data: reasonsCount.map((count) => count.count),
-          backgroundColor: colorsCollection[1],
+          backgroundColor: colors,
           hoverOffset: 6,
         },
       ],
@@ -690,13 +695,17 @@ export default function Home() {
   }, [colorsCollection, reasonsCount]);
 
   useEffect(() => {
+    const arrayFromReason = productsCount.map((r) => r.product);
+
+    const colors = MakingColors(arrayFromReason);
+
     setDataPieChartSalesPC({
       labels: productsCount.map((product) => product.product),
       datasets: [
         {
           label: "Quantidade",
           data: productsCount.map((count) => count.count),
-          backgroundColor: colorsCollection[1],
+          backgroundColor: colors,
           hoverOffset: 6,
         },
       ],
@@ -706,13 +715,17 @@ export default function Home() {
   }, [colorsCollection, productsCount]);
 
   useEffect(() => {
+    const arrayFromReason = outputsReasonsCount.map((r) => r.reason);
+
+    const colors = MakingColors(arrayFromReason);
+
     setDataPieChartOutputsRs({
       labels: outputsReasonsCount.map((reason) => reason.reason),
       datasets: [
         {
           label: "Vezes que uma saída foi registrada por este motivo",
           data: outputsReasonsCount.map((count) => count.count),
-          backgroundColor: colorsCollection[1],
+          backgroundColor: colors,
           hoverOffset: 6,
         },
       ],
@@ -722,13 +735,17 @@ export default function Home() {
   }, [colorsCollection, outputsReasonsCount]);
 
   useEffect(() => {
+    const arrayFromReason = outputsCount.map((r) => r.reason);
+
+    const colors = MakingColors(arrayFromReason);
+
     setDataPieChartOutputs({
       labels: outputsCount.map((output) => output.output),
       datasets: [
         {
           label: "Quantidade de registros de saída",
           data: outputsCount.map((count) => count.count),
-          backgroundColor: colorsCollection[1],
+          backgroundColor: colors,
           hoverOffset: 6,
         },
       ],
