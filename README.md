@@ -31,6 +31,15 @@ vendas e funcionários com sistema de permissões por perfil de usuário.
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/outputs062025.png" width=820 heigth=820/>
 <p font=12>Saídas (Histórico, apenas leitura)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/products.png" width=820 heigth=820/>
+<p font=12>Produtos</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/recipe.png" width=820 heigth=820/>
+<p font=12>Adicionar ingredientes na receita</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/unities-edit.png" width=820 heigth=820/>
+<p font=12>Edição de unidades de produto</p><br>
 <br><br>
 
 ## Funcionalidades
@@ -72,6 +81,15 @@ Web application for inventory and sales management aimed at small and medium-siz
 
 <img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/outputs062025.png" width=820 heigth=820/>
 <p font=12>Outflows (History, read only)</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/products.png" width=820 heigth=820/>
+<p font=12>Products</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/recipe.png" width=820 heigth=820/>
+<p font=12>add ingredients to the recipe</p><br>
+
+<img src="https://github.com/LucasNasc3000/cer-client-side/blob/master/images/unities-edit.png" width=820 heigth=820/>
+<p font=12>Edit of product unities</p><br>
 <br><br>
 
 ## Features
