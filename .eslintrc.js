@@ -27,6 +27,8 @@ module.exports = {
     "react/react-in-jsx-scope": 0,
     "import/prefer-default-export": 0,
     "func-names": 0,
+    "no-console": 0,
+    "no-alert": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
   },
