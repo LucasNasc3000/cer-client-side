@@ -4,7 +4,7 @@ import { BsGrid } from "react-icons/bs";
 import { CiCircleCheck, CiUser } from "react-icons/ci";
 import { GoPackageDependents } from "react-icons/go";
 import { HiOutlineInboxArrowDown, HiOutlineShoppingBag } from "react-icons/hi2";
-import { MdOutlineBadge, MdOutlineUpdate } from "react-icons/md";
+import { MdOutlineUpdate } from "react-icons/md";
 import { TbBaguette } from "react-icons/tb";
 import { TfiDashboard } from "react-icons/tfi";
 import { useDispatch, useSelector } from "react-redux";
@@ -75,10 +75,10 @@ export default function Header() {
                   <CiUser className="profile-icon" />
                   Perfil
                 </Link>
-                <Link to="/employees" class="employees">
+                {/* <Link to="/employees" class="employees">
                   <MdOutlineBadge className="employee-icon" />
                   Funcionários
-                </Link>
+                </Link> */}
                 <button type="button" onClick={(e) => logout(e)} className="logout-btn">
                   Sair
                 </button>
