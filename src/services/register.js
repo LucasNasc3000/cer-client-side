@@ -17,6 +17,8 @@ export default async function Register(data, registerType) {
       )
     );
 
+    console.log(truthyFields);
+
     // eslint-disable-next-line default-case
     switch (registerType) {
       case "supplies":

@@ -5,7 +5,7 @@ import axios from "axios";
 // eslint-disable-next-line import/no-cycle
 
 export const api = axios.create({
-  baseURL: "https://stm-nest.onrender.com",
+  baseURL: process.env.REACT_APP_URL,
   withCredentials: true,
 });
 

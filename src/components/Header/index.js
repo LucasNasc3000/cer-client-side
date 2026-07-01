@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable prettier/prettier */
 import { BsGrid } from "react-icons/bs";
 import { CiCircleCheck, CiUser } from "react-icons/ci";
 import { GoPackageDependents } from "react-icons/go";
@@ -22,126 +21,139 @@ export default function Header() {
 
   permissions.map((p) => onlyPermissions.push(p.resource));
 
-  const logout = async(e) => {
+  const logout = async (e) => {
     e.preventDefault();
 
     // eslint-disable-next-line no-restricted-globals
-    const logoutClick = confirm("Deseja mesmo sair?")
+    const logoutClick = confirm("Deseja mesmo sair?");
 
     if (logoutClick === true) {
-      await axios.post("/auth/logout", { email: emailStored })
-
-      dispatch(actions.loginFailure());
-
-      history.push("/");
+      try {
+        await axios.post("/auth/logout", { email: emailStored });
+        history.push("/");
+      } catch (err) {
+        console.log(err);
+      } finally {
+        dispatch(actions.loginFailure());
+      }
     }
-
   };
 
-    return(
-        <MainHeader>
-          {
-            onlyPermissions.includes("EMPLOYEES") ? (
+  return (
+    <MainHeader>
+      {onlyPermissions.includes("EMPLOYEES") ? (
+        <>
+          <Link to="/home" class="home">
+            <TfiDashboard className="dashboard-icon" />
+            Dashboard
+          </Link>
+          <Link to="/inputs/history" class="inputs">
+            <TbBaguette className="input-icon" />
+            Insumos
+          </Link>
+          <Link to="/inputs/current" class="inputs-current">
+            <MdOutlineUpdate className="inputs-current-icon" />
+            Insumos em tempo real
+          </Link>
+          <Link to="/sales" class="sales">
+            <HiOutlineShoppingBag className="sale-icon" />
+            Vendas
+          </Link>
+          <Link to="/outputs" class="outputs">
+            <GoPackageDependents className="output-icon" />
+            Saídas
+          </Link>
+          <Link to="/products" class="products">
+            <BsGrid className="products-icon" />
+            Produtos
+          </Link>
+          <Link to="/products/inflows" class="products-inflows">
+            <HiOutlineInboxArrowDown className="products-inflows-icon" />
+            Atualizações de produtos
+          </Link>
+          <Link to="/profile" class="profile">
+            <CiUser className="profile-icon" />
+            Perfil
+          </Link>
+          {/* <Link to="/employees" class="employees">
+                  <MdOutlineBadge className="employee-icon" />
+                  Funcionários
+                </Link> */}
+          <button
+            type="button"
+            onClick={(e) => logout(e)}
+            className="logout-btn"
+          >
+            Sair
+          </button>
+        </>
+      ) : (
+        ""
+      )}
+      {!onlyPermissions.includes("EMPLOYEES")
+        ? onlyPermissions.map((p) => {
+            return (
               <>
-                <Link to="/home" class="home">
-                  <TfiDashboard className="dashboard-icon" />
-                  Dashboard
-                </Link>
-                <Link to="/inputs/history" class="inputs">
-                  <TbBaguette className="input-icon" />
-                  Insumos
-                </Link>
-                <Link to="/inputs/current" class="inputs-current">
-                  <MdOutlineUpdate className="inputs-current-icon" />
-                  Insumos em tempo real
-                </Link>
-                <Link to="/sales" class="sales">
-                  <HiOutlineShoppingBag className="sale-icon" />
-                  Vendas
-                </Link>
-                <Link to="/outputs" class="outputs">
-                  <GoPackageDependents className="output-icon" />
-                  Saídas
-                </Link>
-                <Link to="/products" class="products">
-                  <BsGrid className="products-icon" />
-                  Produtos
-                </Link>
-                <Link to="/products/inflows" class="products-inflows">
-                  <HiOutlineInboxArrowDown className="products-inflows-icon" />
-                  Atualizações de produtos
-                </Link>
+                {p === "SUPPLIES" ? (
+                  <>
+                    <Link to="/inputs/history" class="inputs">
+                      <TbBaguette className="input-icon" />
+                      Insumos
+                    </Link>
+                    <Link to="/inputs/current" class="inputs-current">
+                      <MdOutlineUpdate className="inputs-current-icon" />
+                      Insumos em tempo real
+                    </Link>
+                  </>
+                ) : (
+                  ""
+                )}
+                {p === "OUTFLOWS" ? (
+                  <Link to="/outputs" class="outputs">
+                    <CiCircleCheck className="output-icon" />
+                    Saídas
+                  </Link>
+                ) : (
+                  ""
+                )}
+                {p === "SALES" ? (
+                  <Link to="/sales" class="sales">
+                    <HiOutlineShoppingBag className="sale-icon" />
+                    Vendas
+                  </Link>
+                ) : (
+                  ""
+                )}
+                {p === "PRODUCTS" ? (
+                  <>
+                    <Link to="/products" class="products">
+                      <HiOutlineShoppingBag className="product-icon" />
+                      Produtos
+                    </Link>
+                    <Link to="/products/inflows" class="products-inflows">
+                      <HiOutlineInboxArrowDown className="products-inflows-icon" />
+                      Atualizações de produtos
+                    </Link>
+                  </>
+                ) : (
+                  ""
+                )}
                 <Link to="/profile" class="profile">
                   <CiUser className="profile-icon" />
                   Perfil
                 </Link>
-                {/* <Link to="/employees" class="employees">
-                  <MdOutlineBadge className="employee-icon" />
-                  Funcionários
-                </Link> */}
-                <button type="button" onClick={(e) => logout(e)} className="logout-btn">
+
+                <button
+                  type="button"
+                  onClick={(e) => logout(e)}
+                  className="logout-btn"
+                >
                   Sair
                 </button>
               </>
-            ) : (
-              ""
-            )
-          }
-          {
-            !onlyPermissions.includes("EMPLOYEES") ? (
-              onlyPermissions.map((p) => {
-                return (
-                  <>
-                    {p === "SUPPLIES" ? (
-                      <>
-                        <Link to="/inputs/history" class="inputs">
-                          <TbBaguette className="input-icon" />
-                          Insumos
-                        </Link>
-                        <Link to="/inputs/current" class="inputs-current">
-                          <MdOutlineUpdate className="inputs-current-icon" />
-                          Insumos em tempo real
-                        </Link>
-                      </>
-                    ) : ("")}
-                    {p === "OUTFLOWS" ? (
-                      <Link to="/outputs" class="outputs">
-                        <CiCircleCheck className="output-icon" />
-                        Saídas
-                      </Link>
-                    ) : ("")}
-                    {p === "SALES" ? (
-                      <Link to="/sales" class="sales">
-                        <HiOutlineShoppingBag className="sale-icon" />
-                        Vendas
-                      </Link>
-                    ) : ("")}
-                    {p === "PRODUCTS" ? (
-                      <>
-                        <Link to="/products" class="products">
-                          <HiOutlineShoppingBag className="product-icon" />
-                          Produtos
-                        </Link>
-                        <Link to="/products/inflows" class="products-inflows">
-                          <HiOutlineInboxArrowDown className="products-inflows-icon" />
-                          Atualizações de produtos
-                        </Link>
-                      </>
-
-                    ) : ("")}
-                    <Link to="/profile" class="profile">
-                      <CiUser className="profile-icon" />
-                      Perfil
-                    </Link>
-
-                    <button type="button" onClick={(e) => logout(e)} className="logout-btn">
-                      Sair
-                    </button>
-                  </>
-                )
-              })
-            ) : ("")
-          }
-        </MainHeader>
-    );
+            );
+          })
+        : ""}
+    </MainHeader>
+  );
 }

@@ -12,8 +12,6 @@ export default createGlobalStyle`
   }
 
   body {
-    overflow-y: hidden;
-    overflow-x: hidden;
     background: #f5f4f4ff;
     color: ${colors.primaryDarkColor};
   }

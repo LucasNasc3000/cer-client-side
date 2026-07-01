@@ -46,7 +46,30 @@ function* loginRequest({ payload }) {
           return history.push("/sales");
       }
     });
-  } catch (e) {
+  } catch (err) {
+    const errors = get(err, "response.data.message", []);
+
+    if (err) {
+      // eslint-disable-next-line default-case
+      switch (true) {
+        case err instanceof TypeError:
+          toast.error("Erro de tratamento de dados");
+          return false;
+
+        case errors.length > 0:
+          if (!isArray(errors)) {
+            toast.error(errors);
+            return false;
+          }
+
+          errors.map((error) => toast.error(error));
+          return false;
+
+        case err && errors.length < 1:
+          toast.error("Erro desconhecido ao tentar entrar");
+          return false;
+      }
+    }
     yield put(actions.loginFailure());
   }
 }
