@@ -67,6 +67,7 @@ export default async function GetData(
 
     return joinData;
   } catch (err) {
+    console.log(err);
     // eslint-disable-next-line consistent-return
     if (err.response && typeof err.response.data === "string") return;
 
