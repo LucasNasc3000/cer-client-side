@@ -2,7 +2,7 @@
 import styled from "styled-components";
 
 export const InputsContainer = styled.div`
-  height: 900px;
+  height: 800px;
 `;
 
 export const SearchSpace = styled.div`

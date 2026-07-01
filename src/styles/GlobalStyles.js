@@ -13,14 +13,13 @@ export default createGlobalStyle`
 
   body {
     overflow-y: hidden;
-    overflow-x: auto;
+    overflow-x: hidden;
     background: #f5f4f4ff;
     color: ${colors.primaryDarkColor};
   }
 
   html, body, #root {
     height: 100%;
-    overflow: auto;
   }
 
   button {
