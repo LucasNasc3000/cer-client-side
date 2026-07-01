@@ -5,6 +5,7 @@ import { applyMiddleware, legacy_createStore as createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 
 import persistStore from "redux-persist/es/persistStore";
+import { configureCsrfTokenGetter } from "../services/axios";
 import persistedReducers from "./modules/reduxPersist";
 
 import rootReducer from "./modules/rootReducer";
@@ -16,12 +17,15 @@ import rootSaga from "./modules/rootSaga";
 // O reducer comumente é configurado desta forma. Assim, somente vai acontecer algo quando a primeira ação no switch for disparada no login e ouvida aqui
 // O estado (state parâmetro) atual da aplicação nunca é alterado diretamente, e sim copiado para um novo estado, então esse novo estado é alterado e retornado
 // eslint-disable-next-line default-param-last
+
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   persistedReducers(rootReducer),
   applyMiddleware(sagaMiddleware)
 );
+
+configureCsrfTokenGetter(() => store.getState().csrfToken.token);
 
 sagaMiddleware.run(rootSaga);
 

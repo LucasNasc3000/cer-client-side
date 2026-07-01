@@ -35,6 +35,10 @@ export const CLEAR_UPDATE_UNITIES_DATA = "CLEAR_UPDATE_UNITIES_DATA";
 export const UPDATE_SALES_STATUS = "UPDATE_SALES_STATUS";
 export const CLEAR_UPDATE_SALES_STATUS_DATA = "CLEAR_UPDATE_SALES_STATUS_DATA";
 
+export const SET_CSRF_TOKEN = "SET_CSRF_TOKEN";
+export const FETCH_CSRF_TOKEN = "FETCH_CSRF_TOKEN";
+export const CLEAR_CSRF_TOKEN = "CLEAR_CSRF_TOKEN";
+
 /* Esta action vai manter os dados do login no local storage depois que este for feito. Sem ele
   esses dados desaparecerão quando a página for atualizada */
 export const PERSIST_REHYDRATE = "persist/REHYDRATE";

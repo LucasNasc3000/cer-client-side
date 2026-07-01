@@ -5,8 +5,11 @@
 import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import { all, call, put, takeLatest } from "redux-saga/effects";
+// eslint-disable-next-line import/no-cycle
 import axios from "../../../services/axios";
 import history from "../../../services/history";
+import { callWithCsrfRetry } from "../../../utils/CallWithCsrfRetry";
+import * as csrfActions from "../csrfToken/actions";
 import * as types from "../types";
 import * as actions from "./actions";
 
@@ -14,24 +17,13 @@ import * as actions from "./actions";
 // O put dispara uma ação
 // eslint-disable-next-line require-yield
 
-// Esta função recupera o token que desapareceria do cabeçalho depois que o login fosse feito e o site atualizado
-// O terceiro parâmetro de get será um valor padrão
-
-// function persistRehydrate({ payload }) {
-//   const token = get(payload, "auth.token", "");
-//   if (!token) return;
-//   axios.defaults.headers.Authorization = `Bearer ${token}`;
-//   axios.defaults.headers.email = payload.auth.emailHeaders;
-
-//   if (payload.auth.permission !== process.env.REACT_APP_ADMIN_ROLE) {
-//     axios.defaults.headers.headerid = payload.auth.headerid;
-//   }
-// }
-
 function* loginRequest({ payload }) {
   try {
     const response = yield call(axios.post, "/auth", payload);
+
     yield put(actions.loginSuccess({ ...response.data }));
+
+    yield put(csrfActions.fetchCsrfToken());
 
     toast.success("Logado");
 
@@ -59,17 +51,6 @@ function* loginRequest({ payload }) {
   }
 }
 
-// async function getBossData(bossName) {
-//   try {
-//     const bossId = await axios.get(`/employees/search/uniquename/${bossName}`);
-//     const { id } = bossId.data;
-//     return id;
-//   } catch (e) {
-//     console.log(e);
-//     toast.error("Erro ao obter os dados do chefe para atualização de admin");
-//   }
-// }
-
 // Esta função atualiza dos dados do usuário
 // eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
@@ -84,7 +65,7 @@ function* registerRequest({ payload }) {
   } = payload;
 
   try {
-    yield call(axios.post, "/employees", {
+    yield call(callWithCsrfRetry, axios.post, "/employees", {
       name,
       email,
       password,
@@ -135,7 +116,7 @@ function* updateRequest({ payload }) {
       )
     );
 
-    yield call(axios.patch, "/employees/update/self", {
+    yield call(callWithCsrfRetry, axios.patch, "/employees/update/self", {
       ...truthyFields,
     });
 
@@ -175,100 +156,100 @@ function* updateRequest({ payload }) {
   }
 }
 
-function* adminUpdateRequest({ payload }) {
-  try {
-    const { id, permissionEdit, bossEdit, alEdit } = payload;
-    const boss = bossEdit;
-    const permission = permissionEdit;
-    const address_allowed = alEdit;
+// function* adminUpdateRequest({ payload }) {
+//   try {
+//     const { id, permissionEdit, bossEdit, alEdit } = payload;
+//     const boss = bossEdit;
+//     const permission = permissionEdit;
+//     const address_allowed = alEdit;
 
-    if (!id) {
-      toast.error("Erro ao tentar atualizar os dados, id necessário");
-      return;
-    }
+//     if (!id) {
+//       toast.error("Erro ao tentar atualizar os dados, id necessário");
+//       return;
+//     }
 
-    switch (true) {
-      case permission.length > 0 &&
-        boss.length < 1 &&
-        address_allowed.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          permission,
-        });
-        break;
+//     switch (true) {
+//       case permission.length > 0 &&
+//         boss.length < 1 &&
+//         address_allowed.length < 1:
+//         yield call(axios.put, `/employees/${id}`, {
+//           permission,
+//         });
+//         break;
 
-      case boss.length > 0 &&
-        permission.length < 1 &&
-        address_allowed.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          boss,
-        });
-        break;
+//       case boss.length > 0 &&
+//         permission.length < 1 &&
+//         address_allowed.length < 1:
+//         yield call(axios.put, `/employees/${id}`, {
+//           boss,
+//         });
+//         break;
 
-      case address_allowed.length > 0 &&
-        boss.length < 1 &&
-        permission.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          address_allowed,
-        });
-        break;
+//       case address_allowed.length > 0 &&
+//         boss.length < 1 &&
+//         permission.length < 1:
+//         yield call(axios.put, `/employees/${id}`, {
+//           address_allowed,
+//         });
+//         break;
 
-      case boss.length > 0 &&
-        address_allowed.length > 0 &&
-        permission.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          boss,
-          address_allowed,
-        });
-        break;
+//       case boss.length > 0 &&
+//         address_allowed.length > 0 &&
+//         permission.length < 1:
+//         yield call(axios.put, `/employees/${id}`, {
+//           boss,
+//           address_allowed,
+//         });
+//         break;
 
-      case boss.length > 0 &&
-        permission.length > 0 &&
-        address_allowed.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          boss,
-          permission,
-        });
-        break;
+//       case boss.length > 0 &&
+//         permission.length > 0 &&
+//         address_allowed.length < 1:
+//         yield call(axios.put, `/employees/${id}`, {
+//           boss,
+//           permission,
+//         });
+//         break;
 
-      case permission.length > 0 &&
-        address_allowed.length > 0 &&
-        boss.length < 1:
-        yield call(axios.put, `/employees/${id}`, {
-          permission,
-          address_allowed,
-        });
-        break;
+//       case permission.length > 0 &&
+//         address_allowed.length > 0 &&
+//         boss.length < 1:
+//         yield call(axios.put, `/employees/${id}`, {
+//           permission,
+//           address_allowed,
+//         });
+//         break;
 
-      default:
-        yield call(axios.put, `/employees/${id}`, {
-          boss,
-          permission,
-          address_allowed,
-        });
-        break;
-    }
+//       default:
+//         yield call(axios.put, `/employees/${id}`, {
+//           boss,
+//           permission,
+//           address_allowed,
+//         });
+//         break;
+//     }
 
-    toast.success("Dados do funcionário atualizados com sucesso");
+//     toast.success("Dados do funcionário atualizados com sucesso");
 
-    yield put(
-      actions.adminUpdatedSuccess({ boss, permission, address_allowed })
-    );
-  } catch (err) {
-    const errors = get(err, "response.data.error", []);
+//     yield put(
+//       actions.adminUpdatedSuccess({ boss, permission, address_allowed })
+//     );
+//   } catch (err) {
+//     const errors = get(err, "response.data.error", []);
 
-    if (err) {
-      if (errors.length > 0) {
-        errors.map((error) => toast.error(error));
-      }
+//     if (err) {
+//       if (errors.length > 0) {
+//         errors.map((error) => toast.error(error));
+//       }
 
-      if (err && errors.length < 1) {
-        toast.error(
-          "Erro desconhecido ao tentar atualizar dados do funcionário"
-        );
-      }
-    }
-  }
-}
+//       if (err && errors.length < 1) {
+//         toast.error(
+//           "Erro desconhecido ao tentar atualizar dados do funcionário"
+//         );
+//       }
+//     }
+//   }
+// }
 
 // O takeLatest recebe no primeiro parâmetro a ação que vai ser ouvida e no segundo a função que vai ser executada
 // Quando se usa o takeLatest qualquer action anterior é cancelada para que a função do segundo parâmetro seja executada no lugar
@@ -277,5 +258,4 @@ export default all([
   takeLatest(types.LOGIN_REQUEST, loginRequest),
   takeLatest(types.REGISTER_REQUEST, registerRequest),
   takeLatest(types.UPDATE_REQUEST, updateRequest),
-  takeLatest(types.ADMIN_UPDATE_REQUEST, adminUpdateRequest),
 ]);

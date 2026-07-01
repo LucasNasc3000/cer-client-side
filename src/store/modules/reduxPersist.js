@@ -12,6 +12,7 @@ export default (reducers) => {
       key: "STMEXT",
       storage,
       whitelist: ["auth"],
+      blacklist: ["csrfToken"],
     },
     reducers
   );
