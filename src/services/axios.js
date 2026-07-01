@@ -5,7 +5,7 @@ import axios from "axios";
 // eslint-disable-next-line import/no-cycle
 
 export const api = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: "https://stm-nest.onrender.com",
   withCredentials: true,
 });
 
