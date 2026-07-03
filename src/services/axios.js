@@ -10,10 +10,14 @@ export const api = axios.create({
 });
 
 let getCsrfToken = () => null;
+let currentCsrfToken = null;
 
-// Chamado uma vez no bootstrap da app, depois que o store já existe
 export function configureCsrfTokenGetter(getter) {
   getCsrfToken = getter;
+}
+
+export function setCurrentCsrfToken(token) {
+  currentCsrfToken = token;
 }
 
 const MUTATING_METHODS = ["post", "put", "patch", "delete"];
@@ -22,7 +26,7 @@ api.interceptors.request.use((config) => {
   const method = config.method?.toLowerCase();
 
   if (method && MUTATING_METHODS.includes(method)) {
-    const token = getCsrfToken();
+    const token = currentCsrfToken || getCsrfToken();
     if (token) {
       config.headers["x-csrf-token"] = token;
     }
@@ -35,43 +39,56 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 403) {
-      const { data } = error.response;
-      if (data?.message?.toLowerCase().includes("csrf")) {
-        // Marca o erro para a saga identificar e disparar refreshCsrfToken
-        error.isCsrfError = true;
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Intercepta respostas com 401 e tenta renovar o token
-api.interceptors.response.use(
-  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+    // Marca erros CSRF para o helper callWithCsrfRetry identificar
     if (
-      (error.response?.status === 401 &&
-        !originalRequest._retry &&
-        error.response.data.message === "Token expirado") ||
-      (error.response?.status === 401 &&
-        !originalRequest._retry &&
+      error.response?.status === 403 &&
+      !originalRequest._csrfRetry &&
+      error.response.data?.message?.toLowerCase().includes("csrf")
+    ) {
+      originalRequest._csrfRetry = true;
+
+      try {
+        // Busca token novo diretamente, sem passar pelo Redux/saga
+        const tokenResponse = await api.get("/auth/csrf-token");
+        const newToken = tokenResponse.data.csrfToken;
+
+        // Atualiza o getter pra próximas requests
+        // (você precisa expor uma função setter no axios.js)
+        setCurrentCsrfToken(newToken);
+
+        // Retenta a request original com o token novo no header
+        originalRequest.headers["x-csrf-token"] = newToken;
+        return api(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
+    }
+
+    // Tenta renovar JWT em caso de 401
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      (error.response.data.message === "Token expirado" ||
         error.response.data.message === "Não logado")
     ) {
       originalRequest._retry = true;
-
       try {
-        // Chama o endpoint de refresh (usa o refresh_token do cookie)
         await api.post("/refresh");
-
-        // Repete a requisição original com o novo token
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh falhou — redireciona para login
-        window.location.href = "/";
+        console.error(
+          "Refresh falhou:",
+          refreshError.response?.status,
+          refreshError.response?.message
+        );
+
+        if (window.location.pathname !== "/") {
+          window.location.href = "/";
+        }
+
         return Promise.reject(refreshError);
       }
     }
