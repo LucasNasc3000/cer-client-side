@@ -3,7 +3,7 @@ import styled from "styled-components";
 import * as colors from "../../config/colors";
 
 export const HomeContainer = styled.div`
-  height: 700px;
+  height: 680px;
   width: 100%;
   background-color: ${colors.primaryDarkColor};
   overflow-y: auto;
