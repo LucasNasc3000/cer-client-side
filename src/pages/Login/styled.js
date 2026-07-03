@@ -38,6 +38,14 @@ export const FormContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   overflow: hidden;
+
+  .eye-icon {
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    color: black;
+  }
 `;
 
 export const Form = styled.form`
