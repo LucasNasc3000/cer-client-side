@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 
 export const UserContainer = styled.div`
   display: flex;
@@ -54,5 +55,41 @@ export const Form = styled.form`
     color: black;
     top: 190px;
     margin-top: 10px;
+  }
+
+  /* Abaixo de 1024px o menu lateral vira uma barra horizontal (ver
+     Header), então esse formulário deixa de precisar dos deslocamentos
+     gigantes usados para "subir" ao lado do menu fixo. Passa a fluir
+     normalmente, centralizado, com largura de 100%. */
+  @media (max-width: ${breakpoints.laptop}) {
+    position: static;
+    bottom: auto;
+    left: auto;
+    width: 90%;
+    max-width: 450px;
+    height: auto;
+    margin: 30px auto;
+
+    input,
+    .saveBtn,
+    p {
+      position: static;
+      top: auto;
+      left: auto;
+    }
+
+    .saveBtn {
+      width: 60%;
+      max-width: 170px;
+      margin: 20px auto 0;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    width: 94%;
+
+    input {
+      width: 100%;
+    }
   }
 `;

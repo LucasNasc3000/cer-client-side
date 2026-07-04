@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 
 export const ModalShowSaleItemsContainer = styled.div`
   display: flex;
@@ -36,5 +37,12 @@ export const ModalShowSaleItemsContainer = styled.div`
   .price-at-sale {
     width: 70px;
     text-align: center;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    .data-wrap {
+      gap: 8px;
+      font-size: 13px;
+    }
   }
 `;

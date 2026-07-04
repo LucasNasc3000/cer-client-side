@@ -1,8 +1,13 @@
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 import * as colors from "../../config/colors";
 
 export const EmployeeRegisterContainer = styled.div`
   display: flex;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    flex-direction: column;
+  }
 `;
 
 export const Form = styled.div`
@@ -38,5 +43,34 @@ export const Form = styled.div`
     margin-left: 40px;
     justify-content: center;
     width: 350px;
+  }
+
+  /* Em telas menores a caixa deixa de ter margem fixa e passa a se
+     centralizar sozinha, com largura fluida, sem cortar o conteúdo. */
+  @media (max-width: ${breakpoints.laptop}) {
+    width: 90%;
+    max-width: 450px;
+    height: auto;
+    min-height: 500px;
+    margin: 30px auto;
+    padding-bottom: 20px;
+    align-items: center;
+
+    input {
+      width: 80%;
+      max-width: 330px;
+      margin-left: 0;
+    }
+
+    .btn {
+      width: 80%;
+      max-width: 350px;
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    width: 94%;
+    margin: 20px auto;
   }
 `;

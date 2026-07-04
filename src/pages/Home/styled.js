@@ -1,9 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 import * as colors from "../../config/colors";
 
 export const HomeContainer = styled.div`
-  height: 680px;
+  height: 700px;
   width: 100%;
   background-color: ${colors.primaryDarkColor};
   overflow-y: auto;
@@ -128,5 +129,78 @@ export const HomeContainer = styled.div`
     right: 70px;
     font-size: 18px;
     color: black;
+  }
+
+  /* Abaixo de 1024px o menu lateral vira uma barra horizontal (ver
+     Header/HeaderHome), então todos os cards e gráficos deste dashboard
+     deixam de depender dos deslocamentos gigantes calculados para uma
+     tela cheia e passam a fluir normalmente, um abaixo do outro / lado
+     a lado com quebra de linha, sem cortar nem esticar nada. */
+  @media (max-width: ${breakpoints.laptop}) {
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px 40px;
+
+    .price,
+    .price-today,
+    .price-year {
+      position: static;
+      bottom: auto;
+      left: auto;
+      width: 90%;
+      max-width: 320px;
+      margin: 10px 0;
+      font-size: 28px;
+    }
+
+    .total-price {
+      position: static;
+      top: auto;
+      right: auto;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .text {
+      position: static;
+      bottom: auto;
+      left: auto;
+      width: 90%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .filter-space,
+    .filter-space-sales {
+      position: static;
+      bottom: auto;
+      left: auto;
+      width: 100%;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .filter-select-label {
+      right: auto;
+    }
+
+    .warn {
+      position: static;
+      right: auto;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    .price,
+    .price-today,
+    .price-year {
+      font-size: 22px;
+      height: 70px;
+    }
   }
 `;

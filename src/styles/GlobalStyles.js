@@ -11,14 +11,32 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    /* Impede que qualquer elemento com largura fixa gere scroll horizontal na página */
+    overflow-x: hidden;
+  }
+
   body {
-    overflow-y: hidden;
     background: #f5f4f4ff;
     color: ${colors.primaryDarkColor};
+    overflow-x: hidden;
+    width: 100%;
   }
 
   html, body, #root {
     height: 100%;
+    max-width: 100%;
+  }
+
+  img, svg, canvas {
+    max-width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    button {
+      padding: 8px 14px;
+      font-size: 14px;
+    }
   }
 
   button {

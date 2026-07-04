@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 import * as colors from "../../config/colors";
 
 export const Title = styled.p`
@@ -10,6 +11,15 @@ export const Title = styled.p`
   margin-top: 25px;
   border-bottom: 0.5px solid black;
   width: 250px;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    margin: 25px auto 0;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    width: 80%;
+    max-width: 250px;
+  }
 `;
 
 export const BtnRegister = styled.button`
@@ -24,6 +34,13 @@ export const BtnRegister = styled.button`
   width: 350px;
   margin-left: 120px;
   margin-top: 60px;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    width: 70%;
+    max-width: 350px;
+    margin: 40px auto 0;
+    display: block;
+  }
 `;
 
 export const FormContainerRegister = styled.div`
@@ -36,6 +53,23 @@ export const FormContainerRegister = styled.div`
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
+
+  /* Em telas menores a caixa deixa de ter margem fixa (que a empurrava
+     para fora da tela) e passa a se centralizar sozinha, com largura
+     fluida, sem cortar nem esticar o conteúdo. */
+  @media (max-width: ${breakpoints.laptop}) {
+    width: 90%;
+    max-width: 600px;
+    height: auto;
+    min-height: 400px;
+    margin: 50px auto 0;
+    padding-bottom: 20px;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    width: 94%;
+    margin: 25px auto 0;
+  }
 `;
 
 export const Form = styled.form`
@@ -69,5 +103,20 @@ export const Form = styled.form`
 
   &:focus {
     border: 1px solid ${colors.primaryColor};
+  }
+
+  @media (max-width: ${breakpoints.laptop}) {
+    align-items: center;
+
+    input {
+      width: 80%;
+      max-width: 430px;
+      margin-left: 0;
+    }
+
+    .login-link {
+      margin-left: 0;
+      width: auto;
+    }
   }
 `;

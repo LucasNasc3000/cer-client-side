@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 
 export const ModalEditRecipeContainer = styled.div`
   display: flex;
@@ -68,5 +69,11 @@ export const ModalEditRecipeContainer = styled.div`
 
   .cancel:hover {
     color: gray;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    .data-wrap {
+      gap: 8px;
+    }
   }
 `;

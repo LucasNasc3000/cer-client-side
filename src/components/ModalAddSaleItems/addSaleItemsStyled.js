@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 
 export const ModalAddSaleItemsContainer = styled.div`
   display: flex;
@@ -118,5 +119,22 @@ export const ModalAddSaleItemsContainer = styled.div`
   .delete-icon:hover {
     filter: brightness(80%);
     transition: 0.1s ease-in-out;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    .data-wrap {
+      gap: 12px;
+      padding: 0 8px;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    .button-wrapper {
+      flex-wrap: wrap;
+    }
+    .save {
+      margin-left: 0;
+      width: 100%;
+    }
   }
 `;

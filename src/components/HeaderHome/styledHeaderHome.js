@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
+import { fontStack } from "../../config/fonts";
 
 export const MainHeader = styled.nav`
   background-color: white;
@@ -23,7 +25,7 @@ export const MainHeader = styled.nav`
     left: -2px;
     top: 30px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .inputs {
@@ -38,7 +40,7 @@ export const MainHeader = styled.nav`
     left: 18px;
     top: 35px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .inputs-current {
@@ -53,7 +55,7 @@ export const MainHeader = styled.nav`
     left: 48px;
     top: 35px;
     font-size: 15px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .sales {
@@ -68,7 +70,7 @@ export const MainHeader = styled.nav`
     left: 12px;
     top: 35px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .outputs {
@@ -83,7 +85,7 @@ export const MainHeader = styled.nav`
     left: 10px;
     top: 43px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .products {
@@ -98,7 +100,7 @@ export const MainHeader = styled.nav`
     left: 20px;
     top: 50px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .products-inflows {
@@ -113,7 +115,7 @@ export const MainHeader = styled.nav`
     left: 50px;
     top: 65px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .profile {
@@ -128,7 +130,7 @@ export const MainHeader = styled.nav`
     left: 5px;
     top: 77px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .employees {
@@ -143,7 +145,7 @@ export const MainHeader = styled.nav`
     left: 38px;
     top: 81px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .advices {
@@ -158,7 +160,7 @@ export const MainHeader = styled.nav`
     left: 28px;
     top: 54px;
     font-size: 18px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .logout-btn {
@@ -173,7 +175,7 @@ export const MainHeader = styled.nav`
     justify-content: center;
     font-size: 18px;
     font-weight: 400;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${fontStack};
   }
 
   .dashboard-icon {
@@ -285,4 +287,104 @@ export const MainHeader = styled.nav`
     color:rgb(243, 64, 64);
   }
 
+  @media (max-width: ${breakpoints.laptop}) {
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px 10px;
+    gap: 4px;
+    -webkit-overflow-scrolling: touch;
+
+    .home,
+    .inputs,
+    .inputs-current,
+    .sales,
+    .outputs,
+    .products,
+    .products-inflows,
+    .profile,
+    .employees,
+    .advices {
+      position: static;
+      top: 0;
+      left: 0;
+      right: auto;
+      bottom: auto;
+      height: 40px;
+      width: auto;
+      flex: 0 0 auto;
+      padding: 0 12px;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      position: static;
+      top: 0;
+      left: 0;
+      height: 40px;
+      width: auto;
+      flex: 0 0 auto;
+      padding: 0 14px;
+      font-size: 14px;
+      margin-left: auto;
+    }
+
+    .dashboard-icon,
+    .input-icon,
+    .input-current-icon,
+    .sale-icon,
+    .output-icon,
+    .products-icon,
+    .products-inflows-icon,
+    .profile-icon,
+    .employee-icon {
+      height: 20px;
+      width: 20px;
+      margin-right: 8px;
+      margin-top: 0;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: 4px 6px;
+    gap: 2px;
+
+    .home,
+    .inputs,
+    .inputs-current,
+    .sales,
+    .outputs,
+    .products,
+    .products-inflows,
+    .profile,
+    .employees,
+    .advices,
+    .logout-btn {
+      height: 36px;
+      padding: 0 8px;
+      font-size: 12px;
+    }
+
+    .dashboard-icon,
+    .input-icon,
+    .input-current-icon,
+    .sale-icon,
+    .output-icon,
+    .products-icon,
+    .products-inflows-icon,
+    .profile-icon,
+    .employee-icon {
+      height: 16px;
+      width: 16px;
+      margin-right: 4px;
+    }
+  }
 `;

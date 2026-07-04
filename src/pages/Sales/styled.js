@@ -1,9 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
+import { fontStack } from "../../config/fonts";
 
 export const SalesContainer = styled.div`
   overflow-y: hidden;
   height: 800px;
+
+  @media (max-width: ${breakpoints.desktop}) {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: visible;
+  }
 `;
 
 export const SearchSpace = styled.div`
@@ -70,18 +78,7 @@ export const SearchSpace = styled.div`
     padding: 5px;
     border: none;
     border-radius: 6px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: ${fontStack};
   }
 
   .filter-space {
@@ -104,18 +101,7 @@ export const SearchSpace = styled.div`
     color: black;
     font-size: 15px;
     font-weight: normal;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: ${fontStack};
   }
 
   .search-btn:hover {
@@ -128,6 +114,63 @@ export const SearchSpace = styled.div`
 
   .search-icon:hover {
     filter: brightness(70%);
+  }
+
+  /* Responsivo: abaixo de  a barra de busca deixa de ter
+     largura e posicionamento fixos (pensados para uma tela de ~1440px
+     ao lado do menu) e passa a quebrar linha e ocupar a largura
+     disponível, sem cortar nem esticar nada. */
+  @media (max-width: ${breakpoints.desktop}) {
+    position: static;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    row-gap: 12px;
+    padding: 15px 20px;
+
+    .search-space,
+    .filter-space {
+      position: static;
+      top: auto;
+      left: auto;
+      right: auto;
+    }
+
+    .input-search,
+    .sale-search,
+    .output-search,
+    .product-search,
+    .inflow-search {
+      width: 100%;
+      max-width: 280px;
+      right: auto;
+    }
+
+    .search-btn,
+    .arrow,
+    .exemp-list,
+    .link {
+      position: static;
+      top: auto;
+      left: auto;
+      right: auto;
+    }
+
+    .link {
+      width: auto;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: 10px;
+    gap: 8px;
+
+    .options {
+      font-size: 13px;
+    }
   }
 `;
 
@@ -169,18 +212,7 @@ export const SalesSpace = styled.div`
     border-radius: 8px;
     border: none;
     font-size: 16px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: ${fontStack};
     text-align: center;
   }
 
@@ -193,18 +225,7 @@ export const SalesSpace = styled.div`
     border-radius: 8px;
     border: none;
     font-size: 16px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: ${fontStack};
     text-align: center;
   }
 
@@ -222,18 +243,7 @@ export const SalesSpace = styled.div`
     right: 50px;
     width: 130px;
     font-size: 17px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: ${fontStack};
     word-break: keep-all;
   }
 
@@ -295,6 +305,78 @@ export const SalesSpace = styled.div`
   .footer button:hover {
     filter: brightness(80%);
   }
+
+  /* Responsivo: o painel de conteudo deixa de depender de posição e
+     largura fixas e passa a ocupar 100% da largura disponível, com os
+     cartões e botões quebrando linha em vez de estourar a tela. */
+  @media (max-width: ${breakpoints.desktop}) {
+    position: static;
+    bottom: auto;
+    left: auto;
+    top: auto;
+    right: auto;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 70vh;
+    padding: 15px;
+
+    .main-data-div {
+      width: 100%;
+      height: auto;
+    }
+
+    .data-wrap,
+    .data-wrap-price {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .label,
+    .label-price {
+      right: auto;
+    }
+
+    .buttons,
+    .footer {
+      margin: 15px 0 0 0;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .confirm-changes,
+    .cancel-changes,
+    .real-time-stock-btn,
+    .product-stock-btn,
+    .del-btn,
+    .status-edit,
+    .show-items {
+      width: auto;
+      left: auto;
+      bottom: auto;
+    }
+
+    .for-empty-results {
+      margin: 40px auto;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: 10px;
+
+    .main-data-div {
+      padding: 10px;
+    }
+
+    .data-div,
+    .data-div-price {
+      font-size: 14px;
+    }
+  }
 `;
 
 export const NewSale = styled.div`
@@ -336,18 +418,7 @@ export const NewSale = styled.div`
     padding: 5px;
     border: none;
     border-radius: 6px;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: ${fontStack};
   }
 
   .btn {
@@ -380,5 +451,19 @@ export const NewSale = styled.div`
     color: #fff;
     height: 30px;
     width: 30px;
+  }
+
+  @media (max-width: ${breakpoints.desktop}) {
+    position: static;
+    bottom: auto;
+    left: auto;
+    top: auto;
+    width: 92%;
+    max-width: 320px;
+    margin: 20px auto;
+
+    input {
+      width: 100%;
+    }
   }
 `;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { breakpoints } from "../../config/breakpoints";
 
 export const ModalEditUnitiesContainer = styled.div`
   display: flex;
@@ -46,5 +47,19 @@ export const ModalEditUnitiesContainer = styled.div`
     width: 180px;
     height: fit-content;
     margin-top: 8px;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    .notes-wrapper {
+      width: 100%;
+    }
+    .use-stock-supplies-label,
+    .use-stock-supplies-label-disabled {
+      width: auto;
+      font-size: 13px;
+    }
+    .buttons-wrapper {
+      flex-wrap: wrap;
+    }
   }
 `;
