@@ -41,11 +41,17 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl = originalRequest?.url || "";
+
+    // Rotas internas dos interceptors nunca devem ser retentadas
+    const isInternalRoute =
+      requestUrl.includes("/refresh") || requestUrl.includes("/csrf-token");
 
     // Marca erros CSRF para o helper callWithCsrfRetry identificar
     if (
       error.response?.status === 403 &&
       !originalRequest._csrfRetry &&
+      !isInternalRoute &&
       error.response.data?.message?.toLowerCase().includes("csrf")
     ) {
       originalRequest._csrfRetry = true;
@@ -71,6 +77,7 @@ api.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
+      !isInternalRoute &&
       (error.response.data.message === "Token expirado" ||
         error.response.data.message === "Não logado")
     ) {
