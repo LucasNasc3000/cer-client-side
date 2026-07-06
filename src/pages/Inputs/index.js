@@ -145,9 +145,9 @@ export default function Inputs() {
     let formattedDate = "";
 
     if (searchParam === "date" || searchParam === "expirationDate") {
-      const year = searchInput.value.slice(6, 10);
-      const month = searchInput.value.slice(3, 5);
-      const day = searchInput.value.slice(0, 2);
+      const year = searchInputValue.slice(6, 10);
+      const month = searchInputValue.slice(3, 5);
+      const day = searchInputValue.slice(0, 2);
 
       formattedDate = `${year}-${month}-${day}`;
 
@@ -161,7 +161,7 @@ export default function Inputs() {
       search = await DoSearch(
         "supplies",
         searchParam,
-        searchInput.value,
+        searchInputValue,
         "SUPPLY_HISTORY"
       );
     }

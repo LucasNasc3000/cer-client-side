@@ -20,6 +20,7 @@ export default createGlobalStyle`
     background: #f5f4f4ff;
     color: ${colors.primaryDarkColor};
     overflow-x: hidden;
+    overflow-y: hidden;
     width: 100%;
   }
 

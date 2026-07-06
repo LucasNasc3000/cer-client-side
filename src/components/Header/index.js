@@ -32,7 +32,7 @@ export default function Header() {
         await axios.post("/auth/logout", { email: emailStored });
         history.push("/");
       } catch (err) {
-        console.log(err);
+        console.log(err.message);
       } finally {
         dispatch(actions.loginFailure());
       }

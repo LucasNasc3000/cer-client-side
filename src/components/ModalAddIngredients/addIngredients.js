@@ -93,7 +93,6 @@ export function ModalAddIngredientsChildren({ productData }) {
   }, [inputSearchValue]);
 
   useEffect(() => {
-    console.log(getIngredientsDataIfExists);
     if (getIngredientsDataIfExists.addProductIngredient.length < 1) return;
     setIngredientsToShowFromRedux(
       getIngredientsDataIfExists.addProductIngredientToShow

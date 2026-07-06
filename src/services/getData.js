@@ -19,16 +19,6 @@ export default async function GetData(
 ) {
   const joinData = [];
 
-  console.log({
-    bossId,
-    path,
-    employee_id,
-    permission,
-    supplyType,
-    forDisplay,
-    secondaryPath,
-  });
-
   try {
     const getEmployeesByBoss = await axios.get(
       `/employees/search/boss?limit=20&offset=0&value=${bossId}`
@@ -74,8 +64,6 @@ export default async function GetData(
 
       if (bossRegisters.data[1]) joinData.push(...bossRegisters.data[1]);
     }
-
-    console.log(joinData);
 
     return joinData;
   } catch (err) {
