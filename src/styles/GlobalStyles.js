@@ -33,10 +33,14 @@ export default createGlobalStyle`
     max-width: 100%;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 1024px) {
     button {
       padding: 8px 14px;
       font-size: 14px;
+    }
+
+    body {
+      overflow: auto;
     }
   }
 
