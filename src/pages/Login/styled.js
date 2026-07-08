@@ -35,10 +35,19 @@ export const Btn = styled.button`
   width: 150px;
   margin-left: 170px;
   margin-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 
   @media (max-width: ${breakpoints.laptop}) {
     margin: 40px auto 0;
-    display: block;
+    display: flex;
   }
 `;
 
@@ -107,6 +116,21 @@ export const Form = styled.form`
       width: 80%;
       max-width: 330px;
       margin-left: 0;
+    }
+  }
+`;
+
+export const Spinner = styled.div`
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
 `;

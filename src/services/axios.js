@@ -7,7 +7,12 @@ import axios from "axios";
 export const api = axios.create({
   baseURL: process.env.REACT_APP_URL,
   withCredentials: true,
+  timeout: 60000,
 });
+
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 4000;
+const MUTATING_METHODS = ["post", "put", "patch", "delete"];
 
 let getCsrfToken = () => null;
 let currentCsrfToken = null;
@@ -20,7 +25,10 @@ export function setCurrentCsrfToken(token) {
   currentCsrfToken = token;
 }
 
-const MUTATING_METHODS = ["post", "put", "patch", "delete"];
+const delay = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
 api.interceptors.request.use((config) => {
   const method = config.method?.toLowerCase();
@@ -42,6 +50,20 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const requestUrl = originalRequest?.url || "";
+
+    originalRequest._retryCount = originalRequest._retryCount || 0;
+
+    if (
+      error.code === "ECONNABORTED" &&
+      originalRequest.method?.toLowerCase() === "get" &&
+      originalRequest._retryCount < MAX_RETRIES
+    ) {
+      originalRequest._retryCount += 1;
+
+      await delay(RETRY_DELAY);
+
+      return api(originalRequest);
+    }
 
     // Rotas internas dos interceptors nunca devem ser retentadas
     const isInternalRoute =

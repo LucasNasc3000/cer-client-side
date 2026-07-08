@@ -1,12 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import * as actions from "../../store/modules/auth/actions";
-import { Btn, Form, FormContainer, Title } from "./styled";
+import { Btn, Form, FormContainer, Spinner, Title } from "./styled";
 
 export default function Login() {
+  const isLoading = useSelector((state) => state.auth.isLoading);
+
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -42,12 +44,14 @@ export default function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Digite seu e-mail"
+          disabled={isLoading}
         />
         <input
           type={eyeOpen === true ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Digite sua senha"
+          disabled={isLoading}
         />
         <button
           type="button"
@@ -60,8 +64,10 @@ export default function Login() {
             <AiOutlineEyeInvisible size={27} />
           )}
         </button>
-        <Btn>
-          <button type="submit">Entrar</button>
+        <Btn disabled={isLoading}>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? <Spinner /> : "Entrar"}
+          </button>
         </Btn>
       </Form>
     </FormContainer>

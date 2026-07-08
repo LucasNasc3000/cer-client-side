@@ -3,6 +3,7 @@ import * as types from "../types";
 
 const initialState = {
   isLoggedIn: false,
+  isLoading: false,
   emailHeaders: "",
   name: "",
   permissions: [],
@@ -19,6 +20,7 @@ export default function (state = initialState, action) {
       const newState = { ...state };
 
       newState.isLoggedIn = true;
+      newState.isLoading = false;
       newState.emailHeaders = action.payload.email;
       newState.name = action.payload.name;
       newState.permissions = [...action.payload.permissions];
@@ -36,7 +38,10 @@ export default function (state = initialState, action) {
 
     case types.LOGIN_REQUEST: {
       const newState = { ...state };
+
       newState.emailHeaders = action.payload.email;
+      newState.isLoading = true;
+
       return newState;
     }
 
