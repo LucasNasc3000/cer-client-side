@@ -49,27 +49,24 @@ function* loginRequest({ payload }) {
   } catch (err) {
     const errors = get(err, "response.data.message", []);
 
-    if (err) {
-      // eslint-disable-next-line default-case
-      switch (true) {
-        case err instanceof TypeError:
-          toast.error("Erro de tratamento de dados");
-          return false;
+    switch (true) {
+      case err instanceof TypeError:
+        toast.error("Erro de tratamento de dados");
+        break;
 
-        case errors.length > 0:
-          if (!isArray(errors)) {
-            toast.error(errors);
-            return false;
-          }
-
+      case errors.length > 0:
+        if (!isArray(errors)) {
+          toast.error(errors);
+        } else {
           errors.map((error) => toast.error(error));
-          return false;
+        }
+        break;
 
-        case err && errors.length < 1:
-          toast.error("Erro desconhecido ao tentar entrar");
-          return false;
-      }
+      default:
+        toast.error("Erro desconhecido ao tentar entrar");
+        break;
     }
+
     yield put(actions.loginFailure());
   }
 }
