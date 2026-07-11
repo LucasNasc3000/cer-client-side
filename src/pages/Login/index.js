@@ -17,6 +17,7 @@ export default function Login() {
 
   useEffect(() => {
     dispatch(actions.loginFailure());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const SeePassword = (e) => {
