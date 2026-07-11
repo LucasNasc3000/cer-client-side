@@ -16,14 +16,6 @@ const initialState = {
 // eslint-disable-next-line default-param-last
 export default function (state = initialState, action) {
   switch (action.type) {
-    case "REHYDRATE": {
-      const newState = { ...state };
-
-      newState.isLoading = false;
-
-      return newState;
-    }
-
     case types.LOGIN_SUCCESS: {
       const newState = { ...state };
 
