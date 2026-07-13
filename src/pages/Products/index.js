@@ -276,9 +276,23 @@ export default function Products() {
 
       formattedDate = `${year}-${month}-${day}`;
 
-      search = await DoSearch("products", searchParam, formattedDate, null);
+      search = await DoSearch(
+        "products",
+        searchParam,
+        formattedDate,
+        null,
+        null,
+        "PRODUCT"
+      );
     } else {
-      search = await DoSearch("products", searchParam, searchInputValue, null);
+      search = await DoSearch(
+        "products",
+        searchParam,
+        searchInputValue,
+        null,
+        null,
+        "PRODUCT"
+      );
     }
 
     if (typeof search === "undefined" || !search) return;
@@ -493,7 +507,6 @@ export default function Products() {
             <option value="">Selecione</option>
             <option value="category">Categoria</option>
             <option value="name">Nome</option>
-            <option value="expirationDate">Data de validade</option>
 
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
@@ -557,7 +570,7 @@ export default function Products() {
                       <input
                         type="text"
                         className="data-div"
-                        value={product.employee.id}
+                        value={product.employee.email}
                         readOnly
                       />
                     </div>
@@ -568,7 +581,7 @@ export default function Products() {
                       type="text"
                       name="price"
                       className="data-div"
-                      value={product.price}
+                      value={product.price.replace(".", ",")}
                       onChange={(e) => HandleChange(e, product.id)}
                     />
                   </div>
@@ -768,7 +781,7 @@ export default function Products() {
                       <input
                         type="text"
                         className="data-div"
-                        value={product.employee.id}
+                        value={product.employee.email}
                         readOnly
                       />
                     </div>
@@ -779,7 +792,7 @@ export default function Products() {
                       type="text"
                       name="price"
                       className="data-div"
-                      value={product.price}
+                      value={product.price.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, product.id)}
                     />
                   </div>

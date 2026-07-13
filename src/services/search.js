@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import axios from "./axios";
 
@@ -53,14 +53,8 @@ export default async function DoSearch(
 
         return results.data[1];
 
-      case path === "products":
-        results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}`
-        );
-
-        return results.data[1];
-
       case path === "products" && searchParam === "name":
+        console.log("aqui");
         results = await axios.get(
           `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
         );
@@ -71,6 +65,13 @@ export default async function DoSearch(
         results = await axios.get(
           `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
         );
+        return results.data[1];
+
+      case path === "products":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}`
+        );
+
         return results.data[1];
 
       case searchParam &&
@@ -91,27 +92,22 @@ export default async function DoSearch(
   } catch (err) {
     const errors = get(err, "response.data.message", []);
 
-    if (err) {
-      if (errors.length > 0) {
-        toast.error(errors);
-      }
+    switch (true) {
+      case err instanceof TypeError:
+        toast.error("Erro de tratamento de dados");
+        break;
 
-      if (err && errors.length < 1) {
-        // eslint-disable-next-line default-case
-        switch (path) {
-          case "supplies":
-            toast.error("Erro desconhecido ao tentar pesquisar insumo");
-            break;
-
-          case "outflows":
-            toast.error("Erro desconhecido ao tentar pesquisar saída");
-            break;
-
-          case "sales":
-            toast.error("Erro desconhecido ao tentar pesquisar venda");
-            break;
+      case errors.length > 0:
+        if (!isArray(errors)) {
+          toast.error(errors);
+        } else {
+          errors.map((error) => toast.error(error));
         }
-      }
+        break;
+
+      default:
+        toast.error("Erro desconhecido ao buscar registro");
+        break;
     }
   }
 }
