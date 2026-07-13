@@ -350,7 +350,7 @@ export default function Inputs() {
                       type="text"
                       name="totalweightPerRegister"
                       className="data-div"
-                      value={input.totalWeightPerRegister}
+                      value={input.totalWeightPerRegister.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -360,7 +360,7 @@ export default function Inputs() {
                       type="text"
                       name="weightPerUnit"
                       className="data-div"
-                      value={input.weightPerUnit}
+                      value={input.weightPerUnit.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -413,7 +413,7 @@ export default function Inputs() {
                       type="text"
                       name="price"
                       className="data-div"
-                      value={input.price}
+                      value={input.price.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -423,7 +423,7 @@ export default function Inputs() {
                       type="text"
                       name="totalprice"
                       className="data-div"
-                      value={input.totalPrice}
+                      value={input.totalPrice.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -508,7 +508,7 @@ export default function Inputs() {
                       type="text"
                       name="totalweightPerRegister"
                       className="data-div"
-                      value={input.totalweight_per_register}
+                      value={input.totalWeightPerRegister.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -518,7 +518,7 @@ export default function Inputs() {
                       type="text"
                       name="weightPerUnit"
                       className="data-div"
-                      value={input.weightPerUnit}
+                      value={input.weightPerUnit.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -560,7 +560,7 @@ export default function Inputs() {
                       <input
                         type="text"
                         className="data-div"
-                        value={input.employee_id}
+                        value={input.employee.id}
                         readOnly
                       />
                     </div>
@@ -572,7 +572,7 @@ export default function Inputs() {
                       type="text"
                       name="price"
                       className="data-div-price"
-                      value={input.price}
+                      value={input.price.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -582,7 +582,7 @@ export default function Inputs() {
                       type="text"
                       name="totalprice"
                       className="data-div-price"
-                      value={input.totalprice}
+                      value={input.totalprice.replace(".", ",")}
                       readOnly
                     />
                   </div>

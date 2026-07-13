@@ -298,7 +298,7 @@ export default function Outputs() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={`${output.createdAt.slice(11, 13)}/${output.createdAt.slice(14, 16)}/${output.createdAt.slice(17, 19)}`}
+                      value={`${output.createdAt.slice(11, 13)}:${output.createdAt.slice(14, 16)}:${output.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="data-wrap">
@@ -390,7 +390,7 @@ export default function Outputs() {
                       type="text"
                       name="hour"
                       className="data-div"
-                      value={`${output.createdAt.slice(11, 13)}/${output.createdAt.slice(14, 16)}/${output.createdAt.slice(17, 19)}`}
+                      value={`${output.createdAt.slice(11, 13)}:${output.createdAt.slice(14, 16)}:${output.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="data-wrap">

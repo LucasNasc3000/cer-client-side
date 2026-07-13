@@ -427,7 +427,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="totalWeight"
                       className="data-div"
-                      value={input.totalWeight}
+                      value={input.totalWeight.replace(".", ",")}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -437,7 +437,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="weightPerUnit"
                       className="data-div"
-                      value={input.weightPerUnit}
+                      value={input.weightPerUnit.replace(".", ",")}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -480,7 +480,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="price"
                       className="data-div-price"
-                      value={input.price}
+                      value={input.price.replace(".", ",")}
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
@@ -551,7 +551,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="totalWeight"
                       className="data-div"
-                      value={input.totalWeight}
+                      value={input.totalWeight.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -561,7 +561,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="weightPerUnit"
                       className="data-div"
-                      value={input.weightPerUnit}
+                      value={input.weightPerUnit.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
@@ -604,7 +604,7 @@ export default function InputsCurrent() {
                       type="text"
                       name="price"
                       className="data-div-price"
-                      value={input.price}
+                      value={input.price.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>

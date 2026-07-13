@@ -570,7 +570,7 @@ export default function Products() {
                       <input
                         type="text"
                         className="data-div"
-                        value={product.employee.email}
+                        value={product.employee.id}
                         readOnly
                       />
                     </div>
@@ -781,7 +781,7 @@ export default function Products() {
                       <input
                         type="text"
                         className="data-div"
-                        value={product.employee.email}
+                        value={product.employee.id}
                         readOnly
                       />
                     </div>

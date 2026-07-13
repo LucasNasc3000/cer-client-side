@@ -319,7 +319,7 @@ export default function ProductInflows() {
                       type="text"
                       name="price"
                       className="data-div"
-                      value={inflow.price}
+                      value={inflow.price.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -349,7 +349,7 @@ export default function ProductInflows() {
                       <input
                         type="text"
                         className="data-div"
-                        value={inflow.employee.email}
+                        value={inflow.employee.id}
                         readOnly
                       />
                     </div>
@@ -446,7 +446,7 @@ export default function ProductInflows() {
                       type="text"
                       name="price"
                       className="data-div"
-                      value={inflow.price}
+                      value={inflow.price.replace(".", ",")}
                       readOnly
                     />
                   </div>
@@ -476,7 +476,7 @@ export default function ProductInflows() {
                       <input
                         type="text"
                         className="data-div"
-                        value={inflow.employee.email}
+                        value={inflow.employee.id}
                         readOnly
                       />
                     </div>
