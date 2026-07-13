@@ -225,7 +225,7 @@ export default function Home() {
         return;
       }
 
-      setPriceDay(total);
+      setPriceDay(total.replace(".", ","));
       setIsLoadingTotalPriceDay(false);
     }
 

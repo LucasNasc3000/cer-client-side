@@ -347,8 +347,6 @@ export default function Products() {
     setReRender(register);
 
     dispatch(actions.clearRecipeData());
-
-    clearDirectExecution();
   };
 
   const ProductUpdate = async (e, objectData) => {
@@ -452,8 +450,6 @@ export default function Products() {
       }));
 
       setReRender(update);
-
-      clearDirectExecution();
     }
   };
 

@@ -209,8 +209,6 @@ export default function Outputs() {
     const register = await Register(data, "outflows");
 
     setReRender(register);
-
-    clearDirectExecution();
   };
 
   const Transfer = (e, outflow) => {

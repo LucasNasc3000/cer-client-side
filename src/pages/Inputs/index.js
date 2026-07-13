@@ -219,8 +219,6 @@ export default function Inputs() {
     const register = await Register(data, "supplies");
 
     setReRender(register);
-
-    clearDirectExecution();
   };
 
   const Transfer = (e, inputName) => {

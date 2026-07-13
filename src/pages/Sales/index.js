@@ -301,8 +301,6 @@ export default function Sales() {
 
       setReRender(update);
     }
-
-    clearDirectExecution();
   };
 
   const SaleRegister = async (e) => {
@@ -321,8 +319,6 @@ export default function Sales() {
     const register = await Register(data, "sales");
 
     setReRender(register);
-
-    clearDirectExecution();
   };
 
   return (

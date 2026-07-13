@@ -329,8 +329,6 @@ export default function InputsCurrent() {
       }));
 
       setReRender(update);
-
-      clearDirectExecution();
     }
   };
 
