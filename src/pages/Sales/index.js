@@ -21,7 +21,14 @@ import Update from "../../services/update";
 import * as actionsEditSalesStatus from "../../store/modules/editSalesStatus/actions";
 import * as actionsItems from "../../store/modules/saleItems/actions";
 import { GetChangedFields } from "../../utils/GetChangedFields";
-import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
+import {
+  GetDataSpinner,
+  NewSale,
+  SalesContainer,
+  SalesSpace,
+  SearchSpace,
+  Spinner,
+} from "./styled";
 
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -52,6 +59,9 @@ export default function Sales() {
   const [openAddItems, setOpenAddItems] = useState(false);
   const [openModalId, setOpenModalId] = useState(null);
   const [itemsRedux, setItemsRedux] = useState([]);
+  const [isLoadingSales, setIsLoadingSales] = useState(false);
+  const [isLoadingSalesUpdate, setIsLoadingSalesUpdate] = useState(false);
+  const [isLoadingGetSales, setIsLoadingGetSales] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -119,6 +129,8 @@ export default function Sales() {
   async function GetSales() {
     if (!employee_id || !permissions) return;
 
+    setIsLoadingGetSales(true);
+
     const sales = await GetData(
       bossId,
       "sales",
@@ -131,6 +143,7 @@ export default function Sales() {
 
     if (typeof sales === "undefined" || !sales) return;
 
+    setIsLoadingGetSales(false);
     setSalesData(sales);
     setSalesDataBackup(sales);
     setOriginalSalesData(
@@ -291,6 +304,8 @@ export default function Sales() {
       ...truthyFields,
     };
 
+    setIsLoadingSalesUpdate(true);
+
     const update = await Update(objectData.id, allData, "sales");
 
     if (update) {
@@ -299,8 +314,12 @@ export default function Sales() {
         [objectData.id]: { ...current },
       }));
 
+      dispatch(actionsEditSalesStatus.clearUpdateSalesStatusData());
+
       setReRender(update);
     }
+
+    setIsLoadingSalesUpdate(false);
   };
 
   const SaleRegister = async (e) => {
@@ -316,9 +335,15 @@ export default function Sales() {
       saleItems: itemsRedux,
     };
 
+    setIsLoadingSales(true);
+
     const register = await Register(data, "sales");
 
-    setReRender(register);
+    if (register) {
+      setReRender(register);
+    }
+
+    setIsLoadingSales(false);
   };
 
   return (
@@ -375,6 +400,7 @@ export default function Sales() {
         </div>
       </SearchSpace>
       <SalesSpace>
+        {isLoadingGetSales && <GetDataSpinner />}
         {searchResults.length < 1
           ? salesData.map((sale) => {
               return (
@@ -477,6 +503,7 @@ export default function Sales() {
                         type="button"
                         onClick={() => setOpenModalId(`items-${sale.id}`)}
                         className="show-items"
+                        disabled={isLoadingSalesUpdate}
                       >
                         Ver produtos
                       </button>
@@ -491,6 +518,7 @@ export default function Sales() {
                         type="button"
                         onClick={() => setOpenModalId(`status-${sale.id}`)}
                         className="status-edit"
+                        disabled={isLoadingSalesUpdate}
                       >
                         Editar status da venda
                       </button>
@@ -503,13 +531,15 @@ export default function Sales() {
                           type="button"
                           className="confirm-changes"
                           onClick={(e) => SaleUpdate(e, sale)}
+                          disabled={isLoadingSalesUpdate}
                         >
-                          Salvar
+                          {isLoadingSalesUpdate ? <Spinner /> : "Salvar"}
                         </button>
                         <button
                           type="button"
                           className="cancel-changes"
                           onClick={(e) => clear(e)}
+                          disabled={isLoadingSalesUpdate}
                         >
                           Cancelar
                         </button>
@@ -618,6 +648,7 @@ export default function Sales() {
                         type="button"
                         onClick={() => setOpenModalId(`items-${sale.id}`)}
                         className="show-items"
+                        disabled={isLoadingSalesUpdate}
                       >
                         Ver produtos
                       </button>
@@ -632,6 +663,7 @@ export default function Sales() {
                         type="button"
                         onClick={() => setOpenModalId(`status-${sale.id}`)}
                         className="status-edit"
+                        disabled={isLoadingSalesUpdate}
                       >
                         Editar status da venda
                       </button>
@@ -645,13 +677,15 @@ export default function Sales() {
                             type="button"
                             className="confirm-changes"
                             onClick={(e) => SaleUpdate(e, sale)}
+                            disabled={isLoadingSalesUpdate}
                           >
-                            Salvar
+                            {isLoadingSalesUpdate ? <Spinner /> : "Salvar"}
                           </button>
                           <button
                             type="button"
                             className="cancel-changes"
                             onClick={(e) => clear(e)}
+                            disabled={isLoadingSalesUpdate}
                           >
                             Cancelar
                           </button>
@@ -704,11 +738,21 @@ export default function Sales() {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
-        <button type="button" className="btn" onClick={clear}>
+        <button
+          type="button"
+          className="btn"
+          onClick={clear}
+          disabled={isLoadingSales}
+        >
           Cancelar
         </button>
-        <button type="button" className="btn" onClick={(e) => SaleRegister(e)}>
-          Adicionar
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => SaleRegister(e)}
+          disabled={isLoadingSales}
+        >
+          {isLoadingSales ? <Spinner /> : "Salvar"}
         </button>
         <Modal
           isOpen={openAddItems}
@@ -721,6 +765,7 @@ export default function Sales() {
           type="button"
           className="add-items-btn"
           onClick={() => setOpenAddItems(true)}
+          disabled={isLoadingSales}
         >
           <IoMdPaper className="items-icon" />
           Adicionar Produtos

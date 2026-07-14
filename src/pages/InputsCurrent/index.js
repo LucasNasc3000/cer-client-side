@@ -18,7 +18,15 @@ import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/dataTransfer/actions";
-import { InputsContainer, InputsSpace, SearchSpace } from "./styled";
+import { GetChangedFields } from "../../utils/GetChangedFields";
+import {
+  Btn,
+  GetDataSpinner,
+  InputsContainer,
+  InputsSpace,
+  SearchSpace,
+  Spinner,
+} from "./styled";
 
 export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -39,6 +47,9 @@ export default function InputsCurrent() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [isLoadingInputsCurrent, setIsLoadingInputsCurrent] = useState(false);
+  const [isLoadingGetInputsCurrent, setIsLoadingGetInputsCurrent] =
+    useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -137,6 +148,8 @@ export default function InputsCurrent() {
   async function GetInputs() {
     if (!employee_id || !permissions) return;
 
+    setIsLoadingGetInputsCurrent(true);
+
     const inputs = await GetData(
       bossId,
       "supplies",
@@ -148,6 +161,7 @@ export default function InputsCurrent() {
 
     if (typeof inputs === "undefined" || !inputs) return;
 
+    setIsLoadingGetInputsCurrent(false);
     setInputsData(inputs);
     setInputsDataBackup(inputs);
     setOriginalSuppliesData(
@@ -320,6 +334,8 @@ export default function InputsCurrent() {
       return;
     }
 
+    setIsLoadingInputsCurrent(true);
+
     const update = await Update(objectData.id, changedFields, "supplies");
 
     if (update) {
@@ -330,6 +346,8 @@ export default function InputsCurrent() {
 
       setReRender(update);
     }
+
+    setIsLoadingInputsCurrent(false);
   };
 
   return (
@@ -385,6 +403,7 @@ export default function InputsCurrent() {
         </div>
       </SearchSpace>
       <InputsSpace>
+        {isLoadingGetInputsCurrent && <GetDataSpinner />}
         {searchResults.length < 1
           ? inputsData.map((input) => {
               return (
@@ -489,20 +508,24 @@ export default function InputsCurrent() {
                     (p) => p.resource === "SUPPLIES" && p.action === "UPDATE"
                   ) ? (
                     <div className="buttons">
-                      <button
-                        type="button"
-                        className="confirm-changes"
-                        onClick={(e) => InputUpdate(e, input)}
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
-                        Cancelar
-                      </button>
+                      <Btn disabled={isLoadingInputsCurrent}>
+                        <button
+                          type="button"
+                          className="confirm-changes"
+                          onClick={(e) => InputUpdate(e, input)}
+                        >
+                          {isLoadingInputsCurrent ? <Spinner /> : "Salvar"}
+                        </button>
+                      </Btn>
+                      <Btn disabled={isLoadingInputsCurrent}>
+                        <button
+                          type="button"
+                          className="cancel-changes"
+                          onClick={(e) => clear(e)}
+                        >
+                          Cancelar
+                        </button>
+                      </Btn>
                     </div>
                   ) : (
                     ""

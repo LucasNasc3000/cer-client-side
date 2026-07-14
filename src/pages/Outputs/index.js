@@ -16,6 +16,7 @@ import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/dataTransfer/actions";
 import {
+  GetDataSpinner,
   NewOutput,
   OutputsContainer,
   OutputsSpace,
@@ -44,6 +45,7 @@ export default function Outputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [isLoadingGetOutflows, setIsLoadingGetOutflows] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -79,6 +81,8 @@ export default function Outputs() {
   async function GetOutputs() {
     if (!employee_id || !permissions) return;
 
+    setIsLoadingGetOutflows(true);
+
     const outputs = await GetData(
       bossId,
       "outflows",
@@ -90,6 +94,7 @@ export default function Outputs() {
 
     if (typeof outputs === "undefined" || !outputs) return;
 
+    setIsLoadingGetOutflows(false);
     setOutputsData(outputs);
     setOutputsDataBackup(outputs);
   }
@@ -277,6 +282,7 @@ export default function Outputs() {
         </div>
       </SearchSpace>
       <OutputsSpace>
+        {isLoadingGetOutflows && <GetDataSpinner />}
         {searchResults.length < 1
           ? outputsData.map((output) => {
               return (

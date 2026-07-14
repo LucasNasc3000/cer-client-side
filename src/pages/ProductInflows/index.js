@@ -17,7 +17,12 @@ import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
-import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
+import {
+  GetDataSpinner,
+  InflowsContainer,
+  InflowsSpace,
+  SearchSpace,
+} from "./styled";
 
 export default function ProductInflows() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -35,6 +40,8 @@ export default function ProductInflows() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [isLoadingGetProductsInflows, setIsLoadingGetProductsInflows] =
+    useState(false);
 
   const extractFromPermissions = useRef(permissions.map((p) => p.resource));
 
@@ -105,6 +112,8 @@ export default function ProductInflows() {
   async function GetInflows() {
     if (!employee_id || !permissions) return;
 
+    setIsLoadingGetProductsInflows(true);
+
     const inflows = await GetData(
       bossId,
       "products",
@@ -117,6 +126,7 @@ export default function ProductInflows() {
 
     if (typeof inflows === "undefined" || !inflows) return;
 
+    setIsLoadingGetProductsInflows(false);
     setInflowsData(inflows);
   }
 
@@ -259,6 +269,7 @@ export default function ProductInflows() {
         </div>
       </SearchSpace>
       <InflowsSpace>
+        {isLoadingGetProductsInflows && <GetDataSpinner />}
         {searchResults.length < 1
           ? inflowsData.map((inflow) => {
               return (

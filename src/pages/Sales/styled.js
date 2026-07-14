@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
 import { breakpoints } from "../../config/breakpoints";
+import * as colors from "../../config/colors";
 import { fontStack } from "../../config/fonts";
 
 export const SalesContainer = styled.div`
@@ -464,6 +465,65 @@ export const NewSale = styled.div`
 
     input {
       width: 100%;
+    }
+  }
+`;
+
+export const Btn = styled.button`
+  cursor: pointer;
+  background: ${colors.primaryColor};
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 700;
+  transition: all 160ms;
+  width: 150px;
+  height: 40px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: ${breakpoints.laptop}) {
+    margin: 40px auto 0;
+    display: flex;
+  }
+`;
+
+export const Spinner = styled.div`
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+export const GetDataSpinner = styled.div`
+  margin-top: 150px;
+  width: 120px;
+  height: 120px;
+  border: 2.5px solid rgba(72, 71, 71, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
 `;

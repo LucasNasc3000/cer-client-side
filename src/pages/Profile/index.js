@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import * as actions from "../../store/modules/auth/actions";
-import { Form, UserContainer } from "./styled";
+import { Form, Spinner, UserContainer } from "./styled";
 
 export default function Profile() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
@@ -15,12 +15,14 @@ export default function Profile() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
   const clearDirectExecution = () => {
     setName("");
     setEmail("");
     setPassword("");
     setNewPassword("");
+    setIsLoadingProfile(false);
   };
 
   async function HandleSubmit(e) {
@@ -34,6 +36,8 @@ export default function Profile() {
     if (!name && !email && !newPassword) {
       toast.info("Nenhuma alteração detectada");
     }
+
+    setIsLoadingProfile(true);
 
     dispatch(
       actions.updateRequest({
@@ -57,6 +61,7 @@ export default function Profile() {
           onChange={(e) => setName(e.target.value)}
           placeholder={nameStored}
           value={name}
+          disabled={isLoadingProfile}
         />
 
         <input
@@ -65,6 +70,7 @@ export default function Profile() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder={emailStored}
           value={email}
+          disabled={isLoadingProfile}
         />
 
         <p className="minitext-change-pass">Mudar senha:</p>
@@ -74,6 +80,7 @@ export default function Profile() {
           className="new-pass"
           onChange={(e) => setNewPassword(e.target.value)}
           value={newPassword}
+          disabled={isLoadingProfile}
         />
 
         <p className="minitext-warn">
@@ -88,14 +95,16 @@ export default function Profile() {
           className="pass"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
+          disabled={isLoadingProfile}
         />
 
         <button
           type="button"
           className="saveBtn"
           onClick={(e) => HandleSubmit(e)}
+          disabled={isLoadingProfile}
         >
-          Salvar
+          {isLoadingProfile ? <Spinner /> : "Salvar"}
         </button>
       </Form>
     </UserContainer>

@@ -19,7 +19,15 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/dataTransfer/actions";
-import { InputsContainer, InputsSpace, NewInput, SearchSpace } from "./styled";
+import {
+  Btn,
+  GetDataSpinner,
+  InputsContainer,
+  InputsSpace,
+  NewInput,
+  SearchSpace,
+  Spinner,
+} from "./styled";
 
 export default function Inputs() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -47,6 +55,8 @@ export default function Inputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [isLoadingGetInputs, setIsLoadingGetInputs] = useState(false);
+  const [isLoadingInputs, setIsLoadingInputs] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -82,6 +92,8 @@ export default function Inputs() {
   async function GetInputs() {
     if (!employee_id || !permissions) return;
 
+    setIsLoadingGetInputs(true);
+
     const inputsReq = await GetData(
       bossId,
       "supplies",
@@ -93,6 +105,7 @@ export default function Inputs() {
 
     if (typeof inputsReq === "undefined" || !inputsReq) return;
 
+    setIsLoadingGetInputs(false);
     setInputsData(inputsReq);
     setInputsDataBackup(inputsReq);
   }
@@ -216,9 +229,15 @@ export default function Inputs() {
     data.expirationDate = `${year}-${month}-${day}`;
     data.price = data.price.replace(",", ".");
 
+    setIsLoadingInputs(true);
+
     const register = await Register(data, "supplies");
 
-    setReRender(register);
+    if (register) {
+      setReRender(register);
+    }
+
+    setIsLoadingInputs(false);
   };
 
   const Transfer = (e, inputName) => {
@@ -288,6 +307,7 @@ export default function Inputs() {
         </div>
       </SearchSpace>
       <InputsSpace>
+        {isLoadingGetInputs && <GetDataSpinner />}
         {searchResults.length < 1
           ? inputsData.map((input) => {
               return (
@@ -619,6 +639,7 @@ export default function Inputs() {
           id="category"
           placeholder="Categoria ex: cereais"
           value={category}
+          disabled={isLoadingInputs}
           onChange={(e) => setCategory(e.target.value)}
         />
         <input
@@ -626,6 +647,7 @@ export default function Inputs() {
           id="name"
           placeholder="Nome ex: arroz branco"
           value={name}
+          disabled={isLoadingInputs}
           onChange={(e) => setName(e.target.value)}
         />
 
@@ -634,6 +656,7 @@ export default function Inputs() {
           id="details"
           placeholder="Detalhes ex: produto se perdeu etc..."
           value={details}
+          disabled={isLoadingInputs}
           onChange={(e) => setDetails(e.target.value)}
         />
         <input
@@ -641,6 +664,7 @@ export default function Inputs() {
           id="quantity"
           placeholder="Quantidade ex: 25"
           value={quantity || ""}
+          disabled={isLoadingInputs}
           onChange={(e) => setQuantity(e.target.value)}
         />
         <input
@@ -648,6 +672,7 @@ export default function Inputs() {
           id="weightPerUnit"
           placeholder="Peso unitário ex: 1000 (g)"
           value={weightPerUnit || ""}
+          disabled={isLoadingInputs}
           onChange={(e) => setWeightPerUnit(e.target.value)}
         />
         <input
@@ -655,6 +680,7 @@ export default function Inputs() {
           id="supplier"
           placeholder="Fornecedor ex: shopee"
           value={supplier}
+          disabled={isLoadingInputs}
           onChange={(e) => setSupplier(e.target.value)}
         />
         <input
@@ -662,6 +688,7 @@ export default function Inputs() {
           id="expirationDate"
           placeholder="Validade ex: 25-03-2027"
           value={expirationDate}
+          disabled={isLoadingInputs}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
         <input
@@ -669,6 +696,7 @@ export default function Inputs() {
           id="lowStock"
           placeholder="quantidade mínima ex: 5 (opcional)"
           value={lowStock || ""}
+          disabled={isLoadingInputs}
           onChange={(e) => setLowStock(e.target.value)}
         />
         <input
@@ -676,14 +704,19 @@ export default function Inputs() {
           id="price"
           placeholder="Preço unitário ex: 10.90"
           value={price || ""}
+          disabled={isLoadingInputs}
           onChange={(e) => setPrice(e.target.value)}
         />
-        <button type="button" className="btn" onClick={clear}>
-          Cancelar
-        </button>
-        <button type="button" className="btn" onClick={(e) => InputRegister(e)}>
-          Adicionar
-        </button>
+        <Btn disabled={isLoadingInputs}>
+          <button type="button" onClick={clear}>
+            Cancelar
+          </button>
+        </Btn>
+        <Btn disabled={isLoadingInputs}>
+          <button type="button" onClick={(e) => InputRegister(e)}>
+            {isLoadingInputs ? <Spinner /> : "Adicionar"}
+          </button>
+        </Btn>
       </NewInput>
     </InputsContainer>
   );

@@ -27,10 +27,12 @@ import * as actions from "../../store/modules/recipeData/actions";
 import * as actionsEditRecipe from "../../store/modules/recipeEdit/actions";
 import { GetChangedFields } from "../../utils/GetChangedFields";
 import {
+  GetDataSpinner,
   NewProduct,
   ProductsContainer,
   ProductsSpace,
   SearchSpace,
+  Spinner,
 } from "./styled";
 
 export default function Products() {
@@ -70,6 +72,9 @@ export default function Products() {
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
   const [useStockSuppliesRedux, setUseStockSuppliesRedux] = useState(false);
   const [productIngredientRedux, setProductIngredientRedux] = useState([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [isLoadingProductsUpdate, setIsLoadingProductsUpdate] = useState(false);
+  const [isLoadingGetProducts, setIsLoadingGetProducts] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -153,6 +158,8 @@ export default function Products() {
   async function GetProducts() {
     if (!employee_id || !permissions) return;
 
+    setIsLoadingGetProducts(true);
+
     const productsReq = await GetData(
       bossId,
       "products",
@@ -164,6 +171,7 @@ export default function Products() {
 
     if (typeof productsReq === "undefined" || !productsReq) return;
 
+    setIsLoadingGetProducts(false);
     setProductsData(productsReq);
     setProductsDataBackup(productsReq);
     setOriginalProductsData(
@@ -342,11 +350,16 @@ export default function Products() {
     data.expirationDate = `${year}-${month}-${day}`;
     data.price = data.price.replace(",", ".");
 
+    setIsLoadingProducts(true);
+
     const register = await Register(data, "products");
 
-    setReRender(register);
+    if (register) {
+      dispatch(actions.clearRecipeData());
+      setReRender(register);
+    }
 
-    dispatch(actions.clearRecipeData());
+    setIsLoadingProducts(false);
   };
 
   const ProductUpdate = async (e, objectData) => {
@@ -441,6 +454,8 @@ export default function Products() {
       ...restEditUnities,
     };
 
+    setIsLoadingProductsUpdate(true);
+
     const update = await Update(objectData.id, allData, "products");
 
     if (update) {
@@ -449,8 +464,15 @@ export default function Products() {
         [objectData.id]: { ...current },
       }));
 
+      dispatch(actions.clearRecipeData());
+      dispatch(actionsAddIngredients.clearAddIngredients());
+      dispatch(actionsEditRecipe.clearRecipeEdit());
+      dispatch(actionsEditUnities.clearUpdateUnitiesData());
+
       setReRender(update);
     }
+
+    setIsLoadingProductsUpdate(false);
   };
 
   const Transfer = (e, productNameParam) => {
@@ -513,6 +535,7 @@ export default function Products() {
         </div>
       </SearchSpace>
       <ProductsSpace>
+        {isLoadingGetProducts && <GetDataSpinner />}
         {searchResults.length < 1
           ? productsData.map((product) => {
               return (
@@ -633,6 +656,7 @@ export default function Products() {
                               onClick={() =>
                                 setOpenModalId(`edit-recipe-${product.id}`)
                               }
+                              disabled={isLoadingProductsUpdate}
                             >
                               Editar receita
                             </button>
@@ -653,6 +677,7 @@ export default function Products() {
                               onClick={() =>
                                 setOpenModalId(`add-ingredients-${product.id}`)
                               }
+                              disabled={isLoadingProductsUpdate}
                             >
                               Adicionar ingredientes
                             </button>
@@ -672,6 +697,7 @@ export default function Products() {
                                 setOpenModalId(`recipe-${product.id}`)
                               }
                               className="add-recipe"
+                              disabled={isLoadingProductsUpdate}
                             >
                               Adicionar receita
                             </button>
@@ -700,6 +726,7 @@ export default function Products() {
                             setOpenModalId(`unities-${product.id}`)
                           }
                           className="edit-unities"
+                          disabled={isLoadingProductsUpdate}
                         >
                           Editar unidades
                         </button>
@@ -709,13 +736,15 @@ export default function Products() {
                           type="button"
                           className="confirm-changes"
                           onClick={(e) => ProductUpdate(e, product)}
+                          disabled={isLoadingProductsUpdate}
                         >
-                          Salvar
+                          {isLoadingProductsUpdate ? <Spinner /> : "Salvar"}
                         </button>
                         <button
                           type="button"
                           className="cancel-changes"
                           onClick={(e) => clear(e)}
+                          disabled={isLoadingProductsUpdate}
                         >
                           Cancelar
                         </button>
@@ -844,6 +873,7 @@ export default function Products() {
                               onClick={() =>
                                 setOpenModalId(`edit-recipe-${product.id}`)
                               }
+                              disabled={isLoadingProductsUpdate}
                             >
                               Editar receita
                             </button>
@@ -864,6 +894,7 @@ export default function Products() {
                               onClick={() =>
                                 setOpenModalId(`add-ingredients-${product.id}`)
                               }
+                              disabled={isLoadingProductsUpdate}
                             >
                               Adicionar ingredientes
                             </button>
@@ -883,6 +914,7 @@ export default function Products() {
                                 setOpenModalId(`recipe-${product.id}`)
                               }
                               className="add-recipe"
+                              disabled={isLoadingProductsUpdate}
                             >
                               Adicionar receita
                             </button>
@@ -911,6 +943,7 @@ export default function Products() {
                             setOpenModalId(`unities-${product.id}`)
                           }
                           className="edit-unities"
+                          disabled={isLoadingProducts}
                         >
                           Editar unidades
                         </button>
@@ -920,13 +953,15 @@ export default function Products() {
                           type="button"
                           className="confirm-changes"
                           onClick={(e) => ProductUpdate(e, product)}
+                          disabled={isLoadingProducts}
                         >
-                          Salvar
+                          {isLoadingProductsUpdate ? <Spinner /> : "Salvar"}
                         </button>
                         <button
                           type="button"
                           className="cancel-changes"
                           onClick={(e) => clear(e)}
+                          disabled={isLoadingProductsUpdate}
                         >
                           Cancelar
                         </button>
@@ -980,15 +1015,21 @@ export default function Products() {
           value={price || ""}
           onChange={(e) => setPrice(e.target.value)}
         />
-        <button type="button" className="btn" onClick={clear}>
+        <button
+          type="button"
+          className="btn"
+          onClick={clear}
+          disabled={isLoadingProducts}
+        >
           Cancelar
         </button>
         <button
           type="button"
           className="btn"
           onClick={(e) => ProductRegister(e)}
+          disabled={isLoadingProducts}
         >
-          Adicionar
+          {isLoadingProducts ? <Spinner /> : "Salvar"}
         </button>
         <Modal
           isOpen={openAddRecipe}
@@ -1001,6 +1042,7 @@ export default function Products() {
           type="button"
           className="add-recipe-btn"
           onClick={() => setOpenAddRecipe(true)}
+          disabled={isLoadingProducts}
         >
           <IoMdPaper className="recipe-icon" />
           Adicionar receita

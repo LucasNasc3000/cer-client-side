@@ -52,7 +52,7 @@ export function ModalEditSalesStatusChildren({ status }) {
   const SaveSalesStatusEdit = (e) => {
     e.preventDefault();
 
-    if (!reason) {
+    if (!reason && statusState !== "finalizada") {
       toast.error("Motivo não especificado");
       return;
     }

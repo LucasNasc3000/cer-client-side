@@ -371,3 +371,19 @@ export const InflowsSpace = styled.div`
     }
   }
 `;
+
+export const GetDataSpinner = styled.div`
+  margin-top: 150px;
+  width: 120px;
+  height: 120px;
+  border: 2.5px solid rgba(72, 71, 71, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
