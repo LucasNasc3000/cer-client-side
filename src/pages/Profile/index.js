@@ -57,7 +57,6 @@ export default function Profile() {
           onChange={(e) => setName(e.target.value)}
           placeholder={nameStored}
           value={name}
-          disabled={isLoadingProfile}
         />
 
         <input
@@ -66,7 +65,6 @@ export default function Profile() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder={emailStored}
           value={email}
-          disabled={isLoadingProfile}
         />
 
         <p className="minitext-change-pass">Mudar senha:</p>
@@ -76,7 +74,6 @@ export default function Profile() {
           className="new-pass"
           onChange={(e) => setNewPassword(e.target.value)}
           value={newPassword}
-          disabled={isLoadingProfile}
         />
 
         <p className="minitext-warn">
