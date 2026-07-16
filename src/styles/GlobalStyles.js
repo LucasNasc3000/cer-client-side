@@ -78,3 +78,39 @@ export const Container = styled.section`
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
+
+export const Spinner = styled.div`
+  margin-top: 100px;
+  width: 120px;
+  height: 120px;
+  border: 2.5px solid rgba(153, 150, 150, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+export const GetDataSpinner = styled.div`
+  margin-top: 100px;
+  width: 120px;
+  height: 120px;
+  border: 2.5px solid rgba(72, 71, 71, 0.4);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+export const ErrorIcon = styled.div`
+  margin-top: 120px;
+  color: rgba(123, 123, 123, 0.4);
+`;

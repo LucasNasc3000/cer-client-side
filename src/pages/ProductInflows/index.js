@@ -10,6 +10,7 @@ import { get } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
+import { MdErrorOutline } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -17,12 +18,8 @@ import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
-import {
-  GetDataSpinner,
-  InflowsContainer,
-  InflowsSpace,
-  SearchSpace,
-} from "./styled";
+import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
+import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
 
 export default function ProductInflows() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -40,6 +37,8 @@ export default function ProductInflows() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [errorGetCredentials, setErrorGetCredentials] = useState(false);
+  const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
   const [isLoadingGetProductsInflows, setIsLoadingGetProductsInflows] =
     useState(false);
 
@@ -47,9 +46,16 @@ export default function ProductInflows() {
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      setIsLoadingGetCredentials(true);
+
       const getBossId = await GetBossId(headerid, emailStored);
 
       if (typeof getBossId === "undefined" || !getBossId) return;
+
+      if (getBossId === "error") {
+        setErrorGetCredentials(true);
+        setIsLoadingGetCredentials(false);
+      }
 
       setBossId(getBossId);
     }
@@ -64,12 +70,16 @@ export default function ProductInflows() {
           const bossData = await axios.get(
             `/employees/search/email?value=${emailStored}`
           );
+
           setEmployeeId(bossData.data.id);
           return;
         }
         setEmployeeId(headerid);
       } catch (e) {
+        setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
+      } finally {
+        setIsLoadingGetCredentials(false);
       }
     }
 
@@ -131,12 +141,16 @@ export default function ProductInflows() {
   }
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
     GetInflows();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
+
     if (rerender === true) GetInflows();
+
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
@@ -269,6 +283,14 @@ export default function ProductInflows() {
         </div>
       </SearchSpace>
       <InflowsSpace>
+        {isLoadingGetCredentials && <Spinner />}
+
+        {errorGetCredentials && !isLoadingGetCredentials && (
+          <ErrorIcon>
+            <MdErrorOutline size={95} />
+          </ErrorIcon>
+        )}
+
         {isLoadingGetProductsInflows && <GetDataSpinner />}
         {searchResults.length < 1
           ? inflowsData.map((inflow) => {

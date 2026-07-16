@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
+import { MdErrorOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -20,15 +21,9 @@ import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actionsEditSalesStatus from "../../store/modules/editSalesStatus/actions";
 import * as actionsItems from "../../store/modules/saleItems/actions";
+import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
 import { GetChangedFields } from "../../utils/GetChangedFields";
-import {
-  GetDataSpinner,
-  NewSale,
-  SalesContainer,
-  SalesSpace,
-  SearchSpace,
-  Spinner,
-} from "./styled";
+import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
 
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -62,12 +57,21 @@ export default function Sales() {
   const [isLoadingSales, setIsLoadingSales] = useState(false);
   const [isLoadingSalesUpdate, setIsLoadingSalesUpdate] = useState(false);
   const [isLoadingGetSales, setIsLoadingGetSales] = useState(false);
+  const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
+  const [errorGetCredentials, setErrorGetCredentials] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      setIsLoadingGetCredentials(true);
+
       const get = await GetBossId(headerid, emailStored);
 
       if (typeof get === "undefined" || !get) return;
+
+      if (get === "error") {
+        setErrorGetCredentials(true);
+        setIsLoadingGetCredentials(false);
+      }
 
       setBossId(get);
     }
@@ -82,12 +86,16 @@ export default function Sales() {
           const bossData = await axios.get(
             `/employees/search/email?value=${emailStored}`
           );
+
           setEmployeeId(bossData.data.id);
           return;
         }
         setEmployeeId(headerid);
       } catch (e) {
+        setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
+      } finally {
+        setIsLoadingGetCredentials(false);
       }
     }
 
@@ -152,12 +160,16 @@ export default function Sales() {
   }
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
     GetSales();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
+
     if (rerender === true) GetSales();
+
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
@@ -400,6 +412,14 @@ export default function Sales() {
         </div>
       </SearchSpace>
       <SalesSpace>
+        {isLoadingGetCredentials && <Spinner />}
+
+        {errorGetCredentials && !isLoadingGetCredentials && (
+          <ErrorIcon>
+            <MdErrorOutline size={95} />
+          </ErrorIcon>
+        )}
+
         {isLoadingGetSales && <GetDataSpinner />}
         {searchResults.length < 1
           ? salesData.map((sale) => {

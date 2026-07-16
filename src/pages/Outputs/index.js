@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
+import { MdErrorOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -15,8 +16,8 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/dataTransfer/actions";
+import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
 import {
-  GetDataSpinner,
   NewOutput,
   OutputsContainer,
   OutputsSpace,
@@ -46,12 +47,21 @@ export default function Outputs() {
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
   const [isLoadingGetOutflows, setIsLoadingGetOutflows] = useState(false);
+  const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
+  const [errorGetCredentials, setErrorGetCredentials] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      setIsLoadingGetCredentials(true);
+
       const get = await GetBossId(headerid, emailStored);
 
       if (typeof get === "undefined" || !get) return;
+
+      if (get === "error") {
+        setErrorGetCredentials(true);
+        setIsLoadingGetCredentials(false);
+      }
 
       setBossId(get);
     }
@@ -66,12 +76,16 @@ export default function Outputs() {
           const bossData = await axios.get(
             `/employees/search/email?value=${emailStored}`
           );
+
           setEmployeeId(bossData.data.id);
           return;
         }
         setEmployeeId(headerid);
       } catch (e) {
+        setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
+      } finally {
+        setIsLoadingGetCredentials(false);
       }
     }
 
@@ -100,12 +114,16 @@ export default function Outputs() {
   }
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
     GetOutputs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
+
     if (rerender === true) GetOutputs();
+
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
@@ -282,6 +300,14 @@ export default function Outputs() {
         </div>
       </SearchSpace>
       <OutputsSpace>
+        {isLoadingGetCredentials && <Spinner />}
+
+        {errorGetCredentials && !isLoadingGetCredentials && (
+          <ErrorIcon>
+            <MdErrorOutline size={95} />
+          </ErrorIcon>
+        )}
+
         {isLoadingGetOutflows && <GetDataSpinner />}
         {searchResults.length < 1
           ? outputsData.map((output) => {

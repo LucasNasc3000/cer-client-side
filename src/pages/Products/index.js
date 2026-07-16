@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
+import { MdErrorOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -25,14 +26,13 @@ import * as actionsProductDataTransfer from "../../store/modules/dataTransfer/ac
 import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
 import * as actionsEditRecipe from "../../store/modules/recipeEdit/actions";
+import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
 import { GetChangedFields } from "../../utils/GetChangedFields";
 import {
-  GetDataSpinner,
   NewProduct,
   ProductsContainer,
   ProductsSpace,
   SearchSpace,
-  Spinner,
 } from "./styled";
 
 export default function Products() {
@@ -72,15 +72,24 @@ export default function Products() {
   const [openAddRecipe, setOpenAddRecipe] = useState(false);
   const [useStockSuppliesRedux, setUseStockSuppliesRedux] = useState(false);
   const [productIngredientRedux, setProductIngredientRedux] = useState([]);
+  const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const [isLoadingProductsUpdate, setIsLoadingProductsUpdate] = useState(false);
   const [isLoadingGetProducts, setIsLoadingGetProducts] = useState(false);
+  const [errorGetCredentials, setErrorGetCredentials] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      setIsLoadingGetCredentials(true);
+
       const get = await GetBossId(headerid, emailStored);
 
       if (typeof get === "undefined" || !get) return;
+
+      if (get === "error") {
+        setErrorGetCredentials(true);
+        setIsLoadingGetCredentials(false);
+      }
 
       setBossId(get);
     }
@@ -95,12 +104,16 @@ export default function Products() {
           const bossData = await axios.get(
             `/employees/search/email?value=${emailStored}`
           );
+
           setEmployeeId(bossData.data.id);
           return;
         }
         setEmployeeId(headerid);
       } catch (e) {
+        setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
+      } finally {
+        setIsLoadingGetCredentials(false);
       }
     }
 
@@ -180,12 +193,16 @@ export default function Products() {
   }
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
     GetProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bossId, employee_id]);
 
   useEffect(() => {
+    if (isLoadingGetCredentials) return;
+
     if (rerender === true) GetProducts();
+
     setReRender(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender]);
@@ -535,7 +552,16 @@ export default function Products() {
         </div>
       </SearchSpace>
       <ProductsSpace>
+        {isLoadingGetCredentials && <Spinner />}
+
+        {errorGetCredentials && !isLoadingGetCredentials && (
+          <ErrorIcon>
+            <MdErrorOutline size={95} />
+          </ErrorIcon>
+        )}
+
         {isLoadingGetProducts && <GetDataSpinner />}
+
         {searchResults.length < 1
           ? productsData.map((product) => {
               return (

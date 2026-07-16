@@ -20,5 +20,6 @@ export default async function GetBossId(headerid, email) {
     return boss;
   } catch (e) {
     toast.error("Erro desconhecido ao tentar obter dados do chefe");
+    return "error";
   }
 }
