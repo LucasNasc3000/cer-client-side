@@ -5,12 +5,12 @@ import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import axios from "./axios";
 
-export default async function Update(id, data, registerType) {
+export default async function Update(id, data, path) {
   try {
     const { createdAt, updatedAt, ...allowedData } = data;
     const { price, ...allowedDataPriceFields } = data;
 
-    switch (registerType) {
+    switch (path) {
       case "supplies":
         if (price !== undefined) {
           await axios.patch(`/supplies/update/price/${id}`, { price });
@@ -46,6 +46,14 @@ export default async function Update(id, data, registerType) {
 
         toast.success("Venda atualizada");
         break;
+
+      case "platforms":
+        await axios.patch(`/platforms/${id}`, {
+          ...allowedData,
+        });
+
+        toast.success("Plataforma atualizada");
+        break;
     }
 
     return true;
@@ -69,7 +77,7 @@ export default async function Update(id, data, registerType) {
           return false;
 
         case err && errors.length < 1:
-          toast.error(`Erro desconhecido ao tentar atualizar ${registerType}`);
+          toast.error(`Erro desconhecido ao tentar atualizar ${path}`);
           return false;
       }
     }

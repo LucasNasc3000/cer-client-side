@@ -5,9 +5,9 @@ import { get, isArray } from "lodash";
 import { toast } from "react-toastify";
 import axios from "./axios";
 
-let translatedRegisterType = "";
+let translatedPath = "";
 
-export default async function Register(data, registerType) {
+export default async function Register(data, path) {
   try {
     const truthyFields = Object.fromEntries(
       // eslint-disable-next-line array-callback-return
@@ -18,14 +18,14 @@ export default async function Register(data, registerType) {
     );
 
     // eslint-disable-next-line default-case
-    switch (registerType) {
+    switch (path) {
       case "supplies":
         await axios.post("/supplies", {
           ...truthyFields,
         });
 
         const inputName = data.name;
-        translatedRegisterType = "insumo";
+        translatedPath = "insumo";
         toast.success(`${inputName} adicionado`);
         break;
 
@@ -34,7 +34,7 @@ export default async function Register(data, registerType) {
           ...truthyFields,
         });
 
-        translatedRegisterType = "venda";
+        translatedPath = "venda";
         toast.success("Venda adicionada");
         break;
 
@@ -44,8 +44,18 @@ export default async function Register(data, registerType) {
         });
 
         const outflowName = data.name;
-        translatedRegisterType = "saída";
+        translatedPath = "saída";
         toast.success(`${outflowName} adicionado`);
+        break;
+
+      case "platforms":
+        await axios.post("/platforms", {
+          ...truthyFields,
+        });
+
+        const platformName = data.name;
+        translatedPath = "saída";
+        toast.success(`${platformName} adicionado`);
         break;
 
       case "products":
@@ -76,7 +86,7 @@ export default async function Register(data, registerType) {
         }
 
         const productName = data.name;
-        translatedRegisterType = "produto";
+        translatedPath = "produto";
         toast.success(`${productName} adicionado`);
         break;
     }
@@ -103,7 +113,7 @@ export default async function Register(data, registerType) {
 
         case err && errors.length < 1:
           toast.error(
-            `Erro desconhecido ao tentar cadastrar ${translatedRegisterType}`
+            `Erro desconhecido ao tentar cadastrar ${translatedPath}`
           );
           return false;
       }
