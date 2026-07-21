@@ -44,7 +44,9 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
 
       if (typeof platformsData === "undefined" || !platformsData) return;
 
-      setPlatforms(platformsData[1]);
+      if (platformsData.length > 1) setPlatforms(platformsData[1]);
+
+      setPlatforms(platformsData);
     }
 
     GetPlatforms();
@@ -282,7 +284,8 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
               onChange={(e) => setPlatformName(e.target.value)}
               value={platformName}
             >
-              <option value={platform.name} />
+              <option value="">Selecionar</option>
+              <option value={platform.name}>{platform.name}</option>
             </select>
           );
         })}

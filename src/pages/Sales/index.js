@@ -363,21 +363,6 @@ export default function Sales() {
     setIsLoadingSales(false);
   };
 
-  // eslint-disable-next-line consistent-return
-  const CheckPlatformPermission = (e) => {
-    e.preventDefault();
-
-    const permissionVerify = permissions.some(
-      (p) => p.action === "READ" && p.resource === "PLATFORMS"
-    );
-
-    const permissionVerifyAdmin = permissions.some(
-      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
-    );
-
-    if (!permissionVerify && !permissionVerifyAdmin) return false;
-  };
-
   return (
     <SalesContainer>
       <Header />
@@ -528,6 +513,33 @@ export default function Sales() {
                       readOnly
                     />
                   </div>
+                  <div className="data-wrap">
+                    <div className="label">Plataforma: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={
+                        sale.platformNameSnapshot ||
+                        "Sem plataforma especificada"
+                      }
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço líquido: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={
+                        sale.netValue
+                          ? sale.netValue.replace(".", ",")
+                          : "Venda não sujeita à taxas"
+                      }
+                      readOnly
+                    />
+                  </div>
                   <div className="footer">
                     <div className="footer-actions">
                       <Modal
@@ -613,7 +625,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Nome do cliente: </div>
+                    <div className="label">Nome: </div>
                     <input
                       type="text"
                       name="clientName"
@@ -623,7 +635,7 @@ export default function Sales() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">E-mail do cliente: </div>
+                    <div className="label">E-mail: </div>
                     <input
                       type="text"
                       name="clientEmail"
@@ -665,13 +677,40 @@ export default function Sales() {
                       />
                     </div>
                   )}
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço total: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div-price"
+                      className="data-div"
                       value={sale.totalPrice.replace(".", ",")}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Plataforma: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={
+                        sale.platformNameSnapshot ||
+                        "Sem plataforma especificada"
+                      }
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço líquido: </div>
+                    <input
+                      type="text"
+                      name="price"
+                      className="data-div"
+                      value={
+                        sale.netValue
+                          ? sale.netValue.replace(".", ",")
+                          : "Venda não sujeita à taxas"
+                      }
                       readOnly
                     />
                   </div>
@@ -682,7 +721,9 @@ export default function Sales() {
                         onClose={() => setOpenModalId(null)}
                         title="Produtos vendidos"
                       >
-                        <ModalShowSaleItemsChildren saleItems={sale} />
+                        <ModalShowSaleItemsChildren
+                          saleItems={sale.saleItems}
+                        />
                       </Modal>
                       <button
                         type="button"
@@ -693,9 +734,9 @@ export default function Sales() {
                         Ver produtos
                       </button>
                       <Modal
-                        isOpen={openModalId === `items-${sale.id}`}
+                        isOpen={openModalId === `status-${sale.id}`}
                         onClose={() => setOpenModalId(null)}
-                        title="Produtos vendidos"
+                        title="Editar status de venda"
                       >
                         <ModalEditSalesStatusChildren status={sale.status} />
                       </Modal>
@@ -712,24 +753,22 @@ export default function Sales() {
                       (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
                     ) && (
                       <div className="footer-confirm">
-                        <div className="buttons">
-                          <button
-                            type="button"
-                            className="confirm-changes"
-                            onClick={(e) => SaleUpdate(e, sale)}
-                            disabled={isLoadingSalesUpdate}
-                          >
-                            {isLoadingSalesUpdate ? <Spinner /> : "Salvar"}
-                          </button>
-                          <button
-                            type="button"
-                            className="cancel-changes"
-                            onClick={(e) => clear(e)}
-                            disabled={isLoadingSalesUpdate}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          className="confirm-changes"
+                          onClick={(e) => SaleUpdate(e, sale)}
+                          disabled={isLoadingSalesUpdate}
+                        >
+                          {isLoadingSalesUpdate ? <Spinner /> : "Salvar"}
+                        </button>
+                        <button
+                          type="button"
+                          className="cancel-changes"
+                          onClick={(e) => clear(e)}
+                          disabled={isLoadingSalesUpdate}
+                        >
+                          Cancelar
+                        </button>
                       </div>
                     )}
                   </div>
@@ -817,15 +856,13 @@ export default function Sales() {
         >
           <ModalPlatformsChildren employeeId={employee_id} />
         </Modal>
-        {!CheckPlatformPermission() && (
-          <button
-            type="button"
-            className="platforms"
-            onClick={setOpenPlatforms(true)}
-          >
-            <FaStore className="platforms-icon" /> Plataformas
-          </button>
-        )}
+        <button
+          type="button"
+          className="platforms"
+          onClick={() => setOpenPlatforms(true)}
+        >
+          <FaStore className="platforms-icon" /> Plataformas
+        </button>
       </NewSale>
     </SalesContainer>
   );

@@ -47,6 +47,18 @@ export const ModalPlatformsContainer = styled.div`
     margin-left: 10px;
   }
 
+  .cancel-platforms {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    background: none;
+  }
+
   .name {
     flex: 1;
   }
@@ -69,7 +81,8 @@ export const ModalPlatformsContainer = styled.div`
     color: blue;
   }
 
-  .cancel:hover {
+  .cancel:hover,
+  .cancel-platforms:hover {
     color: gray;
   }
 

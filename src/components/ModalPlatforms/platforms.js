@@ -45,6 +45,8 @@ export function ModalPlatformsChildren({ employeeId }) {
   }
 
   async function SearchPlatforms() {
+    CheckPermissions("READ");
+
     try {
       const searchPlatforms = await axios.get(
         `/platforms/search/employee?limit=20&offset=0&value=${employeeId}&forDisplay=true`
@@ -265,7 +267,7 @@ export function ModalPlatformsChildren({ employeeId }) {
               </button>
               <button
                 type="button"
-                className="cancel"
+                className="cancel-platforms"
                 onClick={(e) => Cancel(e, platform.id)}
               >
                 ✕

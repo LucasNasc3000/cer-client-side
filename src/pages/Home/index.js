@@ -259,7 +259,7 @@ export default function Home() {
             if (sale.createdAt.slice(6, 10) === setYearSales) {
               priceAndMonths.push({
                 month: sale.createdAt.slice(3, 5),
-                price: sale.totalPrice,
+                price: sale.netValue || sale.totalPrice,
               });
             }
             return;
@@ -268,7 +268,7 @@ export default function Home() {
           if (sale.createdAt.slice(6, 10) === setCurrentYearSales) {
             priceAndMonths.push({
               month: sale.createdAt.slice(3, 5),
-              price: sale.totalPrice,
+              price: sale.netValue || sale.totalPrice,
             });
           }
         });
@@ -493,7 +493,7 @@ export default function Home() {
         salesData.map((sale) => {
           priceAndYear.push({
             year: sale.createdAt.slice(6, 10),
-            price: sale.totalPrice,
+            price: sale.netValue || sale.totalPrice,
           });
         });
 
