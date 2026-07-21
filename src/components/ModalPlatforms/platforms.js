@@ -5,10 +5,9 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { get, isArray } from "lodash";
-import { IoIosSave } from "react-icons/io";
-
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { IoIosSave } from "react-icons/io";
 import { MdOutlineDelete } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -19,6 +18,7 @@ import { ModalPlatformsContainer } from "./platformsStyled";
 
 export function ModalPlatformsChildren({ employeeId }) {
   const permissions = useSelector((state) => state.auth.permissions);
+  const emailStored = useSelector((state) => state.auth.emailHeaders);
 
   const [platforms, setPlatforms] = useState([]);
   const [platformsBackup, setPlatformsBackup] = useState([]);
@@ -45,8 +45,6 @@ export function ModalPlatformsChildren({ employeeId }) {
   }
 
   async function SearchPlatforms() {
-    CheckPermissions("READ");
-
     try {
       const searchPlatforms = await axios.get(
         `/platforms/search/employee?limit=20&offset=0&value=${employeeId}&forDisplay=true`
@@ -138,6 +136,8 @@ export function ModalPlatformsChildren({ employeeId }) {
 
   const ClearDirectExecution = () => {
     setPlatforms(platformsBackup);
+    setPlatformName("");
+    setTaxPercentage("");
   };
 
   const PlatformRegister = async (e) => {
@@ -145,14 +145,16 @@ export function ModalPlatformsChildren({ employeeId }) {
 
     CheckPermissions("CREATE");
 
+    const formattedTaxPercentageOrNot = taxPercentage.includes(",")
+      ? taxPercentage.replace(",", ".")
+      : taxPercentage;
+
     const data = {
       name: platformName,
-      taxPercentage,
+      taxPercentage: formattedTaxPercentageOrNot,
     };
 
     const register = await Register(data, "platforms");
-
-    toast.success(`${platformName} adicionado`);
 
     setReRender(true);
   };
@@ -160,14 +162,22 @@ export function ModalPlatformsChildren({ employeeId }) {
   const PlatformUpdate = async (e, platformData) => {
     e.preventDefault();
 
-    console.log(platformData);
-    console.log(Object.keys(platformData).length);
+    CheckPermissions("UPDATE");
 
     if (Object.keys(platformData).length === 0) {
       toast.info("Nenhuma alteração detectada");
     }
 
-    const update = await Update(platformData.id, platformData, "platforms");
+    const formattedTaxPercentageOrNot = platformData.taxPercentage.includes(",")
+      ? platformData.taxPercentage.replace(",", ".")
+      : platformData.taxPercentage;
+
+    const updateData = {
+      name: platformData.name,
+      taxPercentage: formattedTaxPercentageOrNot,
+    };
+
+    const update = await Update(platformData.id, updateData, "platforms");
 
     if (update) setReRender(true);
   };
@@ -218,7 +228,7 @@ export function ModalPlatformsChildren({ employeeId }) {
       </div>
 
       <div className="tax-percentage-wrapper">
-        <p className="current-tax-percentage-label">Nome: </p>
+        <p className="current-tax-percentage-label">Taxa (%): </p>
         <input
           type="text"
           className="tax-percentage"
@@ -236,7 +246,7 @@ export function ModalPlatformsChildren({ employeeId }) {
                 type="text"
                 className="tax-percentage"
                 name="taxPercentage"
-                value={platform.taxPercentage}
+                value={platform.taxPercentage.replace(".", ",")}
                 onChange={(e) => HandleChange(e, platform.id)}
               />
               <button
@@ -244,14 +254,14 @@ export function ModalPlatformsChildren({ employeeId }) {
                 className="save"
                 onClick={(e) => PlatformUpdate(e, platform)}
               >
-                <IoIosSave className="save-icon" />
+                <IoIosSave size={22} className="save-icon" />
               </button>
               <button
                 type="button"
                 className="delete"
                 onClick={(e) => PlatformDelete(e, platform)}
               >
-                <MdOutlineDelete className="delete-icon" />
+                <MdOutlineDelete size={22} className="delete-icon" />
               </button>
               <button
                 type="button"

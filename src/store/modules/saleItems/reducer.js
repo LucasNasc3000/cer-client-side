@@ -3,6 +3,7 @@ import * as types from "../types";
 const initialState = {
   saleItems: [],
   saleItemsToShow: [],
+  platform: "",
 };
 
 // eslint-disable-next-line default-param-last
@@ -13,6 +14,7 @@ export default function (state = initialState, action) {
 
       newState.saleItems = [...action.payload.formattedData];
       newState.saleItemsToShow = [...action.payload.saleItemsToShow];
+      newState.platform = action.payload.platformName;
 
       return newState;
     }

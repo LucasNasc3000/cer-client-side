@@ -3,7 +3,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
 import { useEffect, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaStore } from "react-icons/fa";
 import { IoIosSearch, IoMdPaper } from "react-icons/io";
 import { MdErrorOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import Header from "../../components/Header";
 import { Modal } from "../../components/Modal";
 import { ModalAddSaleItemsChildren } from "../../components/ModalAddSaleItems/addSaleItems";
 import { ModalEditSalesStatusChildren } from "../../components/ModalEditSales/editSales";
+import { ModalPlatformsChildren } from "../../components/ModalPlatforms/platforms";
 import { ModalShowSaleItemsChildren } from "../../components/ModalShowSaleItems/showSaleItems";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
@@ -42,6 +43,7 @@ export default function Sales() {
   const [address, setAddress] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [status, setStatus] = useState("");
+  const [platform, setPlatform] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [originalSalesData, setOriginalSalesData] = useState({});
   const [bossId, setBossId] = useState("");
@@ -53,6 +55,7 @@ export default function Sales() {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [openAddItems, setOpenAddItems] = useState(false);
   const [openModalId, setOpenModalId] = useState(null);
+  const [openPlatforms, setOpenPlatforms] = useState(false);
   const [itemsRedux, setItemsRedux] = useState([]);
   const [isLoadingSales, setIsLoadingSales] = useState(false);
   const [isLoadingSalesUpdate, setIsLoadingSalesUpdate] = useState(false);
@@ -106,6 +109,7 @@ export default function Sales() {
     // eslint-disable-next-line no-useless-return
     if (getSaleItems.saleItems.length < 1) return;
     setItemsRedux(getSaleItems.saleItems);
+    setPlatform(getSaleItems.platform);
   }, [getSaleItems]);
 
   const clearDirectExecution = () => {
@@ -344,6 +348,7 @@ export default function Sales() {
       phoneNumber: phoneNumber || null,
       address: address || null,
       status,
+      platform: platform || null,
       saleItems: itemsRedux,
     };
 
@@ -356,6 +361,21 @@ export default function Sales() {
     }
 
     setIsLoadingSales(false);
+  };
+
+  // eslint-disable-next-line consistent-return
+  const CheckPlatformPermission = (e) => {
+    e.preventDefault();
+
+    const permissionVerify = permissions.some(
+      (p) => p.action === "READ" && p.resource === "PLATFORMS"
+    );
+
+    const permissionVerifyAdmin = permissions.some(
+      (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
+    );
+
+    if (!permissionVerify && !permissionVerifyAdmin) return false;
   };
 
   return (
@@ -779,7 +799,7 @@ export default function Sales() {
           onClose={() => setOpenAddItems(false)}
           title="Adicionar produtos"
         >
-          <ModalAddSaleItemsChildren />
+          <ModalAddSaleItemsChildren bossId={bossId} employeeId={employee_id} />
         </Modal>
         <button
           type="button"
@@ -790,6 +810,22 @@ export default function Sales() {
           <IoMdPaper className="items-icon" />
           Adicionar Produtos
         </button>
+        <Modal
+          isOpen={openPlatforms}
+          onClose={() => setOpenPlatforms(false)}
+          title="Plataformas"
+        >
+          <ModalPlatformsChildren employeeId={employee_id} />
+        </Modal>
+        {!CheckPlatformPermission() && (
+          <button
+            type="button"
+            className="platforms"
+            onClick={setOpenPlatforms(true)}
+          >
+            <FaStore className="platforms-icon" /> Plataformas
+          </button>
+        )}
       </NewSale>
     </SalesContainer>
   );

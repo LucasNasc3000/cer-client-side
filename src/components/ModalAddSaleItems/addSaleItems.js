@@ -1,27 +1,54 @@
+/* eslint-disable no-useless-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { get } from "lodash";
+import { get, isArray } from "lodash";
+import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../services/axios";
+import GetData from "../../services/getData";
 import * as actions from "../../store/modules/saleItems/actions";
 import { ModalAddSaleItemsContainer } from "./addSaleItemsStyled";
 
-export function ModalAddSaleItemsChildren() {
+export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
   const getSaleItemsIfExists = useSelector((state) => state.saleItems);
+  const permissions = useSelector((state) => state.auth.permissions);
 
   const dispatch = useDispatch();
 
   const [inputSearchValue, setInputSearchValue] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+  const [platformName, setPlatformName] = useState("");
   const [productData, setProductData] = useState({});
   const [saleItemsToShow, setSaleItemsToShow] = useState([]);
   const [saleItemsToShowFromRedux, setSaleItemsToShowFromRedux] = useState([]);
 
   const isSelecting = useRef(false);
+
+  useEffect(() => {
+    if (!bossId || !employeeId || !permissions) return;
+
+    async function GetPlatforms() {
+      const platformsData = await GetData(
+        bossId,
+        "platforms",
+        employeeId,
+        permissions,
+        null,
+        true
+      );
+
+      if (typeof platformsData === "undefined" || !platformsData) return;
+
+      setPlatforms(platformsData[1]);
+    }
+
+    GetPlatforms();
+  }, [bossId, employeeId, permissions]);
 
   // Exibindo as receitas conforme for salvando e botão de cancelar para limpar os campos (pesquisa e quantidade)
   useEffect(() => {
@@ -57,8 +84,22 @@ export function ModalAddSaleItemsChildren() {
       } catch (err) {
         const errors = get(err, "response.data.message", []);
 
-        if (err) {
-          if (errors.length > 0) console.log(errors);
+        switch (true) {
+          case err instanceof TypeError:
+            toast.error("Erro de tratamento de dados");
+            break;
+
+          case errors.length > 0:
+            if (!isArray(errors)) {
+              toast.error(errors);
+            } else {
+              errors.map((error) => toast.error(error));
+            }
+            break;
+
+          default:
+            toast.error("Erro desconhecido ao tentar excluir plataforma");
+            break;
         }
       }
     }
@@ -108,7 +149,9 @@ export function ModalAddSaleItemsChildren() {
       });
     });
 
-    dispatch(actions.saleItems({ formattedData, saleItemsToShow }));
+    dispatch(
+      actions.saleItems({ formattedData, saleItemsToShow, platformName })
+    );
 
     PartialClerDirectExecution();
 
@@ -229,6 +272,22 @@ export function ModalAddSaleItemsChildren() {
             })}
       </div>
 
+      <div className="platform-wrapper">
+        <p className="platform-label">Vincular à plataforma</p>
+
+        {platforms.map((platform) => {
+          return (
+            <select
+              className="options"
+              onChange={(e) => setPlatformName(e.target.value)}
+              value={platformName}
+            >
+              <option value={platform.name} />
+            </select>
+          );
+        })}
+      </div>
+
       <div className="button-wrapper">
         <button type="button" className="add" onClick={(e) => PreSave(e)}>
           Adicionar
@@ -244,3 +303,8 @@ export function ModalAddSaleItemsChildren() {
     </ModalAddSaleItemsContainer>
   );
 }
+
+ModalAddSaleItemsChildren.propTypes = {
+  bossId: PropTypes.string.isRequired,
+  employeeId: PropTypes.string.isRequired,
+};

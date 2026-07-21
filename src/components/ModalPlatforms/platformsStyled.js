@@ -6,7 +6,7 @@ export const ModalPlatformsContainer = styled.div`
   gap: 10px;
   flex-direction: column;
 
-  .ingredient-list-wrapper {
+  .platform-list-wrapper {
     max-height: 220px; /* altura máxima antes do scroll */
     overflow-y: auto; /* scroll vertical quando ultrapassar */
     overflow-x: hidden;
@@ -31,18 +31,20 @@ export const ModalPlatformsContainer = styled.div`
     justify-content: center;
     cursor: pointer;
     width: 40px;
-    background: none;
     text-align: center;
+    padding: 10px;
+    background: none;
   }
 
   .cancel {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 40px;
-    background: none;
-    text-align: center;
-    margin-right: 10px;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    margin-left: 10px;
   }
 
   .name {

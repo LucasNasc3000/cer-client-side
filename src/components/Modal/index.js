@@ -22,8 +22,8 @@ export function Modal({ isOpen, onClose, title, children }) {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <Overlay onClick={onClose}>
-      <Box onClick={(e) => e.stopPropagation()}>
+    <Overlay>
+      <Box>
         <CloseButton onClick={onClose}>✕</CloseButton>
         {title && <h2 className="title">{title}</h2>}
         {children}

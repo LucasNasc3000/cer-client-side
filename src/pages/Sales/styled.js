@@ -434,7 +434,8 @@ export const NewSale = styled.div`
     box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
 
-  .add-items-btn {
+  .add-items-btn,
+  .platforms {
     display: flex;
     position: relative;
     top: 20px;
@@ -447,7 +448,8 @@ export const NewSale = styled.div`
     box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
 
-  .items-icon {
+  .items-icon,
+  .platforms-icon {
     display: flex;
     color: #fff;
     height: 30px;
