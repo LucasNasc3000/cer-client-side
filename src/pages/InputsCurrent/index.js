@@ -91,13 +91,11 @@ export default function InputsCurrent() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
-    if (inputName) {
-      setSearchValueAutoSearch(inputName);
-      setSearchParam("name");
-    }
-  }, [inputName]);
+    if (!inputName) return;
 
-  useEffect(() => {
+    setSearchValueAutoSearch(inputName);
+    setSearchParam("name");
+
     async function SearchTheInput() {
       const inArray = [];
 

@@ -10,6 +10,15 @@ export default async function DoSearch(
   secondarySearchParam,
   productType
 ) {
+  console.log({
+    path,
+    searchParam,
+    searchValue,
+    supplyType,
+    secondarySearchParam,
+    productType,
+  });
+
   try {
     let results = "";
 
@@ -22,13 +31,13 @@ export default async function DoSearch(
 
       case path === "supplies" && searchParam === "name":
         results = await axios.get(
-          `/${path}/search/${searchParam}/?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&supplyType=${supplyType}&forDisplay=false`
         );
         return results.data[1];
 
       case path === "supplies" && searchParam === "employee":
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&supplyType=${supplyType}&forDisplay=false`
         );
         return results.data[1];
 
@@ -36,40 +45,39 @@ export default async function DoSearch(
         searchParam !== "id" &&
         searchParam !== "employee":
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&supplyType=${supplyType}`
-        );
-        return results.data[1];
-
-      case searchParam === "inflows" && secondarySearchParam === "employees":
-        results = await axios.get(
-          `/${path}/search/employee/inflows?limit=20&offset=0&email=${searchValue}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&supplyType=${supplyType}`
         );
         return results.data[1];
 
       case searchParam === "inflows":
         results = await axios.get(
-          `/${path}/search/${searchParam}/${secondarySearchParam}?limit=20&offset=0&value=${searchValue}`
+          `/${path}/search/${searchParam}/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0&`
         );
 
         return results.data[1];
 
-      case path === "products" && searchParam === "name":
-        console.log("aqui");
+      case searchParam === "inflows" && secondarySearchParam === "employees":
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
+          `/${path}/search/employee/inflows?email=${searchValue}&limit=20&offset=forDisplay=false`
+        );
+        return results.data[1];
+
+      case path === "products" && searchParam === "name":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?value=${searchValue}limit=20&offset=productType=${productType}&forDisplay=false`
         );
 
         return results.data[1];
 
       case path === "products" && searchParam === "employee":
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=${productType}&forDisplay=false`
         );
         return results.data[1];
 
       case path === "products":
         results = await axios.get(
-          `/${path}/search/${searchParam}?limit=20&offset=0&value=${searchValue}&productType=${productType}`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=${productType}`
         );
 
         return results.data[1];
@@ -79,7 +87,7 @@ export default async function DoSearch(
         searchParam !== "products" &&
         searchParam !== "inflows":
         results = await axios.get(
-          `/${path}/search/${searchParam}/?limit=20&offset=0&value=${searchValue}`
+          `/${path}/search/${searchParam}/?value=${searchValue}&limit=20&offset=0`
         );
 
         return results.data[1];

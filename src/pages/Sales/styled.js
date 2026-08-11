@@ -438,12 +438,12 @@ export const NewSale = styled.div`
   .platforms {
     display: flex;
     position: relative;
-    top: 20px;
+    top: 10px;
     justify-content: center;
     align-items: center;
-    height: fit-content;
+    height: 40px;
     width: fit-content;
-    margin-top: 15px;
+    margin-top: 10px;
     gap: 10px;
     box-shadow: 1px 1.5px rgb(102, 96, 96);
   }
@@ -482,7 +482,7 @@ export const Btn = styled.button`
   transition: all 160ms;
   width: 150px;
   height: 40px;
-  margin-top: 10px;
+  margin-top: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -496,5 +496,20 @@ export const Btn = styled.button`
   @media (max-width: ${breakpoints.laptop}) {
     margin: 40px auto 0;
     display: flex;
+  }
+`;
+
+export const Spinner = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(153, 150, 150, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;

@@ -22,9 +22,16 @@ import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actionsEditSalesStatus from "../../store/modules/editSalesStatus/actions";
 import * as actionsItems from "../../store/modules/saleItems/actions";
-import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
+import { ErrorIcon, GetDataSpinner } from "../../styles/GlobalStyles";
 import { GetChangedFields } from "../../utils/GetChangedFields";
-import { NewSale, SalesContainer, SalesSpace, SearchSpace } from "./styled";
+import {
+  Btn,
+  NewSale,
+  SalesContainer,
+  SalesSpace,
+  SearchSpace,
+  Spinner,
+} from "./styled";
 
 export default function Sales() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -825,14 +832,16 @@ export default function Sales() {
         >
           Cancelar
         </button>
-        <button
-          type="button"
-          className="btn"
-          onClick={(e) => SaleRegister(e)}
-          disabled={isLoadingSales}
-        >
-          {isLoadingSales ? <Spinner /> : "Salvar"}
-        </button>
+        <Btn disabled={isLoadingSales}>
+          <button
+            type="button"
+            onClick={(e) => SaleRegister(e)}
+            disabled={isLoadingSales}
+          >
+            {isLoadingSales ? <Spinner /> : "Salvar"}
+          </button>
+        </Btn>
+
         <Modal
           isOpen={openAddItems}
           onClose={() => setOpenAddItems(false)}

@@ -26,13 +26,15 @@ import * as actionsProductDataTransfer from "../../store/modules/dataTransfer/ac
 import * as actionsEditUnities from "../../store/modules/editUnitiesData/actions";
 import * as actions from "../../store/modules/recipeData/actions";
 import * as actionsEditRecipe from "../../store/modules/recipeEdit/actions";
-import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
+import { ErrorIcon, GetDataSpinner } from "../../styles/GlobalStyles";
 import { GetChangedFields } from "../../utils/GetChangedFields";
 import {
+  Btn,
   NewProduct,
   ProductsContainer,
   ProductsSpace,
   SearchSpace,
+  Spinner,
 } from "./styled";
 
 export default function Products() {
@@ -1049,14 +1051,16 @@ export default function Products() {
         >
           Cancelar
         </button>
-        <button
-          type="button"
-          className="btn"
-          onClick={(e) => ProductRegister(e)}
-          disabled={isLoadingProducts}
-        >
-          {isLoadingProducts ? <Spinner /> : "Salvar"}
-        </button>
+        <Btn disabled={isLoadingProducts}>
+          <button
+            type="button"
+            onClick={(e) => ProductRegister(e)}
+            disabled={isLoadingProducts}
+          >
+            {isLoadingProducts ? <Spinner /> : "Salvar"}
+          </button>
+        </Btn>
+
         <Modal
           isOpen={openAddRecipe}
           onClose={() => setOpenAddRecipe(false)}

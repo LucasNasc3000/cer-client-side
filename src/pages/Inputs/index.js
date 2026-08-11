@@ -20,13 +20,14 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/dataTransfer/actions";
-import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
+import { ErrorIcon, GetDataSpinner } from "../../styles/GlobalStyles";
 import {
   Btn,
   InputsContainer,
   InputsSpace,
   NewInput,
   SearchSpace,
+  Spinner,
 } from "./styled";
 
 export default function Inputs() {
@@ -626,7 +627,7 @@ export default function Inputs() {
                       type="text"
                       name="totalprice"
                       className="data-div-price"
-                      value={input.totalprice.replace(".", ",")}
+                      value={input.totalPrice.replace(".", ",")}
                       readOnly
                     />
                   </div>

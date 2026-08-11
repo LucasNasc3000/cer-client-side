@@ -467,3 +467,18 @@ export const Btn = styled.button`
     display: flex;
   }
 `;
+
+export const Spinner = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(153, 150, 150, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
