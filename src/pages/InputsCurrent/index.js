@@ -95,43 +95,20 @@ export default function InputsCurrent() {
 
     setSearchValueAutoSearch(inputName);
     setSearchParam("name");
+  }, [inputName]);
+
+  useEffect(() => {
+    if (!searchValueAutoSearch || !inputName) return;
 
     async function SearchTheInput() {
       const inArray = [];
 
-      let search = "";
-      let formattedDate = "";
-
-      if (searchParam === "date" || searchParam === "expirationDate") {
-        const year = searchInputValue.slice(6, 10);
-        const month = searchInputValue.slice(3, 5);
-        const day = searchInputValue.slice(0, 2);
-
-        formattedDate = `${year}-${month}-${day}`;
-
-        search = await DoSearch(
-          "supplies",
-          searchParam,
-          formattedDate,
-          "SUPPLY_REAL_TIME"
-        );
-      } else {
-        search = await DoSearch(
-          "supplies",
-          searchParam,
-          searchInputValue,
-          "SUPPLY_REAL_TIME"
-        );
-      }
-
-      if (searchValueAutoSearch) {
-        search = await DoSearch(
-          "supplies",
-          searchParam,
-          searchValueAutoSearch,
-          "SUPPLY_REAL_TIME"
-        );
-      }
+      const search = await DoSearch(
+        "supplies",
+        searchParam,
+        searchValueAutoSearch,
+        "SUPPLY_REAL_TIME"
+      );
 
       if (typeof search === "undefined" || !search) return;
 
@@ -147,7 +124,7 @@ export default function InputsCurrent() {
       return;
     }
 
-    if (searchValueAutoSearch) SearchTheInput();
+    SearchTheInput();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValueAutoSearch]);
 
@@ -509,12 +486,12 @@ export default function InputsCurrent() {
                       />
                     </div>
                   )}
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div-price"
+                      className="data-div"
                       value={input.price.replace(".", ",")}
                       onChange={(e) => HandleChange(e, input.id)}
                     />

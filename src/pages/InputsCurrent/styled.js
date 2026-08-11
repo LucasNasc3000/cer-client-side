@@ -173,12 +173,14 @@ export const InputsSpace = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  bottom: 765px;
+  bottom: 735px;
   height: 500px;
   width: 820px;
-  left: 420px;
+  left: 450px;
   padding: 20px;
   align-items: center;
+  margin-bottom: 20px; /* espaço embaixo do último card */
+  padding-bottom: 20px;
 
   .main-data-div {
     background-color: white;
@@ -188,8 +190,8 @@ export const InputsSpace = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     height: 555px;
-    margin-top: 20px;
-    padding: 10px;
+    margin-top: 15px;
+    padding: 15px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;

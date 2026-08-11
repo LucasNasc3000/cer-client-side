@@ -10,15 +10,6 @@ export default async function DoSearch(
   secondarySearchParam,
   productType
 ) {
-  console.log({
-    path,
-    searchParam,
-    searchValue,
-    supplyType,
-    secondarySearchParam,
-    productType,
-  });
-
   try {
     let results = "";
 
