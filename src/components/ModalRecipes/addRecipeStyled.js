@@ -94,6 +94,13 @@ export const ModalRecipeContainer = styled.div`
     gap: 15px;
   }
 
+  .low-stock-warn {
+    height: 18px;
+    width: fit-content;
+    font-size: 14px;
+    color: red;
+  }
+
   .delete {
     align-items: center;
     justify-content: center;

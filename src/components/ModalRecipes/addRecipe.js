@@ -19,6 +19,8 @@ export function ModalRecipeChildren() {
   const [quantity, setQuantity] = useState("");
   const [unitOrWeight, setUnitOrWeight] = useState("");
   const [useStockSupplies, setUseStockSupplies] = useState(false);
+  const [lowStockWarn, setLowStockWarn] = useState(false);
+  const [difference, setDifference] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [supplyData, setSupplyData] = useState({});
   const [recipeItemsToShow, setRecipeItemsToShow] = useState([]);
@@ -78,6 +80,48 @@ export function ModalRecipeChildren() {
     );
   }, [getRecipeDataIfExists]);
 
+  useEffect(() => {
+    if (!unitOrWeight || !quantity || Object.keys(supplyData).length === 0) {
+      return;
+    }
+
+    if (!difference) setLowStockWarn(false);
+
+    const decimalQuantity = new Decimal(quantity);
+    const decimalSupplyDataQuantity = new Decimal(supplyData.quantity);
+    const decimalTotalWeight = new Decimal(supplyData.totalWeight);
+
+    // eslint-disable-next-line default-case
+    switch (unitOrWeight) {
+      case "g":
+      case "ml":
+        const subTotalWeight = decimalTotalWeight.sub(decimalQuantity);
+        setDifference(subTotalWeight.toString());
+        break;
+
+      case "unidades":
+        const subQuantity = decimalSupplyDataQuantity.sub(decimalQuantity);
+        setDifference(subQuantity.toString());
+        break;
+
+      case "L":
+      case "kg":
+        const mulQuantity = decimalQuantity.mul(1000);
+
+        const subTotalWeightMultiplied = decimalTotalWeight.sub(mulQuantity);
+
+        setDifference(subTotalWeightMultiplied.toString());
+        break;
+    }
+
+    if (difference && Number(difference) < 0) {
+      setLowStockWarn(true);
+      return;
+    }
+
+    setLowStockWarn(false);
+  }, [quantity, supplyData, unitOrWeight, difference]);
+
   const ClerDirectExecution = () => {
     setQuantity("");
     setInputSearchValue("");
@@ -86,6 +130,7 @@ export function ModalRecipeChildren() {
     setRecipeItemsToShow([]);
     setRecipeItemsToShowFromRedux([]);
     setUseStockSupplies(false);
+    setDifference("");
   };
 
   const PartialClerDirectExecution = () => {
@@ -167,6 +212,11 @@ export function ModalRecipeChildren() {
       toast.error(
         "Quantidade ou unidade não especificados ou insumos não escolhidos"
       );
+      return;
+    }
+
+    if (Number(difference) < 0) {
+      toast.error("Quantidade insuficiente em estoque");
       return;
     }
 
@@ -254,6 +304,12 @@ export function ModalRecipeChildren() {
           onChange={(e) => setQuantity(e.target.value)}
           value={quantity}
         />
+        {lowStockWarn && (
+          <p className="low-stock-warn">
+            Estoque insuficiente: {supplyData.quantity} unidades restantes (
+            {supplyData.totalWeight}g)
+          </p>
+        )}
       </div>
 
       <div className="supply-list-wrapper">
