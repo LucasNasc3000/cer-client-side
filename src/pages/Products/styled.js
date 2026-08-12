@@ -179,6 +179,8 @@ export const ProductsSpace = styled.div`
   left: 320px;
   margin-bottom: 20px; /* espaço embaixo do último card */
   padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
   align-items: center;
 
   .main-data-div {

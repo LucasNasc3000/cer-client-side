@@ -112,6 +112,13 @@ export const ModalAddSaleItemsContainer = styled.div`
     text-align: right;
   }
 
+  .low-stock-warn {
+    height: 18px;
+    width: fit-content;
+    font-size: 14px;
+    color: red;
+  }
+
   .search-dropdown-item button:hover {
     background: #f0f0f0;
   }

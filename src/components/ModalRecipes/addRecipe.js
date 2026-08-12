@@ -131,6 +131,7 @@ export function ModalRecipeChildren() {
     setRecipeItemsToShowFromRedux([]);
     setUseStockSupplies(false);
     setDifference("");
+    setLowStockWarn(false);
   };
 
   const PartialClerDirectExecution = () => {

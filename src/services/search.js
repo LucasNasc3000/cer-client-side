@@ -42,20 +42,20 @@ export default async function DoSearch(
 
       case searchParam === "inflows":
         results = await axios.get(
-          `/${path}/search/${searchParam}/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0&`
+          `/${path}/search/${searchParam}/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0`
         );
 
         return results.data[1];
 
       case searchParam === "inflows" && secondarySearchParam === "employees":
         results = await axios.get(
-          `/${path}/search/employee/inflows?email=${searchValue}&limit=20&offset=forDisplay=false`
+          `/${path}/search/employee/inflows?email=${searchValue}&limit=20&offset=0&forDisplay=false`
         );
         return results.data[1];
 
       case path === "products" && searchParam === "name":
         results = await axios.get(
-          `/${path}/search/${searchParam}?value=${searchValue}limit=20&offset=productType=${productType}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=${productType}&forDisplay=false`
         );
 
         return results.data[1];

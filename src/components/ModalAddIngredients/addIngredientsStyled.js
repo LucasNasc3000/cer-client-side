@@ -112,6 +112,13 @@ export const ModalAddIngredientsContainer = styled.div`
     text-align: right;
   }
 
+  .low-stock-warn {
+    height: 18px;
+    width: fit-content;
+    font-size: 14px;
+    color: red;
+  }
+
   .unit-type {
     width: 70px;
     text-align: center;

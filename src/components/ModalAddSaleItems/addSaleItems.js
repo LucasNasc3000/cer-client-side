@@ -21,6 +21,8 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
   const [inputSearchValue, setInputSearchValue] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
+  const [lowStockWarn, setLowStockWarn] = useState(false);
+  const [difference, setDifference] = useState(0);
   const [platforms, setPlatforms] = useState([]);
   const [platformName, setPlatformName] = useState("");
   const [productData, setProductData] = useState({});
@@ -110,6 +112,21 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
   }, [inputSearchValue]);
 
   useEffect(() => {
+    if (!quantity || Object.keys(productData).length === 0) {
+      return;
+    }
+
+    setDifference(productData.unities - quantity);
+
+    if (difference < 0) {
+      setLowStockWarn(true);
+      return;
+    }
+
+    setLowStockWarn(false);
+  }, [quantity, productData, difference]);
+
+  useEffect(() => {
     if (getSaleItemsIfExists.saleItems.length < 1) return;
     setSaleItemsToShowFromRedux(getSaleItemsIfExists.saleItemsToShow);
   }, [getSaleItemsIfExists]);
@@ -120,6 +137,8 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
     setSearchResults([]);
     setSaleItemsToShow([]);
     setSaleItemsToShowFromRedux([]);
+    setDifference(0);
+    setLowStockWarn(false);
   };
 
   const PartialClerDirectExecution = () => {
@@ -190,6 +209,11 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
       return;
     }
 
+    if (difference < 0) {
+      toast.error("Quantidade insuficiente em estoque");
+      return;
+    }
+
     const saleItemsToShowData = {
       product: productData.id,
       name: productData.name,
@@ -234,6 +258,11 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
           onChange={(e) => setQuantity(e.target.value)}
           value={quantity}
         />
+        {lowStockWarn && (
+          <p className="low-stock-warn">
+            Estoque insuficiente: {productData.unities} unidades restantes
+          </p>
+        )}
       </div>
 
       <div className="product-list-wrapper">
