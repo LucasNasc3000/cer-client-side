@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/react-in-jsx-scope */
 import { object } from "prop-types";
-import { Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import { ChartContainer } from "./styled-piechart-outputs-names";
 
 export function PieChartOutputsNames({ chartData }) {
   return (
     <ChartContainer>
       <div className="chart-container">
-        <Pie
+        <Doughnut
           data={chartData}
           options={{
             responsive: true,
