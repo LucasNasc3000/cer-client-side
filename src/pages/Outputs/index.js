@@ -229,7 +229,10 @@ export default function Outputs() {
       return;
     }
 
-    const register = await Register(data, "outflows");
+    const register = await Register(
+      data,
+      `outflows-${data.targetType.toLowerCase()}`
+    );
 
     setReRender(register);
   };
@@ -289,7 +292,6 @@ export default function Outputs() {
             <option value="hour">Hora</option>
             <option value="name">Nome</option>
             <option value="category">Categoria</option>
-            <option value="unities">Unidades</option>
 
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
@@ -496,13 +498,31 @@ export default function Outputs() {
             })}
       </OutputsSpace>
       <NewOutput>
-        <input
-          type="text"
-          id="targetType"
-          placeholder="Tipo: produto ou insumo"
-          value={targetType}
-          onChange={(e) => setTargetType(e.target.value)}
-        />
+        <div className="options-outflow">
+          <select
+            className="options-new-outflow"
+            onChange={(e) => setReason(e.target.value)}
+            value={reason}
+          >
+            <option value="">Motivo</option>
+            <option value="vencido">Vencido</option>
+            <option value="perdido">Perdido</option>
+            <option value="danificado">Danificado</option>
+            <option value="roubado">Roubado</option>
+            <option value="desperdício">Desperdício</option>
+            <option value="erro de digitacao">Erro de digitacao</option>
+            <option value="outro">Outro</option>
+          </select>
+          <select
+            className="options-type-new-outflow"
+            onChange={(e) => setTargetType(e.target.value)}
+            value={targetType}
+          >
+            <option value="">Tipo de registro</option>
+            <option value="produto">Produto</option>
+            <option value="insumo">Insumo</option>
+          </select>
+        </div>
         <input
           type="text"
           id="name"
@@ -524,20 +544,18 @@ export default function Outputs() {
           value={unities}
           onChange={(e) => setUnities(e.target.value)}
         />
-        <input
-          type="text"
-          id="reason"
-          placeholder="Motivo ex: venda, vencimento, etc..."
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
-        <input
-          type="text"
-          id="reason"
-          placeholder="Detalhes ex: produto mal armazenado etc..."
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
+        <div className="notes-wrapper">
+          <p className="notes-label">Notas: </p>
+          <textarea
+            type=""
+            className="notes"
+            rows={50}
+            cols={120}
+            onChange={(e) => setNotes(e.target.value)}
+            value={notes}
+            placeholder="Detalhes ex: produto mal armazenado etc..."
+          />
+        </div>
         <button type="button" className="btn" onClick={clear}>
           Cancelar
         </button>

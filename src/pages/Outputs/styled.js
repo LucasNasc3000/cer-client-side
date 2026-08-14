@@ -349,6 +349,48 @@ export const NewOutput = styled.div`
     border-bottom: 0.5px solid black;
   }
 
+  .options-outflow {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .options-new-outflow {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 30px;
+    font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family: ${fontStack};
+  }
+
+  .options-type-new-outflow {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 30px;
+    font-size: 15px;
+    width: 143px;
+    margin-top: 10px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family: ${fontStack};
+  }
+
+  .notes-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 250px;
+    margin-top: 15px;
+  }
+
   .btn {
     display: flex;
     position: relative;

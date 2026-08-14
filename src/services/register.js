@@ -25,7 +25,6 @@ export default async function Register(data, path) {
         });
 
         const inputName = data.name;
-        translatedPath = "insumo";
         toast.success(`${inputName} adicionado`);
         break;
 
@@ -38,14 +37,22 @@ export default async function Register(data, path) {
         toast.success("Venda adicionada");
         break;
 
-      case "outflows":
-        await axios.post("/outflows", {
+      case "outflows-supply":
+        await axios.post("/outflows/create/supply", {
           ...truthyFields,
         });
 
-        const outflowName = data.name;
-        translatedPath = "saída";
-        toast.success(`${outflowName} adicionado`);
+        const outflowSupplyName = data.name;
+        toast.success(`${outflowSupplyName} adicionado`);
+        break;
+
+      case "outflows-product":
+        await axios.post("/outflows/create/product", {
+          ...truthyFields,
+        });
+
+        const outflowProductName = data.name;
+        toast.success(`${outflowProductName} adicionado`);
         break;
 
       case "platforms":
@@ -54,7 +61,6 @@ export default async function Register(data, path) {
         });
 
         const platformName = data.name;
-        translatedPath = "saída";
         toast.success(`${platformName} adicionado`);
         break;
 
@@ -86,7 +92,6 @@ export default async function Register(data, path) {
         }
 
         const productName = data.name;
-        translatedPath = "produto";
         toast.success(`${productName} adicionado`);
         break;
     }

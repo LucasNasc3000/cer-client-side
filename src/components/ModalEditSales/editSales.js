@@ -126,7 +126,6 @@ export function ModalEditSalesStatusChildren({ status }) {
             cols={120}
             onChange={(e) => setNotes(e.target.value)}
             value={notes}
-            readOnly={reason === "other"}
           />
         </div>
       </div>

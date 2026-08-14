@@ -163,7 +163,6 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
             cols={120}
             onChange={(e) => setNotes(e.target.value)}
             value={notes}
-            readOnly={reason === "other"}
           />
         </div>
       </div>
