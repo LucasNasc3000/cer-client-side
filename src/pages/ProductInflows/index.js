@@ -87,10 +87,10 @@ export default function ProductInflows() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
-    if (productName) {
-      setSearchValueAutoSearch(productName);
-      setSearchInputValue(productName);
-    }
+    if (!productName) return;
+
+    setSearchValueAutoSearch(productName);
+    setSearchInputValue(productName);
   }, [productName]);
 
   useEffect(() => {

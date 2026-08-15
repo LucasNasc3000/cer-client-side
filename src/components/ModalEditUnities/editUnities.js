@@ -133,7 +133,6 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
             <option value="danificado">danificado</option>
             <option value="roubado">roubado</option>
             <option value="desperdício">desperdício</option>
-            <option value="venda">venda</option>
             <option value="outro">outro</option>
           </select>
         ) : (

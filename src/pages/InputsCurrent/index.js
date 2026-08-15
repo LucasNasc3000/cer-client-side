@@ -372,6 +372,7 @@ export default function InputsCurrent() {
             className="options"
             id="filter-select"
             onChange={(e) => setSearchParam(e.target.value)}
+            value={searchParam}
           >
             <option value="">Selecione</option>
             <option value="category">Categoria</option>

@@ -74,7 +74,7 @@ export function ModalRecipeChildren() {
   }, [inputSearchValue]);
 
   useEffect(() => {
-    if (getRecipeDataIfExists.productIngredient.length < 1) return;
+    if (getRecipeDataIfExists.addProductIngredient.length < 1) return;
     setRecipeItemsToShowFromRedux(
       getRecipeDataIfExists.productIngredientToShow
     );

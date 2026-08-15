@@ -2,7 +2,7 @@ import * as types from "../types";
 
 const initialState = {
   useStockSupplies: false,
-  productIngredient: [],
+  addProductIngredient: [],
   productIngredientToShow: [],
 };
 
@@ -13,7 +13,7 @@ export default function (state = initialState, action) {
       const newState = { ...state };
 
       newState.useStockSupplies = action.payload.useStockSupplies;
-      newState.productIngredient = [...action.payload.formattedData];
+      newState.addProductIngredient = [...action.payload.formattedData];
       newState.productIngredientToShow = [...action.payload.recipeItemsToShow];
 
       return newState;

@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import styled from "styled-components";
 import { breakpoints } from "../../config/breakpoints";
+import * as colors from "../../config/colors";
 import { fontStack } from "../../config/fonts";
-// import * as colors from "../../config/colors";
 
 export const OutputsContainer = styled.div``;
 
@@ -236,6 +236,7 @@ export const OutputsSpace = styled.div`
     width: fit-content;
     font-weight: 400;
     font-size: 15px;
+    background: ${colors.primaryColor};
   }
 
   .real-time-stock-btn {

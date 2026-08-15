@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
@@ -62,6 +63,7 @@ export default function Products() {
   const [searchParam, setSearchParam] = useState("");
   const [productsData, setProductsData] = useState([]);
   const [originalProductsData, setOriginalProductsData] = useState({});
+  const [originalSearchResults, setOriginalSearchResults] = useState({});
   const [productsDataBackup, setProductsDataBackup] = useState([]);
   const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -162,10 +164,11 @@ export default function Products() {
   useEffect(() => {
     // eslint-disable-next-line no-useless-return
     if (
-      getRecipeDataIfExists.productIngredient.length < 1 ||
+      getRecipeDataIfExists.addProductIngredient.length < 1 ||
       getRecipeDataIfExists.useStockSupplies === undefined
     )
       return;
+
     setProductIngredientRedux(getRecipeDataIfExists.productIngredient);
     setUseStockSuppliesRedux(getRecipeDataIfExists.useStockSupplies);
   }, [getRecipeDataIfExists]);
@@ -217,6 +220,7 @@ export default function Products() {
     setPrice("");
     setLowStock(null);
     setProductsData(productsDataBackup);
+    setSearchParam("");
 
     dispatch(actions.clearRecipeData());
     dispatch(actionsEditUnities.clearUpdateUnitiesData());
@@ -236,6 +240,7 @@ export default function Products() {
     setSearchParam("");
     setSearchResults([]);
     setSearchInputValue("");
+    setOriginalSearchResults({});
 
     dispatch(actionsProductDataTransfer.clearDataTransfer());
   };
@@ -245,7 +250,7 @@ export default function Products() {
     const { name, value } = e.target;
 
     const permissionVerify = permissions.some(
-      (p) => p.action === "UPDATE" && p.resource === "SUPPLIES"
+      (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
     );
 
     const permissionVerifyAdmin = permissions.some(
@@ -269,7 +274,7 @@ export default function Products() {
     const { name, value } = e.target;
 
     const permissionVerify = permissions.some(
-      (p) => p.action === "UPDATE" && p.resource === "SUPPLIES"
+      (p) => p.action === "UPDATE" && p.resource === "PRODUCTS"
     );
 
     const permissionVerifyAdmin = permissions.some(
@@ -327,12 +332,16 @@ export default function Products() {
     if (Array.isArray(search)) {
       setSearchResults(search);
       setSearchResultsBackup(search);
+      setOriginalSearchResults(
+        Object.fromEntries(search.map((item) => [item.id, { ...item }]))
+      );
       return;
     }
 
     inArray.push(search);
     setSearchResults(inArray);
     setSearchResultsBackup(inArray);
+    setOriginalSearchResults(inArray[0]);
   }
 
   const ProductRegister = async (e) => {
@@ -381,11 +390,11 @@ export default function Products() {
     setIsLoadingProducts(false);
   };
 
-  const ProductUpdate = async (e, objectData) => {
+  const ProductUpdate = async (e, objectData, isSearch) => {
     e.preventDefault();
 
     const permissionVerify = permissions.some(
-      (p) => p.action === "CREATE" && p.resource === "SUPPLIES"
+      (p) => p.action === "CREATE" && p.resource === "PRODUCTS"
     );
 
     const permissionVerifyAdmin = permissions.some(
@@ -399,7 +408,7 @@ export default function Products() {
 
     if (objectData.price) {
       const editPricePermissionVerify = permissions.some(
-        (p) => p.action === "EDIT_PRICES" && p.resource === "SUPPLIES"
+        (p) => p.action === "EDIT_PRICES" && p.resource === "PRODUCTS"
       );
 
       if (!editPricePermissionVerify) {
@@ -408,8 +417,13 @@ export default function Products() {
       }
     }
 
-    const current = productsData.find((p) => p.id === objectData.id);
-    const original = originalProductsData[objectData.id];
+    const current = !isSearch
+      ? productsData.find((p) => p.id === objectData.id)
+      : searchResults.find((p) => p.id === objectData.id);
+
+    const original = !isSearch
+      ? originalProductsData[objectData.id]
+      : originalSearchResults[objectData.id];
 
     const changedFields = GetChangedFields(original, current);
 
@@ -422,6 +436,12 @@ export default function Products() {
         value === 0 || value === "" || value === null || value === undefined
       );
     };
+
+    const truthyFieldsAddRecipe = Object.fromEntries(
+      Object.entries(getRecipeDataIfExists).filter(
+        ([, value]) => !IsEmptyValue(value)
+      )
+    );
 
     const truthyFieldsAddIngredients = Object.fromEntries(
       Object.entries(getAddIngredientsIfExists).filter(
@@ -447,7 +467,11 @@ export default function Products() {
     const { addProductIngredientToShow, ...restAddProductIngredient } =
       truthyFieldsAddIngredients;
 
+    const { productIngredientToShow, useStockSupplies, ...restAddRecipe } =
+      truthyFieldsAddRecipe;
+
     const restEditUnities = {};
+    const addProductIngredient = {};
 
     if (truthyFieldsEditUnities.addUnities > 0) {
       Object.assign(restEditUnities, truthyFieldsEditUnities);
@@ -456,9 +480,14 @@ export default function Products() {
       Object.assign(restEditUnities, rest);
     }
 
+    if (truthyFieldsAddRecipe) {
+      Object.assign(addProductIngredient, restAddRecipe);
+    }
+
     if (
       Object.keys(changedFields).length === 0 &&
       Object.keys(restAddProductIngredient).length === 0 &&
+      Object.keys(addProductIngredient).length === 0 &&
       Object.keys(restUpdateRecipe).length === 0 &&
       Object.keys(restEditUnities).length === 0
     ) {
@@ -468,14 +497,28 @@ export default function Products() {
 
     const allData = {
       ...changedFields,
+      ...addProductIngredient,
       ...restUpdateRecipe,
       ...restAddProductIngredient,
       ...restEditUnities,
     };
 
+    const allDataReplaceCommas = Object.fromEntries(
+      Object.entries(allData).map(([key, value]) => {
+        if (typeof value === "string" && value.includes(",")) {
+          value = value.replace(",", ".");
+        }
+        return [key, value];
+      })
+    );
+
     setIsLoadingProductsUpdate(true);
 
-    const update = await Update(objectData.id, allData, "products");
+    const update = await Update(
+      objectData.id,
+      allDataReplaceCommas,
+      "products"
+    );
 
     if (update) {
       setOriginalProductsData((prev) => ({
@@ -540,6 +583,7 @@ export default function Products() {
             className="options"
             id="filter-select"
             onChange={(e) => setSearchParam(e.target.value)}
+            value={searchParam}
           >
             <option value="">Selecione</option>
             <option value="category">Categoria</option>
@@ -763,7 +807,7 @@ export default function Products() {
                         <button
                           type="button"
                           className="confirm-changes"
-                          onClick={(e) => ProductUpdate(e, product)}
+                          onClick={(e) => ProductUpdate(e, product, false)}
                           disabled={isLoadingProductsUpdate}
                         >
                           {isLoadingProductsUpdate ? <Spinner /> : "Salvar"}
@@ -980,7 +1024,7 @@ export default function Products() {
                         <button
                           type="button"
                           className="confirm-changes"
-                          onClick={(e) => ProductUpdate(e, product)}
+                          onClick={(e) => ProductUpdate(e, product, true)}
                           disabled={isLoadingProducts}
                         >
                           {isLoadingProductsUpdate ? <Spinner /> : "Salvar"}
