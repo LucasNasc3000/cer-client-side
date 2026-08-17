@@ -322,9 +322,7 @@ export default function Products() {
         "PRODUCT"
       );
     } else if (searchParam === "price") {
-      console.log("aquiIII");
       const replacedCommaValue = searchInputValue.replace(",", ".");
-      console.log(replacedCommaValue);
 
       search = await DoSearch(
         "products",

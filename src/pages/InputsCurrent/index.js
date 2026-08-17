@@ -101,6 +101,11 @@ export default function InputsCurrent() {
     if (!searchValueAutoSearch || !inputName) return;
 
     async function SearchTheInput() {
+      if (!searchParam) {
+        toast.error("Selecione um filtro de busca");
+        return;
+      }
+
       const inArray = [];
 
       const search = await DoSearch(
@@ -242,6 +247,11 @@ export default function InputsCurrent() {
 
   async function SearchInputs(e) {
     e.preventDefault();
+
+    if (!searchParam) {
+      toast.error("Selecione um filtro de busca");
+      return;
+    }
 
     const inArray = [];
 

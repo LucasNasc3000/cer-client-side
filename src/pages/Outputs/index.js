@@ -155,6 +155,11 @@ export default function Outputs() {
   async function SearchOutputs(e) {
     e.preventDefault();
 
+    if (!searchParam) {
+      toast.error("Selecione um filtro de busca");
+      return;
+    }
+
     const inArray = [];
 
     let search = "";

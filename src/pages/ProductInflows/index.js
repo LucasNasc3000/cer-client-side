@@ -95,6 +95,11 @@ export default function ProductInflows() {
 
   useEffect(() => {
     async function SearchTheProductInflows() {
+      if (!searchProductParam) {
+        toast.error("Selecione um filtro de busca");
+        return;
+      }
+
       const inArray = [];
 
       const search = await DoSearch(
@@ -176,9 +181,14 @@ export default function ProductInflows() {
   }
 
   async function SearchInflows(e) {
-    try {
-      e.preventDefault();
+    e.preventDefault();
 
+    if (!searchParam) {
+      toast.error("Selecione um filtro de busca");
+      return;
+    }
+
+    try {
       const inArray = [];
 
       let search = "";
