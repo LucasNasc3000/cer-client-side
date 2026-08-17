@@ -25,24 +25,47 @@ export const ModalEditRecipeContainer = styled.div`
     margin-bottom: 10px;
   }
 
-  .delete,
-  .save {
+  .delete {
+    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 40px;
+    width: fit-content;
+    height: 35px;
     background: none;
     text-align: center;
+    color: red;
+    font-size: 20px;
+  }
+
+  .save {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: fit-content;
+    height: 35px;
+    background: none;
+    text-align: center;
+    color: blue;
+    font-size: 20px;
   }
 
   .cancel {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 40px;
-    background: none;
+    width: fit-content;
+    background-color: #a5a4a4;
+    color: white;
     text-align: center;
-    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .save-icon,
+  .delete-icon {
+    height: 20px;
+    width: 25px;
   }
 
   .name {
@@ -59,16 +82,10 @@ export const ModalEditRecipeContainer = styled.div`
     text-align: center;
   }
 
-  .delete:hover {
-    color: red;
-  }
-
+  .cancel:hover,
+  .delete:hover,
   .save:hover {
-    color: blue;
-  }
-
-  .cancel:hover {
-    color: gray;
+    filter: brightness(80%);
   }
 
   @media (max-width: ${breakpoints.mobile}) {

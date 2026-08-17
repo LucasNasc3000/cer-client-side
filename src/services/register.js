@@ -17,6 +17,8 @@ export default async function Register(data, path) {
       )
     );
 
+    console.log(truthyFields);
+
     // eslint-disable-next-line default-case
     switch (path) {
       case "supplies":
@@ -66,14 +68,17 @@ export default async function Register(data, path) {
 
       case "products":
         const hasIngredients =
-          Array.isArray(data.productIngredient) &&
-          data.productIngredient.length > 0;
+          Array.isArray(data.addProductIngredient) &&
+          data.addProductIngredient.length > 0;
 
-        const { useStockSupplies, productIngredient, ...restOfTheData } = data;
+        const { useStockSupplies, addProductIngredient, ...restOfTheData } =
+          data;
 
         const payload = data.lowStock
           ? restOfTheData
           : (({ lowStock, ...rest }) => rest)(restOfTheData);
+
+        const productIngredient = [...addProductIngredient];
 
         if (hasIngredients && !useStockSupplies) {
           await axios.post("/products/create/withRecipe", {

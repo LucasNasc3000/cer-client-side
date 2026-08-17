@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import Decimal from "decimal.js";
 import { get } from "lodash";
+import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -10,7 +11,7 @@ import axios from "../../services/axios";
 import * as actions from "../../store/modules/recipeData/actions";
 import { ModalRecipeContainer } from "./addRecipeStyled";
 
-export function ModalRecipeChildren() {
+export function ModalRecipeChildren({ isAlreadyRegisteredProduct }) {
   const getRecipeDataIfExists = useSelector((state) => state.recipeData);
 
   const dispatch = useDispatch();
@@ -308,7 +309,7 @@ export function ModalRecipeChildren() {
         {lowStockWarn && (
           <p className="low-stock-warn">
             Estoque insuficiente: {supplyData.quantity} unidades restantes (
-            {supplyData.totalWeight}g)
+            {supplyData.totalWeight} g/ml)
           </p>
         )}
       </div>
@@ -364,13 +365,17 @@ export function ModalRecipeChildren() {
         >
           Cancelar
         </button>
-        <input
-          type="checkbox"
-          className="use-stock-supplies"
-          onChange={HandleUseStockSupplies}
-          value={useStockSupplies}
-        />
-        <p className="use-stock-supplies-label">Usar insumos em estoque</p>
+        {!isAlreadyRegisteredProduct && (
+          <>
+            <input
+              type="checkbox"
+              className="use-stock-supplies"
+              onChange={HandleUseStockSupplies}
+              value={useStockSupplies}
+            />
+            <p className="use-stock-supplies-label">Usar insumos em estoque</p>
+          </>
+        )}
       </div>
 
       <button type="button" className="save" onClick={(e) => SaveRecipe(e)}>
@@ -379,3 +384,7 @@ export function ModalRecipeChildren() {
     </ModalRecipeContainer>
   );
 }
+
+ModalRecipeChildren.propTypes = {
+  isAlreadyRegisteredProduct: PropTypes.bool.isRequired,
+};

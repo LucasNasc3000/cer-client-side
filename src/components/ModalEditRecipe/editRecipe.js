@@ -199,17 +199,17 @@ export function ModalEditRecipeChildren({ productId }) {
               />
               <button
                 type="button"
-                className="delete"
-                onClick={(e) => DeleteItem(e, ingredient)}
-              >
-                <MdOutlineDelete className="delete-icon" />
-              </button>
-              <button
-                type="button"
                 className="save"
                 onClick={(e) => PreSave(e, ingredient)}
               >
                 <LuSave className="save-icon" />
+              </button>
+              <button
+                type="button"
+                className="delete"
+                onClick={(e) => DeleteItem(e, ingredient)}
+              >
+                <MdOutlineDelete className="delete-icon" />
               </button>
               <button
                 type="button"

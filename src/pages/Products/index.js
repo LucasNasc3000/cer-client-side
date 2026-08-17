@@ -169,7 +169,7 @@ export default function Products() {
     )
       return;
 
-    setProductIngredientRedux(getRecipeDataIfExists.productIngredient);
+    setProductIngredientRedux(getRecipeDataIfExists.addProductIngredient);
     setUseStockSuppliesRedux(getRecipeDataIfExists.useStockSupplies);
   }, [getRecipeDataIfExists]);
 
@@ -296,6 +296,11 @@ export default function Products() {
   async function SearchProducts(e) {
     e.preventDefault();
 
+    if (!searchParam) {
+      toast.error("Selecione um filtro de busca");
+      return;
+    }
+
     const inArray = [];
 
     let search = "";
@@ -312,6 +317,19 @@ export default function Products() {
         "products",
         searchParam,
         formattedDate,
+        null,
+        null,
+        "PRODUCT"
+      );
+    } else if (searchParam === "price") {
+      console.log("aquiIII");
+      const replacedCommaValue = searchInputValue.replace(",", ".");
+      console.log(replacedCommaValue);
+
+      search = await DoSearch(
+        "products",
+        searchParam,
+        replacedCommaValue,
         null,
         null,
         "PRODUCT"
@@ -367,9 +385,11 @@ export default function Products() {
       unities,
       expirationDate,
       lowStock: lowStock || null,
-      productIngredient: productIngredientRedux || null,
+      addProductIngredient: productIngredientRedux || null,
       useStockSupplies: useStockSuppliesRedux,
     };
+
+    console.log(data);
 
     const year = data.expirationDate.slice(6, 10);
     const month = data.expirationDate.slice(3, 5);
@@ -381,6 +401,8 @@ export default function Products() {
     setIsLoadingProducts(true);
 
     const register = await Register(data, "products");
+
+    console.log(register);
 
     if (register) {
       dispatch(actions.clearRecipeData());
@@ -761,7 +783,7 @@ export default function Products() {
                               onClose={() => setOpenModalId(null)}
                               title={`Vincular receita ao produto ${product.name}`}
                             >
-                              <ModalRecipeChildren />
+                              <ModalRecipeChildren isAlreadyRegisteredProduct />
                             </Modal>
                             <button
                               type="button"
@@ -1110,7 +1132,7 @@ export default function Products() {
           onClose={() => setOpenAddRecipe(false)}
           title={`Vincular receita ao produto ${name}`}
         >
-          <ModalRecipeChildren />
+          <ModalRecipeChildren isAlreadyRegisteredProduct={false} />
         </Modal>
         <button
           type="button"

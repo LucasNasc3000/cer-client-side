@@ -180,7 +180,6 @@ export function ModalAddIngredientsChildren({ productData }) {
     ingredientsToShow.map((i) => {
       formattedData.push({
         supplyId: i.supplyId,
-        productId: productData.id,
         quantity: i.quantity,
       });
     });
@@ -330,7 +329,7 @@ export function ModalAddIngredientsChildren({ productData }) {
         {lowStockWarn && (
           <p className="low-stock-warn">
             Estoque insuficiente: {supplyData.quantity} unidades restantes (
-            {supplyData.totalWeight}g)
+            {supplyData.totalWeight} g/ml)
           </p>
         )}
       </div>
