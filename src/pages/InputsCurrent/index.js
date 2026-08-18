@@ -281,6 +281,17 @@ export default function InputsCurrent() {
         null,
         GENERAL_PATH
       );
+    } else if (searchParam === "price") {
+      const formattedPrice = searchInputValue.replace(",", ".");
+
+      search = await DoSearch(
+        "supplies",
+        searchParam,
+        formattedPrice,
+        "SUPPLY_REAL_TIME",
+        null,
+        GENERAL_PATH
+      );
     } else {
       search = await DoSearch(
         "supplies",
@@ -520,6 +531,16 @@ export default function InputsCurrent() {
                     />
                   </div>
                   <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.createdAt.slice(8, 10)}/${input.createdAt.slice(5, 7)}/${input.createdAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
                     <div className="label">Última atualização (data): </div>
                     <input
                       type="text"
@@ -665,6 +686,16 @@ export default function InputsCurrent() {
                       className="data-div-price"
                       value={input.price.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.createdAt.slice(8, 10)}/${input.createdAt.slice(5, 7)}/${input.createdAt.slice(0, 4)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">

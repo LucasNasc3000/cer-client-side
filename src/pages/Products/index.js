@@ -556,8 +556,6 @@ export default function Products() {
   const Transfer = (e, productNameParam) => {
     e.preventDefault();
 
-    console.log(productNameParam);
-
     dispatch(
       actionsProductDataTransfer.productDataTransfer({
         productName: productNameParam,

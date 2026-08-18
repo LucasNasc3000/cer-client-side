@@ -163,7 +163,6 @@ export default function Outputs() {
     const inArray = [];
 
     let search = "";
-    let formattedDate = "";
     let outflowType = "";
 
     if (searchParam === "date") {
@@ -171,7 +170,7 @@ export default function Outputs() {
       const month = searchInputValue.slice(3, 5);
       const day = searchInputValue.slice(0, 2);
 
-      formattedDate = `${year}-${month}-${day}`;
+      const formattedDate = `${year}-${month}-${day}`;
 
       search = await DoSearch("outflows", searchParam, formattedDate);
     } else if (searchParam === "type") {

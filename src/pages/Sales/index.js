@@ -244,32 +244,20 @@ export default function Sales() {
     const inArray = [];
 
     let search = "";
-    let formattedDate = "";
 
     if (searchParam === "date") {
       const year = searchInputValue.slice(6, 10);
       const month = searchInputValue.slice(3, 5);
       const day = searchInputValue.slice(0, 2);
 
-      formattedDate = `${year}-${month}-${day}`;
+      const formattedDate = `${year}-${month}-${day}`;
 
-      search = await DoSearch(
-        "sales",
-        searchParam,
-        formattedDate,
-        null,
-        null,
-        null
-      );
+      search = await DoSearch("sales", searchParam, formattedDate);
+    } else if (searchParam === "price") {
+      const formattedPrice = searchInputValue.replace(",", ".");
+      search = await DoSearch("sales", searchParam, formattedPrice);
     } else {
-      search = await DoSearch(
-        "sales",
-        searchParam,
-        searchInputValue,
-        null,
-        null,
-        null
-      );
+      search = await DoSearch("sales", searchParam, searchInputValue);
     }
 
     if (typeof search === "undefined" || !search) return;
