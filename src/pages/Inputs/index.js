@@ -48,6 +48,7 @@ export default function Inputs() {
   const [price, setPrice] = useState("");
   const [details, setDetails] = useState("");
   const [searchParam, setSearchParam] = useState("");
+  const [supplySearchPath, setSupplySearchPath] = useState("");
   const [inputsData, setInputsData] = useState([]);
   const [inputsDataBackup, setInputsDataBackup] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -60,6 +61,9 @@ export default function Inputs() {
   const [isLoadingInputs, setIsLoadingInputs] = useState(false);
   const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
   const [errorGetCredentials, setErrorGetCredentials] = useState(false);
+
+  const SPECIFIC_PATH = "specific";
+  const GENERAL_PATH = "general";
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -162,10 +166,22 @@ export default function Inputs() {
 
   const ClearSearch = (e) => {
     e.preventDefault();
-    setSearchParam("");
     setSearchResults([]);
     setSearchInputValue("");
   };
+
+  function HandleOptionsValue(e) {
+    const searchType = e.slice(-1);
+    const formattedParam = e.slice(0, -2);
+
+    if (searchType === "S") {
+      setSupplySearchPath(GENERAL_PATH);
+    } else {
+      setSupplySearchPath(SPECIFIC_PATH);
+    }
+
+    setSearchParam(formattedParam);
+  }
 
   async function SearchInputs(e) {
     e.preventDefault();
@@ -178,27 +194,41 @@ export default function Inputs() {
     const inArray = [];
 
     let search = "";
-    let formattedDate = "";
 
     if (searchParam === "date" || searchParam === "expirationDate") {
       const year = searchInputValue.slice(6, 10);
       const month = searchInputValue.slice(3, 5);
       const day = searchInputValue.slice(0, 2);
 
-      formattedDate = `${year}-${month}-${day}`;
+      const formattedDate = `${year}-${month}-${day}`;
 
       search = await DoSearch(
         "supplies",
         searchParam,
         formattedDate,
-        "SUPPLY_HISTORY"
+        "SUPPLY_HISTORY",
+        null,
+        supplySearchPath
+      );
+    } else if (searchParam === "price" || searchParam === "totalprice") {
+      const formattedPrice = searchInputValue.replace(",", ".");
+
+      search = await DoSearch(
+        "supplies",
+        searchParam,
+        formattedPrice,
+        "SUPPLY_HISTORY",
+        null,
+        supplySearchPath
       );
     } else {
       search = await DoSearch(
         "supplies",
         searchParam,
         searchInputValue,
-        "SUPPLY_HISTORY"
+        "SUPPLY_HISTORY",
+        null,
+        supplySearchPath
       );
     }
 
@@ -305,28 +335,26 @@ export default function Inputs() {
             name="search-options"
             className="options"
             id="filter-select"
-            onChange={(e) => setSearchParam(e.target.value)}
+            onChange={(e) => HandleOptionsValue(e.target.value)}
           >
             <option value="">Selecione</option>
-            <option value="category">Categoria</option>
-            <option value="name">Nome</option>
-            <option value="reason">Motivo</option>
-            <option value="quantity">Quantidade</option>
-            <option value="totalweightPerRegister">
+            <option value="category-S">Categoria</option>
+            <option value="name-S">Nome</option>
+            <option value="reason-H">Motivo</option>
+            <option value="totalweightPerRegister-H">
               Peso total por registro
             </option>
-            <option value="weightPerUnit">Peso unitário</option>
-            <option value="supplier">Fornecedor</option>
-            <option value="expirationDate">Validade</option>
-            <option value="date">Data de cadastro</option>
-            <option value="lowStock">Quantidade mínima</option>
+            <option value="weightPerUnit-S">Peso unitário</option>
+            <option value="supplier-S">Fornecedor</option>
+            <option value="expirationDate-H">Validade</option>
+            <option value="date-S">Data de cadastro</option>
 
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
-            ) && <option value="employee">Funcionário</option>}
+            ) && <option value="employee-S">Funcionário</option>}
 
-            <option value="price">Preço</option>
-            <option value="totalprice">Preço total</option>
+            <option value="price-S">Preço unitário</option>
+            <option value="totalprice-S">Preço total</option>
           </select>
         </div>
       </SearchSpace>
@@ -371,7 +399,7 @@ export default function Inputs() {
                       type="text"
                       name="reason"
                       className="data-div"
-                      value={input.reason}
+                      value={input.reason || "Não especificado"}
                       readOnly
                     />
                   </div>
@@ -386,7 +414,7 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Quantidade: </div>
+                    <div className="label">Unidades: </div>
                     <input
                       type="text"
                       name="quantity"
@@ -431,7 +459,7 @@ export default function Inputs() {
                       type="text"
                       name="expirationDate"
                       className="data-div"
-                      value={input.expirationDate}
+                      value={`${input.expirationDate.slice(8, 10)}/${input.expirationDate.slice(5, 7)}/${input.expirationDate.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -529,7 +557,7 @@ export default function Inputs() {
                       type="text"
                       name="reason"
                       className="data-div"
-                      value={input.reason}
+                      value={input.reason || "Não especificado"}
                       readOnly
                     />
                   </div>
@@ -539,12 +567,12 @@ export default function Inputs() {
                       type="text"
                       name="details"
                       className="data-div"
-                      value={input.details}
+                      value={input.details || "Sem detalhes"}
                       readOnly
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Quantidade: </div>
+                    <div className="label">Unidades: </div>
                     <input
                       type="text"
                       name="quantity"
@@ -589,7 +617,7 @@ export default function Inputs() {
                       type="text"
                       name="expirationDate"
                       className="data-div"
-                      value={input.expirationDate}
+                      value={`${input.expirationDate.slice(8, 10)}/${input.expirationDate.slice(5, 7)}/${input.expirationDate.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
@@ -618,7 +646,7 @@ export default function Inputs() {
                   )}
 
                   <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
+                    <div className="label-price">Preço unitário: </div>
                     <input
                       type="text"
                       name="price"
@@ -634,6 +662,16 @@ export default function Inputs() {
                       name="totalprice"
                       className="data-div-price"
                       value={input.totalPrice.replace(".", ",")}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Registrado em: </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.createdAt.slice(8, 10)}/${input.createdAt.slice(5, 7)}/${input.createdAt.slice(0, 4)}`}
                       readOnly
                     />
                   </div>

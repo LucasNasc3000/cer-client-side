@@ -8,8 +8,16 @@ export default async function DoSearch(
   searchValue,
   supplyType,
   secondarySearchParam,
-  productSearchPath
+  searchPath
 ) {
+  console.log({
+    path,
+    searchParam,
+    searchValue,
+    supplyType,
+    secondarySearchParam,
+    searchPath,
+  });
   try {
     let results = "";
 
@@ -21,18 +29,7 @@ export default async function DoSearch(
 
         return results.data[1];
 
-      case path === "supplies" && searchParam === "id":
-        results = await axios.get(
-          `/${path}/search/${searchParam}/${supplyType}/${searchValue}`
-        );
-        return results.data[1];
-
       case path === "supplies" && searchParam === "name":
-        results = await axios.get(
-          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&supplyType=${supplyType}&forDisplay=false`
-        );
-        return results.data[1];
-
       case path === "supplies" && searchParam === "employee":
         results = await axios.get(
           `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&supplyType=${supplyType}&forDisplay=false`
@@ -40,8 +37,18 @@ export default async function DoSearch(
         return results.data[1];
 
       case path === "supplies" &&
-        searchParam !== "id" &&
-        searchParam !== "employee":
+        searchParam !== "employee" &&
+        searchParam !== "name" &&
+        searchPath === "specific":
+        results = await axios.get(
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0`
+        );
+        return results.data[1];
+
+      case path === "supplies" &&
+        searchParam !== "name" &&
+        searchParam !== "employee" &&
+        searchPath === "general":
         results = await axios.get(
           `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&supplyType=${supplyType}`
         );
@@ -49,7 +56,7 @@ export default async function DoSearch(
 
       case searchParam === "inflows" &&
         secondarySearchParam !== "employee" &&
-        productSearchPath === "specific":
+        searchPath === "specific":
         results = await axios.get(
           `/${path}/search/${searchParam}/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0`
         );
@@ -58,7 +65,7 @@ export default async function DoSearch(
 
       case searchParam === "inflows" &&
         secondarySearchParam !== "employee" &&
-        productSearchPath === "general":
+        searchPath === "general":
         results = await axios.get(
           `/${path}/search/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0&productType=PRODUCT_INFLOW`
         );
@@ -67,7 +74,7 @@ export default async function DoSearch(
 
       case searchParam === "inflows" &&
         secondarySearchParam === "employee" &&
-        productSearchPath === null:
+        searchPath === null:
         results = await axios.get(
           `/${path}/search/employee/inflows?id=${searchValue}&limit=20&offset=0&forDisplay=false`
         );

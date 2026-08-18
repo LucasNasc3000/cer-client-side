@@ -54,6 +54,8 @@ export default function InputsCurrent() {
   const [isLoadingGetInputsCurrent, setIsLoadingGetInputsCurrent] =
     useState(false);
 
+  const GENERAL_PATH = "general";
+
   useEffect(() => {
     async function ExecuteGetBossId() {
       setIsLoadingGetCredentials(true);
@@ -263,27 +265,30 @@ export default function InputsCurrent() {
     const inArray = [];
 
     let search = "";
-    let formattedDate = "";
 
     if (searchParam === "date" || searchParam === "expirationDate") {
       const year = searchInputValue.slice(6, 10);
       const month = searchInputValue.slice(3, 5);
       const day = searchInputValue.slice(0, 2);
 
-      formattedDate = `${year}-${month}-${day}`;
+      const formattedDate = `${year}-${month}-${day}`;
 
       search = await DoSearch(
         "supplies",
         searchParam,
         formattedDate,
-        "SUPPLY_REAL_TIME"
+        "SUPPLY_REAL_TIME",
+        null,
+        GENERAL_PATH
       );
     } else {
       search = await DoSearch(
         "supplies",
         searchParam,
         searchInputValue,
-        "SUPPLY_REAL_TIME"
+        "SUPPLY_REAL_TIME",
+        null,
+        GENERAL_PATH
       );
     }
 
