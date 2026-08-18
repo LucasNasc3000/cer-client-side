@@ -1,12 +1,10 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
-import { get } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
@@ -31,8 +29,8 @@ export default function ProductInflows() {
   const [inflowsData, setInflowsData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [searchParam, setSearchParam] = useState("");
   const [searchProductParam, setSearchProductParam] = useState("");
+  const [productSearchPath, setProductSearchPath] = useState("");
   const [searchValueAutoSearch, setSearchValueAutoSearch] = useState("");
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
@@ -43,6 +41,9 @@ export default function ProductInflows() {
     useState(false);
 
   const extractFromPermissions = useRef(permissions.map((p) => p.resource));
+
+  const SPECIFIC_PATH = "specific";
+  const GENERAL_PATH = "general";
 
   useEffect(() => {
     async function ExecuteGetBossId() {
@@ -95,11 +96,6 @@ export default function ProductInflows() {
 
   useEffect(() => {
     async function SearchTheProductInflows() {
-      if (!searchProductParam) {
-        toast.error("Selecione um filtro de busca");
-        return;
-      }
-
       const inArray = [];
 
       const search = await DoSearch(
@@ -166,7 +162,7 @@ export default function ProductInflows() {
     setSearchResults([]);
     setSearchInputValue("");
     setSearchProductParam("");
-    setSearchParam("");
+    setSearchSecondaryParam("");
   };
 
   function HandleOptionsValue(e) {
@@ -174,69 +170,85 @@ export default function ProductInflows() {
     const formattedParam = e.slice(0, -2);
 
     if (searchType === "P") {
-      setSearchParam(formattedParam);
+      setProductSearchPath(GENERAL_PATH);
     } else {
-      setSearchSecondaryParam(formattedParam);
+      setProductSearchPath(SPECIFIC_PATH);
     }
+
+    setSearchSecondaryParam(formattedParam);
   }
 
   async function SearchInflows(e) {
     e.preventDefault();
 
-    if (!searchParam) {
+    if (!searchSecondaryParam) {
       toast.error("Selecione um filtro de busca");
       return;
     }
 
-    try {
-      const inArray = [];
+    const inArray = [];
 
-      let search = "";
-      let formattedDate = "";
+    let search = "";
 
-      if (searchParam === "date" || searchSecondaryParam === "expirationDate") {
-        const year = searchInputValue.slice(6, 10);
-        const month = searchInputValue.slice(3, 5);
-        const day = searchInputValue.slice(0, 2);
+    if (
+      searchSecondaryParam === "date" ||
+      searchSecondaryParam === "expirationDate"
+    ) {
+      const year = searchInputValue.slice(6, 10);
+      const month = searchInputValue.slice(3, 5);
+      const day = searchInputValue.slice(0, 2);
 
-        formattedDate = `${year}-${month}-${day}`;
-      }
+      const formattedDate = `${year}-${month}-${day}`;
 
       search = await DoSearch(
         "products",
-        searchParam === "" ? "inflows" : searchParam,
-        formattedDate === "" ? searchInputValue : formattedDate,
+        "inflows",
+        formattedDate,
         null,
-        searchSecondaryParam === "" ? null : searchSecondaryParam,
-        searchParam === "" ? "PRODUCT_INFLOW" : "PRODUCT"
+        searchSecondaryParam,
+        productSearchPath
       );
+    } else if (searchSecondaryParam === "price") {
+      const formattedPrice = searchInputValue.replace(",", ".");
 
-      if (typeof search === "undefined" || !search) return;
-
-      if (Array.isArray(search)) {
-        setSearchResults(search);
-        return;
-      }
-
-      inArray.push(search);
-      setSearchResults(inArray);
-      return;
-    } catch (err) {
-      const errors = get(err, "response.data.message", []);
-
-      if (err) {
-        if (errors.length > 0) {
-          toast.error(errors);
-        }
-
-        if (err && errors.length < 1) {
-          toast.error(
-            "Erro desconhecido ao tentar pesquisar por registro de produto"
-          );
-          return;
-        }
-      }
+      search = await DoSearch(
+        "products",
+        "inflows",
+        formattedPrice,
+        null,
+        searchSecondaryParam,
+        productSearchPath
+      );
+    } else if (searchSecondaryParam === "employee") {
+      search = await DoSearch(
+        "products",
+        "inflows",
+        searchInputValue,
+        null,
+        searchSecondaryParam,
+        null
+      );
+    } else {
+      search = await DoSearch(
+        "products",
+        "inflows",
+        searchInputValue,
+        null,
+        searchSecondaryParam,
+        productSearchPath
+      );
     }
+
+    if (typeof search === "undefined" || !search) return;
+
+    if (Array.isArray(search)) {
+      setSearchResults(search);
+      return;
+    }
+
+    inArray.push(search);
+    setSearchResults(inArray);
+    return;
   }
 
   return (
@@ -281,7 +293,6 @@ export default function ProductInflows() {
             <option value="product-I">Produto</option>
             <option value="date-P">Data de registro</option>
             <option value="category-P">Categoria</option>
-            <option value="name-P">Nome</option>
             <option value="expirationDate-I">Data de validade</option>
 
             {permissions.some(

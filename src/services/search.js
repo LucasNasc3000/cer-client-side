@@ -8,7 +8,7 @@ export default async function DoSearch(
   searchValue,
   supplyType,
   secondarySearchParam,
-  productType
+  productSearchPath
 ) {
   try {
     let results = "";
@@ -47,35 +47,48 @@ export default async function DoSearch(
         );
         return results.data[1];
 
-      case searchParam === "inflows":
+      case searchParam === "inflows" &&
+        secondarySearchParam !== "employee" &&
+        productSearchPath === "specific":
         results = await axios.get(
           `/${path}/search/${searchParam}/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0`
         );
 
         return results.data[1];
 
-      case searchParam === "inflows" && secondarySearchParam === "employees":
+      case searchParam === "inflows" &&
+        secondarySearchParam !== "employee" &&
+        productSearchPath === "general":
         results = await axios.get(
-          `/${path}/search/employee/inflows?email=${searchValue}&limit=20&offset=0&forDisplay=false`
+          `/${path}/search/${secondarySearchParam}?value=${searchValue}&limit=20&offset=0&productType=PRODUCT_INFLOW`
+        );
+
+        return results.data[1];
+
+      case searchParam === "inflows" &&
+        secondarySearchParam === "employee" &&
+        productSearchPath === null:
+        results = await axios.get(
+          `/${path}/search/employee/inflows?id=${searchValue}&limit=20&offset=0&forDisplay=false`
         );
         return results.data[1];
 
       case path === "products" && searchParam === "name":
         results = await axios.get(
-          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=${productType}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=PRODUCT&forDisplay=false`
         );
 
         return results.data[1];
 
       case path === "products" && searchParam === "employee":
         results = await axios.get(
-          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=${productType}&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=PRODUCT&forDisplay=false`
         );
         return results.data[1];
 
       case path === "products":
         results = await axios.get(
-          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=${productType}`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=PRODUCT`
         );
 
         return results.data[1];

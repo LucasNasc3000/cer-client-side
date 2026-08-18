@@ -19,9 +19,15 @@ import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/dataTransfer/actions";
-import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
+import { ErrorIcon, GetDataSpinner } from "../../styles/GlobalStyles";
 import { GetChangedFields } from "../../utils/GetChangedFields";
-import { Btn, InputsContainer, InputsSpace, SearchSpace } from "./styled";
+import {
+  Btn,
+  InputsContainer,
+  InputsSpace,
+  SearchSpace,
+  Spinner,
+} from "./styled";
 
 export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
@@ -331,6 +337,8 @@ export default function InputsCurrent() {
       return;
     }
 
+    console.log(changedFields);
+
     setIsLoadingInputsCurrent(true);
 
     const update = await Update(objectData.id, changedFields, "supplies");
@@ -507,6 +515,26 @@ export default function InputsCurrent() {
                       onChange={(e) => HandleChange(e, input.id)}
                     />
                   </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (data): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.updatedAt.slice(8, 10)}/${input.updatedAt.slice(5, 7)}/${input.updatedAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (hora): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.updatedAt.slice(11, 13)}:${input.updatedAt.slice(14, 16)}:${input.updatedAt.slice(17, 19)}`}
+                      readOnly
+                    />
+                  </div>
                   {permissions.some(
                     (p) => p.resource === "EMPLOYEES" && p.action === "UPDATE"
                   ) ||
@@ -635,6 +663,26 @@ export default function InputsCurrent() {
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />
                   </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (data): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.updatedAt.slice(8, 10)}/${input.updatedAt.slice(5, 7)}/${input.updatedAt.slice(0, 4)}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Última atualização (hora): </div>
+                    <input
+                      type="text"
+                      name="totalprice"
+                      className="data-div"
+                      value={`${input.updatedAt.slice(11, 13)}:${input.updatedAt.slice(14, 16)}:${input.updatedAt.slice(17, 19)}`}
+                      readOnly
+                    />
+                  </div>
                   {permissions.some(
                     (p) => p.resource === "EMPLOYEES" && p.action === "UPDATE"
                   ) ||
@@ -642,20 +690,24 @@ export default function InputsCurrent() {
                     (p) => p.resource === "SUPPLIES" && p.action === "UPDATE"
                   ) ? (
                     <div className="buttons">
-                      <button
-                        type="button"
-                        className="confirm-changes"
-                        onClick={(e) => InputUpdate(e, input)}
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="cancel-changes"
-                        onClick={(e) => clear(e)}
-                      >
-                        Cancelar
-                      </button>
+                      <Btn disabled={isLoadingInputsCurrent}>
+                        <button
+                          type="button"
+                          className="confirm-changes"
+                          onClick={(e) => InputUpdate(e, input)}
+                        >
+                          {isLoadingInputsCurrent ? <Spinner /> : "Salvar"}
+                        </button>
+                      </Btn>
+                      <Btn disabled={isLoadingInputsCurrent}>
+                        <button
+                          type="button"
+                          className="cancel-changes"
+                          onClick={(e) => clear(e)}
+                        >
+                          Cancelar
+                        </button>
+                      </Btn>
                     </div>
                   ) : (
                     ""
