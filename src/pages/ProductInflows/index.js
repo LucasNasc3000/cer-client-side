@@ -9,13 +9,14 @@ import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { MdErrorOutline } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
+import * as actions from "../../store/modules/dataTransfer/actions";
 import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
 import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
 
@@ -24,6 +25,8 @@ export default function ProductInflows() {
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const productName = useSelector((state) => state.dataTransfer.productName);
+
+  const dispatch = useDispatch();
 
   const [searchSecondaryParam, setSearchSecondaryParam] = useState("");
   const [inflowsData, setInflowsData] = useState([]);
@@ -95,6 +98,8 @@ export default function ProductInflows() {
   }, [productName]);
 
   useEffect(() => {
+    if (!searchValueAutoSearch || !productName) return;
+
     async function SearchTheProductInflows() {
       const inArray = [];
 
@@ -103,7 +108,8 @@ export default function ProductInflows() {
         "inflows",
         searchValueAutoSearch,
         null,
-        "products"
+        "product",
+        SPECIFIC_PATH
       );
 
       if (typeof search === "undefined" || !search) return;
@@ -118,7 +124,12 @@ export default function ProductInflows() {
     }
 
     if (searchValueAutoSearch) SearchTheProductInflows();
-  }, [searchInputValue, searchProductParam, searchValueAutoSearch]);
+  }, [
+    searchInputValue,
+    searchProductParam,
+    searchValueAutoSearch,
+    productName,
+  ]);
 
   async function GetInflows() {
     if (!employee_id || !permissions) return;
@@ -163,6 +174,9 @@ export default function ProductInflows() {
     setSearchInputValue("");
     setSearchProductParam("");
     setSearchSecondaryParam("");
+    setSearchValueAutoSearch("");
+
+    dispatch(actions.clearDataTransfer());
   };
 
   function HandleOptionsValue(e) {

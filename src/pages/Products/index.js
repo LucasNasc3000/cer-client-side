@@ -387,8 +387,6 @@ export default function Products() {
       useStockSupplies: useStockSuppliesRedux,
     };
 
-    console.log(data);
-
     const year = data.expirationDate.slice(6, 10);
     const month = data.expirationDate.slice(3, 5);
     const day = data.expirationDate.slice(0, 2);
@@ -399,8 +397,6 @@ export default function Products() {
     setIsLoadingProducts(true);
 
     const register = await Register(data, "products");
-
-    console.log(register);
 
     if (register) {
       dispatch(actions.clearRecipeData());
@@ -559,6 +555,9 @@ export default function Products() {
 
   const Transfer = (e, productNameParam) => {
     e.preventDefault();
+
+    console.log(productNameParam);
+
     dispatch(
       actionsProductDataTransfer.productDataTransfer({
         productName: productNameParam,
@@ -796,7 +795,7 @@ export default function Products() {
                             <button
                               type="button"
                               className="product-inflows"
-                              onClick={(e) => Transfer(e)}
+                              onClick={(e) => Transfer(e, product.name)}
                             >
                               Ver histórico de atualizações
                             </button>

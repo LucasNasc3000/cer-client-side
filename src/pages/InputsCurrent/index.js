@@ -199,6 +199,7 @@ export default function InputsCurrent() {
     setSearchParam("");
     setSearchResults([]);
     setSearchInputValue("");
+    setSearchValueAutoSearch("");
 
     dispatch(actions.clearDataTransfer());
   };
@@ -336,8 +337,6 @@ export default function InputsCurrent() {
       toast.info("Nenhuma alteração detectada");
       return;
     }
-
-    console.log(changedFields);
 
     setIsLoadingInputsCurrent(true);
 

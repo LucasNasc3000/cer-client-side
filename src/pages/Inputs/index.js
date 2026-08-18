@@ -265,6 +265,7 @@ export default function Inputs() {
 
   const Transfer = (e, inputName) => {
     e.preventDefault();
+
     dispatch(actions.inputDataTransfer({ inputName }));
 
     history.push("/inputs/current");
