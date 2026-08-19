@@ -210,13 +210,17 @@ export default function Inputs() {
         null,
         supplySearchPath
       );
-    } else if (searchParam === "price" || searchParam === "totalprice") {
-      const formattedPrice = searchInputValue.replace(",", ".");
+    } else if (
+      searchParam === "price" ||
+      searchParam === "totalprice" ||
+      searchParam === "weightPerUnit"
+    ) {
+      const formattedPWithDot = searchInputValue.replace(",", ".");
 
       search = await DoSearch(
         "supplies",
         searchParam,
-        formattedPrice,
+        formattedPWithDot,
         "SUPPLY_HISTORY",
         null,
         supplySearchPath
@@ -507,13 +511,22 @@ export default function Inputs() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Registrado em: </div>
+                    <div className="label">Data de registro: </div>
                     <input
                       type="text"
                       name="totalprice"
                       className="data-div"
                       value={`${input.createdAt.slice(8, 10)}/${input.createdAt.slice(5, 7)}/${input.createdAt.slice(0, 4)}`}
                       readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Hora de registro: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={`${input.createdAt.slice(11, 13)}:${input.createdAt.slice(14, 16)}:${input.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="buttons">
@@ -644,35 +657,43 @@ export default function Inputs() {
                       />
                     </div>
                   )}
-
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço unitário: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço unitário: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div-price"
+                      className="data-div"
                       value={input.price.replace(".", ",")}
                       readOnly
                     />
                   </div>
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço total: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço total: </div>
                     <input
                       type="text"
                       name="totalprice"
-                      className="data-div-price"
+                      className="data-div"
                       value={input.totalPrice.replace(".", ",")}
                       readOnly
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Registrado em: </div>
+                    <div className="label">Data de registro: </div>
                     <input
                       type="text"
                       name="totalprice"
                       className="data-div"
                       value={`${input.createdAt.slice(8, 10)}/${input.createdAt.slice(5, 7)}/${input.createdAt.slice(0, 4)}`}
                       readOnly
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Hora de registro: </div>
+                    <input
+                      type="text"
+                      name="hour"
+                      className="data-div"
+                      value={`${input.createdAt.slice(11, 13)}:${input.createdAt.slice(14, 16)}:${input.createdAt.slice(17, 19)}`}
                     />
                   </div>
                   <div className="buttons">
