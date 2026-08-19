@@ -6,6 +6,7 @@ import csrfToken from "./csrfToken/reducer";
 import dataTransfer from "./dataTransfer/reducer";
 import editSalesStatus from "./editSalesStatus/reducer";
 import editUnitiesData from "./editUnitiesData/reducer";
+import editUnitiesDataSupplies from "./editUnitiesDataSupplies/reducer";
 import recipeData from "./recipeData/reducer";
 import recipeEdit from "./recipeEdit/reducer";
 import saleItems from "./saleItems/reducer";
@@ -20,6 +21,7 @@ export default combineReducers({
   addIngredientsData,
   recipeEdit,
   csrfToken,
+  editUnitiesDataSupplies,
 });
 
 // Todos os reducers da aplicação serão importados e combinados aqui

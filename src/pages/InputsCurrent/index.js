@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
@@ -13,27 +12,27 @@ import { MdErrorOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
+import { Modal } from "../../components/Modal";
+import { ModalEditUnitiesSuppliesChildren } from "../../components/ModalEditUnitiesSupplies/editUnitiesSupplies";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
 import GetData from "../../services/getData";
 import DoSearch from "../../services/search";
 import Update from "../../services/update";
 import * as actions from "../../store/modules/dataTransfer/actions";
+import * as actionsEditUnitiesSupply from "../../store/modules/editUnitiesDataSupplies/actions";
 import { ErrorIcon, GetDataSpinner } from "../../styles/GlobalStyles";
 import { GetChangedFields } from "../../utils/GetChangedFields";
-import {
-  Btn,
-  InputsContainer,
-  InputsSpace,
-  SearchSpace,
-  Spinner,
-} from "./styled";
+import { InputsContainer, InputsSpace, SearchSpace, Spinner } from "./styled";
 
 export default function InputsCurrent() {
   const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const inputName = useSelector((state) => state.dataTransfer.inputName);
+  const getEditedUnitiesIfExists = useSelector(
+    (state) => state.editUnitiesDataSupplies
+  );
 
   const dispatch = useDispatch();
 
@@ -48,9 +47,10 @@ export default function InputsCurrent() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [openModalId, setOpenModalId] = useState("");
   const [errorGetCredentials, setErrorGetCredentials] = useState(false);
   const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
-  const [isLoadingInputsCurrent, setIsLoadingInputsCurrent] = useState(false);
+  const [isLoadingSupplyUpdate, setIsLoadingSupplyUpdate] = useState(false);
   const [isLoadingGetInputsCurrent, setIsLoadingGetInputsCurrent] =
     useState(false);
 
@@ -349,14 +349,38 @@ export default function InputsCurrent() {
 
     const changedFields = GetChangedFields(original, current);
 
-    if (Object.keys(changedFields).length === 0) {
+    const IsEmptyValue = (value) => {
+      if (Array.isArray(value)) return value.length === 0;
+      if (typeof value === "object" && value !== null) {
+        return Object.keys(value).length === 0;
+      }
+      return (
+        value === 0 || value === "" || value === null || value === undefined
+      );
+    };
+
+    const truthyFieldsEditUnities = Object.fromEntries(
+      Object.entries(getEditedUnitiesIfExists).filter(
+        ([, value]) => !IsEmptyValue(value)
+      )
+    );
+
+    if (
+      Object.keys(changedFields).length === 0 &&
+      Object.keys(truthyFieldsEditUnities).length === 0
+    ) {
       toast.info("Nenhuma alteração detectada");
       return;
     }
 
-    setIsLoadingInputsCurrent(true);
+    const allData = {
+      ...changedFields,
+      ...truthyFieldsEditUnities,
+    };
 
-    const update = await Update(objectData.id, changedFields, "supplies");
+    setIsLoadingSupplyUpdate(true);
+
+    const update = await Update(objectData.id, allData, "supplies");
 
     if (update) {
       setOriginalSuppliesData((prev) => ({
@@ -367,7 +391,9 @@ export default function InputsCurrent() {
       setReRender(update);
     }
 
-    setIsLoadingInputsCurrent(false);
+    dispatch(actionsEditUnitiesSupply.clearUpdateUnitiesSupplyData());
+
+    setIsLoadingSupplyUpdate(false);
   };
 
   return (
@@ -561,33 +587,48 @@ export default function InputsCurrent() {
                     />
                   </div>
                   {permissions.some(
-                    (p) => p.resource === "EMPLOYEES" && p.action === "UPDATE"
-                  ) ||
-                  permissions.some(
                     (p) => p.resource === "SUPPLIES" && p.action === "UPDATE"
-                  ) ? (
-                    <div className="buttons">
-                      <Btn disabled={isLoadingInputsCurrent}>
+                  ) && (
+                    <div className="footer">
+                      <div className="footer-actions">
+                        <Modal
+                          isOpen={openModalId === `unities-${input.id}`}
+                          onClose={() => setOpenModalId(null)}
+                          title={`Editar quantidades do insumo ${input.name}`}
+                        >
+                          <ModalEditUnitiesSuppliesChildren
+                            quantityProp={input.quantity}
+                            savedData={getEditedUnitiesIfExists}
+                          />
+                        </Modal>
+                        <button
+                          type="button"
+                          onClick={() => setOpenModalId(`unities-${input.id}`)}
+                          className="edit-unities"
+                          disabled={isLoadingSupplyUpdate}
+                        >
+                          Editar quantidade
+                        </button>
+                      </div>
+                      <div className="footer-confirm">
                         <button
                           type="button"
                           className="confirm-changes"
                           onClick={(e) => InputUpdate(e, input)}
+                          disabled={isLoadingSupplyUpdate}
                         >
-                          {isLoadingInputsCurrent ? <Spinner /> : "Salvar"}
+                          {isLoadingSupplyUpdate ? <Spinner /> : "Salvar"}
                         </button>
-                      </Btn>
-                      <Btn disabled={isLoadingInputsCurrent}>
                         <button
                           type="button"
                           className="cancel-changes"
                           onClick={(e) => clear(e)}
+                          disabled={isLoadingSupplyUpdate}
                         >
                           Cancelar
                         </button>
-                      </Btn>
+                      </div>
                     </div>
-                  ) : (
-                    ""
                   )}
                 </div>
               );
@@ -719,33 +760,48 @@ export default function InputsCurrent() {
                     />
                   </div>
                   {permissions.some(
-                    (p) => p.resource === "EMPLOYEES" && p.action === "UPDATE"
-                  ) ||
-                  permissions.some(
                     (p) => p.resource === "SUPPLIES" && p.action === "UPDATE"
-                  ) ? (
-                    <div className="buttons">
-                      <Btn disabled={isLoadingInputsCurrent}>
+                  ) && (
+                    <div className="footer">
+                      <div className="footer-actions">
+                        <Modal
+                          isOpen={openModalId === `unities-${input.id}`}
+                          onClose={() => setOpenModalId(null)}
+                          title={`Editar quantidades do insumo ${input.name}`}
+                        >
+                          <ModalEditUnitiesSuppliesChildren
+                            quantityProp={input.quantity}
+                            savedData={getEditedUnitiesIfExists}
+                          />
+                        </Modal>
+                        <button
+                          type="button"
+                          onClick={() => setOpenModalId(`unities-${input.id}`)}
+                          className="edit-unities"
+                          disabled={isLoadingSupplyUpdate}
+                        >
+                          Editar quantidade
+                        </button>
+                      </div>
+                      <div className="footer-confirm">
                         <button
                           type="button"
                           className="confirm-changes"
                           onClick={(e) => InputUpdate(e, input)}
+                          disabled={isLoadingSupplyUpdate}
                         >
-                          {isLoadingInputsCurrent ? <Spinner /> : "Salvar"}
+                          {isLoadingSupplyUpdate ? <Spinner /> : "Salvar"}
                         </button>
-                      </Btn>
-                      <Btn disabled={isLoadingInputsCurrent}>
                         <button
                           type="button"
                           className="cancel-changes"
                           onClick={(e) => clear(e)}
+                          disabled={isLoadingSupplyUpdate}
                         >
                           Cancelar
                         </button>
-                      </Btn>
+                      </div>
                     </div>
-                  ) : (
-                    ""
                   )}
                 </div>
               );

@@ -215,12 +215,12 @@ export default function Inputs() {
       searchParam === "totalprice" ||
       searchParam === "weightPerUnit"
     ) {
-      const formattedPWithDot = searchInputValue.replace(",", ".");
+      const formattedDecimalFieldWithDot = searchInputValue.replace(",", ".");
 
       search = await DoSearch(
         "supplies",
         searchParam,
-        formattedPWithDot,
+        formattedDecimalFieldWithDot,
         "SUPPLY_HISTORY",
         null,
         supplySearchPath
