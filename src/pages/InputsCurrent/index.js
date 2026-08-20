@@ -373,14 +373,35 @@ export default function InputsCurrent() {
       return;
     }
 
+    if (
+      Object.keys(truthyFieldsEditUnities).length > 0 &&
+      changedFields.price
+    ) {
+      toast.error("Preço e quantidade não devem ser editados ao mesmo tempo");
+      return;
+    }
+
     const allData = {
       ...changedFields,
       ...truthyFieldsEditUnities,
     };
 
+    const allDataReplaceCommas = Object.fromEntries(
+      Object.entries(allData).map(([key, value]) => {
+        if (typeof value === "string" && value.includes(",")) {
+          value = value.replace(",", ".");
+        }
+        return [key, value];
+      })
+    );
+
     setIsLoadingSupplyUpdate(true);
 
-    const update = await Update(objectData.id, allData, "supplies");
+    const update = await Update(
+      objectData.id,
+      allDataReplaceCommas,
+      "supplies"
+    );
 
     if (update) {
       setOriginalSuppliesData((prev) => ({
@@ -491,6 +512,7 @@ export default function InputsCurrent() {
                       className="data-div"
                       value={input.quantity}
                       onChange={(e) => HandleChange(e, input.id)}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -501,6 +523,7 @@ export default function InputsCurrent() {
                       className="data-div"
                       value={input.totalWeight.replace(".", ",")}
                       onChange={(e) => HandleChange(e, input.id)}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -664,6 +687,7 @@ export default function InputsCurrent() {
                       className="data-div"
                       value={input.quantity}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -674,6 +698,7 @@ export default function InputsCurrent() {
                       className="data-div"
                       value={input.totalWeight.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -719,12 +744,12 @@ export default function InputsCurrent() {
                       />
                     </div>
                   )}
-                  <div className="data-wrap-price">
-                    <div className="label-price">Preço: </div>
+                  <div className="data-wrap">
+                    <div className="label">Preço: </div>
                     <input
                       type="text"
                       name="price"
-                      className="data-div-price"
+                      className="data-div"
                       value={input.price.replace(".", ",")}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
                     />

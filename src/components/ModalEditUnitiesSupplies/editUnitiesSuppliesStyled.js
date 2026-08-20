@@ -25,6 +25,13 @@ export const ModalEditUnitiesSuppliesContainer = styled.div`
     gap: 10px;
   }
 
+  .sub-quantity-warn {
+    height: 18px;
+    width: fit-content;
+    font-size: 14px;
+    color: red;
+  }
+
   @media (max-width: ${breakpoints.mobile}) {
     .details-wrapper {
       width: 100%;

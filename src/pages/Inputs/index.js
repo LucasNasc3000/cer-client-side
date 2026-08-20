@@ -286,9 +286,18 @@ export default function Inputs() {
     data.expirationDate = `${year}-${month}-${day}`;
     data.price = data.price.replace(",", ".");
 
+    const allDataReplaceCommas = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => {
+        if (typeof value === "string" && value.includes(",")) {
+          value = value.replace(",", ".");
+        }
+        return [key, value];
+      })
+    );
+
     setIsLoadingInputs(true);
 
-    const register = await Register(data, "supplies");
+    const register = await Register(allDataReplaceCommas, "supplies");
 
     if (register) {
       setReRender(register);
@@ -694,6 +703,7 @@ export default function Inputs() {
                       name="hour"
                       className="data-div"
                       value={`${input.createdAt.slice(11, 13)}:${input.createdAt.slice(14, 16)}:${input.createdAt.slice(17, 19)}`}
+                      readOnly
                     />
                   </div>
                   <div className="buttons">
@@ -718,12 +728,8 @@ export default function Inputs() {
           >
             <option value="">Motivo</option>
             <option value="entrada">Entrada</option>
-            <option value="reposicao">Reposição</option>
-            <option value="ajuste">Ajuste</option>
             <option value="doacao">Doação</option>
             <option value="transferencia">Transferência</option>
-            <option value="correcao de perda">Correção de perda</option>
-            <option value="correcao de escrita">Correção de escrita</option>
           </select>
         </div>
         <input

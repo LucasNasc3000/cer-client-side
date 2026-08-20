@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import * as actions from "../../store/modules/editUnitiesDataSupplies/actions";
@@ -13,6 +13,15 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
   );
   const [reason, setReason] = useState(savedData?.reason || "");
   const [details, setDetails] = useState(savedData?.details || "");
+  const [subQuantityWarn, setSubQuantityWarn] = useState(false);
+
+  useEffect(() => {
+    if (Number(unities) < quantityProp) {
+      setSubQuantityWarn(true);
+    } else {
+      setSubQuantityWarn(false);
+    }
+  }, [quantityProp, subQuantityWarn, unities]);
 
   const Cancel = (e) => {
     e.preventDefault();
@@ -32,13 +41,18 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
       return;
     }
 
+    if (Number(unities) < quantityProp) {
+      toast.error("Saídas não devem ser registradas nesta página");
+      return;
+    }
+
     if (unities === quantityProp) {
-      toast.error("Nenhuma mudança detectada");
+      toast.info("Nenhuma mudança detectada");
       return;
     }
 
     const editUnitiesSupplyData = {
-      quantity: quantityProp,
+      quantity: unities,
       reason,
       details: details || "",
     };
@@ -62,6 +76,11 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
           onChange={(e) => setUnities(e.target.value)}
           value={unities}
         />
+        {subQuantityWarn && (
+          <p className="sub-quantity-warn">
+            Saídas de insumos devem ser feitas na página de saídas
+          </p>
+        )}
       </div>
 
       <div className="reason-wrapper">
