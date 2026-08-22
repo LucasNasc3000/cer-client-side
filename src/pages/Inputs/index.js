@@ -213,6 +213,7 @@ export default function Inputs() {
     } else if (
       searchParam === "price" ||
       searchParam === "totalprice" ||
+      searchParam === "totalweightPerRegister" ||
       searchParam === "weightPerUnit"
     ) {
       const formattedDecimalFieldWithDot = searchInputValue.replace(",", ".");
@@ -299,9 +300,7 @@ export default function Inputs() {
 
     const register = await Register(allDataReplaceCommas, "supplies");
 
-    if (register) {
-      setReRender(register);
-    }
+    if (register) setReRender(register);
 
     setIsLoadingInputs(false);
   };

@@ -22,7 +22,9 @@ export default async function DoSearch(
     let results = "";
 
     switch (true) {
-      case searchParam === "employee":
+      case path !== "products" &&
+        path !== "supplies" &&
+        searchParam === "employee":
         results = await axios.get(
           `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&forDisplay=false`
         );

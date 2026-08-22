@@ -281,13 +281,13 @@ export default function InputsCurrent() {
         null,
         GENERAL_PATH
       );
-    } else if (searchParam === "price") {
-      const formattedPrice = searchInputValue.replace(",", ".");
+    } else if (searchParam === "price" || searchParam === "weightPerUnit") {
+      const formattedWithDot = searchInputValue.replace(",", ".");
 
       search = await DoSearch(
         "supplies",
         searchParam,
-        formattedPrice,
+        formattedWithDot,
         "SUPPLY_REAL_TIME",
         null,
         GENERAL_PATH
@@ -457,7 +457,6 @@ export default function InputsCurrent() {
             <option value="">Selecione</option>
             <option value="category">Categoria</option>
             <option value="name">Nome</option>
-            <option value="quantity">Quantidade</option>
             <option value="weightPerUnit">Peso unitário</option>
             <option value="supplier">Fornecedor</option>
             <option value="expirationDate">Validade</option>

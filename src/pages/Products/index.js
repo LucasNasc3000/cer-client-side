@@ -125,15 +125,17 @@ export default function Products() {
   }, [headerid, emailStored, employee_id]);
 
   useEffect(() => {
-    if (productName) {
-      setSearchValueAutoSearch(productName);
-      setSearchParam("name");
-    }
+    if (!productName) return;
+
+    setSearchValueAutoSearch(productName);
+    setSearchParam("name");
   }, [productName]);
 
   useEffect(() => {
     async function SearchTheProduct() {
       const inArray = [];
+
+      setIsLoadingGetProducts(true);
 
       const search = await DoSearch(
         "products",
@@ -155,6 +157,8 @@ export default function Products() {
       inArray.push(search);
       setSearchResults(inArray);
       setSearchResultsBackup(inArray);
+
+      setIsLoadingGetProducts(false);
     }
 
     if (searchValueAutoSearch) SearchTheProduct();
@@ -582,7 +586,9 @@ export default function Products() {
             type="text"
             placeholder="Pesquisar..."
             className="product-search"
-            value={searchInputValue}
+            value={
+              searchValueAutoSearch !== "" ? productName : searchInputValue
+            }
             onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>

@@ -16,12 +16,13 @@ import history from "../../services/history";
 import Register from "../../services/register";
 import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/dataTransfer/actions";
-import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
+import { ErrorIcon, GetDataSpinner } from "../../styles/GlobalStyles";
 import {
   NewOutput,
   OutputsContainer,
   OutputsSpace,
   SearchSpace,
+  Spinner,
 } from "./styled";
 
 export default function Outputs() {
@@ -37,6 +38,7 @@ export default function Outputs() {
   const [unities, setUnities] = useState("");
   const [reason, setReason] = useState("");
   const [notes, setNotes] = useState("");
+  const [unitOrWeight, setUnitOrWeight] = useState("");
   const [searchParam, setSearchParam] = useState("");
   const [outputsData, setOutputsData] = useState([]);
   const [outputsDataBackup, setOutputsDataBackup] = useState([]);
@@ -46,6 +48,7 @@ export default function Outputs() {
   const [bossId, setBossId] = useState("");
   const [employee_id, setEmployeeId] = useState("");
   const [rerender, setReRender] = useState(false);
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const [isLoadingGetOutflows, setIsLoadingGetOutflows] = useState(false);
   const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
   const [errorGetCredentials, setErrorGetCredentials] = useState(false);
@@ -233,12 +236,16 @@ export default function Outputs() {
       return;
     }
 
+    setIsLoadingRegister(true);
+
     const register = await Register(
       data,
       `outflows-${data.targetType.toLowerCase()}`
     );
 
-    setReRender(register);
+    if (register) setReRender(register);
+
+    setIsLoadingRegister(false);
   };
 
   const Transfer = (e, outflow) => {
@@ -326,6 +333,7 @@ export default function Outputs() {
                       name="date"
                       className="data-div"
                       value={`${output.createdAt.slice(8, 10)}/${output.createdAt.slice(5, 7)}/${output.createdAt.slice(0, 4)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -335,6 +343,7 @@ export default function Outputs() {
                       name="hour"
                       className="data-div"
                       value={`${output.createdAt.slice(11, 13)}:${output.createdAt.slice(14, 16)}:${output.createdAt.slice(17, 19)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -344,6 +353,7 @@ export default function Outputs() {
                       name="name"
                       className="data-div"
                       value={output.name}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -353,6 +363,7 @@ export default function Outputs() {
                       name="category"
                       className="data-div"
                       value={output.category}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -362,6 +373,7 @@ export default function Outputs() {
                       name="unities"
                       className="data-div"
                       value={output.unities}
+                      readOnly
                     />
                   </div>
                   {permissions.some(
@@ -373,6 +385,7 @@ export default function Outputs() {
                         type="text"
                         className="data-div"
                         value={output.employee.id}
+                        readOnly
                       />
                     </div>
                   )}
@@ -418,6 +431,7 @@ export default function Outputs() {
                       name="date"
                       className="data-div"
                       value={`${output.createdAt.slice(8, 10)}/${output.createdAt.slice(5, 7)}/${output.createdAt.slice(0, 4)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -427,6 +441,7 @@ export default function Outputs() {
                       name="hour"
                       className="data-div"
                       value={`${output.createdAt.slice(11, 13)}:${output.createdAt.slice(14, 16)}:${output.createdAt.slice(17, 19)}`}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -436,6 +451,7 @@ export default function Outputs() {
                       name="name"
                       className="data-div"
                       value={output.name}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -445,6 +461,7 @@ export default function Outputs() {
                       name="category"
                       className="data-div"
                       value={output.category}
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -454,6 +471,7 @@ export default function Outputs() {
                       name="unities"
                       className="data-div"
                       value={output.unities}
+                      readOnly
                     />
                   </div>
                   {permissions.some(
@@ -465,6 +483,7 @@ export default function Outputs() {
                         type="text"
                         className="data-div"
                         value={output.employee.id}
+                        readOnly
                       />
                     </div>
                   )}
@@ -514,7 +533,6 @@ export default function Outputs() {
             <option value="danificado">Danificado</option>
             <option value="roubado">Roubado</option>
             <option value="desperdício">Desperdício</option>
-            <option value="erro de digitacao">Erro de digitacao</option>
             <option value="outro">Outro</option>
           </select>
           <select
@@ -526,6 +544,18 @@ export default function Outputs() {
             <option value="produto">Produto</option>
             <option value="insumo">Insumo</option>
           </select>
+          <select
+            className="options-unit-new-outflow"
+            onChange={(e) => setUnitOrWeight(e.target.value)}
+            value={unitOrWeight}
+          >
+            <option value="">Selecionar medida</option>
+            <option value="unidades">unidade</option>
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+            <option value="kg">kg</option>
+            <option value="L">L</option>
+          </select>
         </div>
         <input
           type="text"
@@ -533,6 +563,7 @@ export default function Outputs() {
           placeholder="Nome ex: abacaxi"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          disabled={targetType === ""}
         />
         <input
           type="text"
@@ -540,13 +571,19 @@ export default function Outputs() {
           placeholder="Categoria ex: fruta"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          disabled={targetType === ""}
         />
         <input
-          type="text"
+          type={targetType === "produto" ? "number" : "text"}
           id="unities"
-          placeholder="Unidades ex: 15"
+          placeholder={
+            targetType === "produto"
+              ? "Unidades ex: 12"
+              : "Quantidade em gramas ex: 200"
+          }
           value={unities}
           onChange={(e) => setUnities(e.target.value)}
+          disabled={targetType === ""}
         />
         <div className="notes-wrapper">
           <p className="notes-label">Notas: </p>
@@ -558,6 +595,7 @@ export default function Outputs() {
             onChange={(e) => setNotes(e.target.value)}
             value={notes}
             placeholder="Detalhes ex: produto mal armazenado etc..."
+            disabled={targetType === ""}
           />
         </div>
         <button type="button" className="btn" onClick={clear}>
@@ -568,7 +606,7 @@ export default function Outputs() {
           className="btn"
           onClick={(e) => OutputRegister(e)}
         >
-          Adicionar
+          {isLoadingRegister ? <Spinner /> : "Adicionar"}
         </button>
       </NewOutput>
     </OutputsContainer>

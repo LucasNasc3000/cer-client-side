@@ -77,7 +77,7 @@ export default async function Update(id, data, path) {
           return false;
 
         case err && errors.length < 1:
-          toast.error(`Erro desconhecido ao tentar atualizar ${path}`);
+          toast.error("Erro desconhecido ao tentar atualizar registro");
           return false;
       }
     }

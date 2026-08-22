@@ -96,7 +96,6 @@ export const Spinner = styled.div`
 `;
 
 export const GetDataSpinner = styled.div`
-  margin-top: 100px;
   width: 120px;
   height: 120px;
   border: 2.5px solid rgba(72, 71, 71, 0.4);

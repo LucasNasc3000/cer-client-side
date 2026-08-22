@@ -41,7 +41,7 @@ export default function Login() {
 
   return (
     <FormContainer>
-      <Title>Login</Title>
+      <Title>Entrar</Title>
 
       <Form onSubmit={handleSubmit}>
         <input

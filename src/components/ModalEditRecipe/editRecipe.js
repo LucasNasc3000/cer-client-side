@@ -225,7 +225,7 @@ export function ModalEditRecipeChildren({ productId }) {
 
       <div className="button-wrapper">
         <button type="button" className="add" onClick={(e) => Save(e)}>
-          Adicionar
+          Salvar
         </button>
         <button type="button" className="cancel" onClick={(e) => Clear(e)}>
           Cancelar

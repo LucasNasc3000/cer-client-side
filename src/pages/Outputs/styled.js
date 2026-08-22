@@ -232,23 +232,12 @@ export const OutputsSpace = styled.div`
     margin-top: 40px;
     margin-right: 150px;
     margin-left: 120px;
+    border-radius: 4px;
     gap: 20px;
     width: fit-content;
     font-weight: 400;
     font-size: 15px;
     background: ${colors.primaryColor};
-  }
-
-  .real-time-stock-btn {
-    display: flex;
-    position: relative;
-    background-color: #a5a4a4ff;
-    bottom: 0px;
-    width: 230px;
-    left: 10px;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 15px;
   }
 
   .edit-icon:hover {
@@ -334,7 +323,7 @@ export const NewOutput = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  bottom: 1225px;
+  bottom: 1235px;
   left: 1230px;
   height: fit-content;
   width: fit-content;
@@ -348,6 +337,7 @@ export const NewOutput = styled.div`
     border-left: none;
     border-right: none;
     border-bottom: 0.5px solid black;
+    font-size: 12px;
   }
 
   .options-outflow {
@@ -365,6 +355,18 @@ export const NewOutput = styled.div`
     background-color: #dad7d7ff;
     height: 30px;
     font-size: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 6px;
+    font-family: ${fontStack};
+  }
+
+  .options-unit-new-outflow {
+    display: flex;
+    background-color: #dad7d7ff;
+    height: 30px;
+    font-size: 15px;
+    margin-top: 10px;
     padding: 5px;
     border: none;
     border-radius: 6px;
@@ -415,6 +417,21 @@ export const NewOutput = styled.div`
 
     input {
       width: 100%;
+    }
+  }
+`;
+
+export const Spinner = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(153, 150, 150, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
 `;
