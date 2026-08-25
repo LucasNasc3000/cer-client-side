@@ -2,6 +2,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-return */
 /* eslint-disable no-plusplus */
+import Decimal from "decimal.js";
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
@@ -223,17 +224,30 @@ export default function Outputs() {
       name,
       category,
       reason,
-      unities,
       notes: notes || null,
     };
 
     if (data.targetType === "produto") {
       data.targetType = "PRODUCT";
+      data.unities = Number(unities);
     } else if (data.targetType === "insumo") {
       data.targetType = "SUPPLY";
+
+      if (unitOrWeight === "kg" || unitOrWeight === "L") {
+        const toGrams = new Decimal(unitOrWeight).mul(1000).toString();
+        setUnitOrWeight(toGrams);
+      }
+
+      data.quantity = unities;
     } else {
       toast.error("O tipo de saída deve ser 'produto' ou 'insumo'");
       return;
+    }
+
+    if (unitOrWeight === "unidades") {
+      data.isUnitForSupply = true;
+    } else {
+      data.isUnitForSupply = false;
     }
 
     setIsLoadingRegister(true);
@@ -367,12 +381,20 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Unidades: </div>
+                    <div className="label">
+                      {output.targetType === "PRODUCT"
+                        ? "Unidades: "
+                        : "Quantidade: "}
+                    </div>
                     <input
                       type="text"
                       name="unities"
                       className="data-div"
-                      value={output.unities}
+                      value={
+                        output.targetType === "PRODUCT"
+                          ? output.unities
+                          : output.quantity
+                      }
                       readOnly
                     />
                   </div>
@@ -465,12 +487,20 @@ export default function Outputs() {
                     />
                   </div>
                   <div className="data-wrap">
-                    <div className="label">Unidades: </div>
+                    <div className="label">
+                      {output.targetType === "PRODUCT"
+                        ? "Unidades: "
+                        : "Quantidade: "}
+                    </div>
                     <input
                       type="text"
                       name="unities"
                       className="data-div"
-                      value={output.unities}
+                      value={
+                        output.targetType === "PRODUCT"
+                          ? output.unities
+                          : output.quantity
+                      }
                       readOnly
                     />
                   </div>
@@ -576,11 +606,7 @@ export default function Outputs() {
         <input
           type={targetType === "produto" ? "number" : "text"}
           id="unities"
-          placeholder={
-            targetType === "produto"
-              ? "Unidades ex: 12"
-              : "Quantidade em gramas ex: 200"
-          }
+          placeholder="Quantidade"
           value={unities}
           onChange={(e) => setUnities(e.target.value)}
           disabled={targetType === ""}

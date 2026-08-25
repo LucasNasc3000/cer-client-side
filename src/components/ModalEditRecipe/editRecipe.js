@@ -191,7 +191,7 @@ export function ModalEditRecipeChildren({ productId }) {
             <div key={ingredient.id} className="data-wrap">
               <div className="name">{ingredient.supplyRealTime.name}</div>
               <input
-                type="number"
+                type="text"
                 className="quantity"
                 name="quantity"
                 value={ingredient.quantity}

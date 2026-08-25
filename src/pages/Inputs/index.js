@@ -267,6 +267,11 @@ export default function Inputs() {
       return;
     }
 
+    if (!reason) {
+      toast.error("Motivo não especificado");
+      return;
+    }
+
     const data = {
       category,
       name,
