@@ -174,7 +174,7 @@ export default function InputsCurrent() {
   useEffect(() => {
     setTimeout(() => {
       setReRender(true);
-    }, 120000);
+    }, 180000);
   });
 
   useEffect(() => {
@@ -395,6 +395,16 @@ export default function InputsCurrent() {
       })
     );
 
+    if (allDataReplaceCommas.expirationDate) {
+      const year = allDataReplaceCommas.expirationDate.slice(6, 10);
+      const month = allDataReplaceCommas.expirationDate.slice(3, 5);
+      const day = allDataReplaceCommas.expirationDate.slice(0, 2);
+
+      const formattedDate = `${year}-${month}-${day}`;
+
+      allDataReplaceCommas.expirationDate = formattedDate;
+    }
+
     setIsLoadingSupplyUpdate(true);
 
     const update = await Update(
@@ -543,6 +553,20 @@ export default function InputsCurrent() {
                       className="data-div"
                       value={input.supplier}
                       onChange={(e) => HandleChange(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Validade: </div>
+                    <input
+                      type="text"
+                      name="expirationDate"
+                      className="data-div"
+                      value={
+                        input.expirationDate !== null
+                          ? `${input.expirationDate.slice(8, 10)}/${input.expirationDate.slice(5, 7)}/${input.expirationDate.slice(0, 4)}`
+                          : "Não especificado"
+                      }
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">
@@ -718,6 +742,20 @@ export default function InputsCurrent() {
                       className="data-div"
                       value={input.supplier}
                       onChange={(e) => HandleChangeSearch(e, input.id)}
+                    />
+                  </div>
+                  <div className="data-wrap">
+                    <div className="label">Validade: </div>
+                    <input
+                      type="text"
+                      name="expirationDate"
+                      className="data-div"
+                      value={
+                        input.expirationDate !== null
+                          ? `${input.expirationDate.slice(8, 10)}/${input.expirationDate.slice(5, 7)}/${input.expirationDate.slice(0, 4)}`
+                          : "Não especificado"
+                      }
+                      readOnly
                     />
                   </div>
                   <div className="data-wrap">

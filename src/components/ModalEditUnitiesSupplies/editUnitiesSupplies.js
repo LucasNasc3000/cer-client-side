@@ -11,6 +11,7 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
   const [unities, setUnities] = useState(
     savedData?.quantity > 0 ? savedData.quantity : quantityProp
   );
+  const [newExpirationDate, setNewExpirationDate] = useState("");
   const [reason, setReason] = useState(savedData?.reason || "");
   const [details, setDetails] = useState(savedData?.details || "");
   const [subQuantityWarn, setSubQuantityWarn] = useState(false);
@@ -27,6 +28,7 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
     e.preventDefault();
 
     setUnities(quantityProp);
+    setNewExpirationDate("");
     setDetails("");
     setReason("");
 
@@ -46,7 +48,7 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
       return;
     }
 
-    if (unities === quantityProp) {
+    if (unities === quantityProp && !newExpirationDate) {
       toast.info("Nenhuma mudança detectada");
       return;
     }
@@ -55,6 +57,7 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
       quantity: unities,
       reason,
       details: details || "",
+      expirationDate: newExpirationDate,
     };
 
     dispatch(
@@ -69,6 +72,13 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
   return (
     <ModalEditUnitiesSuppliesContainer>
       <div className="unities-wrapper">
+        <p className="new-expiration-date-label">Atualizar validade: </p>
+        <input
+          type="text"
+          className="new-expiration-date"
+          onChange={(e) => setNewExpirationDate(e.target.value)}
+          value={newExpirationDate}
+        />
         <p className="current-unities-label">Quantidade: </p>
         <input
           type="number"
@@ -98,6 +108,7 @@ export function ModalEditUnitiesSuppliesChildren({ quantityProp, savedData }) {
           <option value="reposicao">reposição</option>
           <option value="ajuste">ajuste</option>
           <option value="doacao">doação</option>
+          <option value="edicao de validade">edição de validade</option>
           <option value="correcao de perda">correção de perda</option>
           <option value="outro">outro</option>
         </select>
