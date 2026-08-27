@@ -234,7 +234,7 @@ export default function Outputs() {
       data.targetType = "SUPPLY";
 
       if (unitOrWeight === "kg" || unitOrWeight === "L") {
-        const toGrams = new Decimal(unitOrWeight).mul(1000).toString();
+        const toGrams = new Decimal(unities).mul(1000).toString();
         setUnitOrWeight(toGrams);
       }
 
@@ -393,7 +393,7 @@ export default function Outputs() {
                       value={
                         output.targetType === "PRODUCT"
                           ? output.unities
-                          : output.quantity
+                          : `${output.quantity} g/ml`
                       }
                       readOnly
                     />
@@ -499,7 +499,7 @@ export default function Outputs() {
                       value={
                         output.targetType === "PRODUCT"
                           ? output.unities
-                          : output.quantity
+                          : `${output.quantity} g/ml`
                       }
                       readOnly
                     />
