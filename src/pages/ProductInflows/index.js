@@ -524,7 +524,7 @@ export default function ProductInflows() {
                       type="text"
                       name="expirationDate"
                       className="data-div"
-                      value={inflow.expirationDate}
+                      value={`${inflow.expirationDate.slice(8, 10)}/${inflow.expirationDate.slice(5, 7)}/${inflow.expirationDate.slice(0, 4)}`}
                       readOnly
                     />
                   </div>
