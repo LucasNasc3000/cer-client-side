@@ -398,21 +398,17 @@ export default function Sales() {
             className="options"
             id="filter-select"
             onChange={(e) => setSearchParam(e.target.value)}
+            value={searchParam}
           >
             <option value="">Selecione</option>
-            <option value="date">Date</option>
+            <option value="date">Data de registro</option>
             <option value="hour">Hora</option>
             <option value="clientName">Nome cliente</option>
-            <option value="clientEmail">E-mail cliente</option>
-            <option value="phoneNumber">Telefone</option>
             <option value="address">Endereço</option>
-            <option value="products">Produtos</option>
 
             {permissions.some(
               (p) => p.action === "UPDATE" && p.resource === "EMPLOYEES"
             ) && <option value="employee">Funcionário</option>}
-
-            <option value="price">Preço</option>
           </select>
         </div>
       </SearchSpace>

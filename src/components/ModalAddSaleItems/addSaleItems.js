@@ -139,6 +139,7 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
     setSaleItemsToShowFromRedux([]);
     setDifference(0);
     setLowStockWarn(false);
+    setPlatformName("");
   };
 
   const PartialClerDirectExecution = () => {
@@ -204,7 +205,11 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
   function PreSave(e) {
     e.preventDefault();
 
-    if (!quantity || Object.values(productData).every((value) => !value)) {
+    if (
+      !quantity ||
+      quantity < 1 ||
+      Object.values(productData).every((value) => !value)
+    ) {
       toast.error("Quantidade não especificada ou produto não escolhido");
       return;
     }
@@ -306,18 +311,16 @@ export function ModalAddSaleItemsChildren({ employeeId, bossId }) {
       <div className="platform-wrapper">
         <p className="platform-label">Vincular à plataforma</p>
 
-        {platforms.map((platform) => {
-          return (
-            <select
-              className="options"
-              onChange={(e) => setPlatformName(e.target.value)}
-              value={platformName}
-            >
-              <option value="">Selecionar</option>
-              <option value={platform.name}>{platform.name}</option>
-            </select>
-          );
-        })}
+        <select
+          className="options"
+          onChange={(e) => setPlatformName(e.target.value)}
+          value={platformName}
+        >
+          <option value="">Selecione</option>
+          {platforms.map((platform) => {
+            return <option value={platform.name}>{platform.name}</option>;
+          })}
+        </select>
       </div>
 
       <div className="button-wrapper">

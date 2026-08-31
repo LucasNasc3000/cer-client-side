@@ -82,45 +82,69 @@ export function ModalRecipeChildren({ isAlreadyRegisteredProduct }) {
   }, [getRecipeDataIfExists]);
 
   useEffect(() => {
-    if (!unitOrWeight || !quantity || Object.keys(supplyData).length === 0) {
-      return;
+    function QuantityCalculate() {
+      try {
+        const alphabetWithAnyLetterAndSpaceRegex = /^[A-Za-z]+$/;
+
+        if (
+          !unitOrWeight ||
+          !quantity ||
+          Object.keys(supplyData).length === 0
+        ) {
+          return;
+        }
+
+        if (!difference) setLowStockWarn(false);
+
+        if (alphabetWithAnyLetterAndSpaceRegex.test(quantity)) {
+          toast.error("A quantidade deve ter somente números");
+          return;
+        }
+
+        const decimalQuantity = new Decimal(quantity);
+        const decimalSupplyDataQuantity = new Decimal(supplyData.quantity);
+        const decimalTotalWeight = new Decimal(supplyData.totalWeight);
+
+        // eslint-disable-next-line default-case
+        switch (unitOrWeight) {
+          case "g":
+          case "ml":
+            const subTotalWeight = decimalTotalWeight.sub(decimalQuantity);
+            setDifference(subTotalWeight.toString());
+            break;
+
+          case "unidades":
+            const subQuantity = decimalSupplyDataQuantity.sub(decimalQuantity);
+            setDifference(subQuantity.toString());
+            break;
+
+          case "L":
+          case "kg":
+            const mulQuantity = decimalQuantity.mul(1000);
+
+            const subTotalWeightMultiplied =
+              decimalTotalWeight.sub(mulQuantity);
+
+            setDifference(subTotalWeightMultiplied.toString());
+            break;
+        }
+
+        if (difference && Number(difference) < 0) {
+          setLowStockWarn(true);
+          return;
+        }
+
+        setLowStockWarn(false);
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error("Erro desconhecido ao definir quantidade");
+        }
+      }
     }
 
-    if (!difference) setLowStockWarn(false);
-
-    const decimalQuantity = new Decimal(quantity);
-    const decimalSupplyDataQuantity = new Decimal(supplyData.quantity);
-    const decimalTotalWeight = new Decimal(supplyData.totalWeight);
-
-    // eslint-disable-next-line default-case
-    switch (unitOrWeight) {
-      case "g":
-      case "ml":
-        const subTotalWeight = decimalTotalWeight.sub(decimalQuantity);
-        setDifference(subTotalWeight.toString());
-        break;
-
-      case "unidades":
-        const subQuantity = decimalSupplyDataQuantity.sub(decimalQuantity);
-        setDifference(subQuantity.toString());
-        break;
-
-      case "L":
-      case "kg":
-        const mulQuantity = decimalQuantity.mul(1000);
-
-        const subTotalWeightMultiplied = decimalTotalWeight.sub(mulQuantity);
-
-        setDifference(subTotalWeightMultiplied.toString());
-        break;
-    }
-
-    if (difference && Number(difference) < 0) {
-      setLowStockWarn(true);
-      return;
-    }
-
-    setLowStockWarn(false);
+    QuantityCalculate();
   }, [quantity, supplyData, unitOrWeight, difference]);
 
   const ClerDirectExecution = () => {
@@ -308,8 +332,8 @@ export function ModalRecipeChildren({ isAlreadyRegisteredProduct }) {
         />
         {lowStockWarn && (
           <p className="low-stock-warn">
-            Estoque insuficiente: {supplyData.quantity} unidades restantes (
-            {supplyData.totalWeight} g/ml)
+            Estoque insuficiente: {String(supplyData.quantity)} unidades
+            restantes ({supplyData.totalWeight} g/ml)
           </p>
         )}
       </div>
