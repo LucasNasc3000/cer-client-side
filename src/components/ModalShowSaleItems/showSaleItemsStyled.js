@@ -39,6 +39,11 @@ export const ModalShowSaleItemsContainer = styled.div`
     text-align: center;
   }
 
+  .total-price-per-item {
+    width: 80px;
+    text-align: center;
+  }
+
   @media (max-width: ${breakpoints.mobile}) {
     .data-wrap {
       gap: 8px;
