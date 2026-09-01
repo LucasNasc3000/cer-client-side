@@ -272,6 +272,7 @@ export function ModalRecipeChildren({ isAlreadyRegisteredProduct }) {
       supplyId: supplyData.id,
       name: supplyData.name,
       quantity: formattedQuantity,
+      quantityToShow: quantity,
       unit: unitOrWeight,
     };
 
@@ -345,7 +346,7 @@ export function ModalRecipeChildren({ isAlreadyRegisteredProduct }) {
                 <div key={item.supplyId} className="supply-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
-                    <div className="quantity">{item.quantity}</div>
+                    <div className="quantity">{item.quantityToShow}</div>
                     <div className="unit-type">{item.unit}</div>
                     <button
                       type="button"
@@ -363,7 +364,7 @@ export function ModalRecipeChildren({ isAlreadyRegisteredProduct }) {
                 <div key={item.supplyId} className="supply-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
-                    <div className="quantity">{item.quantity}</div>
+                    <div className="quantity">{item.quantityToShow}</div>
                     <div className="unit-type">{item.unit}</div>
                     <button
                       type="button"

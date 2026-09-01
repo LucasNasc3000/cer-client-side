@@ -145,7 +145,6 @@ export function ModalEditUnitiesChildren({ currentUnities, savedData }) {
           >
             <option value="">Selecionar motivo</option>
             <option value="entrada">entrada</option>
-            <option value="compra de fornecedor">compra de fornecedor</option>
             <option value="ajuste de inventario">ajuste de inventario</option>
             <option value="devolucao">devolucao</option>
             <option value="correcao de erro">correcao de erro</option>

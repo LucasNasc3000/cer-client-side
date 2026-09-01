@@ -95,45 +95,69 @@ export function ModalAddIngredientsChildren({ productData }) {
   }, [inputSearchValue]);
 
   useEffect(() => {
-    if (!unitOrWeight || !quantity || Object.keys(supplyData).length === 0) {
-      return;
+    function QuantityCalculate() {
+      try {
+        const alphabetWithAnyLetterAndSpaceRegex = /^[A-Za-z]+$/;
+
+        if (
+          !unitOrWeight ||
+          !quantity ||
+          Object.keys(supplyData).length === 0
+        ) {
+          return;
+        }
+
+        if (!difference) setLowStockWarn(false);
+
+        if (alphabetWithAnyLetterAndSpaceRegex.test(quantity)) {
+          toast.error("A quantidade deve ter somente números");
+          return;
+        }
+
+        const decimalQuantity = new Decimal(quantity);
+        const decimalSupplyDataQuantity = new Decimal(supplyData.quantity);
+        const decimalTotalWeight = new Decimal(supplyData.totalWeight);
+
+        // eslint-disable-next-line default-case
+        switch (unitOrWeight) {
+          case "g":
+          case "ml":
+            const subTotalWeight = decimalTotalWeight.sub(decimalQuantity);
+            setDifference(subTotalWeight.toString());
+            break;
+
+          case "unidades":
+            const subQuantity = decimalSupplyDataQuantity.sub(decimalQuantity);
+            setDifference(subQuantity.toString());
+            break;
+
+          case "L":
+          case "kg":
+            const mulQuantity = decimalQuantity.mul(1000);
+
+            const subTotalWeightMultiplied =
+              decimalTotalWeight.sub(mulQuantity);
+
+            setDifference(subTotalWeightMultiplied.toString());
+            break;
+        }
+
+        if (difference && Number(difference) < 0) {
+          setLowStockWarn(true);
+          return;
+        }
+
+        setLowStockWarn(false);
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error("Erro desconhecido ao definir quantidade");
+        }
+      }
     }
 
-    if (!difference) setLowStockWarn(false);
-
-    const decimalQuantity = new Decimal(quantity);
-    const decimalSupplyDataQuantity = new Decimal(supplyData.quantity);
-    const decimalTotalWeight = new Decimal(supplyData.totalWeight);
-
-    // eslint-disable-next-line default-case
-    switch (unitOrWeight) {
-      case "g":
-      case "ml":
-        const subTotalWeight = decimalTotalWeight.sub(decimalQuantity);
-        setDifference(subTotalWeight.toString());
-        break;
-
-      case "unidades":
-        const subQuantity = decimalSupplyDataQuantity.sub(decimalQuantity);
-        setDifference(subQuantity.toString());
-        break;
-
-      case "L":
-      case "kg":
-        const mulQuantity = decimalQuantity.mul(1000);
-
-        const subTotalWeightMultiplied = decimalTotalWeight.sub(mulQuantity);
-
-        setDifference(subTotalWeightMultiplied.toString());
-        break;
-    }
-
-    if (difference && Number(difference) < 0) {
-      setLowStockWarn(true);
-      return;
-    }
-
-    setLowStockWarn(false);
+    QuantityCalculate();
   }, [quantity, supplyData, unitOrWeight, difference]);
 
   useEffect(() => {
@@ -154,7 +178,7 @@ export function ModalAddIngredientsChildren({ productData }) {
     setDifference("");
   };
 
-  const PartialClerDirectExecution = () => {
+  const PartialClearDirectExecution = () => {
     setQuantity("");
     setInputSearchValue("");
     setSearchResults([]);
@@ -216,13 +240,6 @@ export function ModalAddIngredientsChildren({ productData }) {
     setIngredientsToShow([...localRITS]);
   };
 
-  const HandleUseStockSupplies = () => {
-    setUseStockSupplies((prev) => {
-      const nextValue = prev === false;
-      return nextValue;
-    });
-  };
-
   function PreSave(e) {
     e.preventDefault();
 
@@ -268,6 +285,7 @@ export function ModalAddIngredientsChildren({ productData }) {
       supplyId: supplyData.id,
       name: supplyData.name,
       quantity: formattedQuantity,
+      quantityToShow: quantity,
       unit: unitOrWeight,
     };
 
@@ -341,7 +359,7 @@ export function ModalAddIngredientsChildren({ productData }) {
                 <div key={item.supplyId} className="supply-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
-                    <div className="quantity">{item.quantity}</div>
+                    <div className="quantity">{item.quantityToShow}</div>
                     <div className="unit-type">{item.unit}</div>
                     <button
                       type="button"
@@ -359,7 +377,7 @@ export function ModalAddIngredientsChildren({ productData }) {
                 <div key={item.supplyId} className="supply-list">
                   <div className="data-wrap">
                     <div className="name">{item.name}</div>
-                    <div className="quantity">{item.quantity}</div>
+                    <div className="quantity">{item.quantityToShow}</div>
                     <div className="unit-type">{item.unit}</div>
                     <button
                       type="button"

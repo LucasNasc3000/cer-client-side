@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
@@ -363,7 +362,7 @@ export default function Inputs() {
             </option>
             <option value="weightPerUnit-S">Peso unitário</option>
             <option value="supplier-S">Fornecedor</option>
-            <option value="expirationDate-H">Validade</option>
+            <option value="expirationDate-S">Validade</option>
             <option value="date-S">Data de cadastro</option>
 
             {permissions.some(

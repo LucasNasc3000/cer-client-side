@@ -180,7 +180,7 @@ export default function Outputs() {
     } else if (searchParam === "type") {
       outflowType = "SUPPLY";
 
-      if (searchInputValue.includes("p") || searchInputValue.includes("P")) {
+      if (searchInputValue.toLocaleLowerCase().includes("p")) {
         outflowType = "PRODUCT";
       }
 
