@@ -421,6 +421,18 @@ export default function Outputs() {
                       readOnly
                     />
                   </div>
+                  {output.reason === "cadastro de produto" && (
+                    <div className="data-wrap">
+                      <div className="label">Produto: </div>
+                      <input
+                        type="text"
+                        name="reason"
+                        className="data-div"
+                        value={output.product?.name}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Detalhes: </div>
                     <input
@@ -527,6 +539,18 @@ export default function Outputs() {
                       readOnly
                     />
                   </div>
+                  {output.reason === "cadastro de produto" && (
+                    <div className="data-wrap">
+                      <div className="label">Produto: </div>
+                      <input
+                        type="text"
+                        name="reason"
+                        className="data-div"
+                        value={output.product?.name}
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="data-wrap">
                     <div className="label">Detalhes: </div>
                     <input
