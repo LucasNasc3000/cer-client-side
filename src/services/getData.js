@@ -21,7 +21,7 @@ export default async function GetData(
 
   try {
     const getEmployeesByBoss = await axios.get(
-      `/employees/search/boss?limit=20&offset=0&value=${bossId}`
+      "/employees/search/boss?limit=20&offset=0"
     );
 
     if (getEmployeesByBoss.data[1] && getEmployeesByBoss.data[1].length > 0) {

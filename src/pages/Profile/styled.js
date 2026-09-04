@@ -12,8 +12,8 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   position: relative;
-  bottom: 690px;
-  left: 590px;
+  bottom: 750px;
+  left: 650px;
   height: 500px;
   width: 450px;
 
@@ -21,12 +21,32 @@ export const Form = styled.form`
     background-color: transparent;
     display: flex;
     position: relative;
-    height: 40px;
+    height: 35px;
     top: 50px;
     margin-top: 20px;
     border-top: none;
     border-left: none;
     border-right: none;
+  }
+
+  .eye-icon-new-pass {
+    position: relative;
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    top: 50px;
+  }
+
+  .eye-icon {
+    position: relative;
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    top: 50px;
   }
 
   .new-pass {
@@ -39,6 +59,12 @@ export const Form = styled.form`
 
   .minitext-current-pass {
     top: 75px;
+  }
+
+  .minitext-warn {
+    display: flex;
+    position: relative;
+    top: 215px;
   }
 
   .saveBtn {

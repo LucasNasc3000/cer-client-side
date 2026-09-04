@@ -83,14 +83,8 @@ export default function Home() {
   useEffect(() => {
     async function headerIdCheck() {
       try {
-        if (!headerid || headerid === "") {
-          const bossData = await axios.get(
-            `/employees/search/email?value=${emailStored}`
-          );
-          setEmployeeId(bossData.data.id);
-          return;
-        }
-        setEmployeeId(headerid);
+        const adminData = await axios.get("/employees/search/self");
+        setEmployeeId(adminData.data.id);
       } catch (err) {
         toast.error("Erro ao verificar id");
       }

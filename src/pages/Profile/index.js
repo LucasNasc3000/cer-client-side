@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
@@ -15,12 +16,30 @@ export default function Profile() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [eyeOpenCurrentPass, setEyeOpenCurrentPass] = useState(false);
+  const [eyeOpenNewPass, setEyeOpenNewPass] = useState(false);
 
   const clearDirectExecution = () => {
     setName("");
     setEmail("");
     setPassword("");
     setNewPassword("");
+  };
+
+  const SeePasswordCurrentPass = (e) => {
+    e.preventDefault();
+    setEyeOpenCurrentPass((prev) => {
+      const nextValue = prev === false;
+      return nextValue;
+    });
+  };
+
+  const SeePasswordNewPass = (e) => {
+    e.preventDefault();
+    setEyeOpenNewPass((prev) => {
+      const nextValue = prev === false;
+      return nextValue;
+    });
   };
 
   async function HandleSubmit(e) {
@@ -70,11 +89,23 @@ export default function Profile() {
         <p className="minitext-change-pass">Mudar senha:</p>
 
         <input
-          type="password"
+          type={eyeOpenNewPass === true ? "text" : "password"}
           className="new-pass"
           onChange={(e) => setNewPassword(e.target.value)}
           value={newPassword}
         />
+
+        <button
+          type="button"
+          className="eye-icon-new-pass"
+          onClick={(e) => SeePasswordNewPass(e)}
+        >
+          {eyeOpenNewPass === true ? (
+            <AiOutlineEye size={27} />
+          ) : (
+            <AiOutlineEyeInvisible size={27} />
+          )}
+        </button>
 
         <p className="minitext-warn">
           Caso você deseje mudar seu email, por razões de segurança, será
@@ -84,11 +115,22 @@ export default function Profile() {
         <p className="minitext-current-pass">Digite sua senha atual:</p>
 
         <input
-          type="password"
+          type={eyeOpenCurrentPass === true ? "text" : "password"}
           className="pass"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
+        <button
+          type="button"
+          className="eye-icon"
+          onClick={(e) => SeePasswordCurrentPass(e)}
+        >
+          {eyeOpenCurrentPass === true ? (
+            <AiOutlineEye size={27} />
+          ) : (
+            <AiOutlineEyeInvisible size={27} />
+          )}
+        </button>
 
         <button
           type="button"

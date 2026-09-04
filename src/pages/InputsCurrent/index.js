@@ -26,7 +26,6 @@ import { GetChangedFields } from "../../utils/GetChangedFields";
 import { InputsContainer, InputsSpace, SearchSpace, Spinner } from "./styled";
 
 export default function InputsCurrent() {
-  const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const inputName = useSelector((state) => state.dataTransfer.inputName);
@@ -58,9 +57,11 @@ export default function InputsCurrent() {
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      if (!emailStored || !permissions || permissions.length < 1) return;
+
       setIsLoadingGetCredentials(true);
 
-      const get = await GetBossId(headerid, emailStored);
+      const get = await GetBossId();
 
       if (typeof get === "undefined" || !get) return;
 
@@ -73,20 +74,18 @@ export default function InputsCurrent() {
     }
 
     ExecuteGetBossId();
-  }, [bossId, emailStored, headerid]);
+  }, [bossId, emailStored, permissions]);
 
   useEffect(() => {
     async function headerIdCheck() {
       try {
-        if (!headerid || headerid === "") {
-          const bossData = await axios.get(
-            `/employees/search/email?value=${emailStored}`
-          );
-
-          setEmployeeId(bossData.data.id);
+        if (!emailStored || !permissions || permissions.length < 1) {
           return;
         }
-        setEmployeeId(headerid);
+
+        const employeeData = await axios.get("/employees/search/self");
+
+        setEmployeeId(employeeData.data.id);
       } catch (e) {
         setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
@@ -96,7 +95,7 @@ export default function InputsCurrent() {
     }
 
     headerIdCheck();
-  }, [headerid, emailStored, employee_id]);
+  }, [permissions, emailStored, employee_id]);
 
   useEffect(() => {
     if (!inputName) return;

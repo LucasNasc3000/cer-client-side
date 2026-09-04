@@ -34,7 +34,6 @@ import {
 } from "./styled";
 
 export default function Sales() {
-  const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const getSaleItems = useSelector((state) => state.saleItems);
@@ -72,9 +71,11 @@ export default function Sales() {
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      if (!emailStored || !permissions || permissions.length < 1) return;
+
       setIsLoadingGetCredentials(true);
 
-      const get = await GetBossId(headerid, emailStored);
+      const get = await GetBossId();
 
       if (typeof get === "undefined" || !get) return;
 
@@ -87,20 +88,18 @@ export default function Sales() {
     }
 
     ExecuteGetBossId();
-  }, [bossId, emailStored, headerid]);
+  }, [bossId, emailStored, permissions]);
 
   useEffect(() => {
     async function headerIdCheck() {
       try {
-        if (!headerid || headerid === "") {
-          const bossData = await axios.get(
-            `/employees/search/email?value=${emailStored}`
-          );
-
-          setEmployeeId(bossData.data.id);
+        if (!emailStored || !permissions || permissions.length < 1) {
           return;
         }
-        setEmployeeId(headerid);
+
+        const employeeData = await axios.get("/employees/search/self");
+
+        setEmployeeId(employeeData.data.id);
       } catch (e) {
         setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
@@ -110,7 +109,7 @@ export default function Sales() {
     }
 
     headerIdCheck();
-  }, [headerid, emailStored, employee_id]);
+  }, [permissions, emailStored, employee_id]);
 
   useEffect(() => {
     // eslint-disable-next-line no-useless-return

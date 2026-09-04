@@ -21,7 +21,6 @@ import { ErrorIcon, GetDataSpinner, Spinner } from "../../styles/GlobalStyles";
 import { InflowsContainer, InflowsSpace, SearchSpace } from "./styled";
 
 export default function ProductInflows() {
-  const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
   const permissions = useSelector((state) => state.auth.permissions);
   const productName = useSelector((state) => state.dataTransfer.productName);
@@ -50,35 +49,35 @@ export default function ProductInflows() {
 
   useEffect(() => {
     async function ExecuteGetBossId() {
+      if (!emailStored || !permissions || permissions.length < 1) return;
+
       setIsLoadingGetCredentials(true);
 
-      const getBossId = await GetBossId(headerid, emailStored);
+      const get = await GetBossId();
 
-      if (typeof getBossId === "undefined" || !getBossId) return;
+      if (typeof get === "undefined" || !get) return;
 
-      if (getBossId === "error") {
+      if (get === "error") {
         setErrorGetCredentials(true);
         setIsLoadingGetCredentials(false);
       }
 
-      setBossId(getBossId);
+      setBossId(get);
     }
 
     ExecuteGetBossId();
-  }, [bossId, emailStored, headerid]);
+  }, [bossId, emailStored, permissions]);
 
   useEffect(() => {
     async function headerIdCheck() {
       try {
-        if (!headerid || headerid === "") {
-          const bossData = await axios.get(
-            `/employees/search/email?value=${emailStored}`
-          );
-
-          setEmployeeId(bossData.data.id);
+        if (!emailStored || !permissions || permissions.length < 1) {
           return;
         }
-        setEmployeeId(headerid);
+
+        const employeeData = await axios.get("/employees/search/self");
+
+        setEmployeeId(employeeData.data.id);
       } catch (e) {
         setErrorGetCredentials(true);
         toast.error("Erro ao verificar id");
@@ -88,7 +87,7 @@ export default function ProductInflows() {
     }
 
     headerIdCheck();
-  }, [headerid, emailStored, employee_id]);
+  }, [permissions, emailStored, employee_id]);
 
   useEffect(() => {
     if (!productName) return;
