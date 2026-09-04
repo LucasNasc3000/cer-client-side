@@ -1091,7 +1091,7 @@ export default function Products() {
         <input
           type="text"
           id="expirationDate"
-          placeholder="Validade ex: 25-03-2027"
+          placeholder="Validade ex: 25/03/2027"
           value={expirationDate}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
@@ -1105,7 +1105,7 @@ export default function Products() {
         <input
           type="text"
           id="price"
-          placeholder="Preço unitário ex: 10.90"
+          placeholder="Preço unitário ex: 10,90"
           value={price || ""}
           onChange={(e) => setPrice(e.target.value)}
         />

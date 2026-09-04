@@ -91,7 +91,7 @@ export default async function DoSearch(
 
       case path === "products" && searchParam === "employee":
         results = await axios.get(
-          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&productType=PRODUCT&forDisplay=false`
+          `/${path}/search/${searchParam}?value=${searchValue}&limit=20&offset=0&forDisplay=false`
         );
         return results.data[1];
 
