@@ -67,6 +67,11 @@ export default async function GetData(
 
     return joinData;
   } catch (err) {
+    if (err.message.includes("[DecimalError] Invalid argument:")) {
+      toast.error("A quantidade deve ter somente números");
+      return;
+    }
+
     // eslint-disable-next-line consistent-return
     if (err.response && typeof err.response.data === "string") return;
 

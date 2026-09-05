@@ -17,8 +17,6 @@ export default async function Register(data, path) {
       )
     );
 
-    console.log(truthyFields);
-
     // eslint-disable-next-line default-case
     switch (path) {
       case "supplies":
@@ -110,6 +108,10 @@ export default async function Register(data, path) {
       switch (true) {
         case err instanceof TypeError:
           toast.error("Erro de tratamento de dados");
+          return false;
+
+        case err.message.includes("[DecimalError] Invalid argument:"):
+          toast.error("A quantidade deve ter somente números");
           return false;
 
         case errors.length > 0:

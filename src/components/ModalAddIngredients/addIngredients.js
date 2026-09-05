@@ -243,53 +243,61 @@ export function ModalAddIngredientsChildren({ productData }) {
   function PreSave(e) {
     e.preventDefault();
 
-    if (
-      !quantity ||
-      !unitOrWeight ||
-      Object.values(supplyData).every((value) => !value)
-    ) {
-      toast.error(
-        "Quantidade ou unidade não especificados ou insumos não escolhidos"
-      );
-      return;
+    try {
+      if (
+        !quantity ||
+        !unitOrWeight ||
+        Object.values(supplyData).every((value) => !value)
+      ) {
+        toast.error(
+          "Quantidade ou unidade não especificados ou insumos não escolhidos"
+        );
+        return;
+      }
+
+      if (Number(difference) < 0) {
+        toast.error("Quantidade insuficiente em estoque");
+        return;
+      }
+
+      let formattedQuantity = "";
+
+      // eslint-disable-next-line default-case
+      switch (unitOrWeight) {
+        case "unidades":
+          const unities = new Decimal(quantity);
+          const toGrams = unities.mul(supplyData.weightPerUnit).toString();
+          formattedQuantity = toGrams;
+          break;
+
+        case "g":
+        case "ml":
+          formattedQuantity = quantity;
+          break;
+
+        case "kg":
+        case "L":
+          const currentFormat = new Decimal(quantity);
+          const toGramUnit = currentFormat.mul(1000);
+          formattedQuantity = toGramUnit;
+      }
+
+      const ingredientsToShowData = {
+        supplyId: supplyData.id,
+        name: supplyData.name,
+        quantity: formattedQuantity,
+        quantityToShow: quantity,
+        unit: unitOrWeight,
+      };
+
+      setIngredientsToShow((prev) => [...prev, ingredientsToShowData]);
+    } catch (error) {
+      if (error.message.includes("[DecimalError] Invalid argument:")) {
+        toast.error("A quantidade deve ter somente números");
+      } else {
+        toast.error("Erro desconhecido ao definir quantidade");
+      }
     }
-
-    if (Number(difference) < 0) {
-      toast.error("Quantidade insuficiente em estoque");
-      return;
-    }
-
-    let formattedQuantity = "";
-
-    // eslint-disable-next-line default-case
-    switch (unitOrWeight) {
-      case "unidades":
-        const unities = new Decimal(quantity);
-        const toGrams = unities.mul(supplyData.weightPerUnit).toString();
-        formattedQuantity = toGrams;
-        break;
-
-      case "g":
-      case "ml":
-        formattedQuantity = quantity;
-        break;
-
-      case "kg":
-      case "L":
-        const currentFormat = new Decimal(quantity);
-        const toGramUnit = currentFormat.mul(1000);
-        formattedQuantity = toGramUnit;
-    }
-
-    const ingredientsToShowData = {
-      supplyId: supplyData.id,
-      name: supplyData.name,
-      quantity: formattedQuantity,
-      quantityToShow: quantity,
-      unit: unitOrWeight,
-    };
-
-    setIngredientsToShow((prev) => [...prev, ingredientsToShowData]);
   }
 
   return (
