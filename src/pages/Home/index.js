@@ -194,33 +194,41 @@ export default function Home() {
 
   useEffect(() => {
     function GetDays() {
-      const date = new Date();
-      const fullDate = date.toLocaleDateString("pt-br");
-      const fullDateReplaceBars = fullDate.replace(/\//g, "-");
-      const pricesToday = [];
+      try {
+        const date = new Date();
+        const fullDate = date.toLocaleDateString("pt-br");
+        const fullDateReplaceBars = fullDate.replace(/\//g, "-");
+        const pricesToday = [];
 
-      salesData.map((sale) => {
-        if (sale.createdAt === fullDateReplaceBars) {
-          const commaReplaced = sale.totalPrice.replace(",", ".");
-          const decimalPrice = new Decimal(commaReplaced);
-          pricesToday.push(decimalPrice.toString());
+        salesData.map((sale) => {
+          if (sale.createdAt === fullDateReplaceBars) {
+            const commaReplaced = sale.totalPrice.replace(",", ".");
+            const decimalPrice = new Decimal(commaReplaced);
+            pricesToday.push(decimalPrice.toString());
+          }
+        });
+
+        const sum = pricesToday.reduce((acc, currentVal) => {
+          return acc.plus(new Decimal(currentVal));
+        }, new Decimal(0));
+
+        const total = sum.toString();
+
+        if (total.length === 4) {
+          const withZero = `${total}0`;
+          setPriceDay(withZero);
+          return;
         }
-      });
 
-      const sum = pricesToday.reduce((acc, currentVal) => {
-        return acc.plus(new Decimal(currentVal));
-      }, new Decimal(0));
-
-      const total = sum.toString();
-
-      if (total.length === 4) {
-        const withZero = `${total}0`;
-        setPriceDay(withZero);
-        return;
+        setPriceDay(total.replace(".", ","));
+        setIsLoadingTotalPriceDay(false);
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error("Falha ao obter valor total de vendas no dia");
+        }
       }
-
-      setPriceDay(total.replace(".", ","));
-      setIsLoadingTotalPriceDay(false);
     }
 
     GetDays();
@@ -228,80 +236,88 @@ export default function Home() {
 
   useEffect(() => {
     function GetMonthsSales() {
-      const priceAndMonthsRefined = [];
-      const priceAndMonths = [];
+      try {
+        const priceAndMonthsRefined = [];
+        const priceAndMonths = [];
 
-      for (let i = 1; i < 13; i++) {
-        if (i >= 10) {
-          priceAndMonthsRefined.push({
-            month: `${i}/${setYearSales || setCurrentYearSales}`,
-            prices: [],
-            total: "",
-          });
-        } else {
-          priceAndMonthsRefined.push({
-            month: `0${i}/${setYearSales || setCurrentYearSales}`,
-            prices: [],
-            total: "",
-          });
+        for (let i = 1; i < 13; i++) {
+          if (i >= 10) {
+            priceAndMonthsRefined.push({
+              month: `${i}/${setYearSales || setCurrentYearSales}`,
+              prices: [],
+              total: "",
+            });
+          } else {
+            priceAndMonthsRefined.push({
+              month: `0${i}/${setYearSales || setCurrentYearSales}`,
+              prices: [],
+              total: "",
+            });
+          }
         }
-      }
 
-      if (salesData && salesData.length > 0) {
-        salesData.map((sale) => {
-          if (setYearSales !== "") {
-            if (sale.createdAt.slice(6, 10) === setYearSales) {
+        if (salesData && salesData.length > 0) {
+          salesData.map((sale) => {
+            if (setYearSales !== "") {
+              if (sale.createdAt.slice(6, 10) === setYearSales) {
+                priceAndMonths.push({
+                  month: sale.createdAt.slice(3, 5),
+                  price: sale.netValue || sale.totalPrice,
+                });
+              }
+              return;
+            }
+
+            if (sale.createdAt.slice(6, 10) === setCurrentYearSales) {
               priceAndMonths.push({
                 month: sale.createdAt.slice(3, 5),
                 price: sale.netValue || sale.totalPrice,
               });
             }
-            return;
-          }
-
-          if (sale.createdAt.slice(6, 10) === setCurrentYearSales) {
-            priceAndMonths.push({
-              month: sale.createdAt.slice(3, 5),
-              price: sale.netValue || sale.totalPrice,
-            });
-          }
-        });
-
-        for (let i = 0; i < priceAndMonths.length; i++) {
-          if (priceAndMonths[i].month.length === 1) {
-            const withZero = `0${priceAndMonths[i].month}`;
-            priceAndMonths[i].month = withZero;
-          }
-        }
-
-        priceAndMonths.forEach((element) => {
-          const month = parseInt(element.month, 10);
-
-          if (priceAndMonthsRefined[month - 1]) {
-            priceAndMonthsRefined[month - 1].prices.push(element.price);
-          }
-        });
-
-        priceAndMonthsRefined.forEach((element) => {
-          element.prices = element.prices.map((price) => {
-            return price.replace(",", ".");
           });
-        });
 
-        priceAndMonthsRefined.forEach((element) => {
-          const sum = element.prices.reduce((acc, currentVal) => {
-            return acc.plus(new Decimal(currentVal));
-          }, new Decimal(0));
-
-          element.total = sum.toString();
-
-          if (element.total.length === 4) {
-            const withZero = `${element.total}0`;
-            element.total = withZero;
+          for (let i = 0; i < priceAndMonths.length; i++) {
+            if (priceAndMonths[i].month.length === 1) {
+              const withZero = `0${priceAndMonths[i].month}`;
+              priceAndMonths[i].month = withZero;
+            }
           }
-        });
 
-        setPriceMonthsSales(priceAndMonthsRefined);
+          priceAndMonths.forEach((element) => {
+            const month = parseInt(element.month, 10);
+
+            if (priceAndMonthsRefined[month - 1]) {
+              priceAndMonthsRefined[month - 1].prices.push(element.price);
+            }
+          });
+
+          priceAndMonthsRefined.forEach((element) => {
+            element.prices = element.prices.map((price) => {
+              return price.replace(",", ".");
+            });
+          });
+
+          priceAndMonthsRefined.forEach((element) => {
+            const sum = element.prices.reduce((acc, currentVal) => {
+              return acc.plus(new Decimal(currentVal));
+            }, new Decimal(0));
+
+            element.total = sum.toString();
+
+            if (element.total.length === 4) {
+              const withZero = `${element.total}0`;
+              element.total = withZero;
+            }
+          });
+
+          setPriceMonthsSales(priceAndMonthsRefined);
+        }
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error("Falha ao obter vendas por mês");
+        }
       }
     }
 
@@ -311,80 +327,88 @@ export default function Home() {
   // Gráfico dos gastos dos insumos por mês
   useEffect(() => {
     function GetMonths() {
-      const priceAndMonthsRefined = [];
-      const priceAndMonths = [];
+      try {
+        const priceAndMonthsRefined = [];
+        const priceAndMonths = [];
 
-      for (let i = 1; i < 13; i++) {
-        if (i >= 10) {
-          priceAndMonthsRefined.push({
-            month: `${i}/${setYear || setCurrentYear}`,
-            prices: [],
-            total: "",
-          });
-        } else {
-          priceAndMonthsRefined.push({
-            month: `0${i}/${setYear || setCurrentYear}`,
-            prices: [],
-            total: "",
-          });
-        }
-      }
-
-      if (inputsHistoryData && inputsHistoryData.length > 0) {
-        inputsHistoryData.map((input) => {
-          if (setYear !== "") {
-            if (input.createdAt.slice(0, 4) === setYear) {
-              priceAndMonths.push({
-                month: input.createdAt.slice(5, 7),
-                price: input.totalprice,
-              });
-            }
-            return;
-          }
-
-          if (input.createdAt.slice(0, 4) === setCurrentYear) {
-            priceAndMonths.push({
-              month: input.createdAt.slice(5, 7),
-              price: input.totalPrice,
+        for (let i = 1; i < 13; i++) {
+          if (i >= 10) {
+            priceAndMonthsRefined.push({
+              month: `${i}/${setYear || setCurrentYear}`,
+              prices: [],
+              total: "",
+            });
+          } else {
+            priceAndMonthsRefined.push({
+              month: `0${i}/${setYear || setCurrentYear}`,
+              prices: [],
+              total: "",
             });
           }
-        });
-
-        for (let i = 0; i < priceAndMonths.length; i++) {
-          if (priceAndMonths[i].month.length === 1) {
-            const withZero = `0${priceAndMonths[i].month}`;
-            priceAndMonths[i].month = withZero;
-          }
         }
 
-        priceAndMonths.forEach((element) => {
-          const month = parseInt(element.month, 10);
+        if (inputsHistoryData && inputsHistoryData.length > 0) {
+          inputsHistoryData.map((input) => {
+            if (setYear !== "") {
+              if (input.createdAt.slice(0, 4) === setYear) {
+                priceAndMonths.push({
+                  month: input.createdAt.slice(5, 7),
+                  price: input.totalprice,
+                });
+              }
+              return;
+            }
 
-          if (priceAndMonthsRefined[month - 1]) {
-            priceAndMonthsRefined[month - 1].prices.push(element.price);
-          }
-        });
-
-        priceAndMonthsRefined.forEach((element) => {
-          element.prices = element.prices.map((price) => {
-            return price.replace(",", ".");
+            if (input.createdAt.slice(0, 4) === setCurrentYear) {
+              priceAndMonths.push({
+                month: input.createdAt.slice(5, 7),
+                price: input.totalPrice,
+              });
+            }
           });
-        });
 
-        priceAndMonthsRefined.forEach((element) => {
-          const sum = element.prices.reduce((acc, currentVal) => {
-            return acc.plus(new Decimal(currentVal));
-          }, new Decimal(0));
-
-          element.total = sum.toString();
-
-          if (element.total.length === 4) {
-            const withZero = `${element.total}0`;
-            element.total = withZero;
+          for (let i = 0; i < priceAndMonths.length; i++) {
+            if (priceAndMonths[i].month.length === 1) {
+              const withZero = `0${priceAndMonths[i].month}`;
+              priceAndMonths[i].month = withZero;
+            }
           }
-        });
 
-        setPriceMonths(priceAndMonthsRefined);
+          priceAndMonths.forEach((element) => {
+            const month = parseInt(element.month, 10);
+
+            if (priceAndMonthsRefined[month - 1]) {
+              priceAndMonthsRefined[month - 1].prices.push(element.price);
+            }
+          });
+
+          priceAndMonthsRefined.forEach((element) => {
+            element.prices = element.prices.map((price) => {
+              return price.replace(",", ".");
+            });
+          });
+
+          priceAndMonthsRefined.forEach((element) => {
+            const sum = element.prices.reduce((acc, currentVal) => {
+              return acc.plus(new Decimal(currentVal));
+            }, new Decimal(0));
+
+            element.total = sum.toString();
+
+            if (element.total.length === 4) {
+              const withZero = `${element.total}0`;
+              element.total = withZero;
+            }
+          });
+
+          setPriceMonths(priceAndMonthsRefined);
+        }
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error("Falha ao obter gastos mensais com insumos");
+        }
       }
     }
 
@@ -435,43 +459,53 @@ export default function Home() {
 
   useEffect(() => {
     function GetYear() {
-      const priceAndYear = [];
-      const priceAndYearRefined = {};
+      try {
+        const priceAndYear = [];
+        const priceAndYearRefined = {};
 
-      if (inputsHistoryData && inputsHistoryData.length > 0) {
-        inputsHistoryData.map((input) => {
-          priceAndYear.push({
-            year: input.createdAt.slice(0, 4),
-            price: input.totalPrice,
+        if (inputsHistoryData && inputsHistoryData.length > 0) {
+          inputsHistoryData.map((input) => {
+            priceAndYear.push({
+              year: input.createdAt.slice(0, 4),
+              price: input.totalPrice,
+            });
           });
-        });
 
-        priceAndYear.forEach((element) => {
-          // eslint-disable-next-line no-return-assign
-          return (element.price = element.price.replace(",", "."));
-        });
-      }
-
-      const totalPerYear = priceAndYear.reduce((acc, current) => {
-        const { year, price } = current;
-
-        const priceDecimal = new Decimal(price);
-
-        if (acc[year]) {
-          acc[year] = acc[year].plus(priceDecimal);
-        } else {
-          acc[year] = priceDecimal;
+          priceAndYear.forEach((element) => {
+            // eslint-disable-next-line no-return-assign
+            return (element.price = element.price.replace(",", "."));
+          });
         }
 
-        return acc;
-      }, {});
+        const totalPerYear = priceAndYear.reduce((acc, current) => {
+          const { year, price } = current;
 
-      // eslint-disable-next-line no-restricted-syntax, guard-for-in
-      for (const year in totalPerYear) {
-        priceAndYearRefined[year] = totalPerYear[year].toFixed(2);
+          const priceDecimal = new Decimal(price);
+
+          if (acc[year]) {
+            acc[year] = acc[year].plus(priceDecimal);
+          } else {
+            acc[year] = priceDecimal;
+          }
+
+          return acc;
+        }, {});
+
+        // eslint-disable-next-line no-restricted-syntax, guard-for-in
+        for (const year in totalPerYear) {
+          priceAndYearRefined[year] = totalPerYear[year].toFixed(2);
+        }
+
+        setPriceYear(priceAndYearRefined);
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error(
+            "Falha ao calcular valor total dos insumos comprados no ano"
+          );
+        }
       }
-
-      setPriceYear(priceAndYearRefined);
     }
 
     GetYear();
@@ -479,44 +513,51 @@ export default function Home() {
 
   useEffect(() => {
     function GetYearSales() {
-      // O ano vai ter que ser dinamico, com um select
-      const priceAndYear = [];
-      const priceAndYearRefined = {};
+      try {
+        const priceAndYear = [];
+        const priceAndYearRefined = {};
 
-      if (salesData && salesData.length > 0) {
-        salesData.map((sale) => {
-          priceAndYear.push({
-            year: sale.createdAt.slice(6, 10),
-            price: sale.netValue || sale.totalPrice,
+        if (salesData && salesData.length > 0) {
+          salesData.map((sale) => {
+            priceAndYear.push({
+              year: sale.createdAt.slice(6, 10),
+              price: sale.netValue || sale.totalPrice,
+            });
           });
-        });
 
-        priceAndYear.forEach((element) => {
-          // eslint-disable-next-line no-return-assign
-          return (element.price = element.price.replace(",", "."));
-        });
-      }
-
-      const totalPerYear = priceAndYear.reduce((acc, current) => {
-        const { year, price } = current;
-
-        const priceDecimal = new Decimal(price);
-
-        if (acc[year]) {
-          acc[year] = acc[year].plus(priceDecimal);
-        } else {
-          acc[year] = priceDecimal;
+          priceAndYear.forEach((element) => {
+            // eslint-disable-next-line no-return-assign
+            return (element.price = element.price.replace(",", "."));
+          });
         }
 
-        return acc;
-      }, {});
+        const totalPerYear = priceAndYear.reduce((acc, current) => {
+          const { year, price } = current;
 
-      // eslint-disable-next-line no-restricted-syntax, guard-for-in
-      for (const year in totalPerYear) {
-        priceAndYearRefined[year] = totalPerYear[year].toFixed(2);
+          const priceDecimal = new Decimal(price);
+
+          if (acc[year]) {
+            acc[year] = acc[year].plus(priceDecimal);
+          } else {
+            acc[year] = priceDecimal;
+          }
+
+          return acc;
+        }, {});
+
+        // eslint-disable-next-line no-restricted-syntax, guard-for-in
+        for (const year in totalPerYear) {
+          priceAndYearRefined[year] = totalPerYear[year].toFixed(2);
+        }
+
+        setPriceYearSales(priceAndYearRefined);
+      } catch (error) {
+        if (error.message.includes("[DecimalError] Invalid argument:")) {
+          toast.error("A quantidade deve ter somente números");
+        } else {
+          toast.error("Falha ao calcular valor total das vendas no ano");
+        }
       }
-
-      setPriceYearSales(priceAndYearRefined);
     }
 
     GetYearSales();
