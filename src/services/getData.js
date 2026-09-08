@@ -67,13 +67,22 @@ export default async function GetData(
 
     return joinData;
   } catch (err) {
-    if (err.message.includes("[DecimalError] Invalid argument:")) {
+    if (
+      err.response &&
+      err.response.message.includes("[DecimalError] Invalid argument:")
+    ) {
       toast.error("A quantidade deve ter somente números");
       return;
     }
 
     // eslint-disable-next-line consistent-return
-    if (err.response && typeof err.response.data === "string") return;
+    if (
+      err.response &&
+      err.response.data &&
+      typeof err.response.data === "string"
+    ) {
+      return;
+    }
 
     if (err instanceof TypeError) {
       toast.error("Erro de tratamento de dados");

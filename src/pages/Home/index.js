@@ -139,23 +139,31 @@ export default function Home() {
     if (!employee_id || !permissions) return;
 
     async function GetSalesData() {
-      const sales = await GetData(
-        employee_id,
-        "sales",
-        employee_id,
-        permissions,
-        null,
-        true
-      );
+      try {
+        const sales = await GetData(
+          employee_id,
+          "sales",
+          employee_id,
+          permissions,
+          null,
+          true
+        );
 
-      if (typeof sales === "undefined" || !sales) return;
+        if (typeof sales === "undefined" || !sales) return;
 
-      sales.forEach((sale) => {
-        const brDateFormat = BrDateFormat(sale.createdAt);
-        sale.createdAt = brDateFormat;
-      });
+        sales.forEach((sale) => {
+          const brDateFormat = BrDateFormat(sale.createdAt);
+          sale.createdAt = brDateFormat;
+        });
 
-      setSalesData(sales);
+        setSalesData(sales);
+      } catch (error) {
+        if (error instanceof TypeError) {
+          toast.error("Falha ao formatar dados de vendas");
+        } else {
+          toast.error("Falha ao obter dados das vendas");
+        }
+      }
     }
 
     GetSalesData();
