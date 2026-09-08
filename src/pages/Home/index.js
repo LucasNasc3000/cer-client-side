@@ -879,18 +879,18 @@ export default function Home() {
 
   useEffect(() => {
     if (
-      isLoadingPieChart1 &&
-      isLoadingPieChart2 &&
-      isLoadingPieChart3 &&
-      isLoadingPieChart4 &&
-      isLoadingPieChart5 &&
-      isLoadingTotalPrice &&
-      isLoadingTotalPriceDay &&
-      isLoadingPriceMonths &&
-      isLoadingPriceMonthsSales &&
-      isLoadingTotalPriceSales &&
-      isLoadingRegisterYears &&
-      isLoadingRegisterYearsSales
+      !isLoadingPieChart1 &&
+      !isLoadingPieChart2 &&
+      !isLoadingPieChart3 &&
+      !isLoadingPieChart4 &&
+      !isLoadingPieChart5 &&
+      !isLoadingTotalPrice &&
+      !isLoadingTotalPriceDay &&
+      !isLoadingPriceMonths &&
+      !isLoadingPriceMonthsSales &&
+      !isLoadingTotalPriceSales &&
+      !isLoadingRegisterYears &&
+      !isLoadingRegisterYearsSales
     ) {
       setIsLoadingFinal(false);
     }
