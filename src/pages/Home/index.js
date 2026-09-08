@@ -361,7 +361,7 @@ export default function Home() {
               if (input.createdAt.slice(0, 4) === setYear) {
                 priceAndMonths.push({
                   month: input.createdAt.slice(5, 7),
-                  price: input.totalprice,
+                  price: input.totalPrice,
                 });
               }
               return;
@@ -877,62 +877,30 @@ export default function Home() {
     }
   }, [totalPrice]);
 
-  useEffect(() => {
-    if (
-      !isLoadingPieChart1 &&
-      !isLoadingPieChart2 &&
-      !isLoadingPieChart3 &&
-      !isLoadingPieChart4 &&
-      !isLoadingPieChart5 &&
-      !isLoadingTotalPrice &&
-      !isLoadingTotalPriceDay &&
-      !isLoadingPriceMonths &&
-      !isLoadingPriceMonthsSales &&
-      !isLoadingTotalPriceSales &&
-      !isLoadingRegisterYears &&
-      !isLoadingRegisterYearsSales
-    ) {
-      setIsLoadingFinal(false);
-    }
-  }, [
-    isLoadingPieChart1,
-    isLoadingTotalPrice,
-    isLoadingTotalPriceDay,
-    isLoadingPriceMonths,
-    isLoadingPriceMonthsSales,
-    isLoadingTotalPriceSales,
-    isLoadingPieChart2,
-    isLoadingPieChart3,
-    isLoadingPieChart4,
-    isLoadingPieChart5,
-    isLoadingRegisterYears,
-    isLoadingRegisterYearsSales,
-  ]);
-
   return (
     <HomeContainer>
       <HeaderHome />
-      {isLoadingFinal === false ? (
+      {isLoadingPieChart1 === false ? (
         <PieChart chartData={dataPieChartInputs} />
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingPieChart3 === false ? (
         <PieChartInputsReasons chartData={dataPieChartInputsRs} />
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingPieChart4 === false ? (
         <PieChartOutputsNames chartData={dataPieChartOutputs} />
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingPieChart5 === false ? (
         <PieChartOutputsReasons chartData={dataPieChartOutputsRs} />
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingTotalPrice === false ? (
         <div className="price">
           <p className="text">Gasto total de insumos por ano</p>
           <div className="total-price">
@@ -946,7 +914,7 @@ export default function Home() {
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingRegisterYears === false ? (
         <div className="filter-space">
           <p className="filter-select-label">Filtrar por ano: </p>
           <select
@@ -968,18 +936,18 @@ export default function Home() {
         <div>Carregando...</div>
       )}
 
-      {isLoadingFinal === false ? (
+      {isLoadingPriceMonths === false ? (
         <LineChartTotalPriceInputs chartData={dataPriceMonthChart} />
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingPieChart2 === false ? (
         <PieChartProductsCount chartData={dataPieChartSalesPC} />
       ) : (
         <div>Carregando...</div>
       )}
 
-      {isLoadingFinal === false ? (
+      {isLoadingTotalPriceDay === false ? (
         <div className="price-today">
           <p className="text">Total vendido hoje</p>
           <div className="total-price">
@@ -993,7 +961,7 @@ export default function Home() {
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingTotalPriceSales === false ? (
         <div className="price-year">
           <p className="text">Total vendido no ano</p>
           <div className="total-price">
@@ -1007,12 +975,12 @@ export default function Home() {
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingPriceMonthsSales === false ? (
         <LineChartTotalPriceSales chartData={dataPriceMonthSalesChart} />
       ) : (
         <div>Carregando...</div>
       )}
-      {isLoadingFinal === false ? (
+      {isLoadingRegisterYearsSales === false ? (
         <div className="filter-space-sales">
           <p className="filter-select-label">Filtrar por ano: </p>
           <select
