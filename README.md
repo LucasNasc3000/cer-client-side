@@ -1,4 +1,4 @@
-# Storage Manager System - Grid Stock
+# Grid Stock - do projeto legado Storage Manager System
 Aplicação web para gestão de estoque e vendas voltada a pequenos e médios
 empreendedores do setor alimentício. Permite controle de insumos, saídas,
 vendas e funcionários com sistema de permissões por perfil de usuário.
@@ -51,7 +51,7 @@ vendas e funcionários com sistema de permissões por perfil de usuário.
 - Busca e filtragem de registros por diferentes parâmetros
 - Monitoramento de estoque em tempo real com atualização automática
 
-# Storage Manager System - Grid Stock
+# Grid Stock - from legacy project Storage Manager System
 Web application for inventory and sales management aimed at small and medium-sized entrepreneurs in the food sector. Allows control of supplies, outputs, sales and employees with a permissions system by user profile.
 
 | Technology | Usage |
