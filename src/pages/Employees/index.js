@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-return */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-underscore-dangle */
 import { get } from "lodash";
@@ -10,16 +11,16 @@ import { toast } from "react-toastify";
 import Header from "../../components/Header/index";
 import axios from "../../services/axios";
 import GetBossId from "../../services/getBossId";
-import history from "../../services/history";
 import DoSearch from "../../services/search";
 import * as actions from "../../store/modules/auth/actions";
 import { EmployeeCards, EmployeesListContainer, SearchSpace } from "./styled";
 
 export function Employees() {
-  const dispatch = useDispatch();
-  const headerid = useSelector((state) => state.auth.headerid);
   const emailStored = useSelector((state) => state.auth.emailHeaders);
-  const permission = useSelector((state) => state.auth.permission);
+  const permissions = useSelector((state) => state.auth.permissions);
+
+  const dispatch = useDispatch();
+
   const [employees, setEmployees] = useState([]);
   const [employeesBackup, setEmployeesBackup] = useState([]);
   const [searchParam, setSearchParam] = useState("");
@@ -27,37 +28,80 @@ export function Employees() {
   const [searchResultsBackup, setSearchResultsBackup] = useState([]);
   const [exemployees, setExemployees] = useState([]);
   const [exemployeesBackup, setExemployeesBackup] = useState([]);
-  const [boss, setBoss] = useState("");
+  const [bossId, setBossId] = useState("");
   const [rerender, setReRender] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
-
-  useEffect(() => {
-    const PermissionCheck = () => {
-      if (permission !== process.env.REACT_APP_ADMIN_ROLE) history.goBack();
-    };
-
-    PermissionCheck();
-  }, [permission]);
+  const [isLoadingGetCredentials, setIsLoadingGetCredentials] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [errorGetCredentials, setErrorGetCredentials] = useState(false);
 
   useEffect(() => {
     async function ExecuteGetBossId() {
-      const bossId = await GetBossId(headerid, emailStored);
+      if (!emailStored || !permissions || permissions.length < 1) return;
 
-      if (typeof bossId === "undefined" || !bossId) return;
+      setIsLoadingGetCredentials(true);
 
-      setBoss(bossId);
+      const getBossId = await GetBossId();
+
+      if (typeof getBossId === "undefined" || !getBossId) return;
+
+      if (getBossId === "error") {
+        setErrorGetCredentials(true);
+        setIsLoadingGetCredentials(false);
+      }
+
+      setBossId(getBossId);
     }
 
     ExecuteGetBossId();
-  }, [boss, emailStored, headerid]);
+  }, [bossId, emailStored, permissions]);
 
-  const ClearSearch = (e) => {
-    e.preventDefault();
-    setSearchParam("");
-    setSearchResults([]);
-    setExemployees([]);
-    setSearchInputValue("");
-  };
+  async function GetEmployees() {
+    try {
+      const employeesSearch = await axios.get("/employees/search/boss/");
+
+      setEmployees(employeesSearch.data);
+      setEmployeesBackup(employeesSearch.data);
+    } catch (err) {
+      switch (true) {
+        case err.response &&
+          err.response.data &&
+          typeof err.response.data !== "string":
+          toast.error(err.response.data.message);
+          return;
+
+        case err.response &&
+          err.response.data &&
+          typeof err.response.data === "string":
+          return;
+
+        case err instanceof TypeError:
+          toast.error("Erro de tratamento de dados");
+          return;
+
+        default:
+          toast.error(
+            "Erro desconhecido ao tentar obter os dados dos funcionários"
+          );
+          return;
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isLoadingGetCredentials) return;
+    GetEmployees();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bossId]);
+
+  useEffect(() => {
+    if (isLoadingGetCredentials) return;
+
+    if (rerender === true) GetEmployees();
+
+    setReRender(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rerender]);
 
   function clearDirectExecution(isExemployees) {
     if (isExemployees === true) setExemployees(exemployeesBackup);
@@ -73,32 +117,21 @@ export function Employees() {
     clearDirectExecution(isExemployees);
   };
 
-  async function getEmployees() {
-    try {
-      const employeesSearch = await axios.get(`/employees/search/boss/${boss}`);
-
-      setEmployees(employeesSearch.data);
-      setEmployeesBackup(employeesSearch.data);
-    } catch (err) {
-      const errors = get(err, "response.data.error", []);
-      const status = get(err, "response.status", 0);
-
-      if (err) {
-        if (errors.length > 0) {
-          errors.map((error) => toast.error(error));
-        }
-
-        if (err && errors.length < 1 && status !== 404) {
-          toast.error(
-            "Erro desconhecido ao tentar obter os dados dos funcionários"
-          );
-        }
-      }
-    }
-  }
+  const ClearSearch = (e) => {
+    e.preventDefault();
+    setSearchParam("");
+    setSearchResults([]);
+    setExemployees([]);
+    setSearchInputValue("");
+  };
 
   async function SearchEmployees(e) {
     e.preventDefault();
+
+    if (!searchParam) {
+      toast.error("Selecione um filtro de busca");
+      return;
+    }
 
     const inArray = [];
 
@@ -139,22 +172,11 @@ export function Employees() {
     }
   }
 
-  useEffect(() => {
-    getEmployees();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boss]);
-
-  useEffect(() => {
-    if (rerender === true) getEmployees();
-    setReRender(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rerender]);
-
   const HandleChange = (e, itemId) => {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permission !== process.env.REACT_APP_ADMIN_ROLE) return;
+    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
 
     setEmployees((prevData) =>
       prevData.map((item) =>
@@ -167,7 +189,7 @@ export function Employees() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permission !== process.env.REACT_APP_ADMIN_ROLE) return;
+    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
 
     setExemployees((prevData) =>
       prevData.map((item) =>
@@ -180,7 +202,7 @@ export function Employees() {
     // eslint-disable-next-line no-shadow
     const { name, value } = e.target;
 
-    if (permission !== process.env.REACT_APP_ADMIN_ROLE) return;
+    if (permissions !== process.env.REACT_APP_ADMIN_ROLE) return;
 
     setSearchResults((prevData) =>
       prevData.map((item) =>
@@ -284,7 +306,7 @@ export function Employees() {
             <option value="">Selecione</option>
             <option value="email">Email</option>
             <option value="name">Nome</option>
-            <option value="permission">Permissão</option>
+            <option value="role">Cargo</option>
             <option value="id">Id</option>
           </select>
         </div>
