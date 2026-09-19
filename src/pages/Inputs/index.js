@@ -124,6 +124,8 @@ export default function Inputs() {
     setIsLoadingGetInputs(false);
     setInputsData(inputsReq);
     setInputsDataBackup(inputsReq);
+
+    console.log(inputsReq);
   }
 
   useEffect(() => {
