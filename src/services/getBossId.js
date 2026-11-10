@@ -7,7 +7,7 @@ export default async function GetBossId() {
 
     if (bossData.data.boss === null) return bossData.data.id;
 
-    return bossData.boss.id;
+    return bossData.data.boss.id;
   } catch (e) {
     toast.error("Erro desconhecido ao tentar obter dados do admin");
     return "error";

@@ -69,7 +69,7 @@ export default function ProductInflows() {
   }, [bossId, emailStored, permissions]);
 
   useEffect(() => {
-    async function headerIdCheck() {
+    async function GetEmployeeId() {
       try {
         if (!emailStored || !permissions || permissions.length < 1) {
           return;
@@ -86,7 +86,7 @@ export default function ProductInflows() {
       }
     }
 
-    headerIdCheck();
+    GetEmployeeId();
   }, [permissions, emailStored, employee_id]);
 
   useEffect(() => {

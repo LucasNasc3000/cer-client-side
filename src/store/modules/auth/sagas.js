@@ -31,20 +31,19 @@ function* loginRequest({ payload }) {
 
     // eslint-disable-next-line array-callback-return
     permissions.map((p) => {
-      // eslint-disable-next-line default-case
-      switch (true) {
-        case p.resource === "EMPLOYEES":
-          return history.push("/home");
-
-        case p.resource === "supplies":
-          return history.push("/inputs");
-
-        case p.resource === "outflows":
-          return history.push("/outputs");
-
-        case p.resource === "sales":
-          return history.push("/sales");
+      if (p.resource === "EMPLOYEES") {
+        return history.push("/home");
       }
+      if (p.resource === "SUPPLIES") {
+        return history.push("/inputs/history");
+      }
+      if (p.resource === "PRODUCTS") {
+        return history.push("/products");
+      }
+      if (p.resource === "OUTFLOWS") {
+        return history.push("/outputs");
+      }
+      return history.push("/sales");
     });
   } catch (err) {
     const errors = get(err, "response.data.message", []);

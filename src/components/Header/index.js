@@ -71,89 +71,58 @@ export default function Header() {
             <HiOutlineInboxArrowDown className="products-inflows-icon" />
             Atualizações de produtos
           </Link>
-          <Link to="/profile" class="profile">
-            <CiUser className="profile-icon" />
-            Perfil
-          </Link>
           {/* <Link to="/employees" class="employees">
                   <MdOutlineBadge className="employee-icon" />
                   Funcionários
                 </Link> */}
-          <button
-            type="button"
-            onClick={(e) => logout(e)}
-            className="logout-btn"
-          >
-            Sair
-          </button>
         </>
       ) : (
-        ""
+        <>
+          {onlyPermissions.includes("SUPPLIES") && (
+            <>
+              <Link to="/inputs/history" class="inputs">
+                <TbBaguette className="input-icon" />
+                Insumos
+              </Link>
+              <Link to="/inputs/current" class="inputs-current">
+                <MdOutlineUpdate className="inputs-current-icon" />
+                Insumos em tempo real
+              </Link>
+            </>
+          )}
+          {onlyPermissions.includes("OUTFLOWS") && (
+            <Link to="/outputs" class="outputs">
+              <CiCircleCheck className="output-icon" />
+              Saídas
+            </Link>
+          )}
+          {onlyPermissions.includes("SALES") && (
+            <Link to="/sales" class="sales">
+              <HiOutlineShoppingBag className="sale-icon" />
+              Vendas
+            </Link>
+          )}
+          {onlyPermissions.includes("PRODUCTS") && (
+            <>
+              <Link to="/products" class="products">
+                <HiOutlineShoppingBag className="product-icon" />
+                Produtos
+              </Link>
+              <Link to="/products/inflows" class="products-inflows">
+                <HiOutlineInboxArrowDown className="products-inflows-icon" />
+                Atualizações de produtos
+              </Link>
+            </>
+          )}
+        </>
       )}
-      {!onlyPermissions.includes("EMPLOYEES")
-        ? onlyPermissions.map((p) => {
-            return (
-              <>
-                {p === "SUPPLIES" ? (
-                  <>
-                    <Link to="/inputs/history" class="inputs">
-                      <TbBaguette className="input-icon" />
-                      Insumos
-                    </Link>
-                    <Link to="/inputs/current" class="inputs-current">
-                      <MdOutlineUpdate className="inputs-current-icon" />
-                      Insumos em tempo real
-                    </Link>
-                  </>
-                ) : (
-                  ""
-                )}
-                {p === "OUTFLOWS" ? (
-                  <Link to="/outputs" class="outputs">
-                    <CiCircleCheck className="output-icon" />
-                    Saídas
-                  </Link>
-                ) : (
-                  ""
-                )}
-                {p === "SALES" ? (
-                  <Link to="/sales" class="sales">
-                    <HiOutlineShoppingBag className="sale-icon" />
-                    Vendas
-                  </Link>
-                ) : (
-                  ""
-                )}
-                {p === "PRODUCTS" ? (
-                  <>
-                    <Link to="/products" class="products">
-                      <HiOutlineShoppingBag className="product-icon" />
-                      Produtos
-                    </Link>
-                    <Link to="/products/inflows" class="products-inflows">
-                      <HiOutlineInboxArrowDown className="products-inflows-icon" />
-                      Atualizações de produtos
-                    </Link>
-                  </>
-                ) : (
-                  ""
-                )}
-                <Link to="/profile" class="profile">
-                  <CiUser className="profile-icon" />
-                  Perfil
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={(e) => logout(e)}
-                  className="logout-btn"
-                >
-                  Sair
-                </button>
-              </>
-            );
-          })
-        : ""}
+      <Link to="/profile" class="profile">
+        <CiUser className="profile-icon" />
+        Perfil
+      </Link>
+      <button type="button" onClick={(e) => logout(e)} className="logout-btn">
+        Sair
+      </button>
     </MainHeader>
   );
 }
